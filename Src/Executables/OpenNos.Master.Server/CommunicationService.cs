@@ -376,7 +376,6 @@ namespace OpenNos.Master.Server
 
         public string RetrieveRegisteredWorldServers(string username, byte regionType, int sessionId, bool ignoreUserName)
         {
-            Console.WriteLine("2");
             if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
             {
                 return null;
