@@ -218,6 +218,8 @@ namespace OpenNos.Handler.PacketHandler.Basic
             Session.SendPacket(Session.Character.GenerateExts());
             Session.SendPacket(Session.Character.GenerateMlinfo());
             Session.SendPacket(UserInterfaceHelper.GeneratePClear());
+            Session.SendPacket(Session.Character.GeneratePetskill());
+
             Session.SendPacket(Session.Character.GeneratePinit());
             Session.SendPackets(Session.Character.GeneratePst());
 

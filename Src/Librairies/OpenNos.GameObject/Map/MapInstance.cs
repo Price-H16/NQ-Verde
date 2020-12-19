@@ -33,6 +33,8 @@ namespace OpenNos.GameObject
 
             MinLevel = 1;
             MaxLevel = 99;
+            MinHeroLevel = 0;
+            MaxHeroLevel = 60;
 
             if (type != MapInstanceType.TimeSpaceInstance && type != MapInstanceType.RaidInstance)
             {
@@ -49,6 +51,54 @@ namespace OpenNos.GameObject
                     case 210: // Left Wing
                     case 211: // Right Wing
                         MinLevel = 88;
+                        break;
+                    
+                    case 228: //Cylloan
+                    case 229:
+                    case 230:
+                    case 231:
+                    case 232:
+                    case 233:
+                    case 234:
+                    case 235:
+                    case 236:
+                    case 237:
+                    case 238:
+                    case 239:
+                    case 240:
+                    case 241:
+                    case 242:
+                    case 243:
+                    case 244:
+                    case 245:
+                    case 246:
+                        MinLevel = 85;
+                        break;
+                    
+                    case 2628:
+                    case 2629:
+                    case 2630:
+                    case 2631:
+                    case 2632:
+                    case 2633:
+                    case 2634:
+                    case 2635:
+                    case 2636:
+                    case 2637:
+                    case 2638:
+                    case 2640:
+                    case 2641:
+                    case 2642:
+                    case 2643:
+                    case 2644:
+                    case 2645:
+                    case 2646:
+                    case 2647:
+                    case 2648:
+                    case 2649:
+                    case 2650:
+                        MinLevel = 88;
+                        MinHeroLevel = 45;
                         break;
                 }
             }
@@ -198,7 +248,9 @@ namespace OpenNos.GameObject
         public Guid MapInstanceId { get; set; }
 
         public MapInstanceType MapInstanceType { get; set; }
-
+        public byte MinHeroLevel { get; set; }
+        
+        public byte MaxHeroLevel { get; set; }
         public byte MaxLevel { get; set; }
 
         public byte MinLevel { get; set; }
