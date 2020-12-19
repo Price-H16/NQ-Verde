@@ -113,9 +113,9 @@
             IncreaseSlPoint = 102,
             IncreaseDamageVsChar = 103,
             Idk = 104,
-            A7Powers1 = 105,
-            A7Powers2 = 106,
-            
+            RuneBcard = 105,
+            RuneBcard2 = 106,
+            RuneBcard3 = 107,
             Tattoos = 108,
 
             IncreaseHpMp = 110
@@ -128,32 +128,27 @@
     {
         #region Enums
 
-        public enum A7Powers1 : byte
+        public enum RuneBcard : byte
         {
-            DamageApocalypsePower = 11,
-            DamageApocalypsePowerNegated = 12,
+            ApocalypsisPowe = 11,
             ReflectionPower = 21,
-            ReflectionPowerNegated = 22,
-            DamageWolfPower = 31,
-            DamageWolfPowerNegated = 32,
-            EnemyKnockedBack = 41,
-            EnemyKnockedBackNegated = 42,
-            DamageExplosionPower = 51,
-            DamageExplosionPowerNegated = 52,
+            WolfPower = 31,
+            Kickback = 41,
+            Explosion = 51,
         }
 
-        public enum A7Powers2 : byte
+        public enum RuneBcard2 : byte
         {
-            ReceiveAgilityPower = 11,
-            ReceiveAgilityPowerNegated = 12,
-            DamageLightingPower = 21,
-            DamageLightningPowerNegated = 22,
-            TriggerCursePower = 31,
-            TriggerCursePowerNegated = 32,
-            DamageBearPower = 41,
-            DamageBearPowerNegated = 42,
-            ReceiveFrostPower = 51,
-            ReceiveFrostPowerNegated = 52
+            AgiliyyPower = 11,
+            LgPower = 21,
+            CursePower = 31,
+            BearPower = 41,
+            FrostPower = 51,
+        }
+
+        public enum RuneBcard3 : byte
+        {
+            DodgePercent = 51,
         }
 
         public enum AbsorbedSpirit : byte

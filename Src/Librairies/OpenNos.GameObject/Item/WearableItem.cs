@@ -390,16 +390,10 @@ namespace OpenNos.GameObject
                                 {
                                     case EquipmentType.MainWeapon:
                                         session.Character.ShellEffectMain.Clear();
-                                        session.Character.RuneEffectMain.Clear();
 
                                         foreach (var dto in inv.ShellEffects.Where(s => !s.IsRune))
                                         {
                                             session.Character.ShellEffectMain.Add(dto);
-                                        }
-
-                                        foreach (var dto in inv.RuneEffects)
-                                        {
-                                            session.Character.RuneEffectMain.Add(dto);
                                         }
 
                                         break;

@@ -247,7 +247,7 @@
     <Compile Include="RecipeList.cs" />
     <Compile Include="RollGeneratedItem.cs" />
     <Compile Include="Mate.cs" />
-    <Compile Include="RuneEffect.cs" />
+    <Compile Include="RuneEffects.cs" />
     <Compile Include="ScriptedInstance.cs" />
     <Compile Include="BCard.cs" />
     <Compile Include="ShellEffect.cs" />

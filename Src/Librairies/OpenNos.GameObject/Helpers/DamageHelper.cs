@@ -2132,23 +2132,6 @@ namespace OpenNos.GameObject.Helpers
 
             #endregion
 
-            #region Rune Powers Applying
-
-            if (attacker.Character != null)
-            {
-                var bcardsRunes = attacker.BCards.Where(x => x.Type == (byte)CardType.A7Powers1 || x.Type == (byte)CardType.A7Powers2);
-
-                if (bcardsRunes.Any())
-                {
-                    foreach (var bcardRune in bcardsRunes)
-                    {
-                        bcardRune.ApplyBCards(defender, attacker);
-                    }
-                }
-            }
-
-            #endregion
-
             return totalDamage;
 
             #region Functions

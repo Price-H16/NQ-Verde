@@ -2,6 +2,7 @@
 using System.Linq;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
+using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject.Helpers;
@@ -29,33 +30,33 @@ namespace OpenNos.Handler.PacketHandler.Mate
 
         public void SpecialSkill(UpetPacket upetPacket)
         {
-            if (upetPacket == null) return;
+            if (upetPacket == null)
+            {
+                return;
+            }
 
-            var penalty = Session.Account.PenaltyLogs.OrderByDescending(s => s.DateEnd).FirstOrDefault();
+            PenaltyLogDTO penalty = Session.Account.PenaltyLogs.OrderByDescending(s => s.DateEnd).FirstOrDefault();
             if (Session.Character.IsMuted() && penalty != null)
             {
                 if (Session.Character.Gender == GenderType.Female)
                 {
-                    Session.CurrentMapInstance?.Broadcast(
-                        Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("MUTED_FEMALE"), 1));
-                    Session.SendPacket(Session.Character.GenerateSay(
-                        string.Format(Language.Instance.GetMessageFromKey("MUTE_TIME"),
-                            (penalty.DateEnd - DateTime.Now).ToString("hh\\:mm\\:ss")), 11));
+                    Session.CurrentMapInstance?.Broadcast(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("MUTED_FEMALE"), 1));
+                    Session.SendPacket(Session.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("MUTE_TIME"), (penalty.DateEnd - DateTime.Now).ToString("hh\\:mm\\:ss")), 11));
                 }
                 else
                 {
-                    Session.CurrentMapInstance?.Broadcast(
-                        Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("MUTED_MALE"), 1));
-                    Session.SendPacket(Session.Character.GenerateSay(
-                        string.Format(Language.Instance.GetMessageFromKey("MUTE_TIME"),
-                            (penalty.DateEnd - DateTime.Now).ToString("hh\\:mm\\:ss")), 11));
+                    Session.CurrentMapInstance?.Broadcast(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("MUTED_MALE"), 1));
+                    Session.SendPacket(Session.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("MUTE_TIME"), (penalty.DateEnd - DateTime.Now).ToString("hh\\:mm\\:ss")), 11));
                 }
 
                 return;
             }
 
-            var attacker = Session.Character.Mates.FirstOrDefault(x => x.MateTransportId == upetPacket.MateTransportId);
-            if (attacker == null) return;
+            GameObject.Mate attacker = Session.Character.Mates.Find(x => x.IsTeamMember && x.MateType == MateType.Pet);
+            if (attacker == null)
+            {
+                return;
+            }
 
             NpcMonsterSkill mateSkill = null;
             if (attacker.Monster.Skills.Any())
@@ -64,12 +65,22 @@ namespace OpenNos.Handler.PacketHandler.Mate
             }
 
             if (mateSkill == null)
+            {
                 mateSkill = new NpcMonsterSkill
                 {
                     SkillVNum = 200
                 };
+            }
 
-            if (attacker.IsSitting) return;
+            if (mateSkill.LastSkillUse.AddMilliseconds((mateSkill.Skill?.Cooldown * 100) ?? 500) > DateTime.Now)
+            {
+                return;
+            }
+
+            if (attacker.IsSitting)
+            {
+                return;
+            }
 
             switch (upetPacket.TargetType)
             {
@@ -80,7 +91,6 @@ namespace OpenNos.Handler.PacketHandler.Mate
                         attacker.TargetHit(target.BattleEntity, mateSkill);
                         Session.SendPacketAfter("petsr 0", mateSkill.Skill.Cooldown * 100);
                     }
-
                     return;
 
                 case UserType.Npc:
@@ -98,7 +108,6 @@ namespace OpenNos.Handler.PacketHandler.Mate
                         attacker.TargetHit(target.BattleEntity, mateSkill);
                         Session.SendPacketAfter("petsr 0", mateSkill.Skill.Cooldown * 100);
                     }
-
                     return;
 
                 case UserType.Object:

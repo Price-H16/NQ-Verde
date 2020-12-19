@@ -72,7 +72,9 @@ namespace OpenNos.Mapper.Mappers
             output.WaterElement = input.WaterElement;
             output.WaterResistance = input.WaterResistance;
             output.XP = input.XP;
-            output.RuneAmount = input.RuneAmount;
+            output.RuneUpgrade = input.RuneUpgrade;
+            output.RuneBroke = input.RuneBroke;
+            output.RuneCount = input.RuneCount;
             output.IsBreaked = input.IsBreaked;
 
             return true;
@@ -142,7 +144,9 @@ namespace OpenNos.Mapper.Mappers
             output.WaterElement = input.WaterElement ?? 0;
             output.WaterResistance = input.WaterResistance ?? 0;
             output.XP = input.XP ?? 0;
-            output.RuneAmount = input.RuneAmount;
+            output.RuneUpgrade = input.RuneUpgrade;
+            output.RuneBroke = input.RuneBroke;
+            output.RuneCount = input.RuneCount;
             output.IsBreaked = input.IsBreaked;
             
             return true;
