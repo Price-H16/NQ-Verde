@@ -6,14 +6,14 @@ namespace OpenNos.DAL.EF.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.4.0")]
-    public sealed partial class RuneEffects : IMigrationMetadata
+    [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
+    public sealed partial class Runes : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RuneEffects));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Runes));
         
         string IMigrationMetadata.Id
         {
-            get { return "202004172342297_RuneEffects"; }
+            get { return "202012192201270_Runes"; }
         }
         
         string IMigrationMetadata.Source
