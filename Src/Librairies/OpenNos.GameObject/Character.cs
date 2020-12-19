@@ -722,6 +722,7 @@ namespace OpenNos.GameObject
         }
 
         public int RBBWin { get; internal set; }
+        
         public int RBBLose { get; internal set; }
 
         public int WaterResistance { get; set; }
@@ -729,8 +730,9 @@ namespace OpenNos.GameObject
         #endregion
 
         public DateTime LastBugSkill = DateTime.Now;
-
+        
         public DateTime LastSkillUseNew = DateTime.Now;
+        
         #region Methods
 
         public string GenerateEventIcon()
@@ -4332,7 +4334,7 @@ namespace OpenNos.GameObject
             string list = "";
             BazaarItemLink[] billist = new BazaarItemLink[ServerManager.Instance.BazaarList.Count + 20];
             ServerManager.Instance.BazaarList.CopyTo(billist);
-            foreach (BazaarItemLink bz in billist.Where(s => s != null && (s.BazaarItem.DateStart.AddHours(s.BazaarItem.Duration).AddDays(s.BazaarItem.MedalUsed ? 30 : 7) -DateTime.Now).TotalMinutes > 0 && s.BazaarItem.SellerId == CharacterId).Skip(packet.Index * 30).Take(30))
+            foreach (BazaarItemLink bz in billist.Where(s => s != null && (s.BazaarItem.DateStart.AddHours(s.BazaarItem.Duration).AddDays(s.BazaarItem.MedalUsed ? 30 : 7) - DateTime.Now).TotalMinutes > 0 && s.BazaarItem.SellerId == CharacterId).Skip(packet.Index * 30).Take(30))
             {
                 if (bz.Item != null)
                 {
@@ -4341,19 +4343,20 @@ namespace OpenNos.GameObject
                     bool package = bz.BazaarItem.IsPackage;
                     bool isNosbazar = bz.BazaarItem.MedalUsed;
                     long price = bz.BazaarItem.Price;
-                    long minutesLeft = (long) (bz.BazaarItem.DateStart.AddHours(bz.BazaarItem.Duration) - DateTime.Now).TotalMinutes;
-                    byte Status = minutesLeft >= 0 ? (soldedAmount < amount ? (byte) BazaarType.OnSale : (byte) BazaarType.Solded) : (byte) BazaarType.DelayExpired;
-                    if (Status == (byte) BazaarType.DelayExpired)
+                    long minutesLeft = (long)(bz.BazaarItem.DateStart.AddHours(bz.BazaarItem.Duration) - DateTime.Now).TotalMinutes;
+                    byte Status = minutesLeft >= 0 ? (soldedAmount < amount ? (byte)BazaarType.OnSale : (byte)BazaarType.Solded) : (byte)BazaarType.DelayExpired;
+                    if (Status == (byte)BazaarType.DelayExpired)
                     {
-                        minutesLeft = (long) (bz.BazaarItem.DateStart.AddHours(bz.BazaarItem.Duration).AddDays(isNosbazar ? 30 : 7) - DateTime.Now).TotalMinutes;
+                        minutesLeft = (long)(bz.BazaarItem.DateStart.AddHours(bz.BazaarItem.Duration).AddDays(isNosbazar ? 30 : 7) - DateTime.Now).TotalMinutes;
                     }
-
                     string info = "";
                     if (bz.Item.Item.Type == InventoryType.Equipment)
                     {
+                        // Dup shell
+                        //bz.Item.ShellEffects.Clear();
+                        //bz.Item.ShellEffects.AddRange(DAOFactory.ShellEffectDAO.LoadByEquipmentSerialId(bz.Item.EquipmentSerialId));
                         info = bz.Item?.GenerateEInfo().Replace(' ', '^').Replace("e_info^", "");
                     }
-
                     if (packet.Filter == 0 || packet.Filter == Status)
                     {
                         list += $"{bz.BazaarItem.BazaarItemId}|{bz.BazaarItem.SellerId}|{bz.Item.ItemVNum}|{soldedAmount}|{amount}|{(package ? 1 : 0)}|{price}|{Status}|{minutesLeft}|{(isNosbazar ? 1 : 0)}|0|{bz.Item.Rare}|{bz.Item.Upgrade}|0|0|{info} ";

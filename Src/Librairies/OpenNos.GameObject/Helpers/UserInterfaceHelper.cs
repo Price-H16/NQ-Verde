@@ -24,8 +24,7 @@ namespace OpenNos.GameObject.Helpers
 
         #region Methods
 
-        public static string GenerateBazarRecollect(long pricePerUnit, int soldAmount, int amount, long taxes,
-            long totalPrice, string name) => $"rc_scalc 1 {pricePerUnit} {soldAmount} {amount} {taxes} {totalPrice} {name.Replace(' ', '^')}";
+        public static string GenerateBazarRecollect(long pricePerUnit, int soldAmount, int amount, long taxes, long totalPrice, long name) => $"rc_scalc 1 {pricePerUnit} {soldAmount} {amount} {taxes} {totalPrice} {name}";
 
         public static string GenerateBSInfo(byte mode, short title, short time, short text) => $"bsinfo {mode} {title} {time} {text}";
 
@@ -215,7 +214,7 @@ namespace OpenNos.GameObject.Helpers
             List<string> itemssearch = packet.ItemVNumFilter == "0" ? new List<string>() : packet.ItemVNumFilter.Split(' ').ToList();
             List<BazaarItemLink> bzlist = new List<BazaarItemLink>();
             BazaarItemLink[] billist = new BazaarItemLink[ServerManager.Instance.BazaarList.Count + 20];
-            ServerManager.Instance.BazaarList.CopyTo(billist);
+            ServerManager.Instance.BazaarList.Where(s => s != null).CopyTo(billist);
             try
             {
                 foreach (BazaarItemLink bz in billist)
@@ -382,7 +381,6 @@ namespace OpenNos.GameObject.Helpers
                 return "";
             }
         }
-
 
         public static string GenerateRemovePacket(short slot) => $"{slot}.-1.0.0.0";
 

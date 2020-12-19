@@ -4,6 +4,7 @@ using System.Threading;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.DAL;
+using OpenNos.Data;
 using OpenNos.GameObject;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
@@ -28,27 +29,41 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
 
         public void GetBazaar(CScalcPacket cScalcPacket)
         {
+            if (Session.Character == null || Session.Character.InExchangeOrTrade)
+            {
+                return;
+            }
+
+            if (ServerManager.Instance.InShutdown)
+            {
+                return;
+            }
+
+            if (Session.Character.IsMuted())
+            {
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg("Tu es sanctonné tu ne peux pas faire ça", 0));
+                return;
+            }
             if (!Session.Character.CanUseNosBazaar())
             {
-                Session.SendPacket(
-                    UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("INFO_BAZAAR")));
+                Session.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("INFO_BAZAAR")));
                 return;
             }
 
             SpinWait.SpinUntil(() => !ServerManager.Instance.InBazaarRefreshMode);
 
-            var bazaarItemDTO = DAOFactory.BazaarItemDAO.LoadById(cScalcPacket.BazaarId);
+            BazaarItemDTO bazaarItemDTO = DAOFactory.BazaarItemDAO.LoadById(cScalcPacket.BazaarId);
 
             if (bazaarItemDTO != null)
             {
-                var itemInstanceDTO = DAOFactory.ItemInstanceDAO.LoadById(bazaarItemDTO.ItemInstanceId);
-                
+                ItemInstanceDTO itemInstanceDTO = DAOFactory.ItemInstanceDAO.LoadById(bazaarItemDTO.ItemInstanceId);
+
                 if (itemInstanceDTO == null)
                 {
                     return;
                 }
 
-                var itemInstance = new ItemInstance(itemInstanceDTO);
+                ItemInstance itemInstance = new ItemInstance(itemInstanceDTO);
 
                 if (itemInstance == null)
                 {
@@ -60,21 +75,21 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                     return;
                 }
 
-                if ((bazaarItemDTO.DateStart.AddHours(bazaarItemDTO.Duration)
-                                  .AddDays(bazaarItemDTO.MedalUsed ? 30 : 7) - DateTime.Now).TotalMinutes <= 0)
+                if ((bazaarItemDTO.DateStart.AddHours(bazaarItemDTO.Duration).AddDays(bazaarItemDTO.MedalUsed ? 30 : 7) - DateTime.Now).TotalMinutes <= 0)
                 {
                     return;
                 }
 
-                var soldAmount = bazaarItemDTO.Amount - itemInstance.Amount;
-                var taxes = bazaarItemDTO.MedalUsed ? 0 : (long) (bazaarItemDTO.Price * 0.10 * soldAmount);
-                var price = bazaarItemDTO.Price * soldAmount - taxes;
+                int soldAmount = bazaarItemDTO.Amount - itemInstance.Amount;
+                long taxes = bazaarItemDTO.MedalUsed ? 0 : (long)(bazaarItemDTO.Price * 0.10 * soldAmount);
+                long price = (bazaarItemDTO.Price * soldAmount) - taxes;
 
-                var name = itemInstance.Item?.Name ?? "None";
-                
-                if (bazaarItemDTO.DateStart.AddMinutes(2) >= DateTime.Now)
+                string name = itemInstance.Item?.Name ?? "None";
+
+                if (bazaarItemDTO.DateStart.AddMinutes(5) >= DateTime.Now)
                 {
-                    Session.SendPacket(UserInterfaceHelper.GenerateInfo("You have to wait at least 2 minutes after publishing the item to take it out from NosBazaar"));
+                    Session.SendPacket(
+                        UserInterfaceHelper.GenerateInfo("You have to wait at least 5 minutes after publishing the item to take it out from NosBazaar"));
                     return;
                 }
 
@@ -101,12 +116,11 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                             Session.Character.Inventory.AddToInventory(newItemInstance);
                         }
 
-                        Session.SendPacket(UserInterfaceHelper.GenerateBazarRecollect(bazaarItemDTO.Price, soldAmount,
-                            bazaarItemDTO.Amount, taxes, price, name));
+                        Session.SendPacket(UserInterfaceHelper.GenerateBazarRecollect(bazaarItemDTO.Price, soldAmount, bazaarItemDTO.Amount, taxes, price, itemInstance.Item.VNum));
 
-                        Logger.LogUserEvent("BAZAAR_REMOVE", Session.GenerateIdentity(),
-                            $"BazaarId: {cScalcPacket.BazaarId}, IId: {itemInstance.Id} VNum: {itemInstance.ItemVNum} Amount: {bazaarItemDTO.Amount} RemainingAmount: {itemInstance.Amount} Price: {bazaarItemDTO.Price}");
+                        Logger.LogUserEvent("BAZAAR_REMOVE", Session.GenerateIdentity(), $"BazaarId: {cScalcPacket.BazaarId}, IId: {itemInstance.Id} VNum: {itemInstance.ItemVNum} Amount: {bazaarItemDTO.Amount} RemainingAmount: {itemInstance.Amount} Price: {bazaarItemDTO.Price}");
 
+                        Logger.LogUserEvent("BAZAAR_REMOVE_PACKET", Session.GenerateIdentity(), $"Packet string: {cScalcPacket.OriginalContent.ToString()}");
                         if (DAOFactory.BazaarItemDAO.LoadById(bazaarItemDTO.BazaarItemId) != null)
                         {
                             DAOFactory.BazaarItemDAO.Delete(bazaarItemDTO.BazaarItemId);
@@ -118,9 +132,7 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
 
                         ServerManager.Instance.BazaarRefresh(bazaarItemDTO.BazaarItemId);
 
-                        Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(o =>
-                            new CSListPacketHandler(Session).RefreshPersonalBazarList(new CSListPacket()));
-                    }
+                        Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(o => new CSListPacketHandler(Session).RefreshPersonalBazarList(new CSListPacket()));                    }
                     else
                     {
                         Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
@@ -138,7 +150,7 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                 Session.SendPacket($"rc_scalc 0 -1 -1 -1 -1 -1 -1");
             }
         }
-
+        
         #endregion
     }
 }

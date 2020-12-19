@@ -255,10 +255,8 @@ namespace OpenNos.Master.Library.Client
             _client.ServiceProxy.UnregisterWorldServer(worldId);
         }
 
-        public void UpdateBazaar(string worldGroup, long bazaarItemId)
-        {
-            _client.ServiceProxy.UpdateBazaar(worldGroup, bazaarItemId);
-        }
+        public void UpdateBazaar(string worldGroup, long bazaarItemId) => _client.ServiceProxy.UpdateBazaar(worldGroup, bazaarItemId);
+
 
         public void UpdateFamily(string worldGroup, long familyId, bool changeFaction)
         {
@@ -272,20 +270,17 @@ namespace OpenNos.Master.Library.Client
 
         internal void OnCharacterConnected(long characterId)
         {
-            var characterName = DAOFactory.CharacterDAO.LoadById(characterId)?.Name;
+            string characterName = DAOFactory.CharacterDAO.LoadById(characterId)?.Name;
             CharacterConnectedEvent?.Invoke(new Tuple<long, string>(characterId, characterName), null);
         }
 
         internal void OnCharacterDisconnected(long characterId)
         {
-            var characterName = DAOFactory.CharacterDAO.LoadById(characterId)?.Name;
+            string characterName = DAOFactory.CharacterDAO.LoadById(characterId)?.Name;
             CharacterDisconnectedEvent?.Invoke(new Tuple<long, string>(characterId, characterName), null);
         }
+        internal void OnKickSession(long? accountId, int? sessionId) => SessionKickedEvent?.Invoke(new Tuple<long?, long?>(accountId, sessionId), null);
 
-        internal void OnKickSession(long? accountId, int? sessionId)
-        {
-            SessionKickedEvent?.Invoke(new Tuple<long?, long?>(accountId, sessionId), null);
-        }
 
         internal void OnRestart(int time = 5)
         {
@@ -307,10 +302,8 @@ namespace OpenNos.Master.Library.Client
             ShutdownEvent?.Invoke(null, null);
         }
 
-        internal void OnUpdateBazaar(long bazaarItemId)
-        {
-            BazaarRefresh?.Invoke(bazaarItemId, null);
-        }
+        internal void OnUpdateBazaar(long bazaarItemId) => BazaarRefresh?.Invoke(bazaarItemId, null);
+
 
         internal void OnUpdateFamily(long familyId, bool changeFaction)
         {

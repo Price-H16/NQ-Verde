@@ -116,7 +116,7 @@ namespace OpenNos.GameObject.Networking
 
         public List<long> BannedCharacters { get; set; } = new List<long>();
 
-        public List<BazaarItemLink> BazaarList { get; set; }
+        public ThreadSafeGenericList<BazaarItemLink> BazaarList { get; set; }
 
         public List<short> BossVNums { get; set; }
 
@@ -2155,25 +2155,23 @@ namespace OpenNos.GameObject.Networking
         
         public void LoadBazaar()
         {
-            BazaarList = new List<BazaarItemLink>();
-            foreach (var bz in DAOFactory.BazaarItemDAO.LoadAll().ToArray())
+            BazaarList = new ThreadSafeGenericList<BazaarItemLink>();
+            OrderablePartitioner<BazaarItemDTO> bazaarPartitioner = Partitioner.Create(DAOFactory.BazaarItemDAO.LoadAll(), EnumerablePartitionerOptions.NoBuffering);
+            Parallel.ForEach(bazaarPartitioner, new ParallelOptions { MaxDegreeOfParallelism = 8 }, bazaarItem =>
             {
-                var item = new BazaarItemLink
+                BazaarItemLink item = new BazaarItemLink
                 {
-                    BazaarItem = bz
+                    BazaarItem = bazaarItem
                 };
-                var chara = DAOFactory.CharacterDAO.LoadById(bz.SellerId);
+                CharacterDTO chara = DAOFactory.CharacterDAO.LoadById(bazaarItem.SellerId);
                 if (chara != null)
                 {
                     item.Owner = chara.Name;
-                    item.Item = new ItemInstance(DAOFactory.ItemInstanceDAO?.LoadById(bz.ItemInstanceId));
+                    item.Item = new ItemInstance(DAOFactory.ItemInstanceDAO.LoadById(bazaarItem.ItemInstanceId));
                 }
-
                 BazaarList.Add(item);
-            }
-
-            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("BAZAAR_LOADED"),
-                BazaarList.Count));
+            });
+            Console.WriteLine($"[Load] Bazaar Itemlist: {BazaarList.Count} - successfully loaded");
         }
 
         public void LoadBoxItem()
@@ -3509,36 +3507,33 @@ namespace OpenNos.GameObject.Networking
 
         private void OnBazaarRefresh(object sender, EventArgs e)
         {
-            var bazaarId = (long)sender;
-            var bzdto = DAOFactory.BazaarItemDAO.LoadById(bazaarId);
-            var bzlink = BazaarList.Find(s => s.BazaarItem.BazaarItemId == bazaarId);
+            long bazaarId = (long)sender;
+            BazaarItemDTO bzdto = DAOFactory.BazaarItemDAO.LoadById(bazaarId);
+            BazaarItemLink bzlink = BazaarList.Find(s => s.BazaarItem.BazaarItemId == bazaarId);
             lock (BazaarList)
             {
                 if (bzdto != null)
                 {
-                    var chara = DAOFactory.CharacterDAO.LoadById(bzdto.SellerId);
+                    CharacterDTO chara = DAOFactory.CharacterDAO.LoadById(bzdto.SellerId);
                     if (bzlink != null)
                     {
                         BazaarList.Remove(bzlink);
                         bzlink.BazaarItem = bzdto;
                         bzlink.Owner = chara.Name;
-                        bzlink.Item =
-                            new ItemInstance(DAOFactory.ItemInstanceDAO.LoadById(bzdto.ItemInstanceId));
+                        bzlink.Item = new ItemInstance(DAOFactory.ItemInstanceDAO.LoadById(bzdto.ItemInstanceId));
                         BazaarList.Add(bzlink);
                     }
                     else
                     {
-                        var item = new BazaarItemLink
+                        BazaarItemLink item = new BazaarItemLink
                         {
                             BazaarItem = bzdto
                         };
                         if (chara != null)
                         {
                             item.Owner = chara.Name;
-                            item.Item = new ItemInstance(
-                                DAOFactory.ItemInstanceDAO.LoadById(bzdto.ItemInstanceId));
+                            item.Item = new ItemInstance(DAOFactory.ItemInstanceDAO.LoadById(bzdto.ItemInstanceId));
                         }
-
                         BazaarList.Add(item);
                     }
                 }
@@ -3547,10 +3542,9 @@ namespace OpenNos.GameObject.Networking
                     BazaarList.Remove(bzlink);
                 }
             }
-
             InBazaarRefreshMode = false;
         }
-
+        
         private void OnConfiguratinEvent(object sender, EventArgs e)
         {
             Configuration = (ConfigurationObject)sender;

@@ -47,7 +47,7 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                 || depositPacket.Inventory == InventoryType.EighthPartnerInventory
                 || depositPacket.Inventory == InventoryType.NinthPartnerInventory
                 || depositPacket.Inventory == InventoryType.TenthPartnerInventory
-                )
+            )
             {
                 ServerManager.Instance.Kick(Session.Character.Name);
                 Logger.LogUserEvent("WAREHOUSE_CHEAT_TRY", Session.GenerateIdentity(), $"Packet string: {depositPacket.OriginalContent.ToString()}");

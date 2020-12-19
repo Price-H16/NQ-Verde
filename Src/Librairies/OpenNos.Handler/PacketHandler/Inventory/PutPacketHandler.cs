@@ -41,11 +41,10 @@ namespace OpenNos.Handler.PacketHandler.Inventory
 
             lock (Session.Character.Inventory)
             {
-                var invitem =
+                ItemInstance invitem =
                     Session.Character.Inventory.LoadBySlotAndType(putPacket.Slot, putPacket.InventoryType);
                 if (invitem?.Item.IsDroppable == true && invitem.Item.IsTradable
-                                                      && !Session.Character.InExchangeOrTrade &&
-                                                      putPacket.InventoryType != InventoryType.Bazaar)
+                                                      && !Session.Character.InExchangeOrTrade && putPacket.InventoryType != InventoryType.Bazaar)
                 {
                     if (putPacket.Amount > 0 && putPacket.Amount <=
                         DependencyContainer.Instance.GetInstance<JsonItemConfiguration>().Inventory.MaxItemPerSlot)

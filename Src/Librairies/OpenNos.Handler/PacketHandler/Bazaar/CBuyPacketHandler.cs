@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
+using System.Threading;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.DAL;
@@ -83,7 +85,7 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                 return;
             }
 
-            Observable.Timer(TimeSpan.FromSeconds(10)).Subscribe(x =>
+            Observable.Timer(TimeSpan.FromSeconds(10)).Subscribe(x => 
             {
                 if (Session?.Character?.BazarRequests > 0)
                     Session.Character.BazarRequests = 0;
@@ -94,14 +96,15 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                 return;
             }
 
-            
-            var bz = DAOFactory.BazaarItemDAO.LoadById(cBuyPacket.BazaarId);
+            SpinWait.SpinUntil(() => !ServerManager.Instance.InBazaarRefreshMode);
+            BazaarItemDTO bz = DAOFactory.BazaarItemDAO.LoadById(cBuyPacket.BazaarId);
             if (bz != null && cBuyPacket.Amount > 0)
             {
-                var price = cBuyPacket.Amount * bz.Price;
+                long price = cBuyPacket.Amount * bz.Price;
+
                 if (Session.Character.Gold >= price)
                 {
-                    var bzcree = new BazaarItemLink {BazaarItem = bz};
+                    BazaarItemLink bzcree = new BazaarItemLink { BazaarItem = bz };
                     if (DAOFactory.CharacterDAO.LoadById(bz.SellerId) != null)
                     {
                         bzcree.Owner = DAOFactory.CharacterDAO.LoadById(bz.SellerId)?.Name;
@@ -111,6 +114,20 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                     {
                         return;
                     }
+
+                    if (cBuyPacket.Price * cBuyPacket.Amount < 501)
+                    {
+                        Session.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("MINIMUM_BUY_PRICE_IS_501")));
+                        return;
+                    }
+
+
+                    if (Session.Character.LastBazaarInsert.AddSeconds(5) > DateTime.Now)
+                    {
+                        return;
+                    }
+
+
 
                     if (cBuyPacket.Amount <= bzcree.Item.Amount)
                     {
@@ -122,11 +139,6 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                             return;
                         }
 
-                        if (Session.Character.LastBazaarInsert.AddSeconds(5) > DateTime.Now)
-                        {
-                            return;
-                        }
-
                         if (bzcree.Item != null)
                         {
                             if (bz.IsPackage && cBuyPacket.Amount != bz.Amount)
@@ -134,20 +146,19 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                                 return;
                             }
 
-                            var bzitemdto = DAOFactory.ItemInstanceDAO.LoadById(bzcree.BazaarItem.ItemInstanceId);
-
+                            ItemInstanceDTO bzitemdto =
+                                DAOFactory.ItemInstanceDAO.LoadById(bzcree.BazaarItem.ItemInstanceId);
                             if (bzitemdto.Amount < cBuyPacket.Amount)
                             {
                                 return;
                             }
 
-                            // Edit this soo we dont generate new guid every single time we take
-                            // something out.
-                            var newBz = bzcree.Item.DeepCopy();
+                            // Edit this soo we dont generate new guid every single time we take something out.
+                            ItemInstance newBz = bzcree.Item.DeepCopy();
                             newBz.Id = Guid.NewGuid();
                             newBz.Amount = cBuyPacket.Amount;
                             newBz.Type = newBz.Item.Type;
-                            var newInv = Session.Character.Inventory.AddToInventory(newBz);
+                            List<ItemInstance> newInv = Session.Character.Inventory.AddToInventory(newBz);
 
                             if (newInv.Count > 0)
                             {
@@ -167,14 +178,10 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                                 {
                                     DestinationCharacterId = bz.SellerId,
                                     SourceWorldId = ServerManager.Instance.WorldId,
-                                    Message = StaticPacketHelper.Say(1, bz.SellerId, 12,
-                                        string.Format(Language.Instance.GetMessageFromKey("BAZAAR_ITEM_SOLD"),
-                                            cBuyPacket.Amount, bzcree.Item.Item.Name)),
+                                    Message = StaticPacketHelper.Say(1, bz.SellerId, 12, string.Format(Language.Instance.GetMessageFromKey("BAZAAR_ITEM_SOLD"), cBuyPacket.Amount, bzcree.Item.Item.Name)),
                                     Type = MessageType.Other
                                 });
-                                
-                                Session.Character.LastBazaarBuy = DateTime.Now;
-                                
+
                                 Logger.LogUserEvent("BAZAAR_BUY", Session.GenerateIdentity(),
                                     $"BazaarId: {cBuyPacket.BazaarId} VNum: {cBuyPacket.VNum} Amount: {cBuyPacket.Amount} Price: {cBuyPacket.Price}");
                                 Logger.LogUserEvent("BAZAAR_BUY_PACKET", Session.GenerateIdentity(), $"Packet string: {cBuyPacket.OriginalContent.ToString()}");

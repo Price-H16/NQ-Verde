@@ -73,11 +73,11 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                 Session.Character.ExchangeInfo == null || Session.Character.ExchangeInfo.ExchangeList.Any())
                 return;
 
-            for (int j = 4, i = 0; j <= packetsplit.Length && i < 10; j += 3, i++)
+            for (int j = 7, i = 0; j <= packetsplit.Length && i < 10; j += 3, i++)
             {
-                byte.TryParse(packetsplit[j - 2], out type[i]);
-                short.TryParse(packetsplit[j - 1], out slot[i]);
-                short.TryParse(packetsplit[j], out qty[i]);
+                byte.TryParse(packetsplit[j - 3], out type[i]);
+                short.TryParse(packetsplit[j - 2], out slot[i]);
+                short.TryParse(packetsplit[j - 1], out qty[i]);
                 if ((InventoryType)type[i] == InventoryType.Bazaar)
                 {
                     Session.CloseExchange(targetSession);

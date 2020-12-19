@@ -75,7 +75,10 @@ namespace OpenNos.Master.Server
 
         public void Cleanup()
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return;
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
+            {
+                return;
+            }
 
             MSManager.Instance.ConnectedAccounts.Clear();
             MSManager.Instance.WorldServers.Clear();
@@ -83,16 +86,20 @@ namespace OpenNos.Master.Server
 
         public void CleanupOutdatedSession()
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return;
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
+            {
+                return;
+            }
 
-            var tmp = new AccountConnection[MSManager.Instance.ConnectedAccounts.Count + 20];
+            AccountConnection[] tmp = new AccountConnection[MSManager.Instance.ConnectedAccounts.Count + 20];
             lock (MSManager.Instance.ConnectedAccounts)
             {
                 MSManager.Instance.ConnectedAccounts.CopyTo(tmp);
             }
-
-            foreach (var account in tmp.Where(a => a?.LastPulse.AddMinutes(5) <= DateTime.Now))
+            foreach (AccountConnection account in tmp.Where(a => a != null && a?.LastPulse.AddMinutes(5) <= DateTime.Now))
+            {
                 KickSession(account.AccountId, null);
+            }
         }
 
         public bool ConnectAccount(Guid worldId, long accountId, int sessionId)
@@ -259,9 +266,15 @@ namespace OpenNos.Master.Server
 
         public void PulseAccount(long accountId)
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return;
-            var account = MSManager.Instance.ConnectedAccounts.Find(a => a.AccountId.Equals(accountId));
-            if (account != null) account.LastPulse = DateTime.Now;
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
+            {
+                return;
+            }
+            AccountConnection account = MSManager.Instance.ConnectedAccounts.Find(a => a.AccountId.Equals(accountId));
+            if (account != null)
+            {
+                account.LastPulse = DateTime.Now;
+            }
         }
 
         public void RefreshPenalty(int penaltyId)
@@ -276,7 +289,10 @@ namespace OpenNos.Master.Server
 
         public void RegisterAccountLogin(long accountId, int sessionId, string ipAddress)
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return;
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
+            {
+                return;
+            }
             MSManager.Instance.ConnectedAccounts.RemoveAll(a => a.AccountId.Equals(accountId));
             MSManager.Instance.ConnectedAccounts.Add(new AccountConnection(accountId, sessionId, ipAddress));
         }
@@ -292,17 +308,19 @@ namespace OpenNos.Master.Server
 
         public int? RegisterWorldServer(SerializableWorldServer worldServer)
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return null;
-            var ws = new WorldServer(worldServer.Id,
-                new ScsTcpEndPoint(worldServer.EndPointIP, worldServer.EndPointPort), worldServer.AccountLimit,
-                worldServer.WorldGroup)
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
+            {
+                return null;
+            }
+            WorldServer ws = new WorldServer(worldServer.Id, new ScsTcpEndPoint(worldServer.EndPointIP, worldServer.EndPointPort), worldServer.AccountLimit, worldServer.WorldGroup)
             {
                 CommunicationServiceClient = CurrentClient,
-                ChannelId = Enumerable.Range(1, 30).Except(MSManager.Instance.WorldServers
-                    .Where(w => w.WorldGroup.Equals(worldServer.WorldGroup)).OrderBy(w => w.ChannelId)
-                    .Select(w => w.ChannelId)).First()
+                ChannelId = Enumerable.Range(1, 30).Except(MSManager.Instance.WorldServers.Where(w => w.WorldGroup.Equals(worldServer.WorldGroup)).OrderBy(w => w.ChannelId).Select(w => w.ChannelId)).First()
             };
-            if (worldServer.EndPointPort == MSManager.Instance.ConfigurationObject.Act4Port) ws.ChannelId = 51;
+            if (worldServer.EndPointPort == MSManager.Instance.ConfigurationObject.Act4Port)
+            {
+                ws.ChannelId = 51;
+            }
             MSManager.Instance.WorldServers.Add(ws);
             return ws.ChannelId;
         }
@@ -321,33 +339,38 @@ namespace OpenNos.Master.Server
 
         public long[][] RetrieveOnlineCharacters(long characterId)
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return null;
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
+            {
+                return null;
+            }
 
-            var connections = MSManager.Instance.ConnectedAccounts.Where(s =>
-                s.IpAddress == MSManager.Instance.ConnectedAccounts.Find(f => f.CharacterId == characterId)
-                    ?.IpAddress && s.CharacterId != 0);
+            List<AccountConnection> connections = MSManager.Instance.ConnectedAccounts.Where(s => s.IpAddress == MSManager.Instance.ConnectedAccounts.Find(f => f.CharacterId == characterId)?.IpAddress && s.CharacterId != 0);
 
-            var result = new long[connections.Count][];
+            long[][] result = new long[connections.Count][];
 
-            var i = 0;
-            foreach (var acc in connections)
+            int i = 0;
+            foreach (AccountConnection acc in connections)
             {
                 result[i] = new long[2];
                 result[i][0] = acc.CharacterId;
                 result[i][1] = acc.ConnectedWorld?.ChannelId ?? 0;
                 i++;
             }
-
             return result;
         }
 
         public string RetrieveOriginWorld(long accountId)
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return null;
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
+            {
+                return null;
+            }
 
-            var account = MSManager.Instance.ConnectedAccounts.Find(s => s.AccountId.Equals(accountId));
+            AccountConnection account = MSManager.Instance.ConnectedAccounts.Find(s => s.AccountId.Equals(accountId));
             if (account?.OriginWorld != null)
+            {
                 return $"{account.OriginWorld.Endpoint.IpAddress}:{account.OriginWorld.Endpoint.TcpPort}";
+            }
             return null;
         }
 
@@ -378,7 +401,7 @@ namespace OpenNos.Master.Server
 
             foreach (WorldServer world in MSManager.Instance.WorldServers.OrderBy(w => w.WorldGroup))
             {
-
+                
 
 
                 if (lastGroup != world.WorldGroup)
@@ -597,10 +620,15 @@ namespace OpenNos.Master.Server
 
         public void UpdateBazaar(string worldGroup, long bazaarItemId)
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return;
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
+            {
+                return;
+            }
 
-            foreach (var world in MSManager.Instance.WorldServers.Where(w => w.WorldGroup.Equals(worldGroup)))
+            foreach (WorldServer world in MSManager.Instance.WorldServers.Where(w => w.WorldGroup.Equals(worldGroup)))
+            {
                 world.CommunicationServiceClient.GetClientProxy<ICommunicationClient>().UpdateBazaar(bazaarItemId);
+            }
         }
 
         public void UpdateFamily(string worldGroup, long familyId, bool changeFaction)

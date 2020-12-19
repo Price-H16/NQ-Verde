@@ -43,7 +43,6 @@ namespace OpenNos.Handler.PacketHandler.Inventory
 
                     if (mvePacket.InventoryType == InventoryType.Bazaar || mvePacket.DestinationInventoryType == InventoryType.Miniland)
                     {
-                        Session.SendPacket(UserInterfaceHelper.GenerateMsg(("Really you dupe man ?"), 0));
                         Logger.LogUserEvent("DUPE TRY", Session.Character.GenerateIdentity(), "CharacterId: " + Session.Character.CharacterId + " mvePacket");
                         return;
                     }

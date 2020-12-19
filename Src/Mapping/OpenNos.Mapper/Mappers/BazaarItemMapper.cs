@@ -9,7 +9,10 @@ namespace OpenNos.Mapper.Mappers
 
         public static bool ToBazaarItem(BazaarItemDTO input, BazaarItem output)
         {
-            if (input == null) return false;
+            if (input == null)
+            {
+                return false;
+            }
 
             output.Amount = input.Amount;
             output.BazaarItemId = input.BazaarItemId;
@@ -26,7 +29,10 @@ namespace OpenNos.Mapper.Mappers
 
         public static bool ToBazaarItemDTO(BazaarItem input, BazaarItemDTO output)
         {
-            if (input == null) return false;
+            if (input == null)
+            {
+                return false;
+            }
 
             output.Amount = input.Amount;
             output.BazaarItemId = input.BazaarItemId;

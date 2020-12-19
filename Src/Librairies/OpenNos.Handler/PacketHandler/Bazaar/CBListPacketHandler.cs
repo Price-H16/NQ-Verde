@@ -25,10 +25,20 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
 
         public void RefreshBazarList(CBListPacket cbListPacket)
         {
+            if (ServerManager.Instance.InShutdown)
+            {
+                return;
+            }
+
+            if (Session.Character.IsMuted())
+            {
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg("You are sanctioned you cannot do this", 0));
+                return;
+            }
+
             if (!Session.Character.CanUseNosBazaar())
             {
-                Session.SendPacket(
-                    UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("INFO_BAZAAR")));
+                Session.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("INFO_BAZAAR")));
                 return;
             }
 
