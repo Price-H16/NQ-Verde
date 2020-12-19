@@ -312,9 +312,6 @@
           <e p="202004031430029_changes03042020.cs" t="Include" />
           <e p="202004031430029_changes03042020.designer.cs" t="Include" />
           <e p="202004031430029_changes03042020.resx" t="Include" />
-          <e p="202004172342297_RuneEffects.cs" t="Include" />
-          <e p="202004172342297_RuneEffects.designer.cs" t="Include" />
-          <e p="202004172342297_RuneEffects.resx" t="Include" />
           <e p="202005081717558_levelcap.cs" t="Include" />
           <e p="202005081717558_levelcap.designer.cs" t="Include" />
           <e p="202005081717558_levelcap.resx" t="Include" />
@@ -381,6 +378,9 @@
           <e p="202012190114206_Chat.cs" t="Include" />
           <e p="202012190114206_Chat.designer.cs" t="Include" />
           <e p="202012190114206_Chat.resx" t="Include" />
+          <e p="202012192201270_Runes.cs" t="Include" />
+          <e p="202012192201270_Runes.designer.cs" t="Include" />
+          <e p="202012192201270_Runes.resx" t="Include" />
           <e p="Configuration.cs" t="Include" />
         </e>
         <e p="MinigameLog.cs" t="Include" />

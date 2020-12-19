@@ -1019,17 +1019,16 @@ namespace OpenNos.GameObject.Networking
             {
 
                 if (mapId != null)
-                //MapInstance gotoMapInstance = GetMapInstanceByMapId(mapId.Value);
-                /*if (session.Character.Level < gotoMapInstance.MinLevel || session.Character.Level > gotoMapInstance.MaxLevel)
+                {
+                    MapInstance gotoMapInstance = GetMapInstanceByMapId(mapId.Value);
+                    if (session.Character.Level < gotoMapInstance.MinLevel || session.Character.Level > gotoMapInstance.MaxLevel || session.Character.HeroLevel < gotoMapInstance.MinHeroLevel || session.Character.HeroLevel > gotoMapInstance.MaxHeroLevel)
                     {
                         session.SendPacket(UserInterfaceHelper.GenerateInfo(string.Format(Language.Instance.GetMessageFromKey("LOW_LVL_MAP"), gotoMapInstance.MinLevel, gotoMapInstance.MaxLevel)));
                         return;
-                    }*/
+                    }
 
-                {
                     session.Character.MapInstanceId = GetBaseMapInstanceIdByMapId((short)mapId);
                 }
-
                 ChangeMapInstance(id, session.Character.MapInstanceId, mapX, mapY);
             }
         }

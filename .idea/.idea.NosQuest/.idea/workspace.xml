@@ -26,9 +26,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf9525a9-00e4-4327-b938-16302dc69d24" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.NosQuest/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.NosQuest/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Map/MapInstance.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Map/MapInstance.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Basic/GameStartPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Basic/GameStartPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.NosQuest/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.NosQuest/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Networking/ServerManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Networking/ServerManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +44,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/ExcListPacketHandler.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/MvePacketHandler.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/PutPacketHandler.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Npc/SellPacketHandler.cs" />
@@ -96,6 +94,7 @@
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Basic/GameStartPacketHandler.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Map/MapInstance.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Networking/ServerManager.cs" />
       </list>
     </option>
   </component>
@@ -197,7 +196,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1608404631982</updated>
-      <workItem from="1608404649487" duration="11381000" />
+      <workItem from="1608404649487" duration="11714000" />
     </task>
     <servers />
   </component>
