@@ -1,0 +1,2206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\MSI-PC\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\MSI-PC\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_OpenZeub.1623353571.00" t="ExcludeRecursive" />
+    <e p="C:\Users\MSI-PC\Desktop\Dev\openzeub" t="IncludeFlat">
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="ChikenApi" t="Include" />
+      <e p="OpenNos.DAL" t="Include" />
+      <e p="OpenNos.Executables" t="Include" />
+      <e p="OpenNos.Libraries" t="Include" />
+      <e p="OpenNos.Mapping" t="Include" />
+      <e p="OpenZeub.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Plugins" t="Include" />
+      <e p="Src\ChickenApi\ChickenApi.Dal" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ChickenApi.Dal.csproj" t="IncludeRecursive" />
+        <e p="Extensions" t="Include">
+          <e p="IDtoExtension.cs" t="Include" />
+        </e>
+        <e p="IDto.cs" t="Include" />
+        <e p="IGenericAsyncMappedRepository.cs" t="Include" />
+        <e p="IGenericAsyncRepository.cs" t="Include" />
+        <e p="IGenericAsyncUuidRepository.cs" t="Include" />
+        <e p="IGenericMappedRepository.cs" t="Include" />
+        <e p="IGenericSyncMappedRepository.cs" t="Include" />
+        <e p="IGenericSyncRepository.cs" t="Include" />
+        <e p="IGenericSyncUuidRepository.cs" t="Include" />
+        <e p="IGenericUuidRepository.cs" t="Include" />
+        <e p="IKeyValueAsyncRepository.cs" t="Include" />
+        <e p="IKeyValueSyncRepository.cs" t="Include" />
+        <e p="IMappedDto.cs" t="Include" />
+        <e p="IMapper.cs" t="Include" />
+        <e p="IUuidDto.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\ChickenApi\ChickenApi.Events" t="IncludeRecursive">
+        <e p="AsyncTypedSenderEventHandler.cs" t="Include" />
+        <e p="BasicEventPipelineAsync.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ChickenApi.Events.csproj" t="IncludeRecursive" />
+        <e p="ChickenEvent.cs" t="Include" />
+        <e p="GenericEventHandlerBase.cs" t="Include" />
+        <e p="IEventFilter.cs" t="Include" />
+        <e p="IEventHandler.cs" t="Include" />
+        <e p="IEventNotification.cs" t="Include" />
+        <e p="IEventPipeline.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TypedSenderEventHandler.cs" t="Include" />
+      </e>
+      <e p="Src\ChickenApi\ChickenApi.Plugins" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ChickenApi.Plugins.csproj" t="IncludeRecursive" />
+        <e p="Exceptions" t="Include">
+          <e p="CriticalPluginException.cs" t="Include" />
+          <e p="PluginException.cs" t="Include" />
+        </e>
+        <e p="IConfigurablePlugin.cs" t="Include" />
+        <e p="ICorePlugin.cs" t="Include" />
+        <e p="IGamePlugin.cs" t="Include" />
+        <e p="IPlugin.cs" t="Include" />
+        <e p="IPluginConfiguration.cs" t="Include" />
+        <e p="IPluginManager.cs" t="Include" />
+        <e p="Modules" t="Include">
+          <e p="CoreContainerModule.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="PluginEnableTime.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Dal\OpenNos.DAL" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DAOFactory.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.DAL.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Dal\OpenNos.DAL.DAO" t="IncludeRecursive">
+        <e p="AccountDAO.cs" t="Include" />
+        <e p="app.config" t="Include" />
+        <e p="BazaarItemDAO.cs" t="Include" />
+        <e p="BCardDAO.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="BotAuthorityDAO.cs" t="Include" />
+        <e p="BoxItemDAO.cs" t="Include" />
+        <e p="CardDAO.cs" t="Include" />
+        <e p="CellonOptionDAO.cs" t="Include" />
+        <e p="CharacterDAO.cs" t="Include" />
+        <e p="CharacterQuestDAO.cs" t="Include" />
+        <e p="CharacterRelationDAO.cs" t="Include" />
+        <e p="CharacterSkillDAO.cs" t="Include" />
+        <e p="CharacterTitleDAO.cs" t="Include" />
+        <e p="ChatLogDAO.cs" t="Include" />
+        <e p="ComboDAO.cs" t="Include" />
+        <e p="DropDAO.cs" t="Include" />
+        <e p="FamilyCharacterDAO.cs" t="Include" />
+        <e p="FamilyDAO.cs" t="Include" />
+        <e p="FamilyLogDAO.cs" t="Include" />
+        <e p="GeneralLogDAO.cs" t="Include" />
+        <e p="ItemDAO.cs" t="Include" />
+        <e p="ItemInstanceDAO.cs" t="Include" />
+        <e p="MailDAO.cs" t="Include" />
+        <e p="MaintenanceLogDAO.cs" t="Include" />
+        <e p="MapDAO.cs" t="Include" />
+        <e p="MapMonsterDAO.cs" t="Include" />
+        <e p="MapNpcDAO.cs" t="Include" />
+        <e p="MapTypeDAO.cs" t="Include" />
+        <e p="MapTypeMapDAO.cs" t="Include" />
+        <e p="MateDAO.cs" t="Include" />
+        <e p="MinigameLogDAO.cs" t="Include" />
+        <e p="MinilandObjectDAO.cs" t="Include" />
+        <e p="NpcMonsterDAO.cs" t="Include" />
+        <e p="NpcMonsterSkillDAO.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.DAL.DAO.csproj" t="IncludeRecursive" />
+        <e p="PartnerSkillDAO.cs" t="Include" />
+        <e p="PenaltyLogDAO.cs" t="Include" />
+        <e p="PortalDAO.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="QuestDAO.cs" t="Include" />
+        <e p="QuestLogDAO.cs" t="Include" />
+        <e p="QuestObjectiveDAO.cs" t="Include" />
+        <e p="QuestRewardDAO.cs" t="Include" />
+        <e p="QuicklistEntryDAO.cs" t="Include" />
+        <e p="RecipeDAO.cs" t="Include" />
+        <e p="RecipeItemDAO.cs" t="Include" />
+        <e p="RecipeListDAO.cs" t="Include" />
+        <e p="RespawnDAO.cs" t="Include" />
+        <e p="RespawnMapTypeDAO.cs" t="Include" />
+        <e p="RollGeneratedItemDAO.cs" t="Include" />
+        <e p="ScriptedInstanceDAO.cs" t="Include" />
+        <e p="ShellEffectDAO.cs" t="Include" />
+        <e p="ShopDAO.cs" t="Include" />
+        <e p="ShopItemDAO.cs" t="Include" />
+        <e p="ShopSkillDAO.cs" t="Include" />
+        <e p="SkillDAO.cs" t="Include" />
+        <e p="StaticBonusDAO.cs" t="Include" />
+        <e p="StaticBuffDAO.cs" t="Include" />
+        <e p="TeleporterDAO.cs" t="Include" />
+      </e>
+      <e p="Src\Dal\OpenNos.DAL.EF" t="IncludeRecursive">
+        <e p="Account.cs" t="Include" />
+        <e p="app.config" t="Include" />
+        <e p="Base" t="Include">
+          <e p="SynchronizableBaseEntity.cs" t="Include" />
+        </e>
+        <e p="BazaarItem.cs" t="Include" />
+        <e p="BCard.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="BotAuthority.cs" t="Include" />
+        <e p="BoxItem.cs" t="Include" />
+        <e p="Card.cs" t="Include" />
+        <e p="CellonOption.cs" t="Include" />
+        <e p="Character.cs" t="Include" />
+        <e p="CharacterQuest.cs" t="Include" />
+        <e p="CharacterRelation.cs" t="Include" />
+        <e p="CharacterSkill.cs" t="Include" />
+        <e p="CharacterTitle.cs" t="Include" />
+        <e p="ChatLog.cs" t="Include" />
+        <e p="Combo.cs" t="Include" />
+        <e p="Context" t="Include">
+          <e p="OpenNosContext.cs" t="Include" />
+        </e>
+        <e p="Drop.cs" t="Include" />
+        <e p="Family.cs" t="Include" />
+        <e p="FamilyCharacter.cs" t="Include" />
+        <e p="FamilyLog.cs" t="Include" />
+        <e p="GeneralLog.cs" t="Include" />
+        <e p="Helpers" t="Include">
+          <e p="DataAccessHelper.cs" t="Include" />
+        </e>
+        <e p="Item.cs" t="Include" />
+        <e p="ItemInstance.cs" t="Include" />
+        <e p="Mail.cs" t="Include" />
+        <e p="MaintenanceLog.cs" t="Include" />
+        <e p="Map.cs" t="Include" />
+        <e p="MapMonster.cs" t="Include" />
+        <e p="MapNpc.cs" t="Include" />
+        <e p="MapType.cs" t="Include" />
+        <e p="MapTypeMap.cs" t="Include" />
+        <e p="Mate.cs" t="Include" />
+        <e p="Migrations" t="Include">
+          <e p="201904261626285_OpenNos.cs" t="Include" />
+          <e p="201904261626285_OpenNos.Designer.cs" t="Include" />
+          <e p="201904261626285_OpenNos.resx" t="Include" />
+          <e p="201907102208094_MaxPartnerCount.cs" t="Include" />
+          <e p="201907102208094_MaxPartnerCount.Designer.cs" t="Include" />
+          <e p="201907102208094_MaxPartnerCount.resx" t="Include" />
+          <e p="201907110359048_QuestTimeSpaceId.cs" t="Include" />
+          <e p="201907110359048_QuestTimeSpaceId.Designer.cs" t="Include" />
+          <e p="201907110359048_QuestTimeSpaceId.resx" t="Include" />
+          <e p="201907182020416_BoxItem.cs" t="Include" />
+          <e p="201907182020416_BoxItem.Designer.cs" t="Include" />
+          <e p="201907182020416_BoxItem.resx" t="Include" />
+          <e p="201909251933445_ChangeName.cs" t="Include" />
+          <e p="201909251933445_ChangeName.Designer.cs" t="Include" />
+          <e p="201909251933445_ChangeName.resx" t="Include" />
+          <e p="201909301318179_GoldBank_Fix.cs" t="Include" />
+          <e p="201909301318179_GoldBank_Fix.designer.cs" t="Include" />
+          <e p="201909301318179_GoldBank_Fix.resx" t="Include" />
+          <e p="201910031529467_Title.cs" t="Include" />
+          <e p="201910031529467_Title.designer.cs" t="Include" />
+          <e p="201910031529467_Title.resx" t="Include" />
+          <e p="201911050449560_MorphSp.cs" t="Include" />
+          <e p="201911050449560_MorphSp.designer.cs" t="Include" />
+          <e p="201911050449560_MorphSp.resx" t="Include" />
+          <e p="201911050637594_ClassType_In_Portal.cs" t="Include" />
+          <e p="201911050637594_ClassType_In_Portal.designer.cs" t="Include" />
+          <e p="201911050637594_ClassType_In_Portal.resx" t="Include" />
+          <e p="201912161158327_Tattoo.cs" t="Include" />
+          <e p="201912161158327_Tattoo.designer.cs" t="Include" />
+          <e p="201912161158327_Tattoo.resx" t="Include" />
+          <e p="202001221059085_BotAuth.cs" t="Include" />
+          <e p="202001221059085_BotAuth.designer.cs" t="Include" />
+          <e p="202001221059085_BotAuth.resx" t="Include" />
+          <e p="202001240955496_ChatLog.cs" t="Include" />
+          <e p="202001240955496_ChatLog.designer.cs" t="Include" />
+          <e p="202001240955496_ChatLog.resx" t="Include" />
+          <e p="202001261716037_Act7_Rune_Item.cs" t="Include" />
+          <e p="202001261716037_Act7_Rune_Item.designer.cs" t="Include" />
+          <e p="202001261716037_Act7_Rune_Item.resx" t="Include" />
+          <e p="Configuration.cs" t="Include" />
+        </e>
+        <e p="MinigameLog.cs" t="Include" />
+        <e p="MinilandObject.cs" t="Include" />
+        <e p="NpcMonster.cs" t="Include" />
+        <e p="NpcMonsterSkill.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.DAL.EF.csproj" t="IncludeRecursive" />
+        <e p="PartnerSkill.cs" t="Include" />
+        <e p="PenaltyLog.cs" t="Include" />
+        <e p="Portal.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="SlowCheetah" t="Include">
+            <e p="SlowCheetah.Transforms.targets" t="Include" />
+          </e>
+        </e>
+        <e p="Quest.cs" t="Include" />
+        <e p="QuestLog.cs" t="Include" />
+        <e p="QuestObjective.cs" t="Include" />
+        <e p="QuestReward.cs" t="Include" />
+        <e p="QuicklistEntry.cs" t="Include" />
+        <e p="Recipe.cs" t="Include" />
+        <e p="RecipeItem.cs" t="Include" />
+        <e p="RecipeList.cs" t="Include" />
+        <e p="Respawn.cs" t="Include" />
+        <e p="RespawnMapType.cs" t="Include" />
+        <e p="RollGeneratedItem.cs" t="Include" />
+        <e p="ScriptedInstance.cs" t="Include" />
+        <e p="ShellEffect.cs" t="Include" />
+        <e p="Shop.cs" t="Include" />
+        <e p="ShopItem.cs" t="Include" />
+        <e p="Shopskill.cs" t="Include" />
+        <e p="Skill.cs" t="Include" />
+        <e p="StaticBonus.cs" t="Include" />
+        <e p="StaticBuff.cs" t="Include" />
+        <e p="Teleporter.cs" t="Include" />
+      </e>
+      <e p="Src\Dal\OpenNos.DAL.Interface" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="IAccountDAO.cs" t="Include" />
+        <e p="IBazaarItemDAO.cs" t="Include" />
+        <e p="IBCardDAO.cs" t="Include" />
+        <e p="IBotAuthorityDAO.cs" t="Include" />
+        <e p="IBoxItemDAO.cs" t="Include" />
+        <e p="ICardDAO.cs" t="Include" />
+        <e p="ICellonOptionDAO.cs" t="Include" />
+        <e p="ICharacterDAO.cs" t="Include" />
+        <e p="ICharacterQuestDAO.cs" t="Include" />
+        <e p="ICharacterRelationDAO.cs" t="Include" />
+        <e p="ICharacterSkillDAO.cs" t="Include" />
+        <e p="ICharacterTitleDAO.cs" t="Include" />
+        <e p="IChatLogDAO.cs" t="Include" />
+        <e p="IComboDAO.cs" t="Include" />
+        <e p="IDropDAO.cs" t="Include" />
+        <e p="IFamilyCharacterDAO.cs" t="Include" />
+        <e p="IFamilyDAO.cs" t="Include" />
+        <e p="IFamilyLogDAO.cs" t="Include" />
+        <e p="IGeneralLogDAO.cs" t="Include" />
+        <e p="IItemDAO.cs" t="Include" />
+        <e p="IItemInstanceDAO.cs" t="Include" />
+        <e p="IMailDAO.cs" t="Include" />
+        <e p="IMaintenanceLogDAO.cs" t="Include" />
+        <e p="IMapDAO.cs" t="Include" />
+        <e p="IMapMonsterDAO.cs" t="Include" />
+        <e p="IMapNpcDAO.cs" t="Include" />
+        <e p="IMapTypeDAO.cs" t="Include" />
+        <e p="IMapTypeMapDAO.cs" t="Include" />
+        <e p="IMateDAO.cs" t="Include" />
+        <e p="IMinigameLogDAO.cs" t="Include" />
+        <e p="IMinilandObjectDAO.cs" t="Include" />
+        <e p="INpcMonsterDAO.cs" t="Include" />
+        <e p="INpcMonsterSkillDAO.cs" t="Include" />
+        <e p="IPartnerSkillDAO.cs" t="Include" />
+        <e p="IPenaltyLogDAO.cs" t="Include" />
+        <e p="IPortalDAO.cs" t="Include" />
+        <e p="IQuestDAO.cs" t="Include" />
+        <e p="IQuestLogDAO.cs" t="Include" />
+        <e p="IQuestObjectiveDAO.cs" t="Include" />
+        <e p="IQuestRewardDAO.cs" t="Include" />
+        <e p="IQuicklistEntryDAO.cs" t="Include" />
+        <e p="IRecipeDAO.cs" t="Include" />
+        <e p="IRecipeItemDAO.cs" t="Include" />
+        <e p="IRecipeListDAO.cs" t="Include" />
+        <e p="IRespawnDAO.cs" t="Include" />
+        <e p="IRespawnMapTypeDAO.cs" t="Include" />
+        <e p="IRollGeneratedItemDAO.cs" t="Include" />
+        <e p="IScriptedInstanceDAO.cs" t="Include" />
+        <e p="IShellEffectDAO.cs" t="Include" />
+        <e p="IShopDAO.cs" t="Include" />
+        <e p="IShopItemDAO.cs" t="Include" />
+        <e p="IShopSkillDAO.cs" t="Include" />
+        <e p="ISkillDAO.cs" t="Include" />
+        <e p="IStaticBonusDAO.cs" t="Include" />
+        <e p="IStaticBuffDAO.cs" t="Include" />
+        <e p="ITeleporterDAO.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.DAL.Interface.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Dal\OpenNos.Data" t="IncludeRecursive">
+        <e p="AccountDTO.cs" t="Include" />
+        <e p="app.config" t="Include" />
+        <e p="Base" t="Include">
+          <e p="SynchronizableBaseDTO.cs" t="Include" />
+        </e>
+        <e p="BazaarItemDTO.cs" t="Include" />
+        <e p="BCardDTO.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="BotAuthorityDTO.cs" t="Include" />
+        <e p="BoxItemDTO.cs" t="Include" />
+        <e p="CardDTO.cs" t="Include" />
+        <e p="CellonOptionDTO.cs" t="Include" />
+        <e p="CharacterDTO.cs" t="Include" />
+        <e p="CharacterQuestDTO.cs" t="Include" />
+        <e p="CharacterRelationDTO.cs" t="Include" />
+        <e p="CharacterSkillDTO.cs" t="Include" />
+        <e p="CharacterTitleDTO.cs" t="Include" />
+        <e p="ChatLogDTO.cs" t="Include" />
+        <e p="ComboDTO.cs" t="Include" />
+        <e p="DropDTO.cs" t="Include" />
+        <e p="Enums" t="Include">
+          <e p="DeleteResult.cs" t="Include" />
+          <e p="SaveResult.cs" t="Include" />
+        </e>
+        <e p="FamilyCharacterDTO.cs" t="Include" />
+        <e p="FamilyDTO.cs" t="Include" />
+        <e p="FamilyLogDTO.cs" t="Include" />
+        <e p="GeneralLogDTO.cs" t="Include" />
+        <e p="Interfaces" t="Include">
+          <e p="IMapDTO.cs" t="Include" />
+        </e>
+        <e p="ItemDTO.cs" t="Include" />
+        <e p="ItemInstanceDTO.cs" t="Include" />
+        <e p="MailDTO.cs" t="Include" />
+        <e p="MaintenanceLogDTO.cs" t="Include" />
+        <e p="MapDTO.cs" t="Include" />
+        <e p="MapMonsterDTO.cs" t="Include" />
+        <e p="MapNpcDTO.cs" t="Include" />
+        <e p="MapTypeDTO.cs" t="Include" />
+        <e p="MapTypeMapDTO.cs" t="Include" />
+        <e p="MateDTO.cs" t="Include" />
+        <e p="MinigameLogDTO.cs" t="Include" />
+        <e p="MinilandObjectDTO.cs" t="Include" />
+        <e p="NpcMonsterDTO.cs" t="Include" />
+        <e p="NpcMonsterSkillDTO.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.Data.csproj" t="IncludeRecursive" />
+        <e p="PartnerSkillDTO.cs" t="Include" />
+        <e p="PenaltyLogDTO.cs" t="Include" />
+        <e p="PortalDTO.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="QuestDTO.cs" t="Include" />
+        <e p="QuestLogDTO.cs" t="Include" />
+        <e p="QuestObjectiveDTO.cs" t="Include" />
+        <e p="QuestRewardDTO.cs" t="Include" />
+        <e p="QuicklistEntryDTO.cs" t="Include" />
+        <e p="RecipeDTO.cs" t="Include" />
+        <e p="RecipeItemDTO.cs" t="Include" />
+        <e p="RecipeListDTO.cs" t="Include" />
+        <e p="RespawnDTO.cs" t="Include" />
+        <e p="RespawnMapTypeDTO.cs" t="Include" />
+        <e p="RollGeneratedItemDTO.cs" t="Include" />
+        <e p="ScriptedInstanceDTO.cs" t="Include" />
+        <e p="ShellEffectDTO.cs" t="Include" />
+        <e p="ShopDTO.cs" t="Include" />
+        <e p="ShopItemDTO.cs" t="Include" />
+        <e p="ShopSkillDTO.cs" t="Include" />
+        <e p="SkillDTO.cs" t="Include" />
+        <e p="StaticBonusDTO.cs" t="Include" />
+        <e p="StaticBuffDTO.cs" t="Include" />
+        <e p="TeleporterDTO.cs" t="Include" />
+        <e p="UserDTO.cs" t="Include" />
+      </e>
+      <e p="Src\Executables\NosTale.Parser" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="Import" t="Include">
+          <e p="IImport.cs" t="Include" />
+          <e p="ImportAccounts.cs" t="Include" />
+          <e p="ImportCards.cs" t="Include" />
+          <e p="ImportConfiguration.cs" t="Include" />
+          <e p="ImportDrops.cs" t="Include" />
+          <e p="ImportHardcodedRecipes.cs" t="Include" />
+          <e p="ImportItems.cs" t="Include" />
+          <e p="ImportMapNpcs.cs" t="Include" />
+          <e p="ImportMaps.cs" t="Include" />
+          <e p="ImportMapType.cs" t="Include" />
+          <e p="ImportMapTypeMap.cs" t="Include" />
+          <e p="ImportMonsters.cs" t="Include" />
+          <e p="ImportNpcMonsterData.cs" t="Include" />
+          <e p="ImportNpcMonsters.cs" t="Include" />
+          <e p="ImportPackets.cs" t="Include" />
+          <e p="ImportPortals.cs" t="Include" />
+          <e p="ImportQuests.cs" t="Include" />
+          <e p="ImportRecipe.cs" t="Include" />
+          <e p="ImportRespawnMapType.cs" t="Include" />
+          <e p="ImportScriptedInstances.cs" t="Include" />
+          <e p="ImportShopItems.cs" t="Include" />
+          <e p="ImportShops.cs" t="Include" />
+          <e p="ImportShopSkills.cs" t="Include" />
+          <e p="ImportSkills.cs" t="Include" />
+          <e p="ImportTeleporters.cs" t="Include" />
+        </e>
+        <e p="NosTale.Parser.csproj" t="IncludeRecursive" />
+        <e p="noszanou-logo.ico" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Resource" t="Include">
+          <e p="LocalizedResources.de.Designer.cs" t="Include" />
+          <e p="LocalizedResources.de.resx" t="Include" />
+          <e p="LocalizedResources.Designer.cs" t="Include" />
+          <e p="LocalizedResources.fr.Designer.cs" t="Include" />
+          <e p="LocalizedResources.fr.resx" t="Include" />
+          <e p="LocalizedResources.it.Designer.cs" t="Include" />
+          <e p="LocalizedResources.it.resx" t="Include" />
+          <e p="LocalizedResources.pl.Designer.cs" t="Include" />
+          <e p="LocalizedResources.pl.resx" t="Include" />
+          <e p="LocalizedResources.resx" t="Include" />
+          <e p="LocalizedResources.th.Designer.cs" t="Include" />
+          <e p="LocalizedResources.th.resx" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Executables\NosTaleDev.Bot" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="App.Debug.config" t="Include" />
+        <e p="App.Release.config" t="Include" />
+        <e p="NosTale.Bot.csproj" t="IncludeRecursive" />
+        <e p="noszanou-logo.ico" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Resource" t="Include">
+          <e p="LocalizedResources.de.Designer.cs" t="Include" />
+          <e p="LocalizedResources.de.resx" t="Include" />
+          <e p="LocalizedResources.fr.Designer.cs" t="Include" />
+          <e p="LocalizedResources.fr.resx" t="Include" />
+          <e p="LocalizedResources.it.Designer.cs" t="Include" />
+          <e p="LocalizedResources.it.resx" t="Include" />
+          <e p="LocalizedResources.pl.Designer.cs" t="Include" />
+          <e p="LocalizedResources.pl.resx" t="Include" />
+          <e p="LocalizedResources.resx" t="Include" />
+          <e p="LocalizedResources.th.Designer.cs" t="Include" />
+          <e p="LocalizedResources.th.resx" t="Include" />
+          <e p="LocalizedResources1.Designer.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Executables\OpenNos.Login" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="on-logo-icon.ico" t="Include" />
+        <e p="OpenNos.Login.csproj" t="IncludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Resource" t="Include">
+          <e p="LocalizedResources.de.Designer.cs" t="Include" />
+          <e p="LocalizedResources.de.resx" t="Include" />
+          <e p="LocalizedResources.Designer.cs" t="Include" />
+          <e p="LocalizedResources.fr.Designer.cs" t="Include" />
+          <e p="LocalizedResources.fr.resx" t="Include" />
+          <e p="LocalizedResources.it.Designer.cs" t="Include" />
+          <e p="LocalizedResources.it.resx" t="Include" />
+          <e p="LocalizedResources.pl.Designer.cs" t="Include" />
+          <e p="LocalizedResources.pl.resx" t="Include" />
+          <e p="LocalizedResources.resx" t="Include" />
+          <e p="LocalizedResources.th.Designer.cs" t="Include" />
+          <e p="LocalizedResources.th.resx" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Executables\OpenNos.Master.Server" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="AuthentificationService.cs" t="Include" />
+        <e p="CommunicationService.cs" t="Include" />
+        <e p="ConfigurationService.cs" t="Include" />
+        <e p="MailService.cs" t="Include" />
+        <e p="MallService.cs" t="Include" />
+        <e p="MSManager.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="on-logo-icon.ico" t="Include" />
+        <e p="OpenNos.Master.Server.csproj" t="IncludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Resource" t="Include">
+          <e p="LocalizedResources.de.Designer.cs" t="Include" />
+          <e p="LocalizedResources.de.resx" t="Include" />
+          <e p="LocalizedResources.Designer.cs" t="Include" />
+          <e p="LocalizedResources.fr.Designer.cs" t="Include" />
+          <e p="LocalizedResources.fr.resx" t="Include" />
+          <e p="LocalizedResources.it.Designer.cs" t="Include" />
+          <e p="LocalizedResources.it.resx" t="Include" />
+          <e p="LocalizedResources.pl.Designer.cs" t="Include" />
+          <e p="LocalizedResources.pl.resx" t="Include" />
+          <e p="LocalizedResources.resx" t="Include" />
+          <e p="LocalizedResources.th.Designer.cs" t="Include" />
+          <e p="LocalizedResources.th.resx" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Executables\OpenNos.World" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="on-logo-icon.ico" t="Include" />
+        <e p="OpenNos.World.csproj" t="IncludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Resource" t="Include">
+          <e p="LocalizedResources.Designer.cs" t="Include" />
+          <e p="LocalizedResources.resx" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Librairies\NosTale.Configuration" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Configuration" t="Include">
+          <e p="Item" t="Include">
+            <e p="CraftA6FairyConfiguration.cs" t="Include" />
+            <e p="InventoryConfiguration.cs" t="Include" />
+            <e p="PerfectSpConfiguration.cs" t="Include" />
+            <e p="RarifyItemConfiguration.cs" t="Include" />
+            <e p="RemoveRuneConfiguration.cs" t="Include" />
+            <e p="RemoveTattooConfiguration.cs" t="Include" />
+            <e p="RequiredItem.cs" t="Include" />
+            <e p="SummingConfiguration.cs" t="Include" />
+            <e p="UpgradeItemConfiguration.cs" t="Include" />
+            <e p="UpgradeRuneConfiguration.cs" t="Include" />
+            <e p="UpgradeSPConfiguration.cs" t="Include" />
+            <e p="UpgradeSpFunConfiguration.cs" t="Include" />
+            <e p="UpgradeTatooConfiguration.cs" t="Include" />
+          </e>
+          <e p="Server" t="Include">
+            <e p="EventConfiguration.cs" t="Include" />
+            <e p="MaxConfiguration.cs" t="Include" />
+            <e p="RateConfiguration.cs" t="Include" />
+            <e p="ServerConfiguration.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Helper" t="Include">
+          <e p="ConfigurationHelper.cs" t="Include" />
+        </e>
+        <e p="JsonGameConfiguration.cs" t="Include" />
+        <e p="JsonItemConfiguration.cs" t="Include" />
+        <e p="NosTale.Configuration.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Utilities" t="Include">
+          <e p="DependencyContainer.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Librairies\NosTale.Extension" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Extension" t="Include">
+          <e p="Character" t="Include">
+            <e p="CharacterExt.cs" t="Include" />
+          </e>
+          <e p="Command" t="Include">
+            <e p="CommandExt.cs" t="Include" />
+          </e>
+          <e p="Packet" t="Include">
+            <e p="BattleExt.cs" t="Include" />
+            <e p="InvExt.cs" t="Include" />
+            <e p="LoginExt.cs" t="Include" />
+            <e p="MateExt.cs" t="Include" />
+            <e p="MinilandExt.cs" t="Include" />
+            <e p="ShopExt.cs" t="Include" />
+          </e>
+        </e>
+        <e p="NosTale.Extension.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Librairies\NosTale.Packets" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="NosTale.Packets.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Packets" t="Include">
+          <e p="BscPacket.cs" t="Include" />
+          <e p="ClientPackets" t="Include">
+            <e p="AddobjPacket.cs" t="Include" />
+            <e p="BIPacket.cs" t="Include" />
+            <e p="BlDelPacket.cs" t="Include" />
+            <e p="BlInsPacket.cs" t="Include" />
+            <e p="BlPacket.cs" t="Include" />
+            <e p="BtkPacket.cs" t="Include" />
+            <e p="CBlistPacket.cs" t="Include" />
+            <e p="CBuyPacket.cs" t="Include" />
+            <e p="CClosePacket.cs" t="Include" />
+            <e p="CharacterCreatePacket.cs" t="Include" />
+            <e p="CharacterDeletePacket.cs" t="Include" />
+            <e p="CharacterJobCreatePacket.cs" t="Include" />
+            <e p="CharacterOptionPacket.cs" t="Include" />
+            <e p="CharacterRenamePacket.cs" t="Include" />
+            <e p="CModPacket.cs" t="Include" />
+            <e p="ComplimentPacket.cs" t="Include" />
+            <e p="CreateFamilyPacket.cs" t="Include" />
+            <e p="CRegPacket.cs" t="Include" />
+            <e p="CScalcPacket.cs" t="Include" />
+            <e p="CSkillPacket.cs" t="Include" />
+            <e p="CSlistPacket.cs" t="Include" />
+            <e p="CspPacket.cs" t="Include" />
+            <e p="DepositPacket.cs" t="Include" />
+            <e p="DirectionPacket.cs" t="Include" />
+            <e p="EntryPointPacket.cs" t="Include" />
+            <e p="EquipmentInfoPacket.cs" t="Include" />
+            <e p="EscapePacket.cs" t="Include" />
+            <e p="ExchangeListPacket.cs" t="Include" />
+            <e p="ExchangeRequestPacket.cs" t="Include" />
+            <e p="FamilyChatPacket.cs" t="Include" />
+            <e p="FamilyDismissPacket.cs" t="Include" />
+            <e p="FamilyManagementPacket.cs" t="Include" />
+            <e p="FauthPacket.cs" t="Include" />
+            <e p="FDelPacket.cs" t="Include" />
+            <e p="FDepositPacket.cs" t="Include" />
+            <e p="FhistCtsPacket.cs" t="Include" />
+            <e p="FInsPacket.cs" t="Include" />
+            <e p="FlPacket.cs" t="Include" />
+            <e p="FrankCtsPacket.cs" t="Include" />
+            <e p="FReposPacket.cs" t="Include" />
+            <e p="FStashEndPacket.cs" t="Include" />
+            <e p="FWithdrawPacket.cs" t="Include" />
+            <e p="GameStartPacket.cs" t="Include" />
+            <e p="GetGiftPacket.cs" t="Include" />
+            <e p="GetPacket.cs" t="Include" />
+            <e p="GitPacket.cs" t="Include" />
+            <e p="GListPacket.cs" t="Include" />
+            <e p="GroupSayPacket.cs" t="Include" />
+            <e p="GuriPacket.cs" t="Include" />
+            <e p="HeroPacket.cs" t="Include" />
+            <e p="JoinFamilyPacket.cs" t="Include" />
+            <e p="LbsPacket.cs" t="Include" />
+            <e p="LoginPacket.cs" t="Include" />
+            <e p="MallPacket.cs" t="Include" />
+            <e p="MinigamePacket.cs" t="Include" />
+            <e p="MJoinPacket.cs" t="Include" />
+            <e p="MkraidPacket.cs" t="Include" />
+            <e p="MLEditPacket.cs" t="Include" />
+            <e p="MShopPacket.cs" t="Include" />
+            <e p="MultiTargetListPacket.cs" t="Include" />
+            <e p="MvePacket.cs" t="Include" />
+            <e p="MviPacket.cs" t="Include" />
+            <e p="NcifPacket.cs" t="Include" />
+            <e p="NpinfoPacket.cs" t="Include" />
+            <e p="NRunPacket.cs" t="Include" />
+            <e p="PartnerSkillOpenPacket.cs" t="Include" />
+            <e p="PclPacket.cs" t="Include" />
+            <e p="PdtClosePacket.cs" t="Include" />
+            <e p="PdtsePacket.cs" t="Include" />
+            <e p="PinvPacket.cs" t="Include" />
+            <e p="PJoinPacket.cs" t="Include" />
+            <e p="PleavePacket.cs" t="Include" />
+            <e p="PreqPacket.cs" t="Include" />
+            <e p="PslPacket.cs" t="Include" />
+            <e p="PstPacket.cs" t="Include" />
+            <e p="PtCtlPacket.cs" t="Include" />
+            <e p="PtCtlSubPacket.cs" t="Include" />
+            <e p="PulsePacket.cs" t="Include" />
+            <e p="PutPacket.cs" t="Include" />
+            <e p="QSetPacket.cs" t="Include" />
+            <e p="QtPacket.cs" t="Include" />
+            <e p="RaidExitPacket.cs" t="Include" />
+            <e p="RdPacket.cs" t="Include" />
+            <e p="RemovePacket.cs" t="Include" />
+            <e p="ReposPacket.cs" t="Include" />
+            <e p="ReqInfoPacket.cs" t="Include" />
+            <e p="RequestNpcPacket.cs" t="Include" />
+            <e p="RevivalPacket.cs" t="Include" />
+            <e p="RlPacket.cs" t="Include" />
+            <e p="RmvobjPacket.cs" t="Include" />
+            <e p="RselPacket.cs" t="Include" />
+            <e p="RstartPacket.cs" t="Include" />
+            <e p="SayPacket.cs" t="Include" />
+            <e p="SayPPacket.cs" t="Include" />
+            <e p="ScptcsPacket.cs" t="Include" />
+            <e p="SelectPacket.cs" t="Include" />
+            <e p="SellPacket.cs" t="Include" />
+            <e p="ShopClosePacket.cs" t="Include" />
+            <e p="ShoppingPacket.cs" t="Include" />
+            <e p="SitPacket.cs" t="Include" />
+            <e p="SnapPacket.cs" t="Include" />
+            <e p="SortOpenPacket.cs" t="Include" />
+            <e p="SpecialistHolderPacket.cs" t="Include" />
+            <e p="SpTransformPacket.cs" t="Include" />
+            <e p="StashEndPacket.cs" t="Include" />
+            <e p="SuctlPacket.cs" t="Include" />
+            <e p="TawPacket.cs" t="Include" />
+            <e p="TodayPacket.cs" t="Include" />
+            <e p="UpetPacket.cs" t="Include" />
+            <e p="UpgradePacket.cs" t="Include" />
+            <e p="UseAOESkillPacket.cs" t="Include" />
+            <e p="UseIconFalconSkillPacket.cs" t="Include" />
+            <e p="UseItemPacket.cs" t="Include" />
+            <e p="UseobjPacket.cs" t="Include" />
+            <e p="UsePartnerSkillPacket.cs" t="Include" />
+            <e p="UseSkillPacket.cs" t="Include" />
+            <e p="WalkPacket.cs" t="Include" />
+            <e p="WearPacket.cs" t="Include" />
+            <e p="WhisperPacket.cs" t="Include" />
+            <e p="WithdrawPacket.cs" t="Include" />
+          </e>
+          <e p="CommandPackets" t="Include">
+            <e p="Act4Packet.cs" t="Include" />
+            <e p="Act4StatPacket.cs" t="Include" />
+            <e p="AddMonsterPacket.cs" t="Include" />
+            <e p="AddNpcPacket.cs" t="Include" />
+            <e p="AddPartnerPacket.cs" t="Include" />
+            <e p="AddPetPacket.cs" t="Include" />
+            <e p="AddPortalPacket.cs" t="Include" />
+            <e p="AddQuestPacket.cs" t="Include" />
+            <e p="AddShellEffectPacket.cs" t="Include" />
+            <e p="AddSkillPacket.cs" t="Include" />
+            <e p="AddUserLogPacket.cs" t="Include" />
+            <e p="ArenaWinnerPacket.cs" t="Include" />
+            <e p="BackMobPacket.cs" t="Include" />
+            <e p="BackpackPacket.cs" t="Include" />
+            <e p="BankPacket.cs" t="Include" />
+            <e p="BanPacket.cs" t="Include" />
+            <e p="BlockExpPacket.cs" t="Include" />
+            <e p="BlockFExpPacket.cs" t="Include" />
+            <e p="BlockPMPacket.cs" t="Include" />
+            <e p="BlockRepPacket.cs" t="Include" />
+            <e p="BuffPacket.cs" t="Include" />
+            <e p="BuffPackPacket.cs" t="Include" />
+            <e p="ChangeClassPacket.cs" t="Include" />
+            <e p="ChangeDignityPacket.cs" t="Include" />
+            <e p="ChangeFairyLevelPacket.cs" t="Include" />
+            <e p="ChangeHeroLevelPacket.cs" t="Include" />
+            <e p="ChangeJobLevelPacket.cs" t="Include" />
+            <e p="ChangeLevelPacket.cs" t="Include" />
+            <e p="ChangeReputationPacket.cs" t="Include" />
+            <e p="ChangeSexPacket.cs" t="Include" />
+            <e p="ChangeShopNamePacket.cs" t="Include" />
+            <e p="ChangeSpecialistLevelPacket.cs" t="Include" />
+            <e p="ChannelInfoPacket.cs" t="Include" />
+            <e p="CharacterEditPacket.cs" t="Include" />
+            <e p="CharacterStatsPacket.cs" t="Include" />
+            <e p="ClassPackPacket.cs" t="Include" />
+            <e p="ClearInventoryPacket.cs" t="Include" />
+            <e p="ClearMapPacket.cs" t="Include" />
+            <e p="CloneItemPacket.cs" t="Include" />
+            <e p="CMD.cs" t="Include" />
+            <e p="CreateItemPacket.cs" t="Include" />
+            <e p="CustomNpcMonsterNamePacket.cs" t="Include" />
+            <e p="DemotePacket.cs" t="Include" />
+            <e p="DropPacket.cs" t="Include" />
+            <e p="DropRatePacket.cs" t="Include" />
+            <e p="EffectCommandPacket.cs" t="Include" />
+            <e p="EventPacket.cs" t="Include" />
+            <e p="FactionPacket.cs" t="Include" />
+            <e p="FairyXpRatePacket.cs" t="Include" />
+            <e p="FamilyFactionPacket.cs" t="Include" />
+            <e p="GiftPacket.cs" t="Include" />
+            <e p="GiveMallPacket.cs" t="Include" />
+            <e p="GlobalEventPacket.cs" t="Include" />
+            <e p="GodModePacket.cs" t="Include" />
+            <e p="GogoPacket.cs" t="Include" />
+            <e p="GoldDropRatePacket.cs" t="Include" />
+            <e p="GoldPacket.cs" t="Include" />
+            <e p="GoldRatePacket.cs" t="Include" />
+            <e p="GuidePacket.cs" t="Include" />
+            <e p="GuriCommandPacket.cs" t="Include" />
+            <e p="HairColorPacket.cs" t="Include" />
+            <e p="HairStylePacket.cs" t="Include" />
+            <e p="HelpMePacket.cs" t="Include" />
+            <e p="HelpPacket.cs" t="Include" />
+            <e p="HeroXpRatePacket.cs" t="Include" />
+            <e p="HomePacket.cs" t="Include" />
+            <e p="InvisiblePacket.cs" t="Include" />
+            <e p="ItemRainPacket.cs" t="Include" />
+            <e p="KickPacket.cs" t="Include" />
+            <e p="KickSessionPacket.cs" t="Include" />
+            <e p="KillPacket.cs" t="Include" />
+            <e p="LeaveAct4Packet.cs" t="Include" />
+            <e p="MaintenancePacket.cs" t="Include" />
+            <e p="MapDancePacket.cs" t="Include" />
+            <e p="MapPVPPacket.cs" t="Include" />
+            <e p="MapResetPacket.cs" t="Include" />
+            <e p="MapStatisticsPacket.cs" t="Include" />
+            <e p="MinilandPacket.cs" t="Include" />
+            <e p="MorphPacket.cs" t="Include" />
+            <e p="MutePacket.cs" t="Include" />
+            <e p="PacketCallbackPacket.cs" t="Include" />
+            <e p="PartnerSpXpPacket.cs" t="Include" />
+            <e p="PenaltyLogPacket.cs" t="Include" />
+            <e p="PortalToPacket.cs" t="Include" />
+            <e p="PositionPacket.cs" t="Include" />
+            <e p="PromotePacket.cs" t="Include" />
+            <e p="RarifyPacket.cs" t="Include" />
+            <e p="ReloadSI.cs" t="Include" />
+            <e p="RemoveMalus.cs" t="Include" />
+            <e p="RemoveNpcMonsterPacket.cs" t="Include" />
+            <e p="RemovePortalPacket.cs" t="Include" />
+            <e p="RemoveUserLogPacket.cs" t="Include" />
+            <e p="ReputationRatePacket.cs" t="Include" />
+            <e p="ResizePacket.cs" t="Include" />
+            <e p="RestartAllPacket.cs" t="Include" />
+            <e p="RestartPacket.cs" t="Include" />
+            <e p="Roll.cs" t="Include" />
+            <e p="Schedule.cs" t="Include" />
+            <e p="SearchItemPacket.cs" t="Include" />
+            <e p="SearchMonsterPacket.cs" t="Include" />
+            <e p="ServerInfoPacket.cs" t="Include" />
+            <e p="SetPerfectionPacket.cs" t="Include" />
+            <e p="ShoutHerePacket.cs" t="Include" />
+            <e p="ShoutPacket.cs" t="Include" />
+            <e p="ShutdownAllPacket.cs" t="Include" />
+            <e p="ShutdownPacket.cs" t="Include" />
+            <e p="SortPacket.cs" t="Include" />
+            <e p="SpeedPacket.cs" t="Include" />
+            <e p="SPRefillPacket.cs" t="Include" />
+            <e p="StatCommandPacket.cs" t="Include" />
+            <e p="SudoPacket.cs" t="Include" />
+            <e p="SummonNPCPacket.cs" t="Include" />
+            <e p="SummonPacket.cs" t="Include" />
+            <e p="SummonRandomCoordsPacket.cs" t="Include" />
+            <e p="TeleportPacket.cs" t="Include" />
+            <e p="TeleportToMePacket.cs" t="Include" />
+            <e p="UnbanPacket.cs" t="Include" />
+            <e p="UndercoverPacket.cs" t="Include" />
+            <e p="UnmutePacket.cs" t="Include" />
+            <e p="UnstuckPacket.cs" t="Include" />
+            <e p="UpgradeCommandPacket.cs" t="Include" />
+            <e p="UserLogPacket.cs" t="Include" />
+            <e p="WarningPacket.cs" t="Include" />
+            <e p="Warp.cs" t="Include" />
+            <e p="WigColorPacket.cs" t="Include" />
+            <e p="XpRatePacket.cs" t="Include" />
+            <e p="ZoomPacket.cs" t="Include" />
+          </e>
+          <e p="CustomPackets" t="Include">
+            <e p="NtcpACPacket.cs" t="Include" />
+          </e>
+          <e p="FamilyCommandPackets" t="Include">
+            <e p="FamilyInvitePacket.cs" t="Include" />
+            <e p="FamilyKickPacket.cs" t="Include" />
+            <e p="FamilyLeavePacket.cs" t="Include" />
+            <e p="FamilyMessagePacket.cs" t="Include" />
+            <e p="FamilyResetSexPacket.cs" t="Include" />
+            <e p="FamilyShoutPacket.cs" t="Include" />
+            <e p="FamilyTitleChangePacket.cs" t="Include" />
+            <e p="FamilyTodayPacket.cs" t="Include" />
+          </e>
+          <e p="ServerPackets" t="Include">
+            <e p="Act6Packet.cs" t="Include" />
+            <e p="BfPacket.cs" t="Include" />
+            <e p="BuyPacket.cs" t="Include" />
+            <e p="CListPacket.cs" t="Include" />
+            <e p="DialogPacket.cs" t="Include" />
+            <e p="EffectPacket.cs" t="Include" />
+            <e p="EqPacket.cs" t="Include" />
+            <e p="EquipPacket.cs" t="Include" />
+            <e p="GboxPacket.cs" t="Include" />
+            <e p="GetPacket.cs" t="Include" />
+            <e p="HeroPacket.cs" t="Include" />
+            <e p="InPacket.cs" t="Include" />
+            <e p="MovePacket.cs" t="Include" />
+            <e p="MviPacket.cs" t="Include" />
+            <e p="NcifPacket.cs" t="Include" />
+            <e p="RaidListPacket.cs" t="Include" />
+            <e p="RemovePacket.cs" t="Include" />
+            <e p="SayPacket.cs" t="Include" />
+            <e p="SelectPacket.cs" t="Include" />
+            <e p="StatPacket.cs" t="Include" />
+            <e p="TalkPacket.cs" t="Include" />
+            <e p="TitEqPacket.cs" t="Include" />
+            <e p="TreqPacket.cs" t="Include" />
+            <e p="UseItemPacket.cs" t="Include" />
+            <e p="UseobjPacket.cs" t="Include" />
+            <e p="VbPacket.cs" t="Include" />
+            <e p="WithdrawPacket.cs" t="Include" />
+            <e p="WpPacket.cs" t="Include" />
+            <e p="WreqPacket.cs" t="Include" />
+          </e>
+          <e p="TaCallPacket.cs" t="Include" />
+        </e>
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Librairies\OpenNos.Core" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Cryptography" t="Include">
+          <e p="CryptographyBase.cs" t="Include" />
+          <e p="LoginCryptography.cs" t="Include" />
+          <e p="WorldCryptography.cs" t="Include" />
+        </e>
+        <e p="CryptoRandom.cs" t="Include" />
+        <e p="DelegateBuilder.cs" t="Include" />
+        <e p="Extension.cs" t="Include" />
+        <e p="Extensions" t="Include">
+          <e p="AssemblyExtension.cs" t="Include" />
+          <e p="BlockingCollectionExtensions.cs" t="Include" />
+          <e p="ConcurrentQueueExtensions.cs" t="Include" />
+          <e p="StringExtension.cs" t="Include" />
+        </e>
+        <e p="Handling" t="Include">
+          <e p="HandlerMethodReference.cs" t="Include" />
+          <e p="IPacketHandler.cs" t="Include" />
+          <e p="PacketAttribute.cs" t="Include" />
+        </e>
+        <e p="Interfaces" t="Include">
+          <e p="Packets" t="Include">
+            <e p="ClientPackets" t="Include">
+              <e p="ICharacterCreatePacket.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Language.cs" t="Include" />
+        <e p="Logger.cs" t="Include" />
+        <e p="Networking" t="Include">
+          <e p="Communication" t="Include">
+            <e p="Scs" t="Include">
+              <e p="Client" t="Include">
+                <e p="ClientReConnecter.cs" t="Include" />
+                <e p="IConnectableClient.cs" t="Include" />
+                <e p="IScsClient.cs" t="Include" />
+                <e p="ScsClientBase.cs" t="Include" />
+                <e p="ScsClientFactory.cs" t="Include" />
+                <e p="Tcp" t="Include">
+                  <e p="ScsTcpClient.cs" t="Include" />
+                  <e p="TcpHelper.cs" t="Include" />
+                </e>
+              </e>
+              <e p="Communication" t="Include">
+                <e p="Channels" t="Include">
+                  <e p="CommunicationChannelBase.cs" t="Include" />
+                  <e p="CommunicationChannelEventArgs.cs" t="Include" />
+                  <e p="ConnectionListenerBase.cs" t="Include" />
+                  <e p="ICommunicationChannel.cs" t="Include" />
+                  <e p="IConnectionListener.cs" t="Include" />
+                  <e p="Tcp" t="Include">
+                    <e p="TcpCommunicationChannel.cs" t="Include" />
+                    <e p="TcpConnectionListener.cs" t="Include" />
+                  </e>
+                </e>
+                <e p="CommunicationException.cs" t="Include" />
+                <e p="CommunicationStateException.cs" t="Include" />
+                <e p="CommunicationStates.cs" t="Include" />
+                <e p="EndPoints" t="Include">
+                  <e p="ScsEndPoint.cs" t="Include" />
+                  <e p="Tcp" t="Include">
+                    <e p="ScsTcpEndPoint.cs" t="Include" />
+                  </e>
+                </e>
+                <e p="Messages" t="Include">
+                  <e p="IScsMessage.cs" t="Include" />
+                  <e p="MessageEventArgs.cs" t="Include" />
+                  <e p="ScsMessage.cs" t="Include" />
+                  <e p="ScsPingMessage.cs" t="Include" />
+                  <e p="ScsRawDataMessage.cs" t="Include" />
+                  <e p="ScsTextMessage.cs" t="Include" />
+                </e>
+                <e p="Messengers" t="Include">
+                  <e p="IMessenger.cs" t="Include" />
+                  <e p="RequestReplyMessenger.cs" t="Include" />
+                  <e p="SynchronizedMessenger.cs" t="Include" />
+                </e>
+                <e p="Protocols" t="Include">
+                  <e p="BinarySerialization" t="Include">
+                    <e p="BinarySerializationProtocol.cs" t="Include" />
+                    <e p="BinarySerializationProtocolFactory.cs" t="Include" />
+                  </e>
+                  <e p="IScsWireProtocol.cs" t="Include" />
+                  <e p="IScsWireProtocolFactory.cs" t="Include" />
+                  <e p="WireProtocolManager.cs" t="Include" />
+                </e>
+              </e>
+              <e p="Server" t="Include">
+                <e p="IScsServer.cs" t="Include" />
+                <e p="IScsServerClient.cs" t="Include" />
+                <e p="ScsServerBase.cs" t="Include" />
+                <e p="ScsServerClient.cs" t="Include" />
+                <e p="ScsServerFactory.cs" t="Include" />
+                <e p="ScsServerManager.cs" t="Include" />
+                <e p="ServerClientEventArgs.cs" t="Include" />
+                <e p="Tcp" t="Include">
+                  <e p="ScsTcpServer.cs" t="Include" />
+                </e>
+              </e>
+            </e>
+            <e p="ScsServices" t="Include">
+              <e p="Client" t="Include">
+                <e p="IScsServiceClient.cs" t="Include" />
+                <e p="ScsServiceClient.cs" t="Include" />
+                <e p="ScsServiceClientBuilder.cs" t="Include" />
+              </e>
+              <e p="Communication" t="Include">
+                <e p="AutoConnectRemoteInvokeProxy.cs" t="Include" />
+                <e p="Messages" t="Include">
+                  <e p="ScsRemoteException.cs" t="Include" />
+                  <e p="ScsRemoteInvocationException.cs" t="Include" />
+                  <e p="ScsRemoteInvokeMessage.cs" t="Include" />
+                  <e p="ScsRemoteInvokeReturnMessage.cs" t="Include" />
+                </e>
+                <e p="RemoteInvokeProxy.cs" t="Include" />
+              </e>
+              <e p="Service" t="Include">
+                <e p="IScsServiceApplication.cs" t="Include" />
+                <e p="IScsServiceClient.cs" t="Include" />
+                <e p="ScsService.cs" t="Include" />
+                <e p="ScsServiceApplication.cs" t="Include" />
+                <e p="ScsServiceAttribute.cs" t="Include" />
+                <e p="ScsServiceBuilder.cs" t="Include" />
+                <e p="ScsServiceClient.cs" t="Include" />
+                <e p="ScsServiceClientFactory.cs" t="Include" />
+                <e p="ServiceClientEventArgs.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="INetworkClient.cs" t="Include" />
+          <e p="NetworkClient.cs" t="Include" />
+          <e p="WireProtocol.cs" t="Include" />
+          <e p="WireProtocolFactory.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.Core.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Serializing" t="Include">
+          <e p="PacketDefinition.cs" t="Include" />
+          <e p="PacketFactory.cs" t="Include" />
+          <e p="PacketHeaderAttribute.cs" t="Include" />
+          <e p="PacketIndexAttribute.cs" t="Include" />
+        </e>
+        <e p="SessionFactory.cs" t="Include" />
+        <e p="Singleton.cs" t="Include" />
+        <e p="Threading" t="Include">
+          <e p="SequentialItemProcessor.cs" t="Include" />
+          <e p="ThreadSafeGenericList.cs" t="Include" />
+          <e p="ThreadSafeGenericLockedList.cs" t="Include" />
+          <e p="ThreadSafeSortedList.cs" t="Include" />
+          <e p="Timer.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Librairies\OpenNos.Domain" t="IncludeRecursive">
+        <e p="ArenaTeamType.cs" t="Include" />
+        <e p="AttackType.cs" t="Include" />
+        <e p="AuthorityType.cs" t="Include" />
+        <e p="BankActionType.cs" t="Include" />
+        <e p="BazaarListType.cs" t="Include" />
+        <e p="BazaarType.cs" t="Include" />
+        <e p="BCardType.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="BuffType.cs" t="Include" />
+        <e p="BuyShopType.cs" t="Include" />
+        <e p="CellonOptionType.cs" t="Include" />
+        <e p="CharacterOption.cs" t="Include" />
+        <e p="CharacterRelationType.cs" t="Include" />
+        <e p="CharacterState.cs" t="Include" />
+        <e p="ClassType.cs" t="Include" />
+        <e p="DialogType.cs" t="Include" />
+        <e p="DiscordAuthorityType.cs" t="Include" />
+        <e p="EntityType.cs" t="Include" />
+        <e p="EquipmentType.cs" t="Include" />
+        <e p="EventActionType.cs" t="Include" />
+        <e p="EventType.cs" t="Include" />
+        <e p="FactionType.cs" t="Include" />
+        <e p="FamilyAuthority.cs" t="Include" />
+        <e p="FamilyAuthorityType.cs" t="Include" />
+        <e p="FamilyLogType.cs" t="Include" />
+        <e p="FamilyMemberRank.cs" t="Include" />
+        <e p="FixedUpModeType.cs" t="Include" />
+        <e p="GenderType.cs" t="Include" />
+        <e p="GeneralLogType.cs" t="Include" />
+        <e p="GoldBankPacketType.cs" t="Include" />
+        <e p="GroupRequestType.cs" t="Include" />
+        <e p="GroupSharingType.cs" t="Include" />
+        <e p="GroupType.cs" t="Include" />
+        <e p="HairColorType.cs" t="Include" />
+        <e p="HairStyleType.cs" t="Include" />
+        <e p="InRespawnType.cs" t="Include" />
+        <e p="InType.cs" t="Include" />
+        <e p="InventoryType.cs" t="Include" />
+        <e p="ItemPluginType.cs" t="Include" />
+        <e p="ItemType.cs" t="Include" />
+        <e p="JewelOptionType.cs" t="Include" />
+        <e p="LoginFailType.cs" t="Include" />
+        <e p="MapInstanceType.cs" t="Include" />
+        <e p="MapTypeEnum.cs" t="Include" />
+        <e p="MateType.cs" t="Include" />
+        <e p="MedalType.cs" t="Include" />
+        <e p="MessageType.cs" t="Include" />
+        <e p="MinilandState.cs" t="Include" />
+        <e p="MonsterType.cs" t="Include" />
+        <e p="NpcMonsterRaceType.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.Domain.csproj" t="IncludeRecursive" />
+        <e p="PartnerSkillLevelType.cs" t="Include" />
+        <e p="PenaltyType.cs" t="Include" />
+        <e p="PortalType.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="QuestGiverType.cs" t="Include" />
+        <e p="QuestRewardType.cs" t="Include" />
+        <e p="QuestType.cs" t="Include" />
+        <e p="RarifyMode.cs" t="Include" />
+        <e p="RarifyProtection.cs" t="Include" />
+        <e p="ReceiverType.cs" t="Include" />
+        <e p="RequestExchangeType.cs" t="Include" />
+        <e p="RespawnType.cs" t="Include" />
+        <e p="ScriptedInstanceType.cs" t="Include" />
+        <e p="ShellArmorEffectType.cs" t="Include" />
+        <e p="ShellEffectLevelType.cs" t="Include" />
+        <e p="ShellWeaponEffectType.cs" t="Include" />
+        <e p="SkillType.cs" t="Include" />
+        <e p="SMemoType.cs" t="Include" />
+        <e p="SpecialistMorphType.cs" t="Include" />
+        <e p="StaticBonusType.cs" t="Include" />
+        <e p="TalentArenaOptionType.cs" t="Include" />
+        <e p="TargetHitType.cs" t="Include" />
+        <e p="TeleporterType.cs" t="Include" />
+        <e p="UpgradeMode.cs" t="Include" />
+        <e p="UpgradeProtection.cs" t="Include" />
+        <e p="UpgradeRuneType.cs" t="Include" />
+        <e p="UserType.cs" t="Include" />
+      </e>
+      <e p="Src\Librairies\OpenNos.GameObject" t="IncludeRecursive">
+        <e p="_Algorithm" t="Include">
+          <e p="IAlgorithmService.cs" t="Include" />
+          <e p="IDamageAlgorithm.cs" t="Include" />
+          <e p="INpcMonsterAlgorithmService.cs" t="Include" />
+        </e>
+        <e p="_Bcards" t="Include">
+          <e p="Event" t="Include">
+            <e p="BcardEvent.cs" t="Include" />
+          </e>
+          <e p="IBCardEffectAsyncHandler.cs" t="Include" />
+          <e p="IBCardEffectHandlerContainer.cs" t="Include" />
+        </e>
+        <e p="_Event" t="Include">
+          <e p="EventEntity.cs" t="Include" />
+          <e p="PlayerEvent.cs" t="Include" />
+        </e>
+        <e p="_gameEvent" t="Include">
+          <e p="EventNotificationContext.cs" t="Include" />
+          <e p="IPlayerNotifier.cs" t="Include" />
+          <e p="NotifiableEventType.cs" t="Include" />
+        </e>
+        <e p="_Guri" t="Include">
+          <e p="Event" t="Include">
+            <e p="GuriEvent.cs" t="Include" />
+          </e>
+          <e p="IGuriHandler.cs" t="Include" />
+          <e p="IGuriHandlerContainer.cs" t="Include" />
+        </e>
+        <e p="_ItemUsage" t="Include">
+          <e p="Event" t="Include">
+            <e p="InventoryUseItemEvent.cs" t="Include" />
+          </e>
+          <e p="IItemUsageHandlerContainer.cs" t="Include" />
+          <e p="IUseItemRequestHandlerAsync.cs" t="Include" />
+        </e>
+        <e p="_NpcDialog" t="Include">
+          <e p="Event" t="Include">
+            <e p="NpcDialogEvent.cs" t="Include" />
+          </e>
+          <e p="INpcDialogAsyncHandler.cs" t="Include" />
+          <e p="INpcDialogHandlerContainer.cs" t="Include" />
+        </e>
+        <e p="Account.cs" t="Include" />
+        <e p="Act4Stat.cs" t="Include" />
+        <e p="app.config" t="Include" />
+        <e p="ArenaMember.cs" t="Include" />
+        <e p="ArenaTeamMember.cs" t="Include" />
+        <e p="Battle" t="Include">
+          <e p="BattleEntity.cs" t="Include" />
+          <e p="BattleEntityExtension.cs" t="Include" />
+          <e p="HitRequest.cs" t="Include" />
+          <e p="MTListHitTarget.cs" t="Include" />
+        </e>
+        <e p="BazaarItemLink.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Buff" t="Include">
+          <e p="BCard.cs" t="Include" />
+          <e p="Buff.cs" t="Include" />
+          <e p="Card.cs" t="Include" />
+        </e>
+        <e p="Character.cs" t="Include" />
+        <e p="CharacterQuest.cs" t="Include" />
+        <e p="CharacterSkill.cs" t="Include" />
+        <e p="Event" t="Include">
+          <e p="ACT4" t="Include">
+            <e p="Act4Raid.cs" t="Include" />
+            <e p="Act4Ship.cs" t="Include" />
+            <e p="CaligorRaid.cs" t="Include" />
+          </e>
+          <e p="ACT6" t="Include">
+            <e p="Act6Raid.cs" t="Include" />
+          </e>
+          <e p="ACT7" t="Include">
+            <e p="Act7Ship.cs" t="Include" />
+          </e>
+          <e p="ARENA" t="Include">
+            <e p="ArenaEvent.cs" t="Include" />
+          </e>
+          <e p="EventContainer.cs" t="Include" />
+          <e p="EventSchedule.cs" t="Include" />
+          <e p="EventWave.cs" t="Include" />
+          <e p="FAMILYDUNGEON" t="Include">
+            <e p="FamilyDungeon.cs" t="Include" />
+          </e>
+          <e p="GAMES" t="Include">
+            <e p="MeteoriteGame.cs" t="Include" />
+            <e p="ZombieGame.cs" t="Include" />
+          </e>
+          <e p="GROUPY INSTANTBATTLE" t="Include">
+            <e p="GroupyIC.cs" t="Include" />
+          </e>
+          <e p="ICEBREAKER" t="Include">
+            <e p="IceBreaker.cs" t="Include" />
+          </e>
+          <e p="LOD" t="Include">
+            <e p="LOD.cs" t="Include" />
+          </e>
+          <e p="MINILANDREFRESH" t="Include">
+            <e p="MinilandRefresh.cs" t="Include" />
+          </e>
+          <e p="Schedule.cs" t="Include" />
+          <e p="SOLO INSTANTBATTLE" t="Include">
+            <e p="InstantBattle.cs" t="Include" />
+          </e>
+          <e p="TALENTARENA (Unused)" t="Include">
+            <e p="TalentArena.cs" t="Include" />
+            <e p="TalentArenaBattle.cs" t="Include" />
+          </e>
+        </e>
+        <e p="ExchangeInfo.cs" t="Include" />
+        <e p="Extension" t="Include">
+          <e p="CharacterExtension.cs" t="Include" />
+          <e p="Inventory" t="Include">
+            <e p="ApplyTattooExtension.cs" t="Include" />
+            <e p="ConvertToPartnerEquipmentExtension.cs" t="Include" />
+            <e p="CraftFairyExtension.cs" t="Include" />
+            <e p="DownGradeRarity.cs" t="Include" />
+            <e p="OptionItemExtension.cs" t="Include" />
+            <e p="PerfectSpExtension.cs" t="Include" />
+            <e p="RarifyItemExtension.cs" t="Include" />
+            <e p="RemoveRuneExtension.cs" t="Include" />
+            <e p="RemoveTattooInked.cs" t="Include" />
+            <e p="SummingItemExtension.cs" t="Include" />
+            <e p="UpgradeItemExtension.cs" t="Include" />
+            <e p="UpgradeRuneExtension.cs" t="Include" />
+            <e p="UpgradeSpExtension.cs" t="Include" />
+            <e p="UpgradeSpFunExtension.cs" t="Include" />
+            <e p="UpgradeTattooExtension.cs" t="Include" />
+          </e>
+          <e p="ItemExtension.cs" t="Include" />
+        </e>
+        <e p="Family.cs" t="Include" />
+        <e p="FamilyCharacter.cs" t="Include" />
+        <e p="Gift.cs" t="Include" />
+        <e p="Group.cs" t="Include" />
+        <e p="Helpers" t="Include">
+          <e p="ChangeClassHelper.cs" t="Include" />
+          <e p="CharacterHelper.cs" t="Include" />
+          <e p="DamageHelper.cs" t="Include" />
+          <e p="EventHelper.cs" t="Include" />
+          <e p="ItemHelper.cs" t="Include" />
+          <e p="LogHelper.cs" t="Include" />
+          <e p="MallAPIHelper.cs" t="Include" />
+          <e p="MappingHelper.cs" t="Include" />
+          <e p="MateHelper.cs" t="Include" />
+          <e p="MonsterHelper.cs" t="Include" />
+          <e p="PartnerHelper.cs" t="Include" />
+          <e p="PartnerSkillHelper.cs" t="Include" />
+          <e p="PassiveSkillHelper.cs" t="Include" />
+          <e p="PerfectionHelper.cs" t="Include" />
+          <e p="QuestHelper.cs" t="Include" />
+          <e p="RewardsHelper.cs" t="Include" />
+          <e p="RuneHelper.cs" t="Include" />
+          <e p="ShellGeneratorHelper.cs" t="Include" />
+          <e p="SkillHelper.cs" t="Include" />
+          <e p="StaticPacketHelper.cs" t="Include" />
+          <e p="TitleHelper.cs" t="Include" />
+          <e p="UserInterfaceHelper.cs" t="Include" />
+        </e>
+        <e p="InstanceBag.cs" t="Include" />
+        <e p="Inventory.cs" t="Include" />
+        <e p="Item" t="Include">
+          <e p="BoxItem.cs" t="Include" />
+          <e p="FoodItem.cs" t="Include" />
+          <e p="Instance" t="Include">
+            <e p="ItemInstance.cs" t="Include" />
+          </e>
+          <e p="Item.cs" t="Include" />
+          <e p="MagicalItem.cs" t="Include" />
+          <e p="NoFunctionItem.cs" t="Include" />
+          <e p="PotionItem.cs" t="Include" />
+          <e p="ProduceItem.cs" t="Include" />
+          <e p="SnackItem.cs" t="Include" />
+          <e p="SpecialItem.cs" t="Include" />
+          <e p="TeacherItem.cs" t="Include" />
+          <e p="TitleItem.cs" t="Include" />
+          <e p="UpgradeItem.cs" t="Include" />
+          <e p="WearableItem.cs" t="Include" />
+        </e>
+        <e p="Map" t="Include">
+          <e p="CharacterMapItem.cs" t="Include" />
+          <e p="Map.cs" t="Include" />
+          <e p="MapButton.cs" t="Include" />
+          <e p="MapCell.cs" t="Include" />
+          <e p="MapInstance.cs" t="Include" />
+          <e p="MapInstancePortalHandler.cs" t="Include" />
+          <e p="MapItem.cs" t="Include" />
+          <e p="MapMonster.cs" t="Include" />
+          <e p="MapNpc.cs" t="Include" />
+          <e p="MapShop.cs" t="Include" />
+          <e p="ZoneEvent.cs" t="Include" />
+        </e>
+        <e p="Mate.cs" t="Include" />
+        <e p="MinilandObject.cs" t="Include" />
+        <e p="MonsterMapItem.cs" t="Include" />
+        <e p="MonsterToSummon.cs" t="Include" />
+        <e p="Networking" t="Include">
+          <e p="BroadcastableBase.cs" t="Include" />
+          <e p="BroadcastPacket.cs" t="Include" />
+          <e p="ClientSession.cs" t="Include" />
+          <e p="NetworkManager.cs" t="Include" />
+          <e p="ServerManager.cs" t="Include" />
+          <e p="SessionManager.cs" t="Include" />
+          <e p="TransportFactory.cs" t="Include" />
+        </e>
+        <e p="Npc" t="Include">
+          <e p="NpcMonster.cs" t="Include" />
+        </e>
+        <e p="NpcMonsterSkill.cs" t="Include" />
+        <e p="NpcToSummon.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.GameObject.csproj" t="IncludeRecursive" />
+        <e p="PartnerSkill.cs" t="Include" />
+        <e p="PartnerSp.cs" t="Include" />
+        <e p="PersonalShopItem.cs" t="Include" />
+        <e p="Portal.cs" t="Include" />
+        <e p="PossibleTypeAndSubtype.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Quest.cs" t="Include" />
+        <e p="Recipe.cs" t="Include" />
+        <e p="ScriptedInstance.cs" t="Include" />
+        <e p="ScriptedObjects" t="Include">
+          <e p="Clock.cs" t="Include" />
+          <e p="Locker.cs" t="Include" />
+        </e>
+        <e p="Shop.cs" t="Include" />
+        <e p="Skill.cs" t="Include" />
+        <e p="UseSkillOnDamage.cs" t="Include" />
+      </e>
+      <e p="Src\Librairies\OpenNos.Handler" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Bot" t="Include">
+          <e p="DiscordBotCommand.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.Handler.csproj" t="IncludeRecursive" />
+        <e p="PacketHandler" t="Include">
+          <e p="Basic" t="Include">
+            <e p="BlDelPacketHandler.cs" t="Include" />
+            <e p="BlInsPacketHandler.cs" t="Include" />
+            <e p="BlPacketHandler.cs" t="Include" />
+            <e p="BtkPacketHandler.cs" t="Include" />
+            <e p="CharacterOptionPacketHandler.cs" t="Include" />
+            <e p="ComplimentPacketHandler.cs" t="Include" />
+            <e p="CspPacketHandler.cs" t="Include" />
+            <e p="DirectionPacketHandler.cs" t="Include" />
+            <e p="FDelPacketHandler.cs" t="Include" />
+            <e p="FInsPacketHandler.cs" t="Include" />
+            <e p="FlPacketHandler.cs" t="Include" />
+            <e p="GameStartPacketHandler.cs" t="Include" />
+            <e p="GboxPacketHandler.cs" t="Include" />
+            <e p="GetGiftPacketHandler.cs" t="Include" />
+            <e p="GroupSayPacketHandler.cs" t="Include" />
+            <e p="GuriPacketHandler.cs" t="Include" />
+            <e p="HeroPacketHandler.cs" t="Include" />
+            <e p="NcifPacketHandler.cs" t="Include" />
+            <e p="NpinfoPacketHandler.cs" t="Include" />
+            <e p="PinvPacketHandler.cs" t="Include" />
+            <e p="PJoinPacketHandler.cs" t="Include" />
+            <e p="PLeavePacketHandler.cs" t="Include" />
+            <e p="PreqPacketHandler.cs" t="Include" />
+            <e p="PstPacketHandler.cs" t="Include" />
+            <e p="PulsePacketHandler.cs" t="Include" />
+            <e p="QSetPacketHandler.cs" t="Include" />
+            <e p="QtPacketHandler.cs" t="Include" />
+            <e p="RdPacketHandler.cs" t="Include" />
+            <e p="ReqInfoPacketHandler.cs" t="Include" />
+            <e p="RevivalPacketHandler.cs" t="Include" />
+            <e p="RlPacketHandler.cs" t="Include" />
+            <e p="RStartPacketHandler.cs" t="Include" />
+            <e p="SayPacketHandler.cs" t="Include" />
+            <e p="SitPacketHandler.cs" t="Include" />
+            <e p="TitEqPacketHandler.cs" t="Include" />
+            <e p="WalkPacketHandler.cs" t="Include" />
+            <e p="WhisperPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Battle" t="Include">
+            <e p="MultiTargetListPacketHandler.cs" t="Include" />
+            <e p="UseAOESkillPacketHandler.cs" t="Include" />
+            <e p="UseIconFalconSkillPacketHandler.cs" t="Include" />
+            <e p="UseSkillPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Bazaar" t="Include">
+            <e p="CBListPacketHandler.cs" t="Include" />
+            <e p="CBuyPacketHandler.cs" t="Include" />
+            <e p="CModPacketHandler.cs" t="Include" />
+            <e p="CRegPacketHandler.cs" t="Include" />
+            <e p="CScalcPacketHandler.cs" t="Include" />
+            <e p="CSkillPacketHandler.cs" t="Include" />
+            <e p="CSListPacketHandler.cs" t="Include" />
+          </e>
+          <e p="CharScreen" t="Include">
+            <e p="CharRenPacketHandler.cs" t="Include" />
+            <e p="CreateCharacterJobPacketHandler.cs" t="Include" />
+            <e p="CreateCharacterPacketHandler.cs" t="Include" />
+            <e p="DeleteCharacterPacketHandler.cs" t="Include" />
+            <e p="EntryPointPacketHandler.cs" t="Include" />
+            <e p="SelectCharacterPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Command" t="Include">
+            <e p="Act4Handler.cs" t="Include" />
+            <e p="Act4StatHandler.cs" t="Include" />
+            <e p="AddMonsterHandler.cs" t="Include" />
+            <e p="AddNpcHandler.cs" t="Include" />
+            <e p="AddPartnerHandler.cs" t="Include" />
+            <e p="AddPetHandler.cs" t="Include" />
+            <e p="AddPortalHandler.cs" t="Include" />
+            <e p="AddQuestHandler.cs" t="Include" />
+            <e p="AddShellEffectHandler.cs" t="Include" />
+            <e p="AddSkillHandler.cs" t="Include" />
+            <e p="AddUserLogHandler.cs" t="Include" />
+            <e p="ArenaWinnerHandler.cs" t="Include" />
+            <e p="BackMobHandler.cs" t="Include" />
+            <e p="BanHandler.cs" t="Include" />
+            <e p="BankHandler.cs" t="Include" />
+            <e p="BlockFXPHandler.cs" t="Include" />
+            <e p="BlockPMHandler.cs" t="Include" />
+            <e p="BlockRepHandler.cs" t="Include" />
+            <e p="BlockXPHandler.cs" t="Include" />
+            <e p="BuffHandler.cs" t="Include" />
+            <e p="BuffPackHandler.cs" t="Include" />
+            <e p="ChangeClassHandler.cs" t="Include" />
+            <e p="ChangeDignityHandler.cs" t="Include" />
+            <e p="ChangeFairyLevelHandler.cs" t="Include" />
+            <e p="ChangeHeroLevelHandler.cs" t="Include" />
+            <e p="ChangeJobLevelHandler.cs" t="Include" />
+            <e p="ChangeLevelHandler.cs" t="Include" />
+            <e p="ChangeNpcMonsterNameHandler.cs" t="Include" />
+            <e p="ChangeReputationHandler.cs" t="Include" />
+            <e p="ChangeSexHandler.cs" t="Include" />
+            <e p="ChangeShopNameHandler.cs" t="Include" />
+            <e p="ChangeSpecialistLevelHandler.cs" t="Include" />
+            <e p="ChannelInfoHandler.cs" t="Include" />
+            <e p="CharacterEditHandler.cs" t="Include" />
+            <e p="CharStatHandler.cs" t="Include" />
+            <e p="ClassPackHandler.cs" t="Include" />
+            <e p="ClearInventoryHandler.cs" t="Include" />
+            <e p="ClearMapHandler.cs" t="Include" />
+            <e p="CloneItemHandler.cs" t="Include" />
+            <e p="CMDHandler.cs" t="Include" />
+            <e p="CreateItemHandler.cs" t="Include" />
+            <e p="DemoteHandler.cs" t="Include" />
+            <e p="DropHandler.cs" t="Include" />
+            <e p="DropRateHandler.cs" t="Include" />
+            <e p="EffectHandler.cs" t="Include" />
+            <e p="EventHandler.cs" t="Include" />
+            <e p="FactionHandler.cs" t="Include" />
+            <e p="FairyXpRateHandler.cs" t="Include" />
+            <e p="FamilyFactionHandler.cs" t="Include" />
+            <e p="GiftHandler.cs" t="Include" />
+            <e p="GlobalEventHandler.cs" t="Include" />
+            <e p="GodModeHandler.cs" t="Include" />
+            <e p="GogoHandler.cs" t="Include" />
+            <e p="GoldDropRateHandler.cs" t="Include" />
+            <e p="GoldHandler.cs" t="Include" />
+            <e p="GoldRateHandler.cs" t="Include" />
+            <e p="GuideHandler.cs" t="Include" />
+            <e p="GuriHandler.cs" t="Include" />
+            <e p="HairColorHandler.cs" t="Include" />
+            <e p="HairStyleHandler.cs" t="Include" />
+            <e p="HelpHandler.cs" t="Include" />
+            <e p="HelpMeHandler.cs" t="Include" />
+            <e p="HeroXpRateHandler.cs" t="Include" />
+            <e p="HomeHandler.cs" t="Include" />
+            <e p="InvisibleHandler.cs" t="Include" />
+            <e p="ItemRainHandler.cs" t="Include" />
+            <e p="KickHandler.cs" t="Include" />
+            <e p="KickSessionHandler.cs" t="Include" />
+            <e p="KillHandler.cs" t="Include" />
+            <e p="LeaveAct4Handler.cs" t="Include" />
+            <e p="MaintenanceHandler.cs" t="Include" />
+            <e p="MapDanceHandler.cs" t="Include" />
+            <e p="MapPvpHandler.cs" t="Include" />
+            <e p="MapResetHandler.cs" t="Include" />
+            <e p="MapStatsHandler.cs" t="Include" />
+            <e p="MinilandHandler.cs" t="Include" />
+            <e p="MobHandler.cs" t="Include" />
+            <e p="MobRainHandler.cs" t="Include" />
+            <e p="MorphHandler.cs" t="Include" />
+            <e p="MuteHandler.cs" t="Include" />
+            <e p="NpcHandler.cs" t="Include" />
+            <e p="PacketCallBackHandler.cs" t="Include" />
+            <e p="PartnerSpXpHandler.cs" t="Include" />
+            <e p="PenaltyLogHandler.cs" t="Include" />
+            <e p="PortalToHandler.cs" t="Include" />
+            <e p="PositionHandler.cs" t="Include" />
+            <e p="PromoteHandler.cs" t="Include" />
+            <e p="RarifyHandler.cs" t="Include" />
+            <e p="ReloadSiHandler.cs" t="Include" />
+            <e p="RemoveMalusHandler.cs" t="Include" />
+            <e p="RemoveMobHandler.cs" t="Include" />
+            <e p="RemovePortalHandler.cs" t="Include" />
+            <e p="RemoveUserLogHandler.cs" t="Include" />
+            <e p="ReputationRateHandler.cs" t="Include" />
+            <e p="ResizeHandler.cs" t="Include" />
+            <e p="RestartAllHandler.cs" t="Include" />
+            <e p="RestartHandler.cs" t="Include" />
+            <e p="RollHandler.cs" t="Include" />
+            <e p="ScheduleHandler.cs" t="Include" />
+            <e p="SearchItemHandler.cs" t="Include" />
+            <e p="SearchMonsterHandler.cs" t="Include" />
+            <e p="ServerInfoHandler.cs" t="Include" />
+            <e p="SetPerfectionHandler.cs" t="Include" />
+            <e p="ShoutHandler.cs" t="Include" />
+            <e p="ShoutHereHandler.cs" t="Include" />
+            <e p="ShutdownAllHandler.cs" t="Include" />
+            <e p="ShutdownHandler.cs" t="Include" />
+            <e p="SortHandler.cs" t="Include" />
+            <e p="SpeedHandler.cs" t="Include" />
+            <e p="SpRefillHandler.cs" t="Include" />
+            <e p="StatHandler.cs" t="Include" />
+            <e p="SudoHandler.cs" t="Include" />
+            <e p="SummonHandler.cs" t="Include" />
+            <e p="TeleportHandler.cs" t="Include" />
+            <e p="UnbanHandler.cs" t="Include" />
+            <e p="UndercoverHandler.cs" t="Include" />
+            <e p="UnmuteHandler.cs" t="Include" />
+            <e p="UnstuckHandler.cs" t="Include" />
+            <e p="UpgradeHandler.cs" t="Include" />
+            <e p="UserLogHandler.cs" t="Include" />
+            <e p="WarningHandler.cs" t="Include" />
+            <e p="WarpHandler.cs" t="Include" />
+            <e p="WigColorHandler.cs" t="Include" />
+            <e p="XpRateHandler.cs" t="Include" />
+            <e p="ZoomHandler.cs" t="Include" />
+          </e>
+          <e p="Custom" t="Include">
+            <e p="TemplatePacketHandler.cs" t="Include" />
+          </e>
+          <e p="Family" t="Include">
+            <e p="Command" t="Include">
+              <e p="FamilyInvitePacketHandler.cs" t="Include" />
+              <e p="FamilyKickPacketHandler.cs" t="Include" />
+              <e p="FamilyLeavePacketHandler.cs" t="Include" />
+              <e p="FamilyMessagePacketHandler.cs" t="Include" />
+              <e p="FamilyResetSexPacketHandler.cs" t="Include" />
+              <e p="FamilyShoutPacketHandler.cs" t="Include" />
+              <e p="FamilyTitleChangePacketHandler.cs" t="Include" />
+              <e p="FamilyTodayPacketHandler.cs" t="Include" />
+            </e>
+            <e p="CreateFamilyPacketHandler.cs" t="Include" />
+            <e p="FamilyChatPacketHandler.cs" t="Include" />
+            <e p="FamilyDismissPacketHandler.cs" t="Include" />
+            <e p="FamilyManagementPacketHandler.cs" t="Include" />
+            <e p="FAuthPacketHandler.cs" t="Include" />
+            <e p="FDepositPacketHandler.cs" t="Include" />
+            <e p="FhistCtsPacketHandler.cs" t="Include" />
+            <e p="FrankCtsPacketHandler.cs" t="Include" />
+            <e p="FReposPacketHandler.cs" t="Include" />
+            <e p="FWithdrawPacketHandler.cs" t="Include" />
+            <e p="GListPacketHandler.cs" t="Include" />
+            <e p="JoinFamilyPacketHandler.cs" t="Include" />
+            <e p="TodayPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Inventory" t="Include">
+            <e p="BIPacketHandler.cs" t="Include" />
+            <e p="DepositPacketHandler.cs" t="Include" />
+            <e p="EquipmentInfoPacketHandler.cs" t="Include" />
+            <e p="ExchangeRequestPacketHandler.cs" t="Include" />
+            <e p="ExcListPacketHandler.cs" t="Include" />
+            <e p="GetPacketHandler.cs" t="Include" />
+            <e p="MvePacketHandler.cs" t="Include" />
+            <e p="MviPacketHandler.cs" t="Include" />
+            <e p="PutPacketHandler.cs" t="Include" />
+            <e p="RemovePacketHandler.cs" t="Include" />
+            <e p="ReposPacketHandler.cs" t="Include" />
+            <e p="SortOpenPacketHandler.cs" t="Include" />
+            <e p="SpecialistHolderPacketHandler.cs" t="Include" />
+            <e p="SpTransformPacketHandler.cs" t="Include" />
+            <e p="UpgradePacketHandler.cs" t="Include" />
+            <e p="UseItemPacketHandler.cs" t="Include" />
+            <e p="WearPacketHandler.cs" t="Include" />
+            <e p="WithdrawPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Login" t="Include">
+            <e p="LoginPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Mate" t="Include">
+            <e p="PartnerSkillOpenPacketHandler.cs" t="Include" />
+            <e p="PslPacketHandler.cs" t="Include" />
+            <e p="PtCtlPacketHandler.cs" t="Include" />
+            <e p="SayPPacketHandler.cs" t="Include" />
+            <e p="SuctlPacketHandler.cs" t="Include" />
+            <e p="UpetPacketHandler.cs" t="Include" />
+            <e p="UsePartnerSkillPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Miniland" t="Include">
+            <e p="AddObjPacketHandler.cs" t="Include" />
+            <e p="MinigamePacketHandler.cs" t="Include" />
+            <e p="MJoinPacketHandler.cs" t="Include" />
+            <e p="MLEditPacketHandler.cs" t="Include" />
+            <e p="RmvobjPacketHandler.cs" t="Include" />
+            <e p="UseobjPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Npc" t="Include">
+            <e p="BuyPacketHandler.cs" t="Include" />
+            <e p="MShopPacketHandler.cs" t="Include" />
+            <e p="NRunPacketHandler.cs" t="Include" />
+            <e p="PdtsePacketHandler.cs" t="Include" />
+            <e p="RequestNpcPacketHandler.cs" t="Include" />
+            <e p="SellPacketHandler.cs" t="Include" />
+            <e p="ShoppingPacketHandler.cs" t="Include" />
+          </e>
+          <e p="ScriptedInstance" t="Include">
+            <e p="BscPacketHandler.cs" t="Include" />
+            <e p="EscapePacketHandler.cs" t="Include" />
+            <e p="GitPacketHandler.cs" t="Include" />
+            <e p="MkRaidPacketHandler.cs" t="Include" />
+            <e p="RaidExitPacketHandler.cs" t="Include" />
+            <e p="RSelPacketHandler.cs" t="Include" />
+            <e p="TaCallPacketHandler.cs" t="Include" />
+            <e p="TawPacketHandler.cs" t="Include" />
+            <e p="TreqPacketHandler.cs" t="Include" />
+            <e p="WreqPacketHandler.cs" t="Include" />
+          </e>
+          <e p="Useless" t="Include">
+            <e p="CClosePacketHandler.cs" t="Include" />
+            <e p="FStashEndPacketHandler.cs" t="Include" />
+            <e p="LbsPacketPacketHandler.cs" t="Include" />
+            <e p="PdtClosePacketHandler.cs" t="Include" />
+            <e p="ScptcsPacketHandler.cs" t="Include" />
+            <e p="ShopClosePacketHandler.cs" t="Include" />
+            <e p="SnapPacketHandler.cs" t="Include" />
+            <e p="StashEndPacketHandler.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Librairies\OpenNos.Master.Library" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Client" t="Include">
+          <e p="AuthentificationServiceClient.cs" t="Include" />
+          <e p="CommunicationClient.cs" t="Include" />
+          <e p="CommunicationServiceClient.cs" t="Include" />
+          <e p="ConfigurationClient.cs" t="Include" />
+          <e p="ConfigurationServiceClient.cs" t="Include" />
+          <e p="MailClient.cs" t="Include" />
+          <e p="MailServiceClient.cs" t="Include" />
+          <e p="MallServiceClient.cs" t="Include" />
+        </e>
+        <e p="Data" t="Include">
+          <e p="AccountConnection.cs" t="Include" />
+          <e p="ConfigurationObject.cs" t="Include" />
+          <e p="Mail.cs" t="Include" />
+          <e p="MallItem.cs" t="Include" />
+          <e p="MallStaticBonus.cs" t="Include" />
+          <e p="MapInstance.cs" t="Include" />
+          <e p="SCSCharacterMessage.cs" t="Include" />
+          <e p="SerializableWorldServer.cs" t="Include" />
+          <e p="WorldServer.cs" t="Include" />
+        </e>
+        <e p="Interface" t="Include">
+          <e p="IAdminToolService.cs" t="Include" />
+          <e p="IAuthentificationService.cs" t="Include" />
+          <e p="ICommunicationClient.cs" t="Include" />
+          <e p="ICommunicationService.cs" t="Include" />
+          <e p="IConfigurationClient.cs" t="Include" />
+          <e p="IConfigurationService.cs" t="Include" />
+          <e p="IMailClient.cs" t="Include" />
+          <e p="IMailService.cs" t="Include" />
+          <e p="IMallService.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.Master.Library.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Librairies\OpenNos.PathFinder" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="BestFirstSearch.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="GridPos.cs" t="Include" />
+        <e p="Heuristic.cs" t="Include" />
+        <e p="MinHeap.cs" t="Include" />
+        <e p="Node.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.PathFinder.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Librairies\OpenNos.XMLModel" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Events" t="Include">
+          <e p="AddClockTime.cs" t="Include" />
+          <e p="ChangePortalType.cs" t="Include" />
+          <e p="ControlMonsterInRange.cs" t="Include" />
+          <e p="Effect.cs" t="Include" />
+          <e p="End.cs" t="Include" />
+          <e p="GenerateClock.cs" t="Include" />
+          <e p="GenerateMapClock.cs" t="Include" />
+          <e p="Move.cs" t="Include" />
+          <e p="NpcDialog.cs" t="Include" />
+          <e p="OnAreaEntry.cs" t="Include" />
+          <e p="OnCharacterDiscoveringMap.cs" t="Include" />
+          <e p="OnDeath.cs" t="Include" />
+          <e p="OnDisable.cs" t="Include" />
+          <e p="OnEnable.cs" t="Include" />
+          <e p="OnFirstEnable.cs" t="Include" />
+          <e p="OnLockerOpen.cs" t="Include" />
+          <e p="OnMapClean.cs" t="Include" />
+          <e p="OnMoveOnMap.cs" t="Include" />
+          <e p="OnNoticing.cs" t="Include" />
+          <e p="OnStop.cs" t="Include" />
+          <e p="OnTarget.cs" t="Include" />
+          <e p="OnTimeout.cs" t="Include" />
+          <e p="OnTraversal.cs" t="Include" />
+          <e p="Quest" t="Include">
+            <e p="Script.cs" t="Include" />
+            <e p="TeleportTo.cs" t="Include" />
+          </e>
+          <e p="RemoveAfter.cs" t="Include" />
+          <e p="Roam.cs" t="Include" />
+          <e p="SendMessage.cs" t="Include" />
+          <e p="SendPacket.cs" t="Include" />
+          <e p="SetButtonLockers.cs" t="Include" />
+          <e p="SetMonsterLockers.cs" t="Include" />
+          <e p="SpawnButton.cs" t="Include" />
+          <e p="SpawnPortal.cs" t="Include" />
+          <e p="StartClock.cs" t="Include" />
+          <e p="SummonMonster.cs" t="Include" />
+          <e p="SummonMonsters.cs" t="Include" />
+          <e p="SummonNpc.cs" t="Include" />
+          <e p="Teleport.cs" t="Include" />
+          <e p="ThrowItem.cs" t="Include" />
+          <e p="UseSkillOnDamage.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="Quest" t="Include">
+            <e p="QuestGiver.cs" t="Include" />
+            <e p="QuestModel.cs" t="Include" />
+            <e p="Reward.cs" t="Include" />
+          </e>
+          <e p="ScriptedInstance" t="Include">
+            <e p="Globals.cs" t="Include" />
+            <e p="ScriptedInstanceModel.cs" t="Include" />
+          </e>
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Objects" t="Include">
+          <e p="Bool.cs" t="Include" />
+          <e p="CreateMap.cs" t="Include" />
+          <e p="DailyEntries.cs" t="Include" />
+          <e p="FamExp.cs" t="Include" />
+          <e p="GiantTeam.cs" t="Include" />
+          <e p="Gold.cs" t="Include" />
+          <e p="Id.cs" t="Include" />
+          <e p="InstanceEvent.cs" t="Include" />
+          <e p="Item.cs" t="Include" />
+          <e p="Label.cs" t="Include" />
+          <e p="Level.cs" t="Include" />
+          <e p="Lives.cs" t="Include" />
+          <e p="Name.cs" t="Include" />
+          <e p="PetsRewards.cs" t="Include" />
+          <e p="Quest" t="Include">
+            <e p="KillObjective.cs" t="Include" />
+            <e p="LootObjective.cs" t="Include" />
+            <e p="WalkObjective.cs" t="Include" />
+          </e>
+          <e p="Reputation.cs" t="Include" />
+          <e p="SpNeeded.cs" t="Include" />
+          <e p="StartPosition.cs" t="Include" />
+          <e p="Wave.cs" t="Include" />
+        </e>
+        <e p="OpenNos.XMLModel.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Mapping\OpenNos.Mapper" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Mappers" t="Include">
+          <e p="AccountMapper.cs" t="Include" />
+          <e p="BazaarItemMapper.cs" t="Include" />
+          <e p="BCardMapper.cs" t="Include" />
+          <e p="BotAuthorityMapper.cs" t="Include" />
+          <e p="BoxItemMapper.cs" t="Include" />
+          <e p="CardMapper.cs" t="Include" />
+          <e p="CellonOptionMapper.cs" t="Include" />
+          <e p="CharacterMapper.cs" t="Include" />
+          <e p="CharacterQuestMapper.cs" t="Include" />
+          <e p="CharacterRelationMapper.cs" t="Include" />
+          <e p="CharacterSkillMapper.cs" t="Include" />
+          <e p="CharacterTitleMapper.cs" t="Include" />
+          <e p="ChatLogMapper.cs" t="Include" />
+          <e p="ComboMapper.cs" t="Include" />
+          <e p="DropMapper.cs" t="Include" />
+          <e p="FamilyCharacterMapper.cs" t="Include" />
+          <e p="FamilyLogMapper.cs" t="Include" />
+          <e p="FamilyMapper.cs" t="Include" />
+          <e p="GeneralLogMapper.cs" t="Include" />
+          <e p="ItemInstanceMapper.cs" t="Include" />
+          <e p="ItemMapper.cs" t="Include" />
+          <e p="MailMapper.cs" t="Include" />
+          <e p="MaintenanceLogMapper.cs" t="Include" />
+          <e p="MapMapper.cs" t="Include" />
+          <e p="MapMonsterMapper.cs" t="Include" />
+          <e p="MapNpcMapper.cs" t="Include" />
+          <e p="MapTypeMapMapper.cs" t="Include" />
+          <e p="MapTypeMapper.cs" t="Include" />
+          <e p="MateMapper.cs" t="Include" />
+          <e p="MinigameLogMapper.cs" t="Include" />
+          <e p="MinilandObjectMapper.cs" t="Include" />
+          <e p="NpcMonsterMapper.cs" t="Include" />
+          <e p="NpcMonsterSkillMapper.cs" t="Include" />
+          <e p="PartnerSkillMapper.cs" t="Include" />
+          <e p="PenaltyLogMapper.cs" t="Include" />
+          <e p="PortalMapper.cs" t="Include" />
+          <e p="QuestLogMapper.cs" t="Include" />
+          <e p="QuestMapper.cs" t="Include" />
+          <e p="QuestObjectiveMapper.cs" t="Include" />
+          <e p="QuestRewardMapper.cs" t="Include" />
+          <e p="QuicklistEntryMapper.cs" t="Include" />
+          <e p="RecipeItemMapper.cs" t="Include" />
+          <e p="RecipeListMapper.cs" t="Include" />
+          <e p="RecipeMapper.cs" t="Include" />
+          <e p="RespawnMapper.cs" t="Include" />
+          <e p="RespawnMapTypeMapper.cs" t="Include" />
+          <e p="RollGeneratedItemMapper.cs" t="Include" />
+          <e p="ScriptedInstanceMapper.cs" t="Include" />
+          <e p="ShellEffectMapper.cs" t="Include" />
+          <e p="ShopItemMapper.cs" t="Include" />
+          <e p="ShopMapper.cs" t="Include" />
+          <e p="ShopSkillMapper.cs" t="Include" />
+          <e p="SkillMapper.cs" t="Include" />
+          <e p="StaticBonusMapper.cs" t="Include" />
+          <e p="StaticBuffMapper.cs" t="Include" />
+          <e p="TeleporterMapper.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OpenNos.Mapper.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Plugins\Plugins.BasicImplementations" t="IncludeRecursive">
+        <e p="Algorithm" t="Include">
+          <e p="AlgorithmPluginCore.cs" t="Include" />
+          <e p="AlgorithmService.cs" t="Include" />
+          <e p="CharacterAlgorithms" t="Include">
+            <e p="Close" t="Include">
+              <e p="CloseDefenceAlgorithm.cs" t="Include" />
+              <e p="CloseDodgeAlgorithm.cs" t="Include" />
+            </e>
+            <e p="Damage" t="Include">
+              <e p="CriticalDistAlgorithm.cs" t="Include" />
+              <e p="CriticalDistRateAlgorithm.cs" t="Include" />
+              <e p="CriticalHitAlgortihmcs.cs" t="Include" />
+              <e p="CriticalHitRateAlgorithm.cs" t="Include" />
+              <e p="HitRateAlgorithm.cs" t="Include" />
+              <e p="MaxDistanceAlgorithm.cs" t="Include" />
+              <e p="MaxHitAlgorithm.cs" t="Include" />
+              <e p="MinDistanceAlgorithm.cs" t="Include" />
+              <e p="MinHitAlgorithm.cs" t="Include" />
+            </e>
+            <e p="Distance" t="Include">
+              <e p="RangedDefenceAlgorithm.cs" t="Include" />
+              <e p="RangedDodgeAlgorithm.cs" t="Include" />
+            </e>
+            <e p="HpMp" t="Include">
+              <e p="HpMax.cs" t="Include" />
+              <e p="HpRegen.cs" t="Include" />
+              <e p="HpRegenSitting.cs" t="Include" />
+              <e p="MpMax.cs" t="Include" />
+              <e p="MpRegen.cs" t="Include" />
+              <e p="MpRegenSitting.cs" t="Include" />
+            </e>
+            <e p="ICharacterStatAlgorithm.cs" t="Include" />
+            <e p="Magical" t="Include">
+              <e p="MagicDefenceAlgorithm.cs" t="Include" />
+              <e p="MagicDodgeAlgorithm.cs" t="Include" />
+            </e>
+            <e p="SpeedAlgorithm.cs" t="Include" />
+            <e p="Xp" t="Include">
+              <e p="FairyLevelBasedAlgorithm.cs" t="Include" />
+              <e p="HeroLevelBasedAlgorithm.cs" t="Include" />
+              <e p="JobLevelBasedAlgorithm.cs" t="Include" />
+              <e p="LevelBasedAlgorithm.cs" t="Include" />
+              <e p="SpLevelBasedAlgorithm.cs" t="Include" />
+            </e>
+          </e>
+          <e p="DamageAlgorithm.cs" t="Include" />
+          <e p="FamilyAlgorithms" t="Include">
+            <e p="FamilyLevelBasedAlgorithm.cs" t="Include" />
+          </e>
+          <e p="ILevelBasedDataAlgorithm.cs" t="Include" />
+          <e p="NpcMonsterAlgorithms" t="Include">
+            <e p="HeroXp.cs" t="Include" />
+            <e p="HpMax.cs" t="Include" />
+            <e p="IMonsterRaceStatAlgorithm.cs" t="Include" />
+            <e p="JobXp.cs" t="Include" />
+            <e p="MpMax.cs" t="Include" />
+            <e p="Xp.cs" t="Include" />
+          </e>
+          <e p="NpcMonsterAlgorithmService.cs" t="Include" />
+        </e>
+        <e p="BCards" t="Include">
+          <e p="BCardsHandlerContainer.cs" t="Include" />
+          <e p="BCardsPlugin.cs" t="Include" />
+          <e p="BCardsPluginCore.cs" t="Include" />
+          <e p="Handler" t="Include">
+            <e p="TestBuff.cs" t="Include" />
+            <e p="TestHealingBurningAndCasting.cs" t="Include" />
+          </e>
+        </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Event" t="Include">
+          <e p="BCard" t="Include">
+            <e p="BCardEventHandler.cs" t="Include" />
+          </e>
+          <e p="GenericEventPlugin.cs" t="Include" />
+          <e p="GenericEventPluginCore.cs" t="Include" />
+          <e p="Guri" t="Include">
+            <e p="GuriEventHandler.cs" t="Include" />
+          </e>
+          <e p="ItemUsage" t="Include">
+            <e p="ItemUsageEvent.cs" t="Include" />
+          </e>
+          <e p="NpcDialog" t="Include">
+            <e p="NpcDialogEvent.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Guri" t="Include">
+          <e p="GuriHandlerContainer.cs" t="Include" />
+          <e p="GuriPlugin.cs" t="Include" />
+          <e p="GuriPluginCore.cs" t="Include" />
+          <e p="Handler" t="Include">
+            <e p="G10.cs" t="Include" />
+            <e p="G1502.cs" t="Include" />
+            <e p="G199.cs" t="Include" />
+            <e p="G2.cs" t="Include" />
+            <e p="G201.cs" t="Include" />
+            <e p="G202.cs" t="Include" />
+            <e p="G203.cs" t="Include" />
+            <e p="G204.cs" t="Include" />
+            <e p="G205.cs" t="Include" />
+            <e p="G208.cs" t="Include" />
+            <e p="G209.cs" t="Include" />
+            <e p="G300.cs" t="Include" />
+            <e p="G306.cs" t="Include" />
+            <e p="G4.cs" t="Include" />
+            <e p="G40.cs" t="Include" />
+            <e p="G400.cs" t="Include" />
+            <e p="G41.cs" t="Include" />
+            <e p="G42.cs" t="Include" />
+            <e p="G43.cs" t="Include" />
+            <e p="G44.cs" t="Include" />
+            <e p="G5.cs" t="Include" />
+            <e p="G501.cs" t="Include" />
+            <e p="G502.cs" t="Include" />
+            <e p="G506.cs" t="Include" />
+            <e p="G513.cs" t="Include" />
+            <e p="G710.cs" t="Include" />
+            <e p="G711.cs" t="Include" />
+            <e p="G750.cs" t="Include" />
+          </e>
+        </e>
+        <e p="ItemUsage" t="Include">
+          <e p="Handler" t="Include">
+            <e p="Box" t="Include">
+              <e p="DefaultBox.cs" t="Include" />
+            </e>
+            <e p="Food" t="Include">
+              <e p="DefaultFood.cs" t="Include" />
+            </e>
+            <e p="Magical" t="Include" />
+            <e p="NoFunction" t="Include">
+              <e p="DefaultNoFunction.cs" t="Include" />
+            </e>
+            <e p="Potion" t="Include">
+              <e p="DefaultPotion.cs" t="Include" />
+            </e>
+            <e p="Produce" t="Include">
+              <e p="DefaultProduce.cs" t="Include" />
+            </e>
+            <e p="Snack" t="Include">
+              <e p="DefaultSnack.cs" t="Include" />
+            </e>
+            <e p="Special" t="Include" />
+            <e p="Teacher" t="Include">
+              <e p="DefaultTeacher.cs" t="Include" />
+            </e>
+            <e p="Title" t="Include">
+              <e p="DefaultTitle.cs" t="Include" />
+            </e>
+            <e p="Upgrade" t="Include" />
+            <e p="Wearable" t="Include" />
+          </e>
+          <e p="ItemUsageHandlerContainer.cs" t="Include" />
+          <e p="ItemUsagePlugin.cs" t="Include" />
+          <e p="ItemUsagePluginCore.cs" t="Include" />
+        </e>
+        <e p="NpcDialog" t="Include">
+          <e p="Handler" t="Include">
+            <e p="D1.cs" t="Include" />
+            <e p="D10.cs" t="Include" />
+            <e p="D1000.cs" t="Include" />
+            <e p="D109.cs" t="Include" />
+            <e p="D111.cs" t="Include" />
+            <e p="D12.cs" t="Include" />
+            <e p="D129.cs" t="Include" />
+            <e p="D130.cs" t="Include" />
+            <e p="D132.cs" t="Include" />
+            <e p="D134.cs" t="Include" />
+            <e p="D135.cs" t="Include" />
+            <e p="D137.cs" t="Include" />
+            <e p="D138.cs" t="Include" />
+            <e p="D14.cs" t="Include" />
+            <e p="D144.cs" t="Include" />
+            <e p="D145.cs" t="Include" />
+            <e p="D146.cs" t="Include" />
+            <e p="D147.cs" t="Include" />
+            <e p="D148.cs" t="Include" />
+            <e p="D15.cs" t="Include" />
+            <e p="D150.cs" t="Include" />
+            <e p="D1503.cs" t="Include" />
+            <e p="D16.cs" t="Include" />
+            <e p="D1600.cs" t="Include" />
+            <e p="D1601.cs" t="Include" />
+            <e p="D1602.cs" t="Include" />
+            <e p="D1603.cs" t="Include" />
+            <e p="D1604.cs" t="Include" />
+            <e p="D1605.cs" t="Include" />
+            <e p="D17.cs" t="Include" />
+            <e p="D18.cs" t="Include" />
+            <e p="D19.cs" t="Include" />
+            <e p="D194.cs" t="Include" />
+            <e p="D195.cs" t="Include" />
+            <e p="D2.cs" t="Include" />
+            <e p="D200.cs" t="Include" />
+            <e p="D2000.cs" t="Include" />
+            <e p="D2001.cs" t="Include" />
+            <e p="D2002.cs" t="Include" />
+            <e p="D23.cs" t="Include" />
+            <e p="D26.cs" t="Include" />
+            <e p="D3.cs" t="Include" />
+            <e p="D301.cs" t="Include" />
+            <e p="D312.cs" t="Include" />
+            <e p="D315.cs" t="Include" />
+            <e p="D316.cs" t="Include" />
+            <e p="D317.cs" t="Include" />
+            <e p="D319.cs" t="Include" />
+            <e p="D325.cs" t="Include" />
+            <e p="D326.cs" t="Include" />
+            <e p="D332.cs" t="Include" />
+            <e p="D334.cs" t="Include" />
+            <e p="D335.cs" t="Include" />
+            <e p="D336.cs" t="Include" />
+            <e p="D4.cs" t="Include" />
+            <e p="D45.cs" t="Include" />
+            <e p="D5.cs" t="Include" />
+            <e p="D5001.cs" t="Include" />
+            <e p="D5002.cs" t="Include" />
+            <e p="D5004.cs" t="Include" />
+            <e p="D5011.cs" t="Include" />
+            <e p="D5012.cs" t="Include" />
+            <e p="D529.cs" t="Include" />
+            <e p="D532.cs" t="Include" />
+            <e p="D5932.cs" t="Include" />
+            <e p="D60.cs" t="Include" />
+            <e p="D6013.cs" t="Include" />
+            <e p="D6014.cs" t="Include" />
+            <e p="D61.cs" t="Include" />
+            <e p="D62.cs" t="Include" />
+            <e p="D6325.cs" t="Include" />
+            <e p="D6326.cs" t="Include" />
+            <e p="D6327.cs" t="Include" />
+            <e p="D6328.cs" t="Include" />
+            <e p="D65.cs" t="Include" />
+            <e p="D66.cs" t="Include" />
+            <e p="D666.cs" t="Include" />
+            <e p="D69.cs" t="Include" />
+            <e p="D70.cs" t="Include" />
+            <e p="D71.cs" t="Include" />
+            <e p="D72.cs" t="Include" />
+            <e p="D73.cs" t="Include" />
+            <e p="D74.cs" t="Include" />
+            <e p="D75.cs" t="Include" />
+            <e p="D76.cs" t="Include" />
+            <e p="D77.cs" t="Include" />
+            <e p="D78.cs" t="Include" />
+            <e p="D79.cs" t="Include" />
+            <e p="D80.cs" t="Include" />
+            <e p="D81.cs" t="Include" />
+            <e p="D82.cs" t="Include" />
+            <e p="D87.cs" t="Include" />
+            <e p="D88.cs" t="Include" />
+            <e p="D89.cs" t="Include" />
+            <e p="D90.cs" t="Include" />
+            <e p="D91.cs" t="Include" />
+            <e p="D92.cs" t="Include" />
+            <e p="D93.cs" t="Include" />
+          </e>
+          <e p="NpcDialogHandlerContainer.cs" t="Include" />
+          <e p="NpcDialogPlugin.cs" t="Include" />
+          <e p="NpcDialogPluginCore.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Plugins.BasicImplementations.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Plugins\Plugins.DiscordWebhook" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DiscordWebHookNotifier.cs" t="Include" />
+        <e p="DiscordWebhookNotifierConfig.cs" t="Include" />
+        <e p="DiscordWebhookPlugin.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Plugins.DiscordWebhook.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Src\Plugins\Plugins.PacketHandling" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Plugins.PacketHandling.csproj" t="IncludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+    </e>
+  </component>
+</project>

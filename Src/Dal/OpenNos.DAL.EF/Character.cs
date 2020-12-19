@@ -1,0 +1,229 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using OpenNos.DAL.EF.Entities;
+using OpenNos.Domain;
+
+namespace OpenNos.DAL.EF
+{
+    public class Character
+    {
+        #region Instantiation
+
+        public Character()
+        {
+            CharacterSkill = new HashSet<CharacterSkill>();
+            CharacterRelation1 = new HashSet<CharacterRelation>();
+            CharacterRelation2 = new HashSet<CharacterRelation>();
+            StaticBonus = new HashSet<StaticBonus>();
+            StaticBuff = new HashSet<StaticBuff>();
+            BazaarItem = new HashSet<BazaarItem>();
+            Inventory = new HashSet<ItemInstance>();
+            QuicklistEntry = new HashSet<QuicklistEntry>();
+            Respawn = new HashSet<Respawn>();
+            GeneralLog = new HashSet<GeneralLog>();
+            Mail = new HashSet<Mail>();
+            Mail1 = new HashSet<Mail>();
+            MinilandObject = new HashSet<MinilandObject>();
+            Mate = new HashSet<Mate>();
+            MinigameLog = new HashSet<MinigameLog>();
+            CharacterTitle = new List<CharacterTitle>();
+        }
+
+        #endregion
+
+        #region Properties
+
+        public virtual Account Account { get; set; }
+
+        public long AccountId { get; set; }
+
+        public int Act4Dead { get; set; }
+
+        public int Act4Kill { get; set; }
+
+        public int Act4Points { get; set; }
+
+        public long RBBWin { get; set; }
+
+        public long RBBLose { get; set; }
+
+        public int ArenaWinner { get; set; }
+
+        public virtual ICollection<BazaarItem> BazaarItem { get; set; }
+
+        [MaxLength(255)] public string Biography { get; set; }
+
+        public bool BuffBlocked { get; set; }
+
+        public long CharacterId { get; set; }
+
+        public virtual ICollection<CharacterRelation> CharacterRelation1 { get; set; }
+
+        public virtual ICollection<CharacterRelation> CharacterRelation2 { get; set; }
+
+        public virtual ICollection<CharacterSkill> CharacterSkill { get; set; }
+
+        public virtual ICollection<CharacterTitle> CharacterTitle { get; set; }
+        
+        public virtual ICollection<CharacterVisitedMaps> CharacterVisitedMaps { get; set; }
+
+        public byte Class { get; set; }
+
+        public short Compliment { get; set; }
+
+        public float Dignity { get; set; }
+
+        public bool EmoticonsBlocked { get; set; }
+
+        public bool ExchangeBlocked { get; set; }
+
+        public byte Faction { get; set; }
+
+        public virtual ICollection<FamilyCharacter> FamilyCharacter { get; set; }
+
+        public bool FamilyRequestBlocked { get; set; }
+
+        public bool FriendRequestBlocked { get; set; }
+
+        public GenderType Gender { get; set; }
+
+        public virtual ICollection<GeneralLog> GeneralLog { get; set; }
+
+        public long Gold { get; set; }
+
+        public bool GroupRequestBlocked { get; set; }
+
+        public HairColorType HairColor { get; set; }
+
+        public HairStyleType HairStyle { get; set; }
+
+        public bool HeroChatBlocked { get; set; }
+
+        public byte HeroLevel { get; set; }
+
+        public long HeroXp { get; set; }
+
+        public int Hp { get; set; }
+
+        public bool HpBlocked { get; set; }
+
+        public virtual ICollection<ItemInstance> Inventory { get; set; }
+
+        public bool IsPartnerAutoRelive { get; set; }
+
+        public bool IsPetAutoRelive { get; set; }
+
+        public bool IsSeal { get; set; }
+
+        public byte JobLevel { get; set; }
+
+        public long JobLevelXp { get; set; }
+
+        public long LastFamilyLeave { get; set; }
+
+        public byte Level { get; set; }
+
+        public long LevelXp { get; set; }
+
+        public virtual ICollection<Mail> Mail { get; set; }
+
+        public virtual ICollection<Mail> Mail1 { get; set; }
+
+        public virtual Map Map { get; set; }
+
+        public short MapId { get; set; }
+
+        public short MapX { get; set; }
+
+        public short MapY { get; set; }
+
+        public int MasterPoints { get; set; }
+
+        public int MasterTicket { get; set; }
+
+        public virtual ICollection<Mate> Mate { get; set; }
+
+        public byte MaxMateCount { get; set; }
+
+        public byte MaxPartnerCount { get; set; }
+
+        public virtual ICollection<MinigameLog> MinigameLog { get; set; }
+
+        public bool MinilandInviteBlocked { get; set; }
+
+        [MaxLength(255)] public string MinilandMessage { get; set; }
+
+        public virtual ICollection<MinilandObject> MinilandObject { get; set; }
+
+        public short MinilandPoint { get; set; }
+
+        public MinilandState MinilandState { get; set; }
+
+        public bool MouseAimLock { get; set; }
+
+        public int Mp { get; set; }
+
+        [MaxLength(255)] public string Name { get; set; }
+
+        public bool QuickGetUp { get; set; }
+
+        public virtual ICollection<QuicklistEntry> QuicklistEntry { get; set; }
+
+        public long RagePoint { get; set; }
+
+        public long Reputation { get; set; }
+
+        public virtual ICollection<Respawn> Respawn { get; set; }
+
+        public byte Slot { get; set; }
+
+        public int SpAdditionPoint { get; set; }
+
+        public int SpPoint { get; set; }
+
+        public byte State { get; set; }
+
+        public virtual ICollection<StaticBonus> StaticBonus { get; set; }
+
+        public virtual ICollection<StaticBuff> StaticBuff { get; set; }
+
+        public int TalentLose { get; set; }
+
+        public int TalentSurrender { get; set; }
+
+        public int TalentWin { get; set; }
+
+        public int ArenaKill { get; set; }
+
+        public int ArenaDeath { get; set; }
+
+        public bool WhisperBlocked { get; set; }
+
+        public bool IsChangeName { get; set; }
+
+        public int MobKillCounter { get; set; }
+        
+        public byte UnlockedHLevel { get; set; }
+
+        public bool HideHat { get; set; }
+
+        public bool UiBlocked { get; set; }
+
+        public string LockCode { get; set; }
+
+        public bool VerifiedLock { get; set; }
+
+        public long ArenaDie { get; set; }
+
+        public long ArenaTc { get; set; }
+
+        public long LastFactionChange { get; set; }
+
+        public int BattleTowerExp { get; set; }
+
+        public byte BattleTowerStage { get; set; }
+
+        public long GoldBank { get; set; }
+        #endregion
+    }
+}

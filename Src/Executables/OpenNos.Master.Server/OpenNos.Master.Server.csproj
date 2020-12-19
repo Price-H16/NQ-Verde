@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9AA91BF5-88E7-4130-9F42-73AE206E2916}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>OpenNos.Master.Server</RootNamespace>
+    <AssemblyName>OpenNos.Master.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\Debug\Master\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\..\..\ProjectRuleset.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\Master\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\..\ProjectRuleset.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>on-logo-icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenNos.SCS">
+      <HintPath>..\..\..\OpenNos.SCS.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Windows" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommunicationService.cs" />
+    <Compile Include="AuthentificationService.cs" />
+    <Compile Include="MailService.cs" />
+    <Compile Include="ConfigurationService.cs" />
+    <Compile Include="MallService.cs" />
+    <Compile Include="MSManager.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\LocalizedResources.de.Designer.cs">
+      <DependentUpon>LocalizedResources.de.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resource\LocalizedResources.Designer.cs">
+      <DependentUpon>LocalizedResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resource\LocalizedResources.fr.Designer.cs">
+      <DependentUpon>LocalizedResources.fr.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resource\LocalizedResources.it.Designer.cs">
+      <DependentUpon>LocalizedResources.it.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resource\LocalizedResources.pl.Designer.cs">
+      <DependentUpon>LocalizedResources.pl.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resource\LocalizedResources.th.Designer.cs">
+      <DependentUpon>LocalizedResources.th.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\LocalizedResources.de.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedResources.de.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\LocalizedResources.fr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedResources.fr.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\LocalizedResources.it.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedResources.it.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\LocalizedResources.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedResources.pl.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\LocalizedResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\LocalizedResources.th.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedResources.th.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="on-logo-icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ChickenApi\ChickenAPI.Core\ChickenAPI.Core.csproj">
+      <Project>{A6D06310-4228-4AFA-894D-69283976E810}</Project>
+      <Name>ChickenAPI.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ChickenApi\ChickenApi.Plugins\ChickenApi.Plugins.csproj">
+      <Project>{A8289E58-4507-4614-8A28-9FF936BEE009}</Project>
+      <Name>ChickenApi.Plugins</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Dal\OpenNos.DAL.EF\OpenNos.DAL.EF.csproj">
+      <Project>{4AECC47D-098A-4493-8E1E-D10EDBB7A189}</Project>
+      <Name>OpenNos.DAL.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Dal\OpenNos.DAL.Interface\OpenNos.DAL.Interface.csproj">
+      <Project>{175C851B-8DC8-43A5-AF93-AF32D106CD77}</Project>
+      <Name>OpenNos.DAL.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Dal\OpenNos.DAL\OpenNos.DAL.csproj">
+      <Project>{d8c8a266-3d46-42c5-a492-28c75db85ba8}</Project>
+      <Name>OpenNos.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Dal\OpenNos.Data\OpenNos.Data.csproj">
+      <Project>{f1071ded-3d92-4416-9b9c-8664441ade64}</Project>
+      <Name>OpenNos.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Librairies\NosTale.Configuration\NosTale.Configuration.csproj">
+      <Project>{011EE023-E1B8-4645-BBE9-94AC35B55390}</Project>
+      <Name>NosTale.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Librairies\OpenNos.Core\OpenNos.Core.csproj">
+      <Project>{C93A0A40-0551-4732-B594-171B87679AC1}</Project>
+      <Name>OpenNos.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Librairies\OpenNos.Domain\OpenNos.Domain.csproj">
+      <Project>{20addddd-dad9-44f3-9beb-026c73090660}</Project>
+      <Name>OpenNos.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Librairies\OpenNos.Master.Library\OpenNos.Master.Library.csproj">
+      <Project>{8FABDA5B-C873-4E32-A78F-08A9A4768595}</Project>
+      <Name>OpenNos.Master.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\NosQuest.LoggingPlugin\NosQuest.Plugins.Logging.csproj">
+      <Project>{C788BD5E-E8C2-47D1-BEF9-51A1809A7BFE}</Project>
+      <Name>NosQuest.Plugins.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\Plugins.BasicImplementations\Plugins.BasicImplementations.csproj">
+      <Project>{B5FE46A3-9C85-44D9-8EFB-4A33E7E77C4A}</Project>
+      <Name>Plugins.BasicImplementations</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EntityFramework">
+      <Version>6.4.4</Version>
+    </PackageReference>
+    <PackageReference Include="log4net">
+      <Version>2.0.12</Version>
+    </PackageReference>
+    <PackageReference Include="System.Collections">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Collections.Immutable">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Threading.Tasks">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Threading.Tasks.Extensions">
+      <Version>4.5.4</Version>
+    </PackageReference>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.5.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

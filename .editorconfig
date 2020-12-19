@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS1555: Could not find 'NosTale.Bot.Program' specified for Main method
+dotnet_diagnostic.CS1555.severity = none

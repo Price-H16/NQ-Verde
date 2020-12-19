@@ -1,0 +1,450 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4AECC47D-098A-4493-8E1E-D10EDBB7A189}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenNos.DAL.EF</RootNamespace>
+    <AssemblyName>OpenNos.DAL.EF</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\..\ProjectRuleset.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\..\ProjectRuleset.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Label="SlowCheetah">
+    <SlowCheetahToolsPath>$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\..\..\..\packages\SlowCheetah.2.5.15\tools\))</SlowCheetahToolsPath>
+    <SlowCheetah_EnableImportFromNuGet Condition=" '$(SlowCheetah_EnableImportFromNuGet)'=='' ">true</SlowCheetah_EnableImportFromNuGet>
+    <SlowCheetah_NuGetImportPath Condition=" '$(SlowCheetah_NuGetImportPath)'=='' ">$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\Properties\SlowCheetah\SlowCheetah.Transforms.targets ))</SlowCheetah_NuGetImportPath>
+    <SlowCheetahTargets Condition=" '$(SlowCheetah_EnableImportFromNuGet)'=='true' and Exists('$(SlowCheetah_NuGetImportPath)') ">$(SlowCheetah_NuGetImportPath)</SlowCheetahTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <CodeAnalysisRuleSet>..\..\..\ProjectRuleset.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <CodeAnalysisRuleSet>..\..\..\ProjectRuleset.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <CodeAnalysisRuleSet>..\..\..\ProjectRuleset.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <CodeAnalysisRuleSet>..\..\..\ProjectRuleset.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BoxItem.cs" />
+    <Compile Include="CellonOption.cs" />
+    <Compile Include="CharacterQuest.cs" />
+    <Compile Include="CharacterTitle.cs" />
+    <Compile Include="CharacterVisitedMaps.cs" />
+    <Compile Include="FamilySkillMission.cs" />
+    <Compile Include="FamilyQuests.cs" />
+    <Compile Include="Logs\ChatLog.cs" />
+    <Compile Include="Logs\LogsCommands.cs" />
+    <Compile Include="MaintenanceLog.cs" />
+    <Compile Include="Migrations\201904261626285_OpenNos.cs" />
+    <Compile Include="Migrations\201904261626285_OpenNos.Designer.cs">
+      <DependentUpon>201904261626285_OpenNos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907102208094_MaxPartnerCount.cs" />
+    <Compile Include="Migrations\201907102208094_MaxPartnerCount.Designer.cs">
+      <DependentUpon>201907102208094_MaxPartnerCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907110359048_QuestTimeSpaceId.cs" />
+    <Compile Include="Migrations\201907110359048_QuestTimeSpaceId.Designer.cs">
+      <DependentUpon>201907110359048_QuestTimeSpaceId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907182020416_BoxItem.cs" />
+    <Compile Include="Migrations\201907182020416_BoxItem.Designer.cs">
+      <DependentUpon>201907182020416_BoxItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909251933445_ChangeName.cs" />
+    <Compile Include="Migrations\201909251933445_ChangeName.Designer.cs">
+      <DependentUpon>201909251933445_ChangeName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909301318179_GoldBank_Fix.cs" />
+    <Compile Include="Migrations\201909301318179_GoldBank_Fix.designer.cs">
+      <DependentUpon>201909301318179_GoldBank_Fix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910031529467_Title.cs" />
+    <Compile Include="Migrations\201910031529467_Title.designer.cs">
+      <DependentUpon>201910031529467_Title.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911050449560_MorphSp.cs" />
+    <Compile Include="Migrations\201911050449560_MorphSp.designer.cs">
+      <DependentUpon>201911050449560_MorphSp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911050637594_ClassType_In_Portal.cs" />
+    <Compile Include="Migrations\201911050637594_ClassType_In_Portal.designer.cs">
+      <DependentUpon>201911050637594_ClassType_In_Portal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912161158327_Tattoo.cs" />
+    <Compile Include="Migrations\201912161158327_Tattoo.designer.cs">
+      <DependentUpon>201912161158327_Tattoo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001240955496_ChatLog.cs" />
+    <Compile Include="Migrations\202001240955496_ChatLog.designer.cs">
+      <DependentUpon>202001240955496_ChatLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001261716037_Act7_Rune_Item.cs" />
+    <Compile Include="Migrations\202001261716037_Act7_Rune_Item.designer.cs">
+      <DependentUpon>202001261716037_Act7_Rune_Item.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003062106372_LogsCmd.cs" />
+    <Compile Include="Migrations\202003062106372_LogsCmd.designer.cs">
+      <DependentUpon>202003062106372_LogsCmd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004031430029_changes03042020.cs" />
+    <Compile Include="Migrations\202004031430029_changes03042020.designer.cs">
+      <DependentUpon>202004031430029_changes03042020.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004172342297_RuneEffects.cs" />
+    <Compile Include="Migrations\202004172342297_RuneEffects.designer.cs">
+      <DependentUpon>202004172342297_RuneEffects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005081717558_levelcap.cs" />
+    <Compile Include="Migrations\202005081717558_levelcap.designer.cs">
+      <DependentUpon>202005081717558_levelcap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006051520110_hasSkin.cs" />
+    <Compile Include="Migrations\202006051520110_hasSkin.designer.cs">
+      <DependentUpon>202006051520110_hasSkin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006261554332_onlyOnce.cs" />
+    <Compile Include="Migrations\202006261554332_onlyOnce.designer.cs">
+      <DependentUpon>202006261554332_onlyOnce.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007131927598_ArenaScore.cs" />
+    <Compile Include="Migrations\202007131927598_ArenaScore.designer.cs">
+      <DependentUpon>202007131927598_ArenaScore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007232259443_Fast-Travel.cs" />
+    <Compile Include="Migrations\202007232259443_Fast-Travel.designer.cs">
+      <DependentUpon>202007232259443_Fast-Travel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009011138087_NpcEntityFix.cs" />
+    <Compile Include="Migrations\202009011138087_NpcEntityFix.designer.cs">
+      <DependentUpon>202009011138087_NpcEntityFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009022254495_FixCharacterOptions.cs" />
+    <Compile Include="Migrations\202009022254495_FixCharacterOptions.designer.cs">
+      <DependentUpon>202009022254495_FixCharacterOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010060635576_Update1.cs" />
+    <Compile Include="Migrations\202010060635576_Update1.designer.cs">
+      <DependentUpon>202010060635576_Update1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010060646017_Update2.cs" />
+    <Compile Include="Migrations\202010060646017_Update2.designer.cs">
+      <DependentUpon>202010060646017_Update2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010190911250_FamilyQuests.cs" />
+    <Compile Include="Migrations\202010190911250_FamilyQuests.designer.cs">
+      <DependentUpon>202010190911250_FamilyQuests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010191043301_DiscordBot.cs" />
+    <Compile Include="Migrations\202010191043301_DiscordBot.designer.cs">
+      <DependentUpon>202010191043301_DiscordBot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010211031067_LockCoe.cs" />
+    <Compile Include="Migrations\202010211031067_LockCoe.designer.cs">
+      <DependentUpon>202010211031067_LockCoe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010211122450_Lock.cs" />
+    <Compile Include="Migrations\202010211122450_Lock.designer.cs">
+      <DependentUpon>202010211122450_Lock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011051900424_RbbStat.cs" />
+    <Compile Include="Migrations\202011051900424_RbbStat.designer.cs">
+      <DependentUpon>202011051900424_RbbStat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011052337542_FamilyMissions.cs" />
+    <Compile Include="Migrations\202011052337542_FamilyMissions.designer.cs">
+      <DependentUpon>202011052337542_FamilyMissions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011241837508_Update.cs" />
+    <Compile Include="Migrations\202011241837508_Update.designer.cs">
+      <DependentUpon>202011241837508_Update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011252244274_Faction.cs" />
+    <Compile Include="Migrations\202011252244274_Faction.designer.cs">
+      <DependentUpon>202011252244274_Faction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011272004483_UPDT.cs" />
+    <Compile Include="Migrations\202011272004483_UPDT.designer.cs">
+      <DependentUpon>202011272004483_UPDT.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012030029361_Tono1.cs" />
+    <Compile Include="Migrations\202012030029361_Tono1.designer.cs">
+      <DependentUpon>202012030029361_Tono1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012030032462_Tono2.cs" />
+    <Compile Include="Migrations\202012030032462_Tono2.designer.cs">
+      <DependentUpon>202012030032462_Tono2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012030053456_Tono21.cs" />
+    <Compile Include="Migrations\202012030053456_Tono21.designer.cs">
+      <DependentUpon>202012030053456_Tono21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202012190114206_Chat.cs" />
+    <Compile Include="Migrations\202012190114206_Chat.designer.cs">
+      <DependentUpon>202012190114206_Chat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PartnerSkill.cs" />
+    <Compile Include="Quest.cs" />
+    <Compile Include="QuestLog.cs" />
+    <Compile Include="QuestObjective.cs" />
+    <Compile Include="QuestReward.cs" />
+    <Compile Include="RecipeList.cs" />
+    <Compile Include="RollGeneratedItem.cs" />
+    <Compile Include="Mate.cs" />
+    <Compile Include="RuneEffect.cs" />
+    <Compile Include="ScriptedInstance.cs" />
+    <Compile Include="BCard.cs" />
+    <Compile Include="ShellEffect.cs" />
+    <Compile Include="Account.cs" />
+    <Compile Include="Base\SynchronizableBaseEntity.cs" />
+    <Compile Include="BazaarItem.cs" />
+    <Compile Include="Card.cs" />
+    <Compile Include="Character.cs" />
+    <Compile Include="CharacterRelation.cs" />
+    <Compile Include="CharacterSkill.cs" />
+    <Compile Include="Combo.cs" />
+    <Compile Include="Drop.cs" />
+    <Compile Include="Family.cs" />
+    <Compile Include="FamilyCharacter.cs" />
+    <Compile Include="FamilyLog.cs" />
+    <Compile Include="GeneralLog.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="ItemInstance.cs" />
+    <Compile Include="Mail.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="MapMonster.cs" />
+    <Compile Include="MapType.cs" />
+    <Compile Include="MapTypeMap.cs" />
+    <Compile Include="MinilandObject.cs" />
+    <Compile Include="PenaltyLog.cs" />
+    <Compile Include="RespawnMapType.cs" />
+    <Compile Include="StaticBonus.cs" />
+    <Compile Include="StaticBuff.cs" />
+    <Compile Include="MapNpc.cs" />
+    <Compile Include="NpcMonster.cs" />
+    <Compile Include="NpcMonsterSkill.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Context\OpenNosContext.cs" />
+    <Compile Include="Portal.cs" />
+    <Compile Include="QuicklistEntry.cs" />
+    <Compile Include="Recipe.cs" />
+    <Compile Include="RecipeItem.cs" />
+    <Compile Include="Respawn.cs" />
+    <Compile Include="Shop.cs" />
+    <Compile Include="ShopItem.cs" />
+    <Compile Include="Helpers\DataAccessHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shopskill.cs" />
+    <Compile Include="Skill.cs" />
+    <Compile Include="Teleporter.cs" />
+    <Compile Include="MinigameLog.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
+    <None Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Librairies\OpenNos.Core\OpenNos.Core.csproj">
+      <Project>{c93a0a40-0551-4732-b594-171b87679ac1}</Project>
+      <Name>OpenNos.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Librairies\OpenNos.Domain\OpenNos.Domain.csproj">
+      <Project>{20addddd-dad9-44f3-9beb-026c73090660}</Project>
+      <Name>OpenNos.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201904261626285_OpenNos.resx">
+      <DependentUpon>201904261626285_OpenNos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907102208094_MaxPartnerCount.resx">
+      <DependentUpon>201907102208094_MaxPartnerCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907110359048_QuestTimeSpaceId.resx">
+      <DependentUpon>201907110359048_QuestTimeSpaceId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907182020416_BoxItem.resx">
+      <DependentUpon>201907182020416_BoxItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909251933445_ChangeName.resx">
+      <DependentUpon>201909251933445_ChangeName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909301318179_GoldBank_Fix.resx">
+      <DependentUpon>201909301318179_GoldBank_Fix.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910031529467_Title.resx">
+      <DependentUpon>201910031529467_Title.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911050449560_MorphSp.resx">
+      <DependentUpon>201911050449560_MorphSp.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911050637594_ClassType_In_Portal.resx">
+      <DependentUpon>201911050637594_ClassType_In_Portal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912161158327_Tattoo.resx">
+      <DependentUpon>201912161158327_Tattoo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001240955496_ChatLog.resx">
+      <DependentUpon>202001240955496_ChatLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001261716037_Act7_Rune_Item.resx">
+      <DependentUpon>202001261716037_Act7_Rune_Item.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003062106372_LogsCmd.resx">
+      <DependentUpon>202003062106372_LogsCmd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004031430029_changes03042020.resx">
+      <DependentUpon>202004031430029_changes03042020.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004172342297_RuneEffects.resx">
+      <DependentUpon>202004172342297_RuneEffects.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005081717558_levelcap.resx">
+      <DependentUpon>202005081717558_levelcap.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006051520110_hasSkin.resx">
+      <DependentUpon>202006051520110_hasSkin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006261554332_onlyOnce.resx">
+      <DependentUpon>202006261554332_onlyOnce.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007131927598_ArenaScore.resx">
+      <DependentUpon>202007131927598_ArenaScore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007232259443_Fast-Travel.resx">
+      <DependentUpon>202007232259443_Fast-Travel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009011138087_NpcEntityFix.resx">
+      <DependentUpon>202009011138087_NpcEntityFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009022254495_FixCharacterOptions.resx">
+      <DependentUpon>202009022254495_FixCharacterOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010060635576_Update1.resx">
+      <DependentUpon>202010060635576_Update1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010060646017_Update2.resx">
+      <DependentUpon>202010060646017_Update2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010190911250_FamilyQuests.resx">
+      <DependentUpon>202010190911250_FamilyQuests.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010191043301_DiscordBot.resx">
+      <DependentUpon>202010191043301_DiscordBot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010211031067_LockCoe.resx">
+      <DependentUpon>202010211031067_LockCoe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010211122450_Lock.resx">
+      <DependentUpon>202010211122450_Lock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011051900424_RbbStat.resx">
+      <DependentUpon>202011051900424_RbbStat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011052337542_FamilyMissions.resx">
+      <DependentUpon>202011052337542_FamilyMissions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011241837508_Update.resx">
+      <DependentUpon>202011241837508_Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011252244274_Faction.resx">
+      <DependentUpon>202011252244274_Faction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011272004483_UPDT.resx">
+      <DependentUpon>202011272004483_UPDT.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012030029361_Tono1.resx">
+      <DependentUpon>202012030029361_Tono1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012030032462_Tono2.resx">
+      <DependentUpon>202012030032462_Tono2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012030053456_Tono21.resx">
+      <DependentUpon>202012030053456_Tono21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012190114206_Chat.resx">
+      <DependentUpon>202012190114206_Chat.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper">
+      <Version>10.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="EntityFramework">
+      <Version>6.4.4</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SlowCheetahTargets)" Condition="Exists('$(SlowCheetahTargets)')" Label="SlowCheetah" />
+</Project>
