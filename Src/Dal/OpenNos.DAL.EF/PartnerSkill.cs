@@ -7,13 +7,14 @@ namespace OpenNos.DAL.EF
     {
         #region Properties
 
+        [Key]
+        public long PartnerSkillId { get; set; }
+
         public Guid EquipmentSerialId { get; set; }
 
-        public byte Level { get; set; }
-
-        [Key] public long PartnerSkillId { get; set; }
-
         public short SkillVNum { get; set; }
+
+        public byte Level { get; set; }
 
         #endregion
     }

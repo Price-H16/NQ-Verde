@@ -790,8 +790,8 @@ namespace OpenNos.GameObject.Battle
                                   (mate.GlovesInstance?.Item.MagicDefence ?? 0) +
                                   (mate.BootsInstance?.Item.MagicDefence ?? 0);
 
-            Element = (byte)(mate.MateType == MateType.Pet ? mate.Monster.Element :
-                mate.IsUsingSp ? mate.Sp.Instance.Item.Element : 0);
+            Element = (byte)(mate.MateType == MateType.Pet ? mate.Monster.Element : (mate.IsUsingSp ? mate.Sp.Instance.Item.Element : 0));
+
             ElementRate = mate.Monster.ElementRate;
         }
 
@@ -2794,8 +2794,7 @@ namespace OpenNos.GameObject.Battle
 
             if (MapMonster != null)
             {
-                if (damager.Mate != null && damager.MapInstance == damager.Mate.Owner.Miniland &&
-                    damager.Mate.MateType == MateType.Pet)
+                if (damager.Mate != null && damager.MapInstance == damager.Mate.Owner.Miniland && damager.Mate.MateType == MateType.Pet)
                 {
                     if (IsMateTrainer(MapMonster.MonsterVNum))
                     {

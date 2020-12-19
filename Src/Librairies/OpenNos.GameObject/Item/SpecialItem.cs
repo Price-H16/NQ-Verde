@@ -563,10 +563,46 @@ namespace OpenNos.GameObject
                     }
 
                     break;
-
-                // Atk/Def/HP/Exp potions
-                case 6600:
+                
+                //Basic SP Potion
+                case 1245:
+                    session.Character.SpAdditionPoint = 10000;
                     session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                    session.SendPacket("msg 4 You received 10.000 Points");
+                    break;
+                
+                //Stat Potions
+                case 6600:
+                    switch (EffectValue)
+                    {
+                        //Attack Potion
+                        case 1:
+                            session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 3022), session.Character.PositionX, session.Character.PositionY);
+                            session.Character.AddBuff(new Buff(116, session.Character.Level), session.Character.BattleEntity);
+                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                            break;
+
+                        //Defence Potion
+                        case 2:
+                            session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 3022), session.Character.PositionX, session.Character.PositionY);
+                            session.Character.AddBuff(new Buff(117, session.Character.Level), session.Character.BattleEntity);
+                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                            break;
+
+                        //Energy Potion
+                        case 3:
+                            session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 3022), session.Character.PositionX, session.Character.PositionY);
+                            session.Character.AddBuff(new Buff(118, session.Character.Level), session.Character.BattleEntity);
+                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                            break;
+
+                        //Experience Potion
+                        case 4:
+                            session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 3022), session.Character.PositionX, session.Character.PositionY);
+                            session.Character.AddBuff(new Buff(119, session.Character.Level), session.Character.BattleEntity);
+                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                            break;
+                    }
                     break;
 
                 // Golden potion

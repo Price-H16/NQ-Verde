@@ -1045,6 +1045,7 @@ namespace OpenNos.GameObject.Helpers
                 attacker.AttackUpgrade = ServerManager.Instance.Configuration.MaxUpgrade;
 
             if (attacker.Mate?.MateType == MateType.Pet)
+            {
                 switch (attacker.AttackUpgrade)
                 {
                     case 0:
@@ -1091,14 +1092,15 @@ namespace OpenNos.GameObject.Helpers
                         baseDamage += baseDamage * 2;
                         break;
 
-                        //default:
-                        //    if (attacker.AttackUpgrade > 0)
-                        //    {
-                        //        weaponDamage *= attacker.AttackUpgrade / 5;
-                        //    }
+                    //default:
+                    //    if (attacker.AttackUpgrade > 0)
+                    //    {
+                    //        weaponDamage *= attacker.AttackUpgrade / 5;
+                    //    }
 
-                        // break;
+                    //    break;
                 }
+            }
             else
                 switch (attacker.AttackUpgrade)
                 {

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using OpenNos.GameObject._Event;
 using static OpenNos.Domain.BCardType;
 using OpenNos.GameObject.RainbowBattle;
@@ -872,48 +873,48 @@ namespace OpenNos.GameObject
                 MapInstance.Broadcast(mate.GenerateIn());
                 if (!mate.IsTemporalMate)
                 {
-                    Session.SendPacket(GenerateSay(string.Format(Language.Instance.GetMessageFromKey("YOU_GET_PET"), mate.Name), 12));
-                }
+                    if (mate.MateType == MateType.Partner)
+                    {
+                        Session.SendPacket($"msg 4 {mate.Name} is now following you on your Adventure!");
+                        Session.Character.IsPartnerAutoRelive = true;
+                    }
 
+                    if (mate.MateType == MateType.Pet)
+                    {
+                        Session.SendPacket($"msg 4 {mate.Name} is now following you on your Adventure!");
+                        Session.Character.IsPetAutoRelive = true;
+                    }
+
+                }
                 Session.SendPacket(UserInterfaceHelper.GeneratePClear());
                 Session.SendPackets(GenerateScP());
                 Session.SendPackets(GenerateScN());
-                InventoryType newMateInventory = (InventoryType) (13 + mate.PetId);
+                InventoryType newMateInventory = (InventoryType)(13 + mate.PetId);
                 switch (mate.Monster.AttackClass)
                 {
                     case 0:
-
                         // Partner Basic Weapon
                         mate.WeaponInstance = Inventory.AddNewToInventory(990, 1, newMateInventory).FirstOrDefault();
-
                         // Partner Basic Armor
                         mate.ArmorInstance = Inventory.AddNewToInventory(997, 1, newMateInventory).FirstOrDefault();
                         break;
-
                     case 1:
-
                         // Partner Basic Weapon
                         mate.WeaponInstance = Inventory.AddNewToInventory(991, 1, newMateInventory).FirstOrDefault();
-
                         // Partner Basic Armor
                         mate.ArmorInstance = Inventory.AddNewToInventory(996, 1, newMateInventory).FirstOrDefault();
                         break;
-
                     case 2:
-
                         // Partner Basic Weapon
                         mate.WeaponInstance = Inventory.AddNewToInventory(992, 1, newMateInventory).FirstOrDefault();
-
                         // Partner Basic Armor
                         mate.ArmorInstance = Inventory.AddNewToInventory(995, 1, newMateInventory).FirstOrDefault();
                         break;
                 }
-
                 Session.SendPackets(GenerateScN());
                 mate.RefreshStats();
                 return true;
             }
-
             return false;
         }
 
@@ -1016,7 +1017,6 @@ namespace OpenNos.GameObject
             {
                 mate.BackToMiniland();
             }
-
             Session.SendPacket($"ctl 2 {mate.MateTransportId} 3");
             Mates.Add(mate);
             Session.SendPacket(UserInterfaceHelper.GeneratePClear());
@@ -1024,18 +1024,17 @@ namespace OpenNos.GameObject
             Session.SendPackets(GenerateScN());
             if (!isUsingMate)
             {
-                foreach (var sess in Session.CurrentMapInstance.Sessions.Where(s => s.Character != null))
+                Parallel.ForEach(Session.CurrentMapInstance.Sessions.Where(s => s.Character != null), s =>
                 {
-                    if (ServerManager.Instance.ChannelId != 51 || Session.Character.Faction == sess.Character.Faction)
+                    if (ServerManager.Instance.ChannelId != 51 || Session.Character.Faction == s.Character.Faction)
                     {
-                        sess.SendPacket(mate.GenerateIn(false, ServerManager.Instance.ChannelId == 51));
+                        s.SendPacket(mate.GenerateIn(false, ServerManager.Instance.ChannelId == 51));
                     }
                     else
                     {
-                        sess.SendPacket(mate.GenerateIn(true, ServerManager.Instance.ChannelId == 51,sess.Account.Authority));
+                        s.SendPacket(mate.GenerateIn(true, ServerManager.Instance.ChannelId == 51, s.Account.Authority));
                     }
-                }
-
+                });
                 Session.SendPacket(GeneratePinit());
                 Session.SendPacket(UserInterfaceHelper.GeneratePClear());
                 Session.SendPackets(GenerateScP());
@@ -1426,7 +1425,7 @@ namespace OpenNos.GameObject
             }
         }
 
-        public bool CanAddMate(Mate mate) => mate.MateType == MateType.Pet   ? MaxMateCount > Mates.Count(s => s.MateType == MateType.Pet) : MaxPartnerCount > Mates.Count(s => s.MateType == MateType.Partner);
+        public bool CanAddMate(Mate mate) => mate.MateType == MateType.Pet ? MaxMateCount > Mates.Count(s => s.MateType == MateType.Pet) : MaxPartnerCount > Mates.Count(s => s.MateType == MateType.Partner);
 
         public bool CanAttack() => !NoAttack && !HasBuff(CardType.SpecialAttack, (byte) AdditionalTypes.SpecialAttack.NoAttack) &&  !HasBuff(CardType.FrozenDebuff, (byte) AdditionalTypes.FrozenDebuff.EternalIce);
 
@@ -1452,7 +1451,7 @@ namespace OpenNos.GameObject
             return true;
         }
 
-        public void ChangeChannel(string ip, int port, byte mode, bool saveCharacter = true)
+        public void ChangeChannel(string ip, int port, byte mode)
         {
             Session.SendPacket($"mz {ip} {port} {Slot}");
             Session.SendPacket($"it {mode}");
@@ -1462,8 +1461,7 @@ namespace OpenNos.GameObject
             try
             {
                 Save();
-            }
-            catch (Exception e)
+            }catch(Exception e)
             {
                 Console.WriteLine(e);
             }
@@ -1866,9 +1864,9 @@ namespace OpenNos.GameObject
                             }
                         }
 
-                        Mates.Where(s => s.CanPickUp).ToList().ForEach(s =>Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 3007)));
-                        Mates.Where(s => s.IsTsProtected).ToList().ForEach(s =>Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 825)));
-                        Mates.Where(s => s.MateType == MateType.Pet && s.Loyalty <= 0).ToList().ForEach(s =>Session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 5003)));
+                        Mates.Where(s => s.CanPickUp).ToList().ForEach(s => Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 3007)));
+                        Mates.Where(s => s.IsTsProtected).ToList().ForEach(s => Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 825)));
+                        Mates.Where(s => s.MateType == MateType.Pet && s.Loyalty <= 0).ToList().ForEach(s => Session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 5003)));
                     }
 
                     LastEffect = DateTime.Now;
@@ -4243,7 +4241,7 @@ namespace OpenNos.GameObject
             return $"post 5 {type} {MailList.First(s => s.Value == mailDTO).Key} 0 0 {(byte) mailDTO.SenderClass} {(byte) mailDTO.SenderGender} {mailDTO.SenderMorphId} {(byte) mailDTO.SenderHairStyle} {(byte) mailDTO.SenderHairColor} {mailDTO.EqPacket} {sender.Name} {mailDTO.Title} {mailDTO.Message}";
         }
 
-        public List<string> GeneratePst() => Mates.Where(s => s.IsTeamMember).OrderByDescending(s => s.MateType).Select(mate => $"pst 2 {mate.MateTransportId} {(mate.MateType == MateType.Partner ? "0" : "1")} {(int) (mate.Hp / mate.MaxHp * 100)} {(int) (mate.Mp / mate.MaxMp * 100)} {mate.Hp} {mate.Mp} 0 0 0 {mate.Buff.GetAllItems().Aggregate("", (current, buff) => current + $" {buff.Card.CardId}")}").ToList();
+        public List<string> GeneratePst() => Mates.Where(s => s.IsTeamMember).OrderByDescending(s => s.MateType).Select(mate => $"pst 2 {mate.MateTransportId} {(mate.MateType == MateType.Partner ? "0" : "1")} {(int)(mate.Hp / mate.MaxHp * 100)} {(int)(mate.Mp / mate.MaxMp * 100)} {mate.Hp} {mate.Mp} 0 0 0 {mate.Buff.GetAllItems().Aggregate("", (current, buff) => current + $" {buff.Card.CardId}")}").ToList();
 
         public string GeneratePStashAll()
         {
@@ -4441,16 +4439,13 @@ namespace OpenNos.GameObject
         {
             List<string> list = new List<string>();
             byte i = 0;
-            var partners = Mates.Where(s => s.MateType == MateType.Partner).ToList();
-
-            foreach (var partner in partners)
+            Mates.Where(s => s.MateType == MateType.Partner).ToList().ForEach(s =>
             {
-                partner.PetId = i;
-                partner.LoadInventory();
-                list.Add(partner.GenerateScPacket());
+                s.PetId = i;
+                s.LoadInventory();
+                list.Add(s.GenerateScPacket());
                 i++;
-            }
-
+            });
             return list;
         }
 
@@ -4462,7 +4457,7 @@ namespace OpenNos.GameObject
 
             Mates.Where(s => s.MateType == MateType.Pet).Skip(page * 10).Take(10).ToList().ForEach(s =>
             {
-                s.PetId = (byte) (page * 10 + i);
+                s.PetId = (byte)(page * 10 + i);
                 list.Add(s.GenerateScPacket());
                 i++;
             });
@@ -6783,12 +6778,15 @@ namespace OpenNos.GameObject
         {
             Mates.Where(s => s.IsTemporalMate).ToList().ForEach(m =>
             {
-                m.GetInventory().ForEach(s => { Inventory.Remove(s.Id); });
+                m.GetInventory().ForEach(s =>
+                {
+                    Inventory.Remove(s.Id);
+                });
                 Mates.Remove(m);
                 byte i = 0;
                 Mates.Where(s => s.MateType == MateType.Partner).ToList().ForEach(s =>
                 {
-                    s.GetInventory().ForEach(item => item.Type = (InventoryType) (13 + i));
+                    s.GetInventory().ForEach(item => item.Type = (InventoryType)(13 + i));
                     s.PetId = i;
                     i++;
                 });
