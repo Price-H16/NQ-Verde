@@ -9,15 +9,20 @@ namespace NosTale.Packets.Packets.ClientPackets
     {
         #region Properties
 
-        [PacketIndex(0)] public int Number { get; set; }
+        [PacketIndex(0)]
+        public int Number { get; set; }
 
-        [PacketIndex(1)] public string Name { get; set; }
+        [PacketIndex(1)]
+        public string Name { get; set; }
 
-        [PacketIndex(2)] public string Password { get; set; }
+        [PacketIndex(2)]
+        public string Password { get; set; }
 
-        [PacketIndex(4)] public string ClientDataOld { get; set; }
+        [PacketIndex(4)]
+        public string ClientDataOld { get; set; }
 
-        [PacketIndex(6)] public string ClientData { get; set; }
+        [PacketIndex(6)]
+        public string ClientData { get; set; }
 
         #endregion
     }

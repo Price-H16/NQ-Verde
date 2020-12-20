@@ -19,7 +19,7 @@ namespace OpenNos.World.Resource {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class LocalizedResources {
@@ -3517,6 +3517,15 @@ namespace OpenNos.World.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LOCKED_HUD {
+            get {
+                return ResourceManager.GetString("LOCKED_HUD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Land Of The Death is actually closed.
         /// </summary>
         internal static string LOD_CLOSED {
@@ -6753,6 +6762,15 @@ namespace OpenNos.World.Resource {
         internal static string UNLOCK_BEFORE_CHANGE_LOCK_CODE {
             get {
                 return ResourceManager.GetString("UNLOCK_BEFORE_CHANGE_LOCK_CODE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You unlocked the bar of skills, now you can move it..
+        /// </summary>
+        internal static string UNLOCKED_HUD {
+            get {
+                return ResourceManager.GetString("UNLOCKED_HUD", resourceCulture);
             }
         }
         

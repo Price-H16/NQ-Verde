@@ -9,13 +9,17 @@ namespace NosTale.Packets.Packets.ClientPackets
     {
         #region Properties
 
-        [PacketIndex(0)] public int BazaarId { get; set; }
+        [PacketIndex(0)]
+        public int BazaarId { get; set; }
 
-        [PacketIndex(1)] public short VNum { get; set; }
+        [PacketIndex(1)]
+        public short VNum { get; set; }
 
-        [PacketIndex(2)] public short Amount { get; set; }
+        [PacketIndex(2)]
+        public short Amount { get; set; }
 
-        [PacketIndex(3)] public long Price { get; set; }
+        [PacketIndex(3)]
+        public long Price { get; set; }
 
         #endregion
     }

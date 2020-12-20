@@ -2714,10 +2714,7 @@ namespace OpenNos.GameObject
 
                         case BCardType.CardType.IncreaseDamageVsChar:
                             break;
-
-                        case BCardType.CardType.ApplyBuffs:
-                            break;
-
+                        
                         default:
                             Logger.Warn($"Card Type {Type} not defined!");
                             break;

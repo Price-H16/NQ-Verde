@@ -9,8 +9,8 @@ namespace NosTale.Packets.Packets.ClientPackets
     {
         #region Properties
 
-        [PacketIndex(0)] public long CharacterId { get; set; }
-
+        [PacketIndex(0)]
+        public long CharacterId { get; set; }
         #endregion
     }
 }
