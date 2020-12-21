@@ -2776,6 +2776,155 @@ namespace OpenNos.GameObject
                         case BCardType.CardType.ApplyBuffs:
                             break;
 
+                        case BCardType.CardType.A7Powers1:
+                            switch (SubType)
+                            {
+                                case (byte) AdditionalTypes.A7Powers1.DamageApocalypsePower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        var damageToTake = sender.Level * 18;
+
+                                        session.GetDamage(damageToTake, sender, true);
+                                        session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
+
+                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+
+                                case (byte) AdditionalTypes.A7Powers1.ReflectionPower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        sender.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+
+                                case (byte) AdditionalTypes.A7Powers1.DamageWolfPower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        var damageToTake = sender.Level * 15;
+
+                                        session.GetDamage(damageToTake, sender, true);
+                                        session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
+
+                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+
+                                case (byte) AdditionalTypes.A7Powers1.EnemyKnockedBack:
+
+                                    if (sender == null) return;
+
+                                    if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
+                                    {
+                                        PushBackSession(4, session, sender);
+
+                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+
+                                case (byte) AdditionalTypes.A7Powers1.DamageExplosionPower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        var damageToTake = sender.Level * 17;
+
+                                        session.GetDamage(damageToTake, sender, true);
+                                        session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
+
+                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+                            }
+
+                            break;
+
+                        case BCardType.CardType.A7Powers2:
+                            switch (SubType)
+                            {
+                                case (byte) AdditionalTypes.A7Powers2.ReceiveAgilityPower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        sender.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+
+                                case (byte) AdditionalTypes.A7Powers2.DamageLightingPower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        var damageToTake = sender.Level * 18;
+
+                                        session.GetDamage(damageToTake, sender, true);
+                                        session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
+
+                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+
+                                case (byte) AdditionalTypes.A7Powers2.TriggerCursePower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+
+                                case (byte) AdditionalTypes.A7Powers2.DamageBearPower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        var damageToTake = sender.Level * 23;
+
+                                        session.GetDamage(damageToTake, sender, true);
+                                        session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
+
+                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+
+                                case (byte) AdditionalTypes.A7Powers2.ReceiveFrostPower:
+
+                                    if (sender == null) return;
+
+                                    if (ServerManager.RandomProbabilityCheck(FirstData))
+                                    {
+                                        sender.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                    }
+
+                                    break;
+                            }
+
+                            break;
+
                         default:
                             Logger.Warn($"Card Type {Type} not defined!");
                             break;

@@ -67,6 +67,7 @@ namespace OpenNos.GameObject
             SpeedLockObject = new object();
             ShellEffectArmor = new ConcurrentBag<ShellEffectDTO>();
             ShellEffectMain = new ConcurrentBag<ShellEffectDTO>();
+            RuneEffectMain = new ConcurrentBag<RuneEffectDTO>();
             ShellEffectSecondary = new ConcurrentBag<ShellEffectDTO>();
             Quests = new ConcurrentBag<CharacterQuest>();
             DamageList = new Dictionary<long, long>();
@@ -567,7 +568,9 @@ namespace OpenNos.GameObject
                 return respawn;
             }
         }
-        
+
+        public ConcurrentBag<RuneEffectDTO> RuneEffectMain { get; set; }
+
         public MapCell SavedLocation { get; set; }
 
         public short SaveX { get; set; }
@@ -2808,11 +2811,14 @@ namespace OpenNos.GameObject
                 EquipmentBCards.Clear();
                 ShellEffectArmor.Clear();
                 ShellEffectMain.Clear();
+                RuneEffectMain.Clear();
                 ShellEffectSecondary.Clear();
                 CellonOptions.Clear();
 
                 if (Inventory != null)
                 {
+                    EquipmentBCards.AddRange(GetRunesInEquipment());
+
                     for (short i = 0; i < 17; i++)
                     {
                         ItemInstance item = Inventory.LoadBySlotAndType(i, InventoryType.Wear);
@@ -2821,12 +2827,6 @@ namespace OpenNos.GameObject
                             if (item.Item.EquipmentSlot != EquipmentType.Sp)
                             {
                                 EquipmentBCards.AddRange(item.Item.BCards);
-                                
-                                if (item.RuneCount != 0)
-                                {
-                                    EquipmentBCards.AddRange(item.RuneBcards);
-                                }
-                                
                                 switch (item.Item.ItemType)
                                 {
                                     case ItemType.Armor:
@@ -2846,6 +2846,11 @@ namespace OpenNos.GameObject
                                                     ShellEffectMain.Add(dto);
                                                 }
 
+                                                foreach (RuneEffectDTO dto in item.RuneEffects)
+                                                {
+                                                    RuneEffectMain.Add(dto);
+                                                }
+
                                                 break;
 
                                             case EquipmentType.SecondaryWeapon:
@@ -2859,33 +2864,19 @@ namespace OpenNos.GameObject
 
                                         break;
 
-                                    ///
-                                    //Cellon from bizu
-                                    ///
-                                    case ItemType.Jewelery:
+                                    case ItemType.Jewelery: //Antidupe Cellon / Shell infinite
                                         foreach (CellonOptionDTO dto in item.CellonOptions)
                                         {
                                             CellonOptions.Add(dto);
                                         }
                                         break;
-
-                                    //SECURITY
-
                                 }
                             }
-                            if (item.Item.ItemType == ItemType.Fashion)
-                            {
-                                eqlist += $" {i}.{(item.HoldingVNum == 0 ? item.Item.VNum : item.HoldingVNum)}.{item.Rare}.{(item.Item.IsColored ? item.Design : item.Upgrade)}.0.{item.RuneCount}";
-                            }
-                            else
-                                eqlist += $" {i}.{item.Item.VNum}.{item.Rare}.{(item.Item.IsColored ? item.Design : item.Upgrade)}.0.{item.RuneCount}";
+
+                            eqlist += $" {i}.{item.Item.VNum}.{item.Rare}.{(item.Item.IsColored ? item.Design : item.Upgrade)}.0.{item.RuneAmount}";
                         }
                     }
                 }
-
-
-                ///OMG CHANGE THIS
-                ///#HARDCODE
                 if (Family != null)
                 {
 
@@ -4526,7 +4517,7 @@ namespace OpenNos.GameObject
                             }
                             else
                             {
-                                inv0 += $" {inv.Slot}.{inv.ItemVNum}.{inv.Rare}.{(inv.Item.IsColored ? inv.Design : inv.Upgrade)}.0.{inv.RuneCount}";
+                                inv0 += $" {inv.Slot}.{inv.ItemVNum}.{inv.Rare}.{(inv.Item.IsColored ? inv.Design : inv.Upgrade)}.0.{inv.RuneAmount}";
                             }
 
                             break;
@@ -7059,7 +7050,7 @@ namespace OpenNos.GameObject
                             }
                             if (instance.RuneEffects.Any())
                             {
-                                DAOFactory.RuneEffectsDAO.InsertOrUpdateFromList(itemInstance.RuneEffects, itemInstance.EquipmentSerialId);
+                                DAOFactory.RuneEffectDAO.InsertOrUpdateFromList(itemInstance.RuneEffects, itemInstance.EquipmentSerialId);
                             }
                             if (instance.CellonOptions.Any())
                             {
@@ -8447,6 +8438,90 @@ namespace OpenNos.GameObject
         private double XpLoad() => CharacterHelper.XPData[Level - 1];
 
         #endregion
-        
+
+        #region Runes
+
+        public List<BCard> GetRunesInEquipment()
+        {
+            var runes = new List<BCard>();
+            // First of all, let's get main weapon runes
+            var weapon = Inventory.LoadBySlotAndType((byte) EquipmentType.MainWeapon, InventoryType.Wear);
+            if (weapon != null && weapon.RuneEffects != null && weapon.RuneEffects.Any())
+            {
+                var runeEffects = weapon.RuneEffects.ConvertAll(x => x.DeepCopy()).ToList();
+
+                var rune = runeEffects.Select(x => new BCard
+                {
+                    Type = (byte) x.Type,
+                    SubType = (byte) ((x.SubType * 10) + 11),
+                    FirstData = x.FirstData,
+                    SecondData = x.SecondData,
+                    ThirdData = x.ThirdData
+                });
+
+                runes.AddRange(rune);
+            }
+
+            // Now, secondary weapon runes
+            var secondaryWeapon = Inventory.LoadBySlotAndType((byte) EquipmentType.SecondaryWeapon, InventoryType.Wear);
+            if (secondaryWeapon != null && secondaryWeapon.RuneEffects != null && secondaryWeapon.RuneEffects.Any())
+            {
+                var runeEffects = secondaryWeapon.RuneEffects.ToList();
+
+                var rune = runeEffects.Select(x => new BCard
+                {
+                    Type = (byte) x.Type,
+                    SubType = (byte) ((x.SubType * 10) + 11),
+                    FirstData = x.FirstData,
+                    SecondData = x.SecondData,
+                    ThirdData = x.ThirdData
+                });
+
+                runes.AddRange(rune);
+            }
+
+            // Now, I'll purge runes so I can get the highest one from both weapons
+            // I'm retreiving only 105 and 106 cards, I have to look for other values by researching info --> Delynith
+            runes = PurgeBCardList(runes, CardType.A7Powers1, CardType.A7Powers2);
+
+            return runes;
+        }
+
+        public List<BCard> PurgeBCardList(List<BCard> list, params CardType[] cards)
+        {
+            var listReturn = new List<BCard>();
+            if (!list.Any()) return listReturn;
+
+            foreach (var card in cards.ToList())
+            {
+                // I'll get the runes from the list that matches each card I sent as parameter
+                var valueToAdd = list.Where(x => cards.Contains((CardType) x.Type) && x.Type == (byte) card).ToList();
+                if (valueToAdd == null || !valueToAdd.Any()) continue;
+
+                // I'll group the runes by SubType and get max value from each Data variable
+                var grouped = (from x in valueToAdd
+                        group x by new {x.SubType}
+                        into y
+                        select new BCard
+                        {
+                            Type = (byte) card,
+                            SubType = y.Key.SubType,
+                            FirstData = y.Max(x => x.FirstData),
+                            SecondData = y.Max(x => x.SecondData),
+                            ThirdData = y.Max(x => x.ThirdData)
+                        }
+                    ).ToList();
+
+                listReturn.AddRange(grouped);
+            }
+
+            // This part will add all those runes that were not in the Enum "cards"
+            // I won't add those whose type and subtype is already on the listReturn variable
+            listReturn.AddRange(list.Where(x => !listReturn.Any(y => y.Type == x.Type && x.SubType == y.SubType)));
+
+            return listReturn;
+        }
+
+        #endregion
     }
 }

@@ -16,7 +16,7 @@ namespace OpenNos.GameObject
 
         private List<CellonOptionDTO> _cellonOptions;
         private Item _item;
-        private List<RuneEffectsDTO> _runeEffects;
+        private List<RuneEffectDTO> _runeEffects;
         private List<ShellEffectDTO> _shellEffects;
         private long _transportId;
 
@@ -97,10 +97,7 @@ namespace OpenNos.GameObject
             WaterElement = input.WaterElement;
             WaterResistance = input.WaterResistance;
             XP = input.XP;
-            RuneCount = input.RuneCount;
-            RuneBroke = input.RuneBroke;
-            RuneBcards = new List<BCard>();
-            LoadRuneBcards();
+            RuneAmount = input.RuneAmount;
             IsBreaked = input.IsBreaked;
         }
 
@@ -108,18 +105,29 @@ namespace OpenNos.GameObject
 
         #region Properties
 
-        public List<CellonOptionDTO> CellonOptions => _cellonOptions ?? (_cellonOptions = DAOFactory.CellonOptionDAO.GetOptionsByWearableInstanceId(EquipmentSerialId == Guid.Empty ? EquipmentSerialId = Guid.NewGuid() : EquipmentSerialId).ToList());
+        public List<CellonOptionDTO> CellonOptions => _cellonOptions ?? (_cellonOptions = DAOFactory.CellonOptionDAO
+                                                          .GetOptionsByWearableInstanceId(
+                                                              EquipmentSerialId == Guid.Empty
+                                                                  ? EquipmentSerialId = Guid.NewGuid()
+                                                                  : EquipmentSerialId).ToList());
 
+        public bool IsBound => BoundCharacterId.HasValue && Item.ItemType != ItemType.Armor &&
+                               Item.ItemType != ItemType.Weapon;
 
-        public bool IsBound => BoundCharacterId.HasValue && Item.ItemType != ItemType.Armor && Item.ItemType != ItemType.Weapon;
+        public Item Item => _item ?? (_item = IsPartnerEquipment && HoldingVNum != 0
+                                ? ServerManager.GetItem(HoldingVNum)
+                                : ServerManager.GetItem(ItemVNum));
 
-        public Item Item => _item ?? (_item = IsPartnerEquipment && HoldingVNum != 0 ? ServerManager.GetItem(HoldingVNum) : ServerManager.GetItem(ItemVNum));
+        public List<RuneEffectDTO> RuneEffects => _runeEffects ?? (_runeEffects = DAOFactory.RuneEffectDAO
+                                                       .LoadByEquipmentSerialId(
+                                                           EquipmentSerialId == Guid.Empty
+                                                               ? EquipmentSerialId = Guid.NewGuid()
+                                                               : EquipmentSerialId).ToList());
 
-        public List<RuneEffectsDTO> RuneEffects => _runeEffects ?? (_runeEffects = DAOFactory.RuneEffectsDAO.LoadByEquipmentSerialId(EquipmentSerialId == Guid.Empty ? EquipmentSerialId = Guid.NewGuid() : EquipmentSerialId).ToList());
-
-
-        public List<ShellEffectDTO> ShellEffects => _shellEffects ?? (_shellEffects = DAOFactory.ShellEffectDAO.LoadByEquipmentSerialId(EquipmentSerialId == Guid.Empty ? EquipmentSerialId = Guid.NewGuid() : EquipmentSerialId).ToList());
-        public List<BCard> RuneBcards { get; set; }
+        public List<ShellEffectDTO> ShellEffects => _shellEffects ?? (_shellEffects = DAOFactory.ShellEffectDAO
+                                                        .LoadByEquipmentSerialId(EquipmentSerialId == Guid.Empty
+                                                            ? EquipmentSerialId = Guid.NewGuid()
+                                                            : EquipmentSerialId).ToList());
 
         public long TransportId
         {
@@ -143,87 +151,56 @@ namespace OpenNos.GameObject
 
         public string GenerateEInfo()
         {
-            EquipmentType equipmentslot = Item.EquipmentSlot;
-            ItemType itemType = Item.ItemType;
-            byte itemClass = Item.Class;
-            byte subtype = Item.ItemSubType;
-            DateTime test = ItemDeleteTime ?? DateTime.Now;
-            long time = ItemDeleteTime != null ? (long)test.Subtract(DateTime.Now).TotalSeconds : 0;
-            long seconds = IsBound ? time : Item.ItemValidTime;
+            var equipmentslot = Item.EquipmentSlot;
+            var itemType = Item.ItemType;
+            var itemClass = Item.Class;
+            var subtype = Item.ItemSubType;
+            var test = ItemDeleteTime ?? DateTime.Now;
+            var time = ItemDeleteTime != null ? (long)test.Subtract(DateTime.Now).TotalSeconds : 0;
+            var seconds = IsBound ? time : Item.ItemValidTime;
             if (seconds < 0)
             {
                 seconds = 0;
             }
+
+            var rune =
+                $"{RuneAmount} {(IsBreaked ? "1" : "0")} {RuneEffects.Count()} " +
+                $"{RuneEffects.Where(x => x.Type != BCardType.CardType.A7Powers1 && x.Type != BCardType.CardType.A7Powers2).Aggregate("", (result, effect) => result += $"{(byte)effect.Type}.{(byte)effect.SubType}.{effect.FirstData * 4}.{effect.SecondData * 4}.{effect.ThirdData} ")} " +
+                $"{RuneEffects.Where(x => x.Type == BCardType.CardType.A7Powers1 || x.Type == BCardType.CardType.A7Powers2).Aggregate("", (result, effect) => result += $"{(byte)effect.Type}.{(byte)effect.SubType}.{effect.FirstData * 4}.{effect.SecondData * 4}.{effect.ThirdData} ")}";
             switch (itemType)
             {
                 case ItemType.Weapon:
                     switch (equipmentslot)
                     {
                         case EquipmentType.MainWeapon:
-                            if (RuneCount != 0)
-                            {
-                                return $"e_info " +
-                                $"{(itemClass == 4 ? 1 : itemClass == 8 ? 5 : 0)} " +
-                                $"{ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} " +
-                                $"{Item.LevelMinimum} " +
-                                $"{Item.DamageMinimum + DamageMinimum} " +
-                                $"{Item.DamageMaximum + DamageMaximum} " +
-                                $"{Item.HitRate + HitRate} " +
-                                $"{Item.CriticalLuckRate + CriticalLuckRate} " +
-                                $"{Item.CriticalRate + CriticalRate} " +
-                                $"{Ammo} " +
-                                $"{Item.MaximumAmmo} " +
-                                $"{Item.SellToNpcPrice} " +
-                                $"{(IsPartnerEquipment ? $"{HoldingVNum}" : "-1")} " +
-                                $"{(ShellRarity == null ? "0" : $"{ShellRarity}")} " +
-                                $"{BoundCharacterId ?? 0} " +
-                                $"{ShellEffects.Count} " +
-                                $"{ShellEffects.Aggregate("", (result, effect) => result += $"{(byte)effect.EffectLevel}.{effect.Effect}.{(byte)effect.Value} ")}" +
-                                $"{RuneCount} " +
-                                $"{(RuneBroke == true ? 1 : 0)} " +
-                                $"{RuneBcards.Count()} " +
-                                $"{RuneBcards.OrderBy(s => s.SecondData).Aggregate("", (result, bcard) => result += $"{bcard.Type}.{bcard.SubType - 1}.{bcard.FirstData * 4}.{bcard.SecondData * 4}.{bcard.ThirdData} ")}";
-                            }
-                            else
-                            {
-                                return $"e_info " +
-                                $"{(itemClass == 4 ? 1 : itemClass == 8 ? 5 : 0)} " +
-                                $"{ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} " +
-                                $"{Item.LevelMinimum} " +
-                                $"{Item.DamageMinimum + DamageMinimum} " +
-                                $"{Item.DamageMaximum + DamageMaximum} " +
-                                $"{Item.HitRate + HitRate} " +
-                                $"{Item.CriticalLuckRate + CriticalLuckRate} " +
-                                $"{Item.CriticalRate + CriticalRate} " +
-                                $"{Ammo} " +
-                                $"{Item.MaximumAmmo} " +
-                                $"{Item.SellToNpcPrice} " +
-                                $"{(IsPartnerEquipment ? $"{HoldingVNum}" : "-1")} " +
-                                $"{(ShellRarity == null ? "0" : $"{ShellRarity}")} " +
-                                $"{BoundCharacterId ?? 0} " +
-                                $"{ShellEffects.Count} " +
-                                $"{ShellEffects.Aggregate("", (result, effect) => result += $"{(byte)effect.EffectLevel}.{effect.Effect}.{(byte)effect.Value} ")}";
-                            }
+                            return
+                                $"e_info {(itemClass == 4 ? 1 : itemClass == 8 ? 5 : 0)} {ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} {Item.LevelMinimum} {Item.DamageMinimum + DamageMinimum} {Item.DamageMaximum + DamageMaximum} {Item.HitRate + HitRate} {Item.CriticalLuckRate + CriticalLuckRate} {Item.CriticalRate + CriticalRate} {Ammo} {Item.MaximumAmmo} {Item.SellToNpcPrice} {(IsPartnerEquipment ? $"{HoldingVNum}" : "-1")} {(ShellRarity == null ? "0" : $"{ShellRarity}")} {BoundCharacterId ?? 0} {ShellEffects.Count} {ShellEffects.Aggregate("", (result, effect) => result += $"{(byte)effect.EffectLevel}.{effect.Effect}.{(byte)effect.Value} ")} {rune}";
 
                         case EquipmentType.SecondaryWeapon:
-                            return $"e_info {(itemClass <= 2 ? 1 : 0)} {ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} {Item.LevelMinimum} {Item.DamageMinimum + DamageMinimum} {Item.DamageMaximum + DamageMaximum} {Item.HitRate + HitRate} {Item.CriticalLuckRate + CriticalLuckRate} {Item.CriticalRate + CriticalRate} {Ammo} {Item.MaximumAmmo} {Item.SellToNpcPrice} {(IsPartnerEquipment ? $"{HoldingVNum}" : "-1")} {(ShellRarity == null ? "0" : $"{ShellRarity}")} {BoundCharacterId ?? 0} {ShellEffects.Count} {ShellEffects.Aggregate("", (result, effect) => result += $"{(byte)effect.EffectLevel}.{effect.Effect}.{(byte)effect.Value} ")}";
+                            return
+                                $"e_info {(itemClass <= 2 ? 1 : 0)} {ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} {Item.LevelMinimum} {Item.DamageMinimum + DamageMinimum} {Item.DamageMaximum + DamageMaximum} {Item.HitRate + HitRate} {Item.CriticalLuckRate + CriticalLuckRate} {Item.CriticalRate + CriticalRate} {Ammo} {Item.MaximumAmmo} {Item.SellToNpcPrice} {(IsPartnerEquipment ? $"{HoldingVNum}" : "-1")} {(ShellRarity == null ? "0" : $"{ShellRarity}")} {BoundCharacterId ?? 0} {ShellEffects.Count} {ShellEffects.Aggregate("", (result, effect) => result += $"{(byte)effect.EffectLevel}.{effect.Effect}.{(byte)effect.Value} ")}";
                     }
+
                     break;
 
                 case ItemType.Armor:
-                    return $"e_info 2 {ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} {Item.LevelMinimum} {Item.CloseDefence + CloseDefence} {Item.DistanceDefence + DistanceDefence} {Item.MagicDefence + MagicDefence} {Item.DefenceDodge + DefenceDodge} {Item.SellToNpcPrice} {(IsPartnerEquipment ? $"{HoldingVNum}" : "-1")} {(ShellRarity == null ? "0" : $"{ShellRarity}")} {BoundCharacterId ?? 0} {ShellEffects.Count} {ShellEffects.Aggregate("", (result, effect) => result += $"{((byte)effect.EffectLevel > 12 ? (byte)effect.EffectLevel - 12 : (byte)effect.EffectLevel)}.{(effect.Effect > 50 ? effect.Effect - 50 : effect.Effect)}.{(byte)effect.Value} ")}";
+                    return
+                        $"e_info 2 {ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} {Item.LevelMinimum} {Item.CloseDefence + CloseDefence} {Item.DistanceDefence + DistanceDefence} {Item.MagicDefence + MagicDefence} {Item.DefenceDodge + DefenceDodge} {Item.SellToNpcPrice} {(IsPartnerEquipment ? $"{HoldingVNum}" : "-1")} {(ShellRarity == null ? "0" : $"{ShellRarity}")} {BoundCharacterId ?? 0} {ShellEffects.Count} {ShellEffects.Aggregate("", (result, effect) => result += $"{((byte)effect.EffectLevel > 12 ? (byte)effect.EffectLevel - 12 : (byte)effect.EffectLevel)}.{(effect.Effect > 50 ? effect.Effect - 50 : effect.Effect)}.{(byte)effect.Value} ")}";
 
                 case ItemType.Fashion:
                     switch (equipmentslot)
                     {
                         case EquipmentType.CostumeHat:
-                            return $"e_info 3 {ItemVNum} {Item.LevelMinimum} {Item.CloseDefence + CloseDefence} {Item.DistanceDefence + DistanceDefence} {Item.MagicDefence + MagicDefence} {Item.DefenceDodge + DefenceDodge} {Item.FireResistance + FireResistance} {Item.WaterResistance + WaterResistance} {Item.LightResistance + LightResistance} {Item.DarkResistance + DarkResistance} {Item.SellToNpcPrice} {(Item.ItemValidTime == 0 ? -1 : 0)} 2 {(Item.ItemValidTime == 0 ? -1 : seconds / 3600)}{FusionVnum}";
+                            return
+                                $"e_info 3 {ItemVNum} {Item.LevelMinimum} {Item.CloseDefence + CloseDefence} {Item.DistanceDefence + DistanceDefence} {Item.MagicDefence + MagicDefence} {Item.DefenceDodge + DefenceDodge} {Item.FireResistance + FireResistance} {Item.WaterResistance + WaterResistance} {Item.LightResistance + LightResistance} {Item.DarkResistance + DarkResistance} {Item.SellToNpcPrice} {(Item.ItemValidTime == 0 ? -1 : 0)} 2 {(Item.ItemValidTime == 0 ? -1 : seconds / 3600)}";
 
                         case EquipmentType.CostumeSuit:
-                            return $"e_info 2 {ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} {Item.LevelMinimum} {Item.CloseDefence + CloseDefence} {Item.DistanceDefence + DistanceDefence} {Item.MagicDefence + MagicDefence} {Item.DefenceDodge + DefenceDodge} {Item.SellToNpcPrice} {(Item.ItemValidTime == 0 ? -1 : 0)} 1 {(Item.ItemValidTime == 0 ? -1 : seconds / 3600)}{FusionVnum}"; // 1 = IsCosmetic -1 = no shells
+                            return
+                                $"e_info 2 {ItemVNum} {Rare} {Upgrade} {(IsFixed ? 1 : 0)} {Item.LevelMinimum} {Item.CloseDefence + CloseDefence} {Item.DistanceDefence + DistanceDefence} {Item.MagicDefence + MagicDefence} {Item.DefenceDodge + DefenceDodge} {Item.SellToNpcPrice} {(Item.ItemValidTime == 0 ? -1 : 0)} 1 {(Item.ItemValidTime == 0 ? -1 : seconds / 3600)}"; // 1 = IsCosmetic -1 = no shells
 
                         default:
-                            return $"e_info 3 {ItemVNum} {Item.LevelMinimum} {Item.CloseDefence + CloseDefence} {Item.DistanceDefence + DistanceDefence} {Item.MagicDefence + MagicDefence} {Item.DefenceDodge + DefenceDodge} {Item.FireResistance + FireResistance} {Item.WaterResistance + WaterResistance} {Item.LightResistance + LightResistance} {Item.DarkResistance + DarkResistance} {Item.SellToNpcPrice} {Upgrade} 0 -1"; // after Item.Price theres TimesConnected {(Item.ItemValidTime == 0 ? -1 : Item.ItemValidTime / (3600))}
+                            return
+                                $"e_info 3 {ItemVNum} {Item.LevelMinimum} {Item.CloseDefence + CloseDefence} {Item.DistanceDefence + DistanceDefence} {Item.MagicDefence + MagicDefence} {Item.DefenceDodge + DefenceDodge} {Item.FireResistance + FireResistance} {Item.WaterResistance + WaterResistance} {Item.LightResistance + LightResistance} {Item.DarkResistance + DarkResistance} {Item.SellToNpcPrice} {Upgrade} 0 -1"; // after Item.Price theres TimesConnected {(Item.ItemValidTime == 0 ? -1 : Item.ItemValidTime / (3600))}
                     }
 
                 case ItemType.Jewelery:
@@ -232,22 +209,26 @@ namespace OpenNos.GameObject
                         case EquipmentType.Amulet:
                             if (DurabilityPoint > 0)
                             {
-                                return $"e_info 4 {ItemVNum} {Item.LevelMinimum} {DurabilityPoint} 100 0 {Item.SellToNpcPrice}";
+                                return
+                                        $"e_info 4 {ItemVNum} {Item.LevelMinimum} {DurabilityPoint} 100 0 {Item.SellToNpcPrice}";
                             }
+
                             return $"e_info 4 {ItemVNum} {Item.LevelMinimum} {seconds * 10} 0 0 {Item.SellToNpcPrice}";
 
                         case EquipmentType.Fairy:
-                            return $"e_info 4 {ItemVNum} {Item.Element} {ElementRate + Item.ElementRate} 0 0 0 0 0"; // last IsNosmall
+                            return
+                                $"e_info 4 {ItemVNum} {Item.Element} {ElementRate + Item.ElementRate} 0 0 0 0 0"; // last IsNosmall
 
                         default:
-                            string cellon = "";
-                            foreach (CellonOptionDTO option in CellonOptions)
+                            var cellon = "";
+                            foreach (var option in CellonOptions)
                             {
                                 cellon += $" {(byte)option.Type} {option.Level} {option.Value}";
                             }
-                            return $"e_info 4 {ItemVNum} {Item.LevelMinimum} {Item.MaxCellonLvl} {Item.MaxCellon} {CellonOptions.Count} {Item.SellToNpcPrice}{cellon}";
-                    }
 
+                            return
+                                $"e_info 4 {ItemVNum} {Item.LevelMinimum} {Item.MaxCellonLvl} {Item.MaxCellon} {CellonOptions.Count} {Item.SellToNpcPrice}{cellon}";
+                    }
                 case ItemType.Specialist:
                     return $"e_info 8 {ItemVNum}";
 
@@ -298,11 +279,12 @@ namespace OpenNos.GameObject
                     }
 
                 case ItemType.Shell:
-                    return $"e_info 9 {ItemVNum} {Upgrade} {Rare} {Item.SellToNpcPrice} {ShellEffects.Count}{ShellEffects.Aggregate("", (current, option) => current + $" {((byte)option.EffectLevel > 12 ? (byte)option.EffectLevel - 12 : (byte)option.EffectLevel)}.{(option.Effect > 50 ? option.Effect - 50 : option.Effect)}.{option.Value}")}";
+                    return
+                        $"e_info 9 {ItemVNum} {Upgrade} {Rare} {Item.SellToNpcPrice} {ShellEffects.Count}{ShellEffects.Aggregate("", (current, option) => current + $" {((byte)option.EffectLevel > 12 ? (byte)option.EffectLevel - 12 : (byte)option.EffectLevel)}.{(option.Effect > 50 ? option.Effect - 50 : option.Effect)}.{option.Value}")}";
             }
+
             return "";
         }
-
 
         public string GenerateFStash() => $"f_stash {GenerateStashPacket()}";
 
@@ -389,7 +371,7 @@ namespace OpenNos.GameObject
             {
                 case InventoryType.Equipment:
                     return
-                        $"ivn 0 {Slot}.{ItemVNum}.{Rare}.{(Item.IsColored ? Design : Upgrade)}.{SpStoneUpgrade}.{RuneCount}";
+                        $"ivn 0 {Slot}.{ItemVNum}.{Rare}.{(Item.IsColored ? Design : Upgrade)}.{SpStoneUpgrade}.{RuneAmount}";
 
                 case InventoryType.Main:
                     return $"ivn 1 {Slot}.{ItemVNum}.{Amount}.0";
@@ -409,54 +391,7 @@ namespace OpenNos.GameObject
 
             return "";
         }
-        public void LoadRuneBcards()
-        {
-            if (RuneCount != 0)
-            {
-                RuneBcards = new List<BCard>(0);
-                BCard b;
-                foreach (RuneEffectsDTO rf in RuneEffects)
-                {
-                    b = new BCard(new BCardDTO
-                    {
-                        CastType = 0,
-                        FirstData = rf.FirstData,
-                        IsLevelDivided = false,
-                        IsLevelScaled = false,
-                        SecondData = rf.SecondData,
-                        ThirdData = rf.ThirdDada,
-                        SubType = rf.SubType,
-                        Type = rf.Type
-                    });
-                    RuneBcards.Add(b);
-                }
-            }
-        }
 
-        public void UpgradeRunes(ClientSession Session, RuneScrollType type)
-        {
-            CraveRuneHelper.GenerateCraveRune(this, Session, type);
-        }
-        public void RemoveRuneEffets()
-        {
-            _runeEffects = new List<RuneEffectsDTO>();
-            DAOFactory.RuneEffectsDAO.DeleteByEquipmentSerialId(EquipmentSerialId);
-            LoadRuneBcards();
-        }
-    
-
-        public string GenerateRuInfo()
-        {
-
-            List<RuneEffectsDTO> SpcialRune = RuneEffects.Where(x => x.Type == 106 || x.Type == 105).ToList();
-            List<RuneEffectsDTO> NormalRune = RuneEffects.Where(x => x.Type != 106 && x.Type != 105).ToList();
-
-            string RuInfo = "" +
-                            $"{NormalRune.Aggregate("", (result, bcard) => result += $"{bcard.Type}.{bcard.SubType - 1}.{bcard.FirstData * 4}.{bcard.SecondData * 4}.{bcard.ThirdDada} ")}" +
-                            $"{SpcialRune.Aggregate("", (result, bcard) => result += $"{bcard.Type}.{bcard.SubType - 1}.{bcard.FirstData * 4}.{bcard.SecondData * 4}.{bcard.ThirdDada} ")}";
-
-            return RuInfo;
-        }
         public string GeneratePslInfo()
         {
             var partnerSp = new PartnerSp(this);

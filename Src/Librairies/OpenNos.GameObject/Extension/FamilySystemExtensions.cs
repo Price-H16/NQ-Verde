@@ -12,7 +12,7 @@ namespace OpenNos.GameObject.Extensions
             if (c.Family == null) return $"fmi ";
 
             var prepData = FamilySystemHelper.GetFmiPrepSortedData1();
-            string packet = string.Empty;           
+            string packet = string.Empty;
             byte i = 0;
             byte state = 0;
 

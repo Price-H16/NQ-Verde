@@ -6,45 +6,56 @@ namespace OpenNos.GameObject.Helpers
 {
     public class PartnerHelper
     {
+        #region Members
+
         private static readonly Dictionary<AttackType, short[]> Map = new Dictionary<AttackType, short[]>
         {
-            { AttackType.Melee, new short[] { 318, 319, 2617, 2618 } }, // Tom, Kliff, Frigg, Ragnar
-            { AttackType.Range, new short[] { 317, 822, 2640, 2641  } }, // Bob, Leona, Jennifer, Wingless Amora
-            { AttackType.Magical, new short[] { 417, 2557, 2620, 2673 } } // Princess Sakura, Graham, Erdimien, Yertirand
+            {AttackType.Melee, new short[] {318, 319, 2602, 2618}}, // Tom, Kliff, Frigg, Ragnar
+            {AttackType.Range, new short[] {317, 822, 2640, 2641}}, // Bob, Leona, Jennifer, Wingless Amora
+            {AttackType.Magical, new short[] {417, 2557, 2620, 2673}} // Princess Sakura, Graham, Erdimien, Yertirand
         };
+
+        #endregion
+
+        #region Methods
+
+        public static bool CanWearSp(short partnerVNum, short itemVNum)
+        {
+            var attackType = GetAttackType(itemVNum);
+
+            return Map.ContainsKey(attackType) && Map[attackType].Contains(partnerVNum);
+        }
 
         private static AttackType GetAttackType(short itemVNum)
         {
             switch (itemVNum)
             {
-                case 4326: // Bone Warrior Ragnar
-                case 4343: // Mad Professor Macavity
-                case 4349: // Archdaemon Amon
-                case 4446: // Perti deplumay
                 case 4800: // Aegir the Angry
                 case 4804: // Shinobi the Silent
                 case 4807: // Foxy
-                case 4808: // Maru
-                case 4809: // Maru in Mother's Fur
-                case 4814: // Amon
-                case 4815: // Lucy Lopea﻿rs
                 case 4818: // Fiona
+                case 4808: // Maru
+                case 4814: // Amon
+                case 4809: // Maru in Mother's Fur
+                case 4349: // Archdaemon Amon
+                case 4815: // Lucy Lopea﻿rs
                 case 4822: // Palina Puppet Master
                 case 4825: // Little Pri﻿ncess Venus
-                case 4547: // Pharaoh
-                case 8398: // Perti deplumay 2
+                case 4326: // Bone Warrior Ragnar
+                case 4343: // Mad Professor Macavity
+                case 4446: // One Winged Perti
                     return AttackType.Melee;
 
-                case 4324: // Guardian Lucifer
-                case 4325: // Sheriff Chloe
-                case 4413: // Amora
-                case 4417: // Mad March Hare
                 case 4802: // Barni the Clever
                 case 4805: // Lotus the Graceful
-                case 4812: // Lucifer
+                case 4812: // Archangel Lucifer
+                case 4324: // Guardian Lucifer
                 case 4817: // Cowgirl Chloe
+                case 4325: // Sheriff Chloe
                 case 4821: // Daniel Ducats
                 case 4824: // Nelia Nymph
+                case 4413: // Amora
+                case 4417: // Mad March Hare
                     return AttackType.Range;
 
                 case 4405: // Magic Student Yuna
@@ -62,11 +73,6 @@ namespace OpenNos.GameObject.Helpers
             return AttackType.None;
         }
 
-        public static bool CanWearSp(short partnerVNum, short itemVNum)
-        {
-            AttackType attackType = GetAttackType(itemVNum);
-
-            return Map.ContainsKey(attackType) && Map[attackType].Contains(partnerVNum);
-        }
+        #endregion
     }
 }

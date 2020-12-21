@@ -684,6 +684,7 @@ namespace OpenNos.GameObject.Battle
                 )
                 {
                     ShellWeaponEffects = character.ShellEffectMain.ToList();
+                    RuneWeaponEffects = character.RuneEffectMain.ToList();
                 }
                 else
                 {
@@ -1494,7 +1495,9 @@ namespace OpenNos.GameObject.Battle
 
         public int ResistForcedMovement => GetBuff(CardType.AbsorbedSpirit,
             (byte)AdditionalTypes.AbsorbedSpirit.ResistForcedMovement)[0];
-        
+
+        public List<RuneEffectDTO> RuneWeaponEffects { get; }
+
         public int ShadowResistance { get; set; }
 
         public List<ShellEffectDTO> ShellArmorEffects { get; }

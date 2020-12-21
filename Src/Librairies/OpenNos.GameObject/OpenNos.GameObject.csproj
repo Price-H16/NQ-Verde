@@ -111,9 +111,11 @@
     <Compile Include="Extension\Inventory\OptionItemExtension.cs" />
     <Compile Include="Extension\Inventory\PerfectSpExtension.cs" />
     <Compile Include="Extension\Inventory\RarifyItemExtension.cs" />
+    <Compile Include="Extension\Inventory\RemoveRuneExtension.cs" />
     <Compile Include="Extension\Inventory\RemoveTattooInked.cs" />
     <Compile Include="Extension\Inventory\SummingItemExtension.cs" />
     <Compile Include="Extension\Inventory\UpgradeItemExtension.cs" />
+    <Compile Include="Extension\Inventory\UpgradeRuneExtension.cs" />
     <Compile Include="Extension\Inventory\UpgradeSpExtension.cs" />
     <Compile Include="Extension\Inventory\UpgradeSpFunExtension.cs" />
     <Compile Include="Extension\Inventory\UpgradeTattooExtension.cs" />
@@ -121,11 +123,9 @@
     <Compile Include="Extension\FamilyExtensions.cs" />
     <Compile Include="Extension\ItemExtension.cs" />
     <Compile Include="Extension\LogsExtension.cs" />
-    <Compile Include="Extension\MateExtension.cs" />
     <Compile Include="Extension\NumberExtension.cs" />
     <Compile Include="FamilySkillMission.cs" />
     <Compile Include="Helpers\ChangeClassHelper.cs" />
-    <Compile Include="Helpers\CraveRuneHelper.cs" />
     <Compile Include="Helpers\DamageHelper.cs" />
     <Compile Include="Helpers\DiscordWebhookHelper.cs" />
     <Compile Include="Helpers\FamilySystemHelper.cs" />

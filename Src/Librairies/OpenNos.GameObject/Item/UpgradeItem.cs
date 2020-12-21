@@ -137,21 +137,22 @@ namespace OpenNos.GameObject
                     {
                         switch (inv.ItemVNum)
                         {
-                            case 5813: // premium rune scroll
+                            case 5813: // Rune Premium
                                 session.SendPacket(
                                     UserInterfaceHelper.GenerateGuri(12, 1, session.Character.CharacterId, 89));
                                 break;
-                            case 5823: // normal rune scroll
+
+                            case 5823: // Rune basic
                                 session.SendPacket(
                                     UserInterfaceHelper.GenerateGuri(12, 1, session.Character.CharacterId, 93));
                                 break;
 
-                            case 5815: // Tattoo 
+                            case 5815: // Tattoo
                                 session.SendPacket(
                                     UserInterfaceHelper.GenerateGuri(12, 1, session.Character.CharacterId, 90));
                                 break;
 
-                            case 5874: // Fusion Item
+                            case 5874:
                                 session.SendPacket(
                                     UserInterfaceHelper.GenerateGuri(12, 1, session.Character.CharacterId, 79));
                                 break;

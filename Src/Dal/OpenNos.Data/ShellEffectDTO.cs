@@ -16,8 +16,6 @@ namespace OpenNos.Data
 
         public bool IsRune { get; set; }
 
-        public byte RuneUpgrade { get; set; }
-
         public long ShellEffectId { get; set; }
 
         public short Type { get; set; }

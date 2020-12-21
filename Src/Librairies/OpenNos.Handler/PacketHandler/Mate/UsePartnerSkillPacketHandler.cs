@@ -298,7 +298,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
                 bool hasAbsorbed = false;
 
                 int damage = DamageHelper.Instance.CalculateDamage(battleEntityAttacker, battleEntityDefender,
-                    skill, ref hitMode, ref onyxWings, ref zephyrWings/*, ref hasAbsorbed*/);
+                    skill, ref hitMode, ref onyxWings/*, ref hasAbsorbed*/, ref zephyrWings);
 
                 #endregion
 

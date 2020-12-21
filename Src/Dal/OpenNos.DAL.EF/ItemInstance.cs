@@ -110,11 +110,7 @@ namespace OpenNos.DAL.EF
 
         public short Rare { get; set; }
 
-        public byte RuneUpgrade { get; set; }
-
-        public bool RuneBroke { get; set; }
-
-        public byte RuneCount { get; set; }
+        public byte RuneAmount { get; set; }
 
         public short? ShellRarity { get; set; }
 

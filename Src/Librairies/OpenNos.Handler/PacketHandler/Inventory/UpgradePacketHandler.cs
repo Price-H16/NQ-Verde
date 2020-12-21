@@ -39,22 +39,8 @@ namespace OpenNos.Handler.PacketHandler.Inventory
             var inventoryType = upgradePacket.InventoryType;
             var uptype = upgradePacket.UpgradeType;
             var slot = upgradePacket.Slot;
-            bool isCarveRemove;
             Session.Character.LastDelay = DateTime.Now;
-            if (uptype == 83 || uptype == 84)
-            {
-                inventoryType = InventoryType.Equipment;
-                isCarveRemove = upgradePacket.InventoryType == InventoryType.Etc ? true : false;
-                slot = (short)upgradePacket.InventoryType2;
-            }
-            else
-            {
-                inventoryType = upgradePacket.InventoryType;
-                isCarveRemove = false;
-            }
-            ItemInstance inventory = Session.Character.Inventory.LoadBySlotAndType(slot, inventoryType);
-            if (inventory == null) return;
-
+            ItemInstance inventory;
             var item = Session.Character.Inventory.LoadBySlotAndType(slot, inventoryType);
             var slot2 = upgradePacket.Slot2;
             switch (uptype)
@@ -119,60 +105,36 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                 }
                     break;
 
-                case 83: //Runes
-                    if (inventory.Item.EquipmentSlot == EquipmentType.MainWeapon)
-                    { 
-                        if (isCarveRemove)
-                        {
-                            int hammerCount = Session.Character.Inventory.CountItem(5812);
-                            if (hammerCount >= 1)
-                            {
-                                Session.Character.Inventory.RemoveItemAmount(5812, 1);
-                                if (Session.Character.Inventory.CountItem(5812) == hammerCount - 1)
-                                {
-                                    inventory.RemoveRuneEffets();
-                                    inventory.RuneCount = 0;
-                                    Session.SendPacket(Session.Character.GenerateSay("Runes removed!", 12));
-                                    Session.SendPacket("shop_end 1");
-                                    Session.SendPacket(inventory.GenerateEInfo());
-                                }
-                            }
-                        }
-                        else
-                        {
-                            inventory.UpgradeRunes(Session, RuneScrollType.NoScroll);
-                        }
-                    }
-                    else
+                // Rune Upgrade / Remove
+                case 83:
+                case 84: // scroll premium
+                case 86: // scroll basic
+                {
+                    inventory = Session.Character.Inventory.LoadBySlotAndType((byte) upgradePacket.InventoryType2,
+                        InventoryType.Equipment);
+
+                    if (inventory == null) return;
+
+                    switch (inventoryType)
                     {
-                        return;
+                        // Remove Rune
+                        case (InventoryType) 2:
+                            inventory.RemoveRune(Session);
+                            break;
+
+                        // Upgrade Rune
+                        case (InventoryType) 1:
+                        case (InventoryType) 3: // basic
+                        case (InventoryType) 4: // Premium
+                            inventory.UpgradeRune(Session,
+                                uptype == 84 ? UpgradeRuneType.Premium :
+                                uptype == 86 ? UpgradeRuneType.Basic : UpgradeRuneType.None);
+                            break;
+
+                        default:
+                            return;
                     }
-
-                    break;
-
-                case 84: // Scroll with double boost
-                    if (inventory.Item.EquipmentSlot == EquipmentType.MainWeapon)
-                    {
-                        inventory.UpgradeRunes(Session, RuneScrollType.PremiumScroll);
-                    }
-                    else
-                    {
-                        return;
-                    }
-
-                    break;
-
-
-                case 86: // Runes Upgrade With Scroll
-                    if (inventory.Item.EquipmentSlot == EquipmentType.MainWeapon)
-                    {
-                        inventory.UpgradeRunes(Session, RuneScrollType.NormalScroll);
-                    }
-                    else
-                    {
-                        return;
-                    }
-
+                }
                     break;
 
                 case 50: //zenas eggs

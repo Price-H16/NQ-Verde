@@ -94,7 +94,7 @@
     <Compile Include="RespawnDAO.cs" />
     <Compile Include="RespawnMapTypeDAO.cs" />
     <Compile Include="RollGeneratedItemDAO.cs" />
-    <Compile Include="RuneEffectsDAO.cs" />
+    <Compile Include="RuneEffectDAO.cs" />
     <Compile Include="ScriptedInstanceDAO.cs" />
     <Compile Include="QuestDAO.cs" />
     <Compile Include="ShellEffectDAO.cs" />

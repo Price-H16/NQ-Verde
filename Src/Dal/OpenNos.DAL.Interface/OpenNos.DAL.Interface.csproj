@@ -76,7 +76,7 @@
     <Compile Include="IFamilySkillMissionDAO.cs" />
     <Compile Include="IFamilyQuestsDAO.cs" />
     <Compile Include="IMappingBaseDAO.cs" />
-    <Compile Include="IRuneEffectsDAO.cs" />
+    <Compile Include="IRuneEffectDAO.cs" />
     <Compile Include="Logs\ILogsCommandsDAO.cs" />
     <Compile Include="Logs\IChatLogDAO.cs" />
     <Compile Include="IFamilyCharacterDAO.cs" />

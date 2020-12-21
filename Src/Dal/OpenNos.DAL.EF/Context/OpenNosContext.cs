@@ -515,7 +515,7 @@ namespace OpenNos.DAL.EF
 
         public virtual DbSet<Respawn> Respawn { get; set; }
 
-        public virtual DbSet<RuneEffects> RuneEffects { get; set; }
+        public virtual DbSet<RuneEffect> RuneEffects { get; set; }
 
         public virtual DbSet<RespawnMapType> RespawnMapType { get; set; }
 
