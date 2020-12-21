@@ -511,10 +511,22 @@ namespace OpenNos.GameObject
                                ?.FirstOrDefault()?.Value ?? 0;
                 }
 
-                slElementShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                slHpShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                slDefenceShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                slHitShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
+                slElementShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) +
+                                 GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) +
+                                 session.Character.GetTitleEffectValue(BCardType.CardType.IncreaseSlPoint,
+                                     (byte) AdditionalTypes.IncreaseSlPoint.IncreaseEllement);
+                slHpShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) +
+                            GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) +
+                            session.Character.GetTitleEffectValue(BCardType.CardType.IncreaseSlPoint,
+                                (byte) AdditionalTypes.IncreaseSlPoint.IncreaseHPMP);
+                slDefenceShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) +
+                                 GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) +
+                                 session.Character.GetTitleEffectValue(BCardType.CardType.IncreaseSlPoint,
+                                     (byte) AdditionalTypes.IncreaseSlPoint.IncreaseDefence);
+                slHitShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) +
+                             GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) +
+                             session.Character.GetTitleEffectValue(BCardType.CardType.IncreaseSlPoint,
+                                 (byte) AdditionalTypes.IncreaseSlPoint.IncreaseDamage);
             }
 
             var slElement = CharacterHelper.SlPoint(SlElement, 2);

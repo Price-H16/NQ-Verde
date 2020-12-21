@@ -4673,8 +4673,13 @@ namespace OpenNos.GameObject
                     }
 
 
-                    int point = CharacterHelper.SlPoint(specialist.SlDamage, 0) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                    if (point > 100) { point = 100; };
+                    int point = CharacterHelper.SlPoint(specialist.SlDamage, 0) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseDamage);
+                    if (point > 100)
+                    {
+                        point = 100;
+                    }
+
+                    ;
 
                     int p = 0;
                     if (point <= 10)
@@ -4735,8 +4740,11 @@ namespace OpenNos.GameObject
                     SecondWeaponMaxHit += p;
                     SecondWeaponMinHit += p;
 
-                    point = CharacterHelper.SlPoint(specialist.SlDefence, 1) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                    if (point > 100) { point = 100; };
+                    point = CharacterHelper.SlPoint(specialist.SlDefence, 1) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseDefence);
+                    if (point > 100)
+                    {
+                        point = 100;
+                    }
 
                     p = 0;
                     if (point <= 10)
@@ -4784,14 +4792,18 @@ namespace OpenNos.GameObject
                     MagicalDefence += p;
                     DistanceDefence += p;
 
-                    point = CharacterHelper.SlPoint(specialist.SlElement, 2) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                    if (point > 100) { point = 100; };
+                    point = CharacterHelper.SlPoint(specialist.SlElement, 2) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseEllement);
+                    if (point > 100)
+                    {
+                        point = 100;
+                    }
 
+                    ;
 
                     p = point <= 50 ? point : 50 + ((point - 50) * 2);
                     ElementRateSP += p;
 
-                    slhpbonus = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
+                    slhpbonus = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseHPMP);
                 }
             }
 

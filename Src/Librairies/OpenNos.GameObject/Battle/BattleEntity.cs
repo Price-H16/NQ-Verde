@@ -2557,94 +2557,156 @@ namespace OpenNos.GameObject.Battle
             return $"tp {(short)UserType} {MapEntityId} {PositionX} {PositionY} 0";
         }
 
-        public int[] GetBuff(CardType type, byte subtype, int secondData = -1)
+        public int[] GetBuff(CardType type, byte subtype, int secondData = -1, int addValue = 0)
         {
-            int value1 = 0;
-            int value2 = 0;
-            int value3 = 0;
+            var value1 = 0;
+            var value2 = 0;
+            var value3 = 0;
+            var value4 = 0;
 
-            foreach (BCard entry in BCards.Where(s => s?.Type.Equals((byte)type) == true && s.SubType.Equals((byte)(subtype / 10)) && (secondData == -1 || s.SecondData == secondData)))
-
+            foreach (var entry in BCards.Where(s =>
+                s?.Type.Equals((byte)type) == true && s.SubType.Equals(subtype) &&
+                (secondData == -1 || s.SecondData == secondData)))
             {
                 if (entry.IsLevelScaled)
                 {
                     if (entry.IsLevelDivided)
                     {
-                        value1 += Level / entry.FirstData;
+                        value1 += Level / (entry.FirstData + addValue);
                     }
                     else
                     {
-                        value1 += entry.FirstData * Level;
+                        value1 += (entry.FirstData + addValue) * Level;
                     }
                 }
                 else
                 {
-                    value1 += entry.FirstData;
+                    value1 += entry.FirstData + addValue;
                 }
 
                 value2 += entry.SecondData;
                 value3 += entry.ThirdData;
+                value4++;
             }
 
             lock (Buffs)
             {
-                foreach (Buff buff in Buffs.GetAllItems())
-                {                    // THIS ONE DOES NOT FOR STUFFS
+                foreach (var buff in Buffs.GetAllItems())
+                    // THIS ONE DOES NOT FOR STUFFS
 
-                    foreach (BCard entry in buff.Card.BCards
-                        .Where(s => s.Type.Equals((byte)type) && s.SubType.Equals((byte)(subtype / 10)) && (secondData == -1 || s.SecondData == secondData) && (s.CastType != 1 || (s.CastType == 1 && buff.Start.AddMilliseconds(buff.Card.Delay * 100) < DateTime.Now))))
+                    foreach (var entry in buff.Card.BCards
+                        .Where(s => s.Type.Equals((byte)type) && s.SubType.Equals(subtype) &&
+                                    (secondData == -1 || s.SecondData == secondData) &&
+                                    (s.CastType != 1 || s.CastType == 1 &&
+                                     buff.Start.AddMilliseconds(buff.Card.Delay * 100) < DateTime.Now)))
                     {
                         if (entry.IsLevelScaled)
                         {
                             if (entry.IsLevelDivided)
                             {
-                                value1 += buff.Level / entry.FirstData;
+                                value1 += buff.Level / (entry.FirstData + addValue);
                             }
                             else
                             {
-                                value1 += entry.FirstData * buff.Level;
+                                value1 += (entry.FirstData + addValue) * buff.Level;
                             }
                         }
                         else
                         {
-                            value1 += entry.FirstData;
+                            value1 += entry.FirstData + addValue;
                         }
 
                         value2 += entry.SecondData;
                         value3 += entry.ThirdData;
+                        value4++;
                     }
             }
 
             if (Character != null && Character.Skills != null)
             {
-                List<BCard> PassiveSkillsBCards = PassiveSkillHelper.Instance.PassiveSkillToBCards(Character.Skills.Where(s => s.Skill.SkillType == 0));
-                foreach (BCard entry in PassiveSkillsBCards.Where(s => s?.Type.Equals((byte)type) == true && s.SubType.Equals((byte)(subtype / 10)) && (secondData == -1 || s.SecondData == secondData)))
+                var PassiveSkillsBCards =
+                    PassiveSkillHelper.Instance.PassiveSkillToBCards(
+                        Character.Skills.Where(s => s.Skill.SkillType == 0));
+                foreach (var entry in PassiveSkillsBCards.Where(s =>
+                    s?.Type.Equals((byte)type) == true && s.SubType.Equals(subtype) &&
+                    (secondData == -1 || s.SecondData == secondData)))
                 {
                     if (entry.IsLevelScaled)
                     {
                         if (entry.IsLevelDivided)
                         {
-                            value1 += Level / entry.FirstData;
+                            value1 += Level / (entry.FirstData + addValue);
                         }
                         else
                         {
-                            value1 += entry.FirstData * Level;
+                            value1 += (entry.FirstData + addValue) * Level;
                         }
                     }
                     else
                     {
-                        value1 += entry.FirstData;
+                        value1 += entry.FirstData + addValue;
                     }
 
                     value2 += entry.SecondData;
                     value3 += entry.ThirdData;
+                    value4++;
+                }
+
+                //var RuneBCards = RuneHelper.Instance.RuneItemToBCards(Character.RuneEffectMain);
+                //foreach (var entry in RuneBCards.Where(s =>
+                //    s?.Type.Equals((byte)type) == true && s.SubType.Equals(subtype) &&
+                //    (secondData == -1 || s.SecondData == secondData)))
+                //{
+                //    if (entry.IsLevelScaled)
+                //    {
+                //        if (entry.IsLevelDivided)
+                //        {
+                //            value1 += Level / (entry.FirstData + addValue);
+                //        }
+                //        else
+                //        {
+                //            value1 += (entry.FirstData + addValue) * Level;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        value1 += entry.FirstData + addValue;
+                //    }
+
+                //    value2 += entry.SecondData;
+                //    value3 += entry.ThirdData;
+                //    value4++;
+                //}
+
+                foreach (var entry in Character.EffectFromTitle.Where(s =>
+                    s?.Type.Equals((byte)type) == true && s.SubType.Equals(subtype) &&
+                    (secondData == -1 || s.SecondData == secondData)))
+                {
+                    if (entry.IsLevelScaled)
+                    {
+                        if (entry.IsLevelDivided)
+                        {
+                            value1 += Level / (entry.FirstData + addValue);
+                        }
+                        else
+                        {
+                            value1 += (entry.FirstData + addValue) * Level;
+                        }
+                    }
+                    else
+                    {
+                        value1 += entry.FirstData + addValue;
+                    }
+
+                    value2 += entry.SecondData;
+                    value3 += entry.ThirdData;
+                    value4++;
                 }
             }
 
             return new[] { value1, value2, value3 };
         }
-            
-    }
+
         public void HealEntity(int rawAmountToHeal, bool percentage = false)
         {
             var amountToHeal = 0;
