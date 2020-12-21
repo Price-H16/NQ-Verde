@@ -88,7 +88,8 @@ namespace OpenNos.Handler.PacketHandler.Basic
                 {
                     if (ServerManager.Instance.IsAct4Online())
                     {
-                        Session.Character.ChangeChannel(ServerManager.Instance.Configuration.Act4IP, ServerManager.Instance.Configuration.Act4Port, 2);
+                        Session.Character.ChangeChannel(ServerManager.Instance.Configuration.Act4IP,
+                                ServerManager.Instance.Configuration.Act4Port, 2, false);
                         return;
                     }
 

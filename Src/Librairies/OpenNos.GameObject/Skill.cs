@@ -57,7 +57,6 @@ namespace OpenNos.GameObject
 
         public PartnerSkill PartnerSkill { get; set; }
 
-
         #endregion
     }
 }

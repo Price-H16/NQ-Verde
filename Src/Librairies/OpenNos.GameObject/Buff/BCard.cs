@@ -1047,59 +1047,117 @@ namespace OpenNos.GameObject
 
                             break;
 
-                    case BCardType.CardType.Capture:
-                        if (sender.Character?.Session is ClientSession senderSession)
-                        {
-                            if (session.MapMonster is MapMonster mapMonster)
+                        case BCardType.CardType.Capture:
+                            if (sender.Character?.Session is ClientSession senderSession)
                             {
-                                if (ServerManager.GetNpcMonster(mapMonster.MonsterVNum) is NpcMonster mateNpc)
+                                if (session.MapMonster is MapMonster mapMonster)
                                 {
-                                    if (mapMonster.Monster.Catch && (senderSession.Character.MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance || senderSession.Character.MapInstance.MapInstanceType == MapInstanceType.TimeSpaceInstance))
+                                    if (ServerManager.GetNpcMonster(mapMonster.MonsterVNum) is NpcMonster mateNpc)
                                     {
-                                        if (mapMonster.Monster.Level < senderSession.Character.Level)
+                                        if (mapMonster.Monster.Catch &&
+                                            (senderSession.Character.MapInstance.MapInstanceType ==
+                                             MapInstanceType.BaseMapInstance ||
+                                             senderSession.Character.MapInstance.MapInstanceType ==
+                                             MapInstanceType.TimeSpaceInstance))
                                         {
-                                            if (mapMonster.CurrentHp < (mapMonster.Monster.MaxHP / 2))
+                                            if (mapMonster.Monster.Level < senderSession.Character.Level)
                                             {
-                                                // Algo  
-                                                int capturerate = 100 - (int)((mapMonster.CurrentHp / (double)mapMonster.Monster.MaxHP + 1) * 100 / 3);
-                                                if (ServerManager.RandomNumber() <= capturerate)
+                                                if (mapMonster.CurrentHp < mapMonster.Monster.MaxHP / 2)
                                                 {
-                                                    if (senderSession.Character.Quests.Any(q => q.Quest.QuestType == (int)QuestType.Capture1 && q.Quest.QuestObjectives.Any(d => d.Data == mapMonster.MonsterVNum && q.GetObjectives()[d.ObjectiveIndex - 1] < q.GetObjectiveByIndex(d.ObjectiveIndex).Objective)))
+                                                    // Algo
+                                                    var capturerate =
+                                                        100 - (int) ((mapMonster.CurrentHp / mapMonster.Monster.MaxHP +
+                                                                      1) * 100 / 3);
+                                                    if (ServerManager.RandomNumber() <= capturerate)
                                                     {
-                                                        senderSession.Character.IncrementQuests(QuestType.Capture1, mapMonster.MonsterVNum);
-                                                        mapMonster.SetDeathStatement();
-                                                        senderSession.CurrentMapInstance?.Broadcast(StaticPacketHelper.Out(UserType.Monster, mapMonster.MapMonsterId));
+                                                        if (senderSession.Character.Quests.Any(q =>
+                                                            q.Quest.QuestType == (int) QuestType.Capture1 &&
+                                                            q.Quest.QuestObjectives.Any(d =>
+                                                                d.Data == mapMonster.MonsterVNum &&
+                                                                q.GetObjectives()[d.ObjectiveIndex - 1] <
+                                                                q.GetObjectiveByIndex(d.ObjectiveIndex).Objective)))
+                                                        {
+                                                            senderSession.Character.IncrementQuests(QuestType.Capture1,
+                                                                mapMonster.MonsterVNum);
+                                                            mapMonster.SetDeathStatement();
+                                                            senderSession.CurrentMapInstance?.Broadcast(
+                                                                StaticPacketHelper.Out(UserType.Monster,
+                                                                    mapMonster.MapMonsterId));
+                                                        }
+                                                        else
+                                                        {
+                                                            senderSession.Character.IncrementQuests(QuestType.Capture2,
+                                                                mapMonster.MonsterVNum);
+                                                            var mate = new Mate(senderSession.Character, mateNpc,
+                                                                mapMonster.Monster.Level, MateType.Pet);
+                                                            if (senderSession.Character.CanAddMate(mate))
+                                                            {
+                                                                mate.RefreshStats();
+                                                                senderSession.Character.AddPetWithSkill(mate);
+                                                                senderSession.SendPacket(
+                                                                    UserInterfaceHelper.GenerateMsg(
+                                                                        Language.Instance.GetMessageFromKey(
+                                                                            "CATCH_SUCCESS"), 0));
+                                                                senderSession.CurrentMapInstance?.Broadcast(
+                                                                    StaticPacketHelper.GenerateEff(UserType.Player,
+                                                                        senderSession.Character.CharacterId, 197));
+                                                                senderSession.CurrentMapInstance?.Broadcast(
+                                                                    StaticPacketHelper.SkillUsed(UserType.Player,
+                                                                        senderSession.Character.CharacterId, 3,
+                                                                        mapMonster.MapMonsterId, -1, 0, 15, -1, -1, -1,
+                                                                        true,
+                                                                        (int) ((float) mapMonster.CurrentHp /
+                                                                            (float) mapMonster.MaxHp * 100), 0, -1,
+                                                                        0));
+                                                                mapMonster.SetDeathStatement();
+                                                                senderSession.CurrentMapInstance?.Broadcast(
+                                                                    StaticPacketHelper.Out(UserType.Monster,
+                                                                        mapMonster.MapMonsterId));
+                                                            }
+                                                            else
+                                                            {
+                                                                senderSession.SendPacket(
+                                                                    senderSession.Character.GenerateSay(
+                                                                        Language.Instance.GetMessageFromKey(
+                                                                            "PET_SLOT_FULL"), 10));
+                                                            }
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        senderSession.Character.IncrementQuests(QuestType.Capture2, mapMonster.MonsterVNum);
-                                                        Mate mate = new Mate(senderSession.Character, mateNpc, mapMonster.Monster.Level, MateType.Pet);
-                                                        if (senderSession.Character.CanAddMate(mate))
-                                                        {
-                                                            mate.RefreshStats();
-                                                            senderSession.Character.AddPetWithSkill(mate);
-                                                            senderSession.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("CATCH_SUCCESS"), 0));
-                                                            senderSession.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, senderSession.Character.CharacterId, 197));
-                                                            senderSession.CurrentMapInstance?.Broadcast(StaticPacketHelper.SkillUsed(UserType.Player, senderSession.Character.CharacterId, 3, mapMonster.MapMonsterId, -1, 0, 15, -1, -1, -1, true, (int)((float)mapMonster.CurrentHp / (float)mapMonster.MaxHp * 100), 0, -1, 0));
-                                                            mapMonster.SetDeathStatement();
-                                                            senderSession.CurrentMapInstance?.Broadcast(StaticPacketHelper.Out(UserType.Monster, mapMonster.MapMonsterId));
-                                                        }
-                                                        else { senderSession.SendPacket(senderSession.Character.GenerateSay(Language.Instance.GetMessageFromKey("PET_SLOT_FULL"), 10)); }
+                                                        senderSession.SendPacket(
+                                                            UserInterfaceHelper.GenerateMsg(
+                                                                Language.Instance.GetMessageFromKey("CATCH_FAIL"), 0));
                                                     }
                                                 }
-                                                else { senderSession.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("CATCH_FAIL"), 0)); }
+                                                else
+                                                {
+                                                    senderSession.SendPacket(
+                                                        UserInterfaceHelper.GenerateMsg(
+                                                            Language.Instance.GetMessageFromKey("CURRENT_HP_TOO_HIGH"),
+                                                            0));
+                                                }
                                             }
-                                            else { senderSession.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("CURRENT_HP_TOO_HIGH"), 0)); }
+                                            else
+                                            {
+                                                senderSession.SendPacket(UserInterfaceHelper.GenerateMsg(
+                                                    Language.Instance.GetMessageFromKey("LEVEL_LOWER_THAN_MONSTER"),
+                                                    0));
+                                            }
                                         }
-                                        else { senderSession.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LEVEL_LOWER_THAN_MONSTER"), 0)); }
+                                        else
+                                        {
+                                            senderSession.SendPacket(UserInterfaceHelper.GenerateMsg(
+                                                Language.Instance.GetMessageFromKey("MONSTER_CANT_BE_CAPTURED"), 0));
+                                        }
                                     }
-                                    else { senderSession.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MONSTER_CANT_BE_CAPTURED"), 0)); }
                                 }
+
+                                //senderSession.CurrentMapInstance?.Broadcast(StaticPacketHelper.SkillUsed(UserType.Player, senderSession.Character.CharacterId, 3, session.MapEntityId, -1, 0, 15, -1, -1, -1, true, (int)((float)session.Hp / (float)session.HpMax * 100), 0, -1, 0));
+                                senderSession.SendPacket(StaticPacketHelper.Cancel(2, session.MapEntityId));
                             }
-                            //senderSession.CurrentMapInstance?.Broadcast(StaticPacketHelper.SkillUsed(UserType.Player, senderSession.Character.CharacterId, 3, session.MapEntityId, -1, 0, 15, -1, -1, -1, true, (int)((float)session.Hp / (float)session.HpMax * 100), 0, -1, 0));
-                            senderSession.SendPacket(StaticPacketHelper.Cancel(2, session.MapEntityId));
-                        }
-                        break;
+
+                            break;
 
                         case BCardType.CardType.SpecialDamageAndExplosions:
                             break;

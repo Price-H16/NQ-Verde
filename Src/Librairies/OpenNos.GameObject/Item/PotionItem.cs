@@ -136,125 +136,129 @@ namespace OpenNos.GameObject
 
                         session.Character.Mp += mpAmount;
 
-                            switch (inv.ItemVNum)
-                            {
-                                // Full HP Potion
-                                case 1242:
-                                case 5582:
-                                    {
-                                        if (convertRecoveryToDamage)
-                                        {
-                                            session.CurrentMapInstance.Broadcast(session.Character.GenerateDm(session.Character.Hp - 1));
-                                            session.Character.Hp = 1;
-                                        }
-                                        else
-                                        {
-                                            session.CurrentMapInstance.Broadcast(session.Character.GenerateRc(hpLoad - session.Character.Hp));
-                                            session.Character.Hp = hpLoad;
-                                        }
-                                    }
-                                    break;
-
-                                // Full MP Potion
-                                case 1243:
-                                case 5583:
-                                    {
-                                        session.Character.Mp = mpLoad;
-                                    }
-                                    break;
-
-                                // Full HP & MP Potion
-                                case 1244:
-                                case 5584:
-                                case 9129:
-                                    {
-                                        if (convertRecoveryToDamage)
-                                        {
-                                            session.CurrentMapInstance.Broadcast(session.Character.GenerateDm(session.Character.Hp - 1));
-                                            session.Character.Hp = 1;
-                                        }
-                                        else
-                                        {
-                                            session.CurrentMapInstance.Broadcast(session.Character.GenerateRc(hpLoad - session.Character.Hp));
-                                            session.Character.Hp = hpLoad;
-                                        }
-                                        
-                                        session.Character.Mp = mpLoad;
-                                    }
-                                    break;
-                            }
-
-                            session.SendPacket(session.Character.GenerateStat());
-                        }
-
-                        foreach (Mate mate in session.Character.Mates.Where(s => s.IsTeamMember && s.IsAlive))
+                        switch (inv.ItemVNum)
                         {
-                            hpLoad = (int)mate.MaxHp;
-                            mpLoad = (int)mate.MaxMp;
-
-                            if (mate.Hp <= 0 || (mate.Hp == hpLoad && mate.Mp == mpLoad))
+                            // Full HP Potion
+                            case 1242:
+                            case 5582:
                             {
-                                continue;
+                                if (convertRecoveryToDamage)
+                                {
+                                    session.CurrentMapInstance.Broadcast(
+                                        session.Character.GenerateDm(session.Character.Hp - 1));
+                                    session.Character.Hp = 1;
+                                }
+                                else
+                                {
+                                    session.CurrentMapInstance.Broadcast(
+                                        session.Character.GenerateRc(hpLoad - session.Character.Hp));
+                                    session.Character.Hp = hpLoad;
+                                }
                             }
+                                break;
 
-                            hasPotionBeenUsed = true;
-
-                            int hpAmount = Hp;
-                            int mpAmount = Mp;
-
-                            if (mate.Hp + hpAmount > hpLoad)
+                            // Full MP Potion
+                            case 1243:
+                            case 5583:
                             {
-                                hpAmount = hpLoad - (int)mate.Hp;
+                                session.Character.Mp = mpLoad;
                             }
+                                break;
 
-                            if (mate.Mp + mpAmount > mpLoad)
+                            // Full HP & MP Potion
+                            case 1244:
+                            case 5584:
+                            case 9129:
                             {
-                                mpAmount = mpLoad - (int)mate.Mp;
+                                if (convertRecoveryToDamage)
+                                {
+                                    session.CurrentMapInstance.Broadcast(
+                                        session.Character.GenerateDm(session.Character.Hp - 1));
+                                    session.Character.Hp = 1;
+                                }
+                                else
+                                {
+                                    session.CurrentMapInstance.Broadcast(
+                                        session.Character.GenerateRc(hpLoad - session.Character.Hp));
+                                    session.Character.Hp = hpLoad;
+                                }
+
+                                session.Character.Mp = mpLoad;
                             }
-
-                            mate.Hp += hpAmount;
-                            mate.Mp += mpAmount;
-
-                            session.CurrentMapInstance.Broadcast(mate.GenerateRc(hpAmount));
-
-                            switch (inv.ItemVNum)
-                            {
-                                // Full HP Potion
-                                case 1242:
-                                case 5582:
-                                    session.CurrentMapInstance.Broadcast(mate.GenerateRc(hpLoad - (int)mate.Hp));
-                                    mate.Hp = hpLoad;
-                                    break;
-
-                                // Full MP Potion
-                                case 1243:
-                                case 5583:
-                                    mate.Mp = mpLoad;
-                                    break;
-
-                                // Full HP & MP Potion
-                                case 1244:
-                                case 5584:
-                                case 9129:
-                                    session.CurrentMapInstance.Broadcast(mate.GenerateRc(hpLoad - (int)mate.Hp));
-                                    mate.Hp = hpLoad;
-                                    mate.Mp = mpLoad;
-                                    break;
-                            }
-
-                            session.SendPacket(mate.GenerateStatInfo());
+                                break;
                         }
 
-                        if (session.Character.Mates.Any(m => m.IsTeamMember && m.IsAlive))
-                        {
-                            session.SendPackets(session.Character.GeneratePst());
-                        }
-
-                        if (hasPotionBeenUsed)
-                        {
-                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                        }
+                        session.SendPacket(session.Character.GenerateStat());
                     }
+
+                    foreach (var mate in session.Character.Mates.Where(s => s.IsTeamMember && s.IsAlive))
+                    {
+                        hpLoad = (int) mate.MaxHp;
+                        mpLoad = (int) mate.MaxMp;
+
+                        if (mate.Hp <= 0 || mate.Hp == hpLoad && mate.Mp == mpLoad)
+                        {
+                            continue;
+                        }
+
+                        hasPotionBeenUsed = true;
+
+                        int hpAmount = Hp;
+                        int mpAmount = Mp;
+
+                        if (mate.Hp + hpAmount > hpLoad)
+                        {
+                            hpAmount = hpLoad - (int) mate.Hp;
+                        }
+
+                        if (mate.Mp + mpAmount > mpLoad)
+                        {
+                            mpAmount = mpLoad - (int) mate.Mp;
+                        }
+
+                        mate.Hp += hpAmount;
+                        mate.Mp += mpAmount;
+
+                        session.CurrentMapInstance.Broadcast(mate.GenerateRc(hpAmount));
+
+                        switch (inv.ItemVNum)
+                        {
+                            // Full HP Potion
+                            case 1242:
+                            case 5582:
+                                session.CurrentMapInstance.Broadcast(mate.GenerateRc(hpLoad - (int) mate.Hp));
+                                mate.Hp = hpLoad;
+                                break;
+
+                            // Full MP Potion
+                            case 1243:
+                            case 5583:
+                                mate.Mp = mpLoad;
+                                break;
+
+                            // Full HP & MP Potion
+                            case 1244:
+                            case 5584:
+                            case 9129:
+                                session.CurrentMapInstance.Broadcast(mate.GenerateRc(hpLoad - (int) mate.Hp));
+                                mate.Hp = hpLoad;
+                                mate.Mp = mpLoad;
+                                break;
+                        }
+
+                        session.SendPacket(mate.GenerateStatInfo());
+                    }
+
+                    if (session.Character.Mates.Any(m => m.IsTeamMember && m.IsAlive))
+                    {
+                        session.SendPackets(session.Character.GeneratePst());
+                    }
+
+                    if (hasPotionBeenUsed)
+                    {
+                        session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                    }
+                }
                     break;
             }
         }
