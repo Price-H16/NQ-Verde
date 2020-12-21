@@ -1521,76 +1521,46 @@ namespace OpenNos.GameObject.Battle
         {
             if (indicator.Card != null)
             {
-
-                Logger.Info($"{indicator.Card?.CardId ?? 0}");
-
                 indicator.Level = sender.MapMonster?.Owner?.Level ?? sender.Level;
 
                 indicator.Sender = sender;
 
-                if (Character != null && (indicator.Card.BuffType == BuffType.Bad && Character.HasGodMode ||
-                                          Character.InvisibleGm)
-                    || Mate != null && (indicator.Card.BuffType == BuffType.Bad && Mate.Owner.HasGodMode ||
-                                        Mate.Owner.InvisibleGm))
+                if ((Character != null && ((indicator.Card.BuffType == BuffType.Bad && Character.HasGodMode) || Character.InvisibleGm))
+                 || (Mate != null && ((indicator.Card.BuffType == BuffType.Bad && Mate.Owner.HasGodMode) || Mate.Owner.InvisibleGm)))
                 {
                     return;
                 }
 
-                if (MapMonster != null &&
-                    (MapMonster.IsBoss || ServerManager.Instance.BossVNums.Contains(MapMonster.MonsterVNum)))
+                if (MapMonster != null && (MapMonster.IsBoss || ServerManager.Instance.BossVNums.Contains(MapMonster.MonsterVNum)))
                 {
-                    if (!forced && indicator.Card.BuffType == BuffType.Bad &&
-                        (indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)CardType.SpecialAttack &&
-                                 b.SubType == (byte)AdditionalTypes.SpecialAttack.NoAttack)
-                      || indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)CardType.Move &&
-                                 b.SubType == (byte)AdditionalTypes.Move.MovementImpossible)
-                      || indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.SetMovement)
-                      || indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)CardType.Move &&
-                                 b.SubType == (byte)AdditionalTypes.Move.MovementSpeedDecreased)
-                      || indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)CardType.Move &&
-                                 b.SubType == (byte)AdditionalTypes.Move.MoveSpeedDecreased)))
+                    if (!forced && (indicator.Card.BuffType == BuffType.Bad &&
+                       (indicator.Card.BCards.Any(b => b.Type == (byte)CardType.SpecialAttack && b.SubType == (byte)AdditionalTypes.SpecialAttack.NoAttack / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.MovementImpossible / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.SetMovement / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.SetMovementNegated / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.MovementSpeedDecreased / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.MoveSpeedDecreased / 10))))
                     {
                         return;
                     }
                 }
 
                 if (indicator.Card.BCards.Any(newbuff => Buffs.GetAllItems().Any(b => b.Card.BCards.Any(buff =>
-                                                                                                buff.CardId != newbuff.CardId
-                                                                                             && (buff.Type == (byte)CardType.MaxHPMP && buff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumHPMPIncreased &&
-                                                                                                        (newbuff.Type == (byte)CardType.MaxHPMP || newbuff.Type == (byte)CardType.BearSpirit) 
-                                                                                                        || newbuff.Type == (byte)CardType.MaxHPMP && newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumHPMPIncreased &&
-                                                                                                            (buff.Type == (byte)CardType.MaxHPMP || buff.Type == (byte)CardType.BearSpirit)
-                                                                                                        || buff.Type == (byte)CardType.MaxHPMP &&
-                                                                                                             (buff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumHPIncreased || buff.SubType == (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumHP) &&
-                                                                                                           (newbuff.Type == (byte)CardType.BearSpirit && newbuff.SubType == (byte)AdditionalTypes.BearSpirit.IncreaseMaximumHP) ||
-                                                                                                           buff.Type == (byte)CardType.MaxHPMP &&
-                                                                                                           (buff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumMPIncreased || buff.SubType == (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumMP) &&
-                                                                                                           newbuff.Type == (byte)CardType.BearSpirit && newbuff.SubType == (byte)AdditionalTypes.BearSpirit.IncreaseMaximumMP
-                                                                                                           || newbuff.Type == (byte)CardType.MaxHPMP &&
-                                                                                                           (newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumHPIncreased || newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumHP) &&
-                                                                                                           buff.Type == (byte)CardType.BearSpirit && buff.SubType == (byte)AdditionalTypes.BearSpirit.IncreaseMaximumHP ||
-                                                                                                           newbuff.Type == (byte)CardType.MaxHPMP && (newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumMPIncreased || newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumMP) &&
-                                                                                                           buff.Type == (byte)CardType.BearSpirit && buff.SubType == (byte)AdditionalTypes.BearSpirit.IncreaseMaximumMP || buff.Type == (byte)CardType.MaxHPMP && newbuff.Type == (byte)CardType.MaxHPMP &&
-                                                                                                           buff.SubType == newbuff.SubType || buff.Type == (byte)CardType.BearSpirit && newbuff.Type == (byte)CardType.BearSpirit && buff.SubType == newbuff.SubType)))))
+                    buff.CardId != newbuff.CardId
+                 && ((buff.Type == 33 && buff.SubType == 5 && (newbuff.Type == 33 || newbuff.Type == 58)) || (newbuff.Type == 33 && newbuff.SubType == 5 && (buff.Type == 33 || buff.Type == 58))
+                 || (buff.Type == 33 && (buff.SubType == 1 || buff.SubType == 3) && (newbuff.Type == 58 && (newbuff.SubType == 1))) || (buff.Type == 33 && (buff.SubType == 2 || buff.SubType == 4) && (newbuff.Type == 58 && (newbuff.SubType == 3)))
+                 || (newbuff.Type == 33 && (newbuff.SubType == 1 || newbuff.SubType == 3) && (buff.Type == 58 && (buff.SubType == 1))) || (newbuff.Type == 33 && (newbuff.SubType == 2 || newbuff.SubType == 4) && (buff.Type == 58 && (buff.SubType == 3)))
+                 || (buff.Type == 33 && newbuff.Type == 33 && buff.SubType == newbuff.SubType) || (buff.Type == 58 && newbuff.Type == 58 && buff.SubType == newbuff.SubType))))))
                 {
                     return;
                 }
 
-                if (indicator.Card.BCards.Any(s =>
-                                      s.Type == (byte)CardType.LotusSkills &&
-                                      s.SubType.Equals((byte)AdditionalTypes.LotusSkills.ChangeMoonSkills)))
+                if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.LotusSkills && s.SubType.Equals((byte)AdditionalTypes.LotusSkills.ChangeMoonSkills / 10)))
                 {
                     RemoveBuff(697);
                 }
 
-                if (indicator.Card.BCards.Any(s =>
-                                      s.Type == (byte)CardType.LotusSkills &&
-                                      s.SubType.Equals((byte)AdditionalTypes.LotusSkills.ChangeLotusSkills)))
+                if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.LotusSkills && s.SubType.Equals((byte)AdditionalTypes.LotusSkills.ChangeLotusSkills / 10)))
                 {
                     RemoveBuff(690);
                 }
@@ -1947,15 +1917,13 @@ namespace OpenNos.GameObject.Battle
 
                     indicator.Start = DateTime.Now;
 
-                    Character.Session.SendPacket(
-                        $"bf 1 {MapEntityId} {(indicator.Card.CardId == 0 ? Character.ChargeValue > 7000 ? 7000 : Character.ChargeValue : amuletMaxDurability > 0 ? buffTime : 0)}.{indicator.Card.CardId}.{(indicator.Card.Duration == 0 || indicator.Card.CardId == 62 ? amuletMaxDurability > 0 ? amuletMaxDurability : buffTime : indicator.Card.Duration)} {sender.Level}");
+                    Character.Session.SendPacket($"bf 1 {MapEntityId} {(indicator.Card.CardId == 0 ? Character.ChargeValue > 7000 ? 7000 : Character.ChargeValue : amuletMaxDurability > 0 ? buffTime : 0)}.{indicator.Card.CardId}.{(indicator.Card.Duration == 0 || indicator.Card.CardId == 62 ? amuletMaxDurability > 0 ? amuletMaxDurability : buffTime : indicator.Card.Duration)} {sender.Level}");
 
                     if (!noMessage || !Buffs.Any(s => s.Card.CardId == indicator.Card.CardId))
                     {
-                        Character.Session.SendPacket(Character.GenerateSay(
-                                string.Format(Language.Instance.GetMessageFromKey("UNDER_EFFECT"), indicator.Card.Name),
-                                20));
+                        Character.Session.SendPacket(Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("UNDER_EFFECT"), indicator.Card.Name), 20));
                     }
+
 
                     Character.Session.SendPacket(Character.GenerateStat());
 
@@ -2118,7 +2086,6 @@ namespace OpenNos.GameObject.Battle
                                         {
                                             return false;
                                         }
-
                                         if (MapInstance.Map.MapTypes.Any(s => s.MapTypeId == (short)MapTypeEnum.Act4))
                                         {
                                             if (Character.Faction != receiver.Character.Faction
@@ -2128,22 +2095,12 @@ namespace OpenNos.GameObject.Battle
                                                 return true;
                                             }
                                         }
-                                        else if (MapInstance.Map.MapTypes.Any(m =>
-                                                m.MapTypeId == (short)MapTypeEnum.PVPMap) || MapInstance.IsPVP
-                                                                                           || HasBuff(CardType.SpecialEffects,
-                                                                                               (byte)AdditionalTypes
-                                                                                                   .SpecialEffects
-                                                                                                   .AbleToFightPVP) &&
-                                                                                           receiver.HasBuff(
-                                                                                               CardType.SpecialEffects,
-                                                                                               (byte)AdditionalTypes
-                                                                                                   .SpecialEffects
-                                                                                                   .AbleToFightPVP))
+                                        else if (MapInstance.Map.MapTypes.Any(m => m.MapTypeId == (short)MapTypeEnum.PVPMap) || MapInstance.IsPVP
+                                              || HasBuff(CardType.SpecialEffects, (byte)AdditionalTypes.SpecialEffects.AbleToFightPVP) && receiver.HasBuff(CardType.SpecialEffects, (byte)AdditionalTypes.SpecialEffects.AbleToFightPVP))
                                         {
                                             if (MapInstance == ServerManager.Instance.FamilyArenaInstance
-                                                && (Character.Family != null && receiver.Character.Family != null &&
-                                                    Character.Family == receiver.Character.Family
-                                                    || Character.Family == null && receiver.Character.Family == null))
+                                                && ((Character.Family != null && receiver.Character.Family != null && Character.Family == receiver.Character.Family)
+                                                || Character.Family == null && receiver.Character.Family == null))
                                             {
                                                 return false;
                                             }
@@ -2172,13 +2129,10 @@ namespace OpenNos.GameObject.Battle
                                                 }
                                             }
 
-                                            if (team != null &&
-                                                team.FirstOrDefault(s => s.Session == Character.Session)?.ArenaTeamType !=
-                                                team.FirstOrDefault(s => s.Session == receiver.Character.Session)?.ArenaTeamType
-                                                || MapInstance.MapInstanceType != MapInstanceType.TalentArenaMapInstance &&
-                                                (Character.Group == null ||
-                                                 !Character.Group.IsMemberOfGroup(receiver.Character.CharacterId))
-                                                && (iceteam == null || !iceteam.Contains(receiver.Character.Session)))
+                                            if (team != null && team.FirstOrDefault(s => s.Session == Character.Session)?.ArenaTeamType != team.FirstOrDefault(s => s.Session == receiver.Character.Session)?.ArenaTeamType
+                                               || MapInstance.MapInstanceType != MapInstanceType.TalentArenaMapInstance &&
+                                               (Character.Group == null || !Character.Group.IsMemberOfGroup(receiver.Character.CharacterId))
+                                               && (iceteam == null || !iceteam.Contains(receiver.Character.Session)))
                                             {
                                                 return true;
                                             }
@@ -2197,31 +2151,21 @@ namespace OpenNos.GameObject.Battle
                                         return CanAttackEntity(receiver.Mate.Owner.BattleEntity, true);
                                     }
                                 case EntityType.Monster:
-                                    if (receiver.MapMonster.Owner == null || receiver.MapMonster.Owner.MapEntityId !=
-                                                                          MapEntityId &&
-                                                                          CanAttackEntity(receiver.MapMonster.Owner, true)
-                                                                          || receiver.MapMonster.Owner.MapEntityId ==
-                                                                          MapEntityId &&
-                                                                          MapInstance == Character.Miniland &&
-                                                                          IsMateTrainer(receiver.MapMonster.MonsterVNum))
+                                    if (receiver.MapMonster.Owner == null || receiver.MapMonster.Owner.MapEntityId != MapEntityId && CanAttackEntity(receiver.MapMonster.Owner, true)
+                                    || (receiver.MapMonster.Owner.MapEntityId == MapEntityId && MapInstance == Character.Miniland && IsMateTrainer(receiver.MapMonster.MonsterVNum)))
                                     {
                                         if (ServerManager.Instance.ChannelId != 51 ||
                                             receiver.MapMonster.Faction == FactionType.None ||
                                             receiver.MapMonster.Faction != Character.Faction)
                                         {
-                                            if (receiver.MapMonster.IsDisabled ||
-                                                !isOwnerCheck && receiver.MapMonster.IsJumping)
+                                            if (receiver.MapMonster.IsDisabled || (!isOwnerCheck && receiver.MapMonster.IsJumping))
                                             {
                                                 return false;
                                             }
-
-                                            if (!IsMateTrainer(receiver.MapMonster.MonsterVNum) &&
-                                                (receiver.MapMonster.Owner?.Character != null ||
-                                                 receiver.MapMonster.Owner?.Mate != null))
+                                            if (!IsMateTrainer(receiver.MapMonster.MonsterVNum) && (receiver.MapMonster.Owner?.Character != null || receiver.MapMonster.Owner?.Mate != null))
                                             {
                                                 return false;
                                             }
-
                                             return true;
                                         }
                                     }

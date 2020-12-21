@@ -524,36 +524,7 @@ namespace OpenNos.GameObject
 
                 // Atk/Def/HP/Exp potions  //so i dont have card for that wait a sec
                 case 6600:
-                    switch (EffectValue)
-                    {
-                        //Attack Potion
-                        case 1:
-                            session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 3022), session.Character.PositionX, session.Character.PositionY);
-                            session.Character.AddBuff(new Buff(116, session.Character.Level), session.Character.BattleEntity);
-                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                            break;
-
-                        //Defence Potion
-                        case 2:
-                            session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 3022), session.Character.PositionX, session.Character.PositionY);
-                            session.Character.AddBuff(new Buff(117, session.Character.Level), session.Character.BattleEntity);
-                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                            break;
-
-                        //Energy Potion
-                        case 3:
-                            session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 3022), session.Character.PositionX, session.Character.PositionY);
-                            session.Character.AddBuff(new Buff(118, session.Character.Level), session.Character.BattleEntity);
-                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                            break;
-
-                        //Experience Potion
-                        case 4:
-                            session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 3022), session.Character.PositionX, session.Character.PositionY);
-                            session.Character.AddBuff(new Buff(119, session.Character.Level), session.Character.BattleEntity);
-                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                            break;
-                    }
+                    session.Character.Inventory.RemoveItemFromInventory(inv.Id);
                     break;
 
                 // Golden potion
