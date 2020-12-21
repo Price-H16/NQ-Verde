@@ -30,30 +30,6 @@
   <component name="ChangeListManager">
     <list default="true" id="cf9525a9-00e4-4327-b938-16302dc69d24" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.NosQuest/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.NosQuest/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Executables/OpenNos.World/Resource/LocalizedResources.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Executables/OpenNos.World/Resource/LocalizedResources.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Executables/OpenNos.World/Resource/LocalizedResources.resx" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Executables/OpenNos.World/Resource/LocalizedResources.resx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/BscPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/BscPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/AddobjPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/AddobjPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/BIPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/BIPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/BlDelPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/BlDelPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/BlInsPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/BlInsPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/BlPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/BlPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CBlistPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CBlistPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CBuyPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CBuyPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CModPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CModPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CRegPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CRegPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CScalcPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CScalcPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CspPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/CspPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/DepositPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/DepositPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/EquipmentInfoPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/EquipmentInfoPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/LoginPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/LoginPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/MultiTargetListPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/MultiTargetListPacket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntityExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntityExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Buff/BCard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Buff/BCard.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/Instance/ItemInstance.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/Instance/ItemInstance.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Family/Command/FamilyLeavePacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Family/Command/FamilyLeavePacketHandler.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +41,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/63DD8BF9-8CFA-4BA9-85AF-735EF1A56BA9/9e/40bffb1f/Void.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Inventory.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -223,13 +200,14 @@
       <option name="presentableId" value="Default" />
       <updated>1608404631982</updated>
       <workItem from="1608404649487" duration="17925000" />
+      <workItem from="1608568037493" duration="1435000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -241,6 +219,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
