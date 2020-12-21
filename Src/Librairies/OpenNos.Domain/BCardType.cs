@@ -94,15 +94,15 @@
             StealBuff = 84,
             Unknown = 85,
             EffectSummon = 86,
-
-            // ??? = 87~88
+            SpecialWeaponEffects = 87,
+            HeroExpBuff = 87,
             Dracula = 87,
-
+            Hero = 88,
             MartialArts = 89,
 
             // ??? = 90~95,
             SealedLodDamage = 90,
-
+            Unknown1 = 93,
             LotusSkills = 91,
             ApplyBuffs = 95,
             PixieCostumeWings = 96,
@@ -113,9 +113,9 @@
             IncreaseSlPoint = 102,
             IncreaseDamageVsChar = 103,
             Idk = 104,
-            RuneBcard = 105,
-            RuneBcard2 = 106,
-            RuneBcard3 = 107,
+            A7Powers1 = 105,
+            A7Powers2 = 106,
+            
             Tattoos = 108,
 
             IncreaseHpMp = 110
@@ -128,27 +128,32 @@
     {
         #region Enums
 
-        public enum RuneBcard : byte
+        public enum A7Powers1 : byte
         {
-            ApocalypsisPowe = 11,
+            DamageApocalypsePower = 11,
+            DamageApocalypsePowerNegated = 12,
             ReflectionPower = 21,
-            WolfPower = 31,
-            Kickback = 41,
-            Explosion = 51,
+            ReflectionPowerNegated = 22,
+            DamageWolfPower = 31,
+            DamageWolfPowerNegated = 32,
+            EnemyKnockedBack = 41,
+            EnemyKnockedBackNegated = 42,
+            DamageExplosionPower = 51,
+            DamageExplosionPowerNegated = 52,
         }
 
-        public enum RuneBcard2 : byte
+        public enum A7Powers2 : byte
         {
-            AgiliyyPower = 11,
-            LgPower = 21,
-            CursePower = 31,
-            BearPower = 41,
-            FrostPower = 51,
-        }
-
-        public enum RuneBcard3 : byte
-        {
-            DodgePercent = 51,
+            ReceiveAgilityPower = 11,
+            ReceiveAgilityPowerNegated = 12,
+            DamageLightingPower = 21,
+            DamageLightningPowerNegated = 22,
+            TriggerCursePower = 31,
+            TriggerCursePowerNegated = 32,
+            DamageBearPower = 41,
+            DamageBearPowerNegated = 42,
+            ReceiveFrostPower = 51,
+            ReceiveFrostPowerNegated = 52
         }
 
         public enum AbsorbedSpirit : byte
@@ -173,6 +178,20 @@
             MagicalAttacksDecreased = 42
         }
 
+        public enum SESpecialist : byte
+        {
+            EnterNumberOfBuffsAndDamage = 12,
+            EnterNumberOfBuffs = 22,
+            MovingAura = 31,
+            DontNeedToEnter = 32, // Same as 42
+            LowerHPStrongerEffect = 41,
+            DoNotNeedToEnter = 42 // Same as 32
+        }
+
+        public enum HeroExpBuff : byte
+        {
+            HeroEXP = 21,
+        }
         public enum AbsorptionAndPowerSkill : byte
         {
             AddDamageToHP = 11,
@@ -962,16 +981,6 @@
             ReduceEnemySkillNegated = 32,
             HitAttacker = 41,
             HitAttackerNegated = 42
-        }
-
-        public enum SESpecialist : byte
-        {
-            EnterNumberOfBuffsAndDamage = 12,
-            EnterNumberOfBuffs = 22,
-            MovingAura = 31,
-            DontNeedToEnter = 32, // Same as 42
-            LowerHPStrongerEffect = 41,
-            DoNotNeedToEnter = 42 // Same as 32
         }
 
         public enum SniperAttack : byte

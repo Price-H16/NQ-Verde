@@ -15,7 +15,8 @@ using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.GameObject;
-using OpenNos.Handler.BasicPacket.Login;
+using OpenNos.Handler;
+using OpenNos.Handler.PacketHandler.Basic;
 using OpenNos.Master.Library.Client;
 
 namespace OpenNos.Login
@@ -52,7 +53,7 @@ namespace OpenNos.Login
             PacketFactory.Initialize<WalkPacket>();
             var a = DependencyContainer.Instance.GetInstance<JsonGameConfiguration>().Server;
             var port = a.LoginPort;
-            var networkManager = new NetworkManager<LoginCryptography>(a.IPAddress, port, typeof(LoginPacketHandler), typeof(LoginCryptography), false);
+            NetworkManager<LoginCryptography> networkManager = new NetworkManager<LoginCryptography>(a.IPAddress, port, typeof(NoS0575PacketHandler), typeof(LoginCryptography), false);
         }
         private static void InitializeLogger()
         {

@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using OpenNos.GameObject._Event;
 using static OpenNos.Domain.BCardType;
 using OpenNos.GameObject.RainbowBattle;
@@ -68,6 +67,7 @@ namespace OpenNos.GameObject
             SpeedLockObject = new object();
             ShellEffectArmor = new ConcurrentBag<ShellEffectDTO>();
             ShellEffectMain = new ConcurrentBag<ShellEffectDTO>();
+            RuneEffectMain = new ConcurrentBag<RuneEffectDTO>();
             ShellEffectSecondary = new ConcurrentBag<ShellEffectDTO>();
             Quests = new ConcurrentBag<CharacterQuest>();
             DamageList = new Dictionary<long, long>();
@@ -568,7 +568,9 @@ namespace OpenNos.GameObject
                 return respawn;
             }
         }
-        
+
+        public ConcurrentBag<RuneEffectDTO> RuneEffectMain { get; set; }
+
         public MapCell SavedLocation { get; set; }
 
         public short SaveX { get; set; }
@@ -873,48 +875,48 @@ namespace OpenNos.GameObject
                 MapInstance.Broadcast(mate.GenerateIn());
                 if (!mate.IsTemporalMate)
                 {
-                    if (mate.MateType == MateType.Partner)
-                    {
-                        Session.SendPacket($"msg 4 {mate.Name} is now following you on your Adventure!");
-                        Session.Character.IsPartnerAutoRelive = true;
-                    }
-
-                    if (mate.MateType == MateType.Pet)
-                    {
-                        Session.SendPacket($"msg 4 {mate.Name} is now following you on your Adventure!");
-                        Session.Character.IsPetAutoRelive = true;
-                    }
-
+                    Session.SendPacket(GenerateSay(string.Format(Language.Instance.GetMessageFromKey("YOU_GET_PET"), mate.Name), 12));
                 }
+
                 Session.SendPacket(UserInterfaceHelper.GeneratePClear());
                 Session.SendPackets(GenerateScP());
                 Session.SendPackets(GenerateScN());
-                InventoryType newMateInventory = (InventoryType)(13 + mate.PetId);
+                InventoryType newMateInventory = (InventoryType) (13 + mate.PetId);
                 switch (mate.Monster.AttackClass)
                 {
                     case 0:
+
                         // Partner Basic Weapon
                         mate.WeaponInstance = Inventory.AddNewToInventory(990, 1, newMateInventory).FirstOrDefault();
+
                         // Partner Basic Armor
                         mate.ArmorInstance = Inventory.AddNewToInventory(997, 1, newMateInventory).FirstOrDefault();
                         break;
+
                     case 1:
+
                         // Partner Basic Weapon
                         mate.WeaponInstance = Inventory.AddNewToInventory(991, 1, newMateInventory).FirstOrDefault();
+
                         // Partner Basic Armor
                         mate.ArmorInstance = Inventory.AddNewToInventory(996, 1, newMateInventory).FirstOrDefault();
                         break;
+
                     case 2:
+
                         // Partner Basic Weapon
                         mate.WeaponInstance = Inventory.AddNewToInventory(992, 1, newMateInventory).FirstOrDefault();
+
                         // Partner Basic Armor
                         mate.ArmorInstance = Inventory.AddNewToInventory(995, 1, newMateInventory).FirstOrDefault();
                         break;
                 }
+
                 Session.SendPackets(GenerateScN());
                 mate.RefreshStats();
                 return true;
             }
+
             return false;
         }
 
@@ -1017,6 +1019,7 @@ namespace OpenNos.GameObject
             {
                 mate.BackToMiniland();
             }
+
             Session.SendPacket($"ctl 2 {mate.MateTransportId} 3");
             Mates.Add(mate);
             Session.SendPacket(UserInterfaceHelper.GeneratePClear());
@@ -1024,17 +1027,18 @@ namespace OpenNos.GameObject
             Session.SendPackets(GenerateScN());
             if (!isUsingMate)
             {
-                Parallel.ForEach(Session.CurrentMapInstance.Sessions.Where(s => s.Character != null), s =>
+                foreach (var sess in Session.CurrentMapInstance.Sessions.Where(s => s.Character != null))
                 {
-                    if (ServerManager.Instance.ChannelId != 51 || Session.Character.Faction == s.Character.Faction)
+                    if (ServerManager.Instance.ChannelId != 51 || Session.Character.Faction == sess.Character.Faction)
                     {
-                        s.SendPacket(mate.GenerateIn(false, ServerManager.Instance.ChannelId == 51));
+                        sess.SendPacket(mate.GenerateIn(false, ServerManager.Instance.ChannelId == 51));
                     }
                     else
                     {
-                        s.SendPacket(mate.GenerateIn(true, ServerManager.Instance.ChannelId == 51, s.Account.Authority));
+                        sess.SendPacket(mate.GenerateIn(true, ServerManager.Instance.ChannelId == 51,sess.Account.Authority));
                     }
-                });
+                }
+
                 Session.SendPacket(GeneratePinit());
                 Session.SendPacket(UserInterfaceHelper.GeneratePClear());
                 Session.SendPackets(GenerateScP());
@@ -1425,7 +1429,7 @@ namespace OpenNos.GameObject
             }
         }
 
-        public bool CanAddMate(Mate mate) => mate.MateType == MateType.Pet ? MaxMateCount > Mates.Count(s => s.MateType == MateType.Pet) : MaxPartnerCount > Mates.Count(s => s.MateType == MateType.Partner);
+        public bool CanAddMate(Mate mate) => mate.MateType == MateType.Pet   ? MaxMateCount > Mates.Count(s => s.MateType == MateType.Pet) : MaxPartnerCount > Mates.Count(s => s.MateType == MateType.Partner);
 
         public bool CanAttack() => !NoAttack && !HasBuff(CardType.SpecialAttack, (byte) AdditionalTypes.SpecialAttack.NoAttack) &&  !HasBuff(CardType.FrozenDebuff, (byte) AdditionalTypes.FrozenDebuff.EternalIce);
 
@@ -1451,7 +1455,7 @@ namespace OpenNos.GameObject
             return true;
         }
 
-        public void ChangeChannel(string ip, int port, byte mode)
+        public void ChangeChannel(string ip, int port, byte mode, bool saveCharacter = true)
         {
             Session.SendPacket($"mz {ip} {port} {Slot}");
             Session.SendPacket($"it {mode}");
@@ -1461,7 +1465,8 @@ namespace OpenNos.GameObject
             try
             {
                 Save();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
@@ -1864,9 +1869,9 @@ namespace OpenNos.GameObject
                             }
                         }
 
-                        Mates.Where(s => s.CanPickUp).ToList().ForEach(s => Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 3007)));
-                        Mates.Where(s => s.IsTsProtected).ToList().ForEach(s => Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 825)));
-                        Mates.Where(s => s.MateType == MateType.Pet && s.Loyalty <= 0).ToList().ForEach(s => Session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 5003)));
+                        Mates.Where(s => s.CanPickUp).ToList().ForEach(s =>Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 3007)));
+                        Mates.Where(s => s.IsTsProtected).ToList().ForEach(s =>Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 825)));
+                        Mates.Where(s => s.MateType == MateType.Pet && s.Loyalty <= 0).ToList().ForEach(s =>Session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Npc, s.MateTransportId, 5003)));
                     }
 
                     LastEffect = DateTime.Now;
@@ -2806,11 +2811,14 @@ namespace OpenNos.GameObject
                 EquipmentBCards.Clear();
                 ShellEffectArmor.Clear();
                 ShellEffectMain.Clear();
+                RuneEffectMain.Clear();
                 ShellEffectSecondary.Clear();
                 CellonOptions.Clear();
 
                 if (Inventory != null)
                 {
+                    EquipmentBCards.AddRange(GetRunesInEquipment());
+
                     for (short i = 0; i < 17; i++)
                     {
                         ItemInstance item = Inventory.LoadBySlotAndType(i, InventoryType.Wear);
@@ -2819,12 +2827,6 @@ namespace OpenNos.GameObject
                             if (item.Item.EquipmentSlot != EquipmentType.Sp)
                             {
                                 EquipmentBCards.AddRange(item.Item.BCards);
-                                
-                                if (item.RuneCount != 0)
-                                {
-                                    EquipmentBCards.AddRange(item.RuneBcards);
-                                }
-                                
                                 switch (item.Item.ItemType)
                                 {
                                     case ItemType.Armor:
@@ -2844,6 +2846,11 @@ namespace OpenNos.GameObject
                                                     ShellEffectMain.Add(dto);
                                                 }
 
+                                                foreach (RuneEffectDTO dto in item.RuneEffects)
+                                                {
+                                                    RuneEffectMain.Add(dto);
+                                                }
+
                                                 break;
 
                                             case EquipmentType.SecondaryWeapon:
@@ -2857,33 +2864,19 @@ namespace OpenNos.GameObject
 
                                         break;
 
-                                    ///
-                                    //Cellon from bizu
-                                    ///
-                                    case ItemType.Jewelery:
+                                    case ItemType.Jewelery: //Antidupe Cellon / Shell infinite
                                         foreach (CellonOptionDTO dto in item.CellonOptions)
                                         {
                                             CellonOptions.Add(dto);
                                         }
                                         break;
-
-                                    //SECURITY
-
                                 }
                             }
-                            if (item.Item.ItemType == ItemType.Fashion)
-                            {
-                                eqlist += $" {i}.{(item.HoldingVNum == 0 ? item.Item.VNum : item.HoldingVNum)}.{item.Rare}.{(item.Item.IsColored ? item.Design : item.Upgrade)}.0.{item.RuneCount}";
-                            }
-                            else
-                                eqlist += $" {i}.{item.Item.VNum}.{item.Rare}.{(item.Item.IsColored ? item.Design : item.Upgrade)}.0.{item.RuneCount}";
+
+                            eqlist += $" {i}.{item.Item.VNum}.{item.Rare}.{(item.Item.IsColored ? item.Design : item.Upgrade)}.0.{item.RuneAmount}";
                         }
                     }
                 }
-
-
-                ///OMG CHANGE THIS
-                ///#HARDCODE
                 if (Family != null)
                 {
 
@@ -4241,7 +4234,7 @@ namespace OpenNos.GameObject
             return $"post 5 {type} {MailList.First(s => s.Value == mailDTO).Key} 0 0 {(byte) mailDTO.SenderClass} {(byte) mailDTO.SenderGender} {mailDTO.SenderMorphId} {(byte) mailDTO.SenderHairStyle} {(byte) mailDTO.SenderHairColor} {mailDTO.EqPacket} {sender.Name} {mailDTO.Title} {mailDTO.Message}";
         }
 
-        public List<string> GeneratePst() => Mates.Where(s => s.IsTeamMember).OrderByDescending(s => s.MateType).Select(mate => $"pst 2 {mate.MateTransportId} {(mate.MateType == MateType.Partner ? "0" : "1")} {(int)(mate.Hp / mate.MaxHp * 100)} {(int)(mate.Mp / mate.MaxMp * 100)} {mate.Hp} {mate.Mp} 0 0 0 {mate.Buff.GetAllItems().Aggregate("", (current, buff) => current + $" {buff.Card.CardId}")}").ToList();
+        public List<string> GeneratePst() => Mates.Where(s => s.IsTeamMember).OrderByDescending(s => s.MateType).Select(mate => $"pst 2 {mate.MateTransportId} {(mate.MateType == MateType.Partner ? "0" : "1")} {(int) (mate.Hp / mate.MaxHp * 100)} {(int) (mate.Mp / mate.MaxMp * 100)} {mate.Hp} {mate.Mp} 0 0 0 {mate.Buff.GetAllItems().Aggregate("", (current, buff) => current + $" {buff.Card.CardId}")}").ToList();
 
         public string GeneratePStashAll()
         {
@@ -4439,13 +4432,16 @@ namespace OpenNos.GameObject
         {
             List<string> list = new List<string>();
             byte i = 0;
-            Mates.Where(s => s.MateType == MateType.Partner).ToList().ForEach(s =>
+            var partners = Mates.Where(s => s.MateType == MateType.Partner).ToList();
+
+            foreach (var partner in partners)
             {
-                s.PetId = i;
-                s.LoadInventory();
-                list.Add(s.GenerateScPacket());
+                partner.PetId = i;
+                partner.LoadInventory();
+                list.Add(partner.GenerateScPacket());
                 i++;
-            });
+            }
+
             return list;
         }
 
@@ -4457,7 +4453,7 @@ namespace OpenNos.GameObject
 
             Mates.Where(s => s.MateType == MateType.Pet).Skip(page * 10).Take(10).ToList().ForEach(s =>
             {
-                s.PetId = (byte)(page * 10 + i);
+                s.PetId = (byte) (page * 10 + i);
                 list.Add(s.GenerateScPacket());
                 i++;
             });
@@ -4521,7 +4517,7 @@ namespace OpenNos.GameObject
                             }
                             else
                             {
-                                inv0 += $" {inv.Slot}.{inv.ItemVNum}.{inv.Rare}.{(inv.Item.IsColored ? inv.Design : inv.Upgrade)}.0.{inv.RuneCount}";
+                                inv0 += $" {inv.Slot}.{inv.ItemVNum}.{inv.Rare}.{(inv.Item.IsColored ? inv.Design : inv.Upgrade)}.0.{inv.RuneAmount}";
                             }
 
                             break;
@@ -4668,8 +4664,13 @@ namespace OpenNos.GameObject
                     }
 
 
-                    int point = CharacterHelper.SlPoint(specialist.SlDamage, 0) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                    if (point > 100) { point = 100; };
+                    int point = CharacterHelper.SlPoint(specialist.SlDamage, 0) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseDamage);
+                    if (point > 100)
+                    {
+                        point = 100;
+                    }
+
+                    ;
 
                     int p = 0;
                     if (point <= 10)
@@ -4730,8 +4731,11 @@ namespace OpenNos.GameObject
                     SecondWeaponMaxHit += p;
                     SecondWeaponMinHit += p;
 
-                    point = CharacterHelper.SlPoint(specialist.SlDefence, 1) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                    if (point > 100) { point = 100; };
+                    point = CharacterHelper.SlPoint(specialist.SlDefence, 1) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseDefence);
+                    if (point > 100)
+                    {
+                        point = 100;
+                    }
 
                     p = 0;
                     if (point <= 10)
@@ -4779,14 +4783,18 @@ namespace OpenNos.GameObject
                     MagicalDefence += p;
                     DistanceDefence += p;
 
-                    point = CharacterHelper.SlPoint(specialist.SlElement, 2) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
-                    if (point > 100) { point = 100; };
+                    point = CharacterHelper.SlPoint(specialist.SlElement, 2) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseEllement);
+                    if (point > 100)
+                    {
+                        point = 100;
+                    }
 
+                    ;
 
                     p = point <= 50 ? point : 50 + ((point - 50) * 2);
                     ElementRateSP += p;
 
-                    slhpbonus = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal);
+                    slhpbonus = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseHPMP);
                 }
             }
 
@@ -6766,15 +6774,12 @@ namespace OpenNos.GameObject
         {
             Mates.Where(s => s.IsTemporalMate).ToList().ForEach(m =>
             {
-                m.GetInventory().ForEach(s =>
-                {
-                    Inventory.Remove(s.Id);
-                });
+                m.GetInventory().ForEach(s => { Inventory.Remove(s.Id); });
                 Mates.Remove(m);
                 byte i = 0;
                 Mates.Where(s => s.MateType == MateType.Partner).ToList().ForEach(s =>
                 {
-                    s.GetInventory().ForEach(item => item.Type = (InventoryType)(13 + i));
+                    s.GetInventory().ForEach(item => item.Type = (InventoryType) (13 + i));
                     s.PetId = i;
                     i++;
                 });
@@ -7045,7 +7050,7 @@ namespace OpenNos.GameObject
                             }
                             if (instance.RuneEffects.Any())
                             {
-                                DAOFactory.RuneEffectsDAO.InsertOrUpdateFromList(itemInstance.RuneEffects, itemInstance.EquipmentSerialId);
+                                DAOFactory.RuneEffectDAO.InsertOrUpdateFromList(itemInstance.RuneEffects, itemInstance.EquipmentSerialId);
                             }
                             if (instance.CellonOptions.Any())
                             {
@@ -7808,6 +7813,7 @@ namespace OpenNos.GameObject
                 Mp = (int) MPLoad();
                 Session.SendPacket(GenerateStat());
                 Session.SendPacket(GenerateLevelUp());
+                Session.Character.Save();
                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("HERO_LEVELUP"),0));
                 Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 8),PositionX, PositionY);
                 Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 198),PositionX, PositionY);
@@ -7847,6 +7853,7 @@ namespace OpenNos.GameObject
                 Session.SendPackets(GenerateQuicklist());
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(8), PositionX, PositionY);
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(198), PositionX, PositionY);
+                Session.Character.Save();
             }
         }
 
@@ -7912,6 +7919,7 @@ namespace OpenNos.GameObject
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(6), PositionX, PositionY);
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(198), PositionX, PositionY);
                 ServerManager.Instance.UpdateGroup(CharacterId);
+                Session.Character.Save();
 
                 //LevelRewards(Level);
             }
@@ -8433,6 +8441,90 @@ namespace OpenNos.GameObject
         private double XpLoad() => CharacterHelper.XPData[Level - 1];
 
         #endregion
-        
+
+        #region Runes
+
+        public List<BCard> GetRunesInEquipment()
+        {
+            var runes = new List<BCard>();
+            // First of all, let's get main weapon runes
+            var weapon = Inventory.LoadBySlotAndType((byte) EquipmentType.MainWeapon, InventoryType.Wear);
+            if (weapon != null && weapon.RuneEffects != null && weapon.RuneEffects.Any())
+            {
+                var runeEffects = weapon.RuneEffects.ConvertAll(x => x.DeepCopy()).ToList();
+
+                var rune = runeEffects.Select(x => new BCard
+                {
+                    Type = (byte) x.Type,
+                    SubType = (byte) ((x.SubType * 10) + 11),
+                    FirstData = x.FirstData,
+                    SecondData = x.SecondData,
+                    ThirdData = x.ThirdData
+                });
+
+                runes.AddRange(rune);
+            }
+
+            // Now, secondary weapon runes
+            var secondaryWeapon = Inventory.LoadBySlotAndType((byte) EquipmentType.SecondaryWeapon, InventoryType.Wear);
+            if (secondaryWeapon != null && secondaryWeapon.RuneEffects != null && secondaryWeapon.RuneEffects.Any())
+            {
+                var runeEffects = secondaryWeapon.RuneEffects.ToList();
+
+                var rune = runeEffects.Select(x => new BCard
+                {
+                    Type = (byte) x.Type,
+                    SubType = (byte) ((x.SubType * 10) + 11),
+                    FirstData = x.FirstData,
+                    SecondData = x.SecondData,
+                    ThirdData = x.ThirdData
+                });
+
+                runes.AddRange(rune);
+            }
+
+            // Now, I'll purge runes so I can get the highest one from both weapons
+            // I'm retreiving only 105 and 106 cards, I have to look for other values by researching info --> Delynith
+            runes = PurgeBCardList(runes, CardType.A7Powers1, CardType.A7Powers2);
+
+            return runes;
+        }
+
+        public List<BCard> PurgeBCardList(List<BCard> list, params CardType[] cards)
+        {
+            var listReturn = new List<BCard>();
+            if (!list.Any()) return listReturn;
+
+            foreach (var card in cards.ToList())
+            {
+                // I'll get the runes from the list that matches each card I sent as parameter
+                var valueToAdd = list.Where(x => cards.Contains((CardType) x.Type) && x.Type == (byte) card).ToList();
+                if (valueToAdd == null || !valueToAdd.Any()) continue;
+
+                // I'll group the runes by SubType and get max value from each Data variable
+                var grouped = (from x in valueToAdd
+                        group x by new {x.SubType}
+                        into y
+                        select new BCard
+                        {
+                            Type = (byte) card,
+                            SubType = y.Key.SubType,
+                            FirstData = y.Max(x => x.FirstData),
+                            SecondData = y.Max(x => x.SecondData),
+                            ThirdData = y.Max(x => x.ThirdData)
+                        }
+                    ).ToList();
+
+                listReturn.AddRange(grouped);
+            }
+
+            // This part will add all those runes that were not in the Enum "cards"
+            // I won't add those whose type and subtype is already on the listReturn variable
+            listReturn.AddRange(list.Where(x => !listReturn.Any(y => y.Type == x.Type && x.SubType == y.SubType)));
+
+            return listReturn;
+        }
+
+        #endregion
     }
 }

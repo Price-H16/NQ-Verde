@@ -38,7 +38,7 @@ namespace OpenNos.GameObject.Extensions
                     Date = DateTime.Now, //DATE IS NEEDED ONLY IN NORMAL MISSIONS (DateEnd/LastUpdate)
                     TotalValue = value, //TOTAL VALUE IS NEEDED ONLY IN DAILY MISSIONS
                 };
-                
+
                 f.FamilySkillMissions.Add(new FamilySkillMission(newMission));
                 DAOFactory.FamilySkillMissionDAO.InsertOrUpdate(ref newMission);
                 if (value >= missionData[2])
@@ -67,7 +67,7 @@ namespace OpenNos.GameObject.Extensions
                             }
                         }
 
-                        mis.TotalValue += value;                              
+                        mis.TotalValue += value;
                         f.SaveMission(mis);
                     }
                 }

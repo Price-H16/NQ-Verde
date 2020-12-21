@@ -88,7 +88,8 @@ namespace OpenNos.Handler.PacketHandler.Basic
                 {
                     if (ServerManager.Instance.IsAct4Online())
                     {
-                        Session.Character.ChangeChannel(ServerManager.Instance.Configuration.Act4IP, ServerManager.Instance.Configuration.Act4Port, 2);
+                        Session.Character.ChangeChannel(ServerManager.Instance.Configuration.Act4IP,
+                                ServerManager.Instance.Configuration.Act4Port, 2, false);
                         return;
                     }
 
@@ -217,7 +218,6 @@ namespace OpenNos.Handler.PacketHandler.Basic
             Session.SendPacket(Session.Character.GenerateExts());
             Session.SendPacket(Session.Character.GenerateMlinfo());
             Session.SendPacket(UserInterfaceHelper.GeneratePClear());
-            Session.SendPacket(Session.Character.GeneratePetskill());
 
             Session.SendPacket(Session.Character.GeneratePinit());
             Session.SendPackets(Session.Character.GeneratePst());

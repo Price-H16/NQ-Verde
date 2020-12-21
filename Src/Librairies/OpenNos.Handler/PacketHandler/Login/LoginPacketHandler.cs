@@ -156,8 +156,7 @@ namespace OpenNos.Handler.BasicPacket.Login
 
         private string BuildServersPacket(string username, byte regionType, int sessionId, bool ignoreUserName)
         {
-            string channelpacket =
-                CommunicationServiceClient.Instance.RetrieveRegisteredWorldServers(username, regionType, sessionId, ignoreUserName);
+            string channelpacket = CommunicationServiceClient.Instance.RetrieveRegisteredWorldServers(username, regionType, sessionId, ignoreUserName);
 
             if (channelpacket == null || !channelpacket.Contains(':'))
             {

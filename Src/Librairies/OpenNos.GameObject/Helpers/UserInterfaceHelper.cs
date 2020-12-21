@@ -370,7 +370,7 @@ namespace OpenNos.GameObject.Helpers
                             bzlink.Item?.GenerateEInfo() : bzlink.Item.Item.SpType == 0 && bzlink.Item.Item.ItemSubType == 4 ?
                             bzlink.Item?.GeneratePslInfo() : bzlink.Item?.GenerateSlInfo()).Replace(' ', '^').Replace("slinfo^", "").Replace("e_info^", "");
                     }
-                    itembazar += $"{bzlink.BazaarItem.BazaarItemId}|{bzlink.BazaarItem.SellerId}|{bzlink.Owner}|{bzlink.Item.Item.VNum}|{bzlink.Item.Amount}|{(bzlink.BazaarItem.IsPackage ? 1 : 0)}|{bzlink.BazaarItem.Price}|{time}|2|0|{bzlink.Item.Rare}|{bzlink.Item.Upgrade}|{bzlink.Item.RuneCount}|0|{info} ";
+                    itembazar += $"{bzlink.BazaarItem.BazaarItemId}|{bzlink.BazaarItem.SellerId}|{bzlink.Owner}|{bzlink.Item.Item.VNum}|{bzlink.Item.Amount}|{(bzlink.BazaarItem.IsPackage ? 1 : 0)}|{bzlink.BazaarItem.Price}|{time}|2|0|{bzlink.Item.Rare}|{bzlink.Item.Upgrade}|{bzlink.Item.RuneAmount}|0|{info} ";
                 }
 
                 return $"rc_blist {packet.Index} {itembazar} ";
@@ -426,6 +426,7 @@ namespace OpenNos.GameObject.Helpers
         public string GenerateStashRemove(short slot) => $"stash {GenerateRemovePacket(slot)}";
 
         public string GenerateTaSt(TalentArenaOptionType watch) => $"ta_st {(byte)watch}";
+
 
         #endregion
     }

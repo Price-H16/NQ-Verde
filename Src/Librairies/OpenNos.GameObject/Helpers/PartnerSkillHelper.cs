@@ -7,30 +7,7 @@ namespace OpenNos.GameObject.Helpers
 {
     public class PartnerSkillHelper
     {
-        public static double GetMultiplierBySkillLevel(byte level)
-        {
-            PartnerSkillLevelType levelType = (PartnerSkillLevelType)level;
-
-            switch (levelType)
-            {
-                case PartnerSkillLevelType.F:
-                    return 0.3D;
-                case PartnerSkillLevelType.E:
-                    return 0.5D;
-                case PartnerSkillLevelType.D:
-                    return 0.8D;
-                case PartnerSkillLevelType.C:
-                    return 1.0D;
-                case PartnerSkillLevelType.B:
-                    return 1.2D;
-                case PartnerSkillLevelType.A:
-                    return 1.5D;
-                case PartnerSkillLevelType.S:
-                    return 2.5D;
-            }
-
-            return 0;
-        }
+        #region Methods
 
         public static Skill ConvertToNormalSkill(PartnerSkill partnerSkill)
         {
@@ -89,5 +66,38 @@ namespace OpenNos.GameObject.Helpers
 
             return skill;
         }
+
+        public static double GetMultiplierBySkillLevel(byte level)
+        {
+            PartnerSkillLevelType levelType = (PartnerSkillLevelType)level;
+
+            switch (levelType)
+            {
+                case PartnerSkillLevelType.F:
+                    return 0.3D;
+
+                case PartnerSkillLevelType.E:
+                    return 0.5D;
+
+                case PartnerSkillLevelType.D:
+                    return 0.8D;
+
+                case PartnerSkillLevelType.C:
+                    return 1.0D;
+
+                case PartnerSkillLevelType.B:
+                    return 1.2D;
+
+                case PartnerSkillLevelType.A:
+                    return 1.5D;
+
+                case PartnerSkillLevelType.S:
+                    return 2.5D;
+            }
+
+            return 0;
+        }
+
+        #endregion
     }
 }

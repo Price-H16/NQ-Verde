@@ -212,7 +212,7 @@
         <e p="RespawnDAO.cs" t="Include" />
         <e p="RespawnMapTypeDAO.cs" t="Include" />
         <e p="RollGeneratedItemDAO.cs" t="Include" />
-        <e p="RuneEffectsDAO.cs" t="Include" />
+        <e p="RuneEffectDAO.cs" t="Include" />
         <e p="ScriptedInstanceDAO.cs" t="Include" />
         <e p="ShellEffectDAO.cs" t="Include" />
         <e p="ShopDAO.cs" t="Include" />
@@ -409,7 +409,7 @@
         <e p="Respawn.cs" t="Include" />
         <e p="RespawnMapType.cs" t="Include" />
         <e p="RollGeneratedItem.cs" t="Include" />
-        <e p="RuneEffects.cs" t="Include" />
+        <e p="RuneEffect.cs" t="Include" />
         <e p="ScriptedInstance.cs" t="Include" />
         <e p="ShellEffect.cs" t="Include" />
         <e p="Shop.cs" t="Include" />
@@ -472,7 +472,7 @@
         <e p="IRespawnDAO.cs" t="Include" />
         <e p="IRespawnMapTypeDAO.cs" t="Include" />
         <e p="IRollGeneratedItemDAO.cs" t="Include" />
-        <e p="IRuneEffectsDAO.cs" t="Include" />
+        <e p="IRuneEffectDAO.cs" t="Include" />
         <e p="IScriptedInstanceDAO.cs" t="Include" />
         <e p="IShellEffectDAO.cs" t="Include" />
         <e p="IShopDAO.cs" t="Include" />
@@ -566,7 +566,7 @@
         <e p="RespawnDTO.cs" t="Include" />
         <e p="RespawnMapTypeDTO.cs" t="Include" />
         <e p="RollGeneratedItemDTO.cs" t="Include" />
-        <e p="RuneEffectsDTO.cs" t="Include" />
+        <e p="RuneEffectDTO.cs" t="Include" />
         <e p="ScriptedInstanceDTO.cs" t="Include" />
         <e p="ShellEffectDTO.cs" t="Include" />
         <e p="ShopDTO.cs" t="Include" />
@@ -1321,7 +1321,6 @@
         <e p="ReceiverType.cs" t="Include" />
         <e p="RequestExchangeType.cs" t="Include" />
         <e p="RespawnType.cs" t="Include" />
-        <e p="RuneScrollType.cs" t="Include" />
         <e p="ScriptedInstanceType.cs" t="Include" />
         <e p="SessionType.cs" t="Include" />
         <e p="ShellArmorEffectType.cs" t="Include" />
@@ -1466,16 +1465,17 @@
             <e p="OptionItemExtension.cs" t="Include" />
             <e p="PerfectSpExtension.cs" t="Include" />
             <e p="RarifyItemExtension.cs" t="Include" />
+            <e p="RemoveRuneExtension.cs" t="Include" />
             <e p="RemoveTattooInked.cs" t="Include" />
             <e p="SummingItemExtension.cs" t="Include" />
             <e p="UpgradeItemExtension.cs" t="Include" />
+            <e p="UpgradeRuneExtension.cs" t="Include" />
             <e p="UpgradeSpExtension.cs" t="Include" />
             <e p="UpgradeSpFunExtension.cs" t="Include" />
             <e p="UpgradeTattooExtension.cs" t="Include" />
           </e>
           <e p="ItemExtension.cs" t="Include" />
           <e p="LogsExtension.cs" t="Include" />
-          <e p="MateExtension.cs" t="Include" />
           <e p="NumberExtension.cs" t="Include" />
         </e>
         <e p="Family.cs" t="Include" />
@@ -1486,7 +1486,6 @@
         <e p="Helpers" t="Include">
           <e p="ChangeClassHelper.cs" t="Include" />
           <e p="CharacterHelper.cs" t="Include" />
-          <e p="CraveRuneHelper.cs" t="Include" />
           <e p="DamageHelper.cs" t="Include" />
           <e p="DiscordWebhookHelper.cs" t="Include" />
           <e p="EventHelper.cs" t="Include" />

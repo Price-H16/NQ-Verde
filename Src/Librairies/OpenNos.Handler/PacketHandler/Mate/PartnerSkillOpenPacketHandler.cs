@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using NosTale.Packets.Packets.ClientPackets;
+﻿using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
-using OpenNos.GameObject.Extension;
 using OpenNos.GameObject.Helpers;
 
 namespace OpenNos.Handler.PacketHandler.Mate
@@ -29,37 +27,28 @@ namespace OpenNos.Handler.PacketHandler.Mate
 
         public void PartnerSkillOpen(PartnerSkillOpenPacket partnerSkillOpenPacket)
         {
-            if (partnerSkillOpenPacket == null
-                || partnerSkillOpenPacket.CastId < 0
-                || partnerSkillOpenPacket.CastId > 2)
-            {
+            if (partnerSkillOpenPacket == null || partnerSkillOpenPacket.CastId < 0 || partnerSkillOpenPacket.CastId > 2)
+
                 return;
-            }
 
-            GameObject.Mate mate = Session?.Character?.Mates?.ToList().FirstOrDefault(s => s.IsTeamMember && s.MateType == MateType.Partner && s.PetId == partnerSkillOpenPacket.PetId);
+            var mate = Session?.Character?.Mates?.Find(s => s.IsTeamMember && s.MateType == MateType.Partner);
 
-            if (mate?.Sp == null || mate.IsUsingSp)
-            {
-                return;
-            }
+            if (mate == null) return;
 
-            if (!mate.Sp.CanLearnSkill())
-            {
-                return;
-            }
+            if (mate.Sp == null || mate.IsUsingSp) return;
 
-            PartnerSkill partnerSkill = mate.Sp.GetSkill(partnerSkillOpenPacket.CastId);
+            if (!mate.Sp.CanLearnSkill()) return;
 
-            if (partnerSkill != null)
-            {
-                return;
-            }
+            var partnerSkill = mate.Sp.GetSkill(partnerSkillOpenPacket.CastId);
+
+            if (partnerSkill != null) return;
 
             if (partnerSkillOpenPacket.JustDoIt)
             {
-                if (mate.Sp.AddSkill(partnerSkillOpenPacket.CastId))
+                if (mate.Sp.AddSkill(mate, partnerSkillOpenPacket.CastId))
                 {
-                    Session.SendPacket(UserInterfaceHelper.GenerateModal(Language.Instance.GetMessageFromKey("PSP_SKILL_LEARNED"), 1));
+                    Session.SendPacket(
+                        UserInterfaceHelper.GenerateModal(Language.Instance.GetMessageFromKey("PSP_SKILL_LEARNED"), 1));
                     mate.Sp.ResetXp();
                 }
 
@@ -67,21 +56,27 @@ namespace OpenNos.Handler.PacketHandler.Mate
             }
             else
             {
-                if (Session.Account.Authority >= AuthorityType.GM)
+                if (Session.Account.Authority >= AuthorityType.DEV)
                 {
-                    if (mate.Sp.AddSkill(partnerSkillOpenPacket.CastId))
+                    if (mate.Sp.AddSkill(mate, partnerSkillOpenPacket.CastId))
                     {
-                        Session.SendPacket(UserInterfaceHelper.GenerateModal(Language.Instance.GetMessageFromKey("PSP_SKILL_LEARNED"), 1));
+                        Session.SendPacket(
+                            UserInterfaceHelper.GenerateModal(Language.Instance.GetMessageFromKey("PSP_SKILL_LEARNED"),
+                                1));
                         mate.Sp.FullXp();
                     }
 
                     Session.SendPacket(mate.GenerateScPacket());
                     return;
                 }
-                Session.SendPacket($"pdelay 3000 12 #ps_op^{partnerSkillOpenPacket.PetId}^{partnerSkillOpenPacket.CastId}^1");
-                Session.CurrentMapInstance?.Broadcast(UserInterfaceHelper.GenerateGuri(2, 2, mate.MateTransportId), mate.PositionX, mate.PositionY);
+
+                Session.SendPacket(
+                    $"pdelay 3000 12 #ps_op^{partnerSkillOpenPacket.PetId}^{partnerSkillOpenPacket.CastId}^1");
+                Session.CurrentMapInstance?.Broadcast(UserInterfaceHelper.GenerateGuri(2, 2, mate.MateTransportId),
+                    mate.PositionX, mate.PositionY);
             }
         }
+
         #endregion
     }
 }

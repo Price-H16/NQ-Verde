@@ -8,17 +8,13 @@ namespace NosTale.Packets.Packets.ClientPackets
     {
         #region Properties
 
-        [PacketIndex(0)]
-        public long TransportId { get; set; }
+        [PacketIndex(0)] public long TransportId { get; set; }
 
-        [PacketIndex(1)]
-        public UserType TargetType { get; set; }
+        [PacketIndex(1)] public UserType TargetType { get; set; }
 
-        [PacketIndex(2)]
-        public long TargetId { get; set; }
+        [PacketIndex(2)] public long TargetId { get; set; }
 
-        [PacketIndex(3)]
-        public byte CastId { get; set; }
+        [PacketIndex(3)] public byte CastId { get; set; }
 
         #endregion
     }

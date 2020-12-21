@@ -1045,7 +1045,6 @@ namespace OpenNos.GameObject.Helpers
                 attacker.AttackUpgrade = ServerManager.Instance.Configuration.MaxUpgrade;
 
             if (attacker.Mate?.MateType == MateType.Pet)
-            {
                 switch (attacker.AttackUpgrade)
                 {
                     case 0:
@@ -1092,15 +1091,14 @@ namespace OpenNos.GameObject.Helpers
                         baseDamage += baseDamage * 2;
                         break;
 
-                    //default:
-                    //    if (attacker.AttackUpgrade > 0)
-                    //    {
-                    //        weaponDamage *= attacker.AttackUpgrade / 5;
-                    //    }
+                        //default:
+                        //    if (attacker.AttackUpgrade > 0)
+                        //    {
+                        //        weaponDamage *= attacker.AttackUpgrade / 5;
+                        //    }
 
-                    //    break;
+                        // break;
                 }
-            }
             else
                 switch (attacker.AttackUpgrade)
                 {
@@ -2130,6 +2128,23 @@ namespace OpenNos.GameObject.Helpers
                 totalDamage += attacker.Character.ChargeValue;
                 attacker.Character.ChargeValue = 0;
                 attacker.RemoveBuff(0);
+            }
+
+            #endregion
+
+            #region Rune Powers Applying
+
+            if (attacker.Character != null)
+            {
+                var bcardsRunes = attacker.BCards.Where(x => x.Type == (byte)CardType.A7Powers1 || x.Type == (byte)CardType.A7Powers2);
+
+                if (bcardsRunes.Any())
+                {
+                    foreach (var bcardRune in bcardsRunes)
+                    {
+                        bcardRune.ApplyBCards(defender, attacker);
+                    }
+                }
             }
 
             #endregion

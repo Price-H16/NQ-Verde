@@ -2497,10 +2497,4 @@
   <data name="TOURNAMENT_STARTED" xml:space="preserve">
     <value>The Tournament Game Start!</value>
   </data>
-  <data name="LOCKED_HUD" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UNLOCKED_HUD" xml:space="preserve">
-    <value>You unlocked the bar of skills, now you can move it.</value>
-  </data>
 </root>

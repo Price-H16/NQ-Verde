@@ -6,31 +6,52 @@
     <projectFile>Src/Executables/OpenNos.Master.Server/OpenNos.Master.Server.csproj</projectFile>
     <projectFile>Src/Executables/OpenNos.World/OpenNos.World.csproj</projectFile>
   </component>
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
-  <component name="BranchesTreeState">
-    <expand>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </expand>
-    <select />
-  </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="cf9525a9-00e4-4327-b938-16302dc69d24" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/.idea.NosQuest/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.NosQuest/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.EF/PartnerSkill.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.EF/PartnerSkill.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/PartnerSkillOpenPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/PartnerSkillOpenPacket.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/UsePartnerSkillPacket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/UsePartnerSkillPacket.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Buff/BCard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Buff/BCard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/DamageHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/DamageHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/PotionItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/PotionItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/SpecialItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/SpecialItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/TeacherItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/TeacherItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/PartnerSkill.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/PartnerSkill.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Skill.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Skill.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Basic/GameStartPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Basic/GameStartPacketHandler.cs" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.DAO/BazaarItemDAO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.DAO/BazaarItemDAO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Executables/OpenNos.Master.Server/CommunicationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Executables/OpenNos.Master.Server/CommunicationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/UserInterfaceHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/UserInterfaceHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Inventory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Inventory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/SpecialItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/SpecialItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Networking/ServerManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Networking/ServerManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/OpenNos.Handler.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/OpenNos.Handler.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CBListPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CBListPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CBuyPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CBuyPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CModPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CModPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CRegPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CRegPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CSListPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CSListPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CScalcPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CScalcPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CSkillPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CSkillPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/BIPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/BIPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/DepositPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/DepositPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/ExcListPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/ExcListPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/MvePacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/MvePacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/PutPacketHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/PutPacketHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Librairies/OpenNos.Master.Library/Client/CommunicationServiceClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Librairies/OpenNos.Master.Library/Client/CommunicationServiceClient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Src/Mapping/OpenNos.Mapper/Mappers/BazaarItemMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Mapping/OpenNos.Mapper/Mappers/BazaarItemMapper.cs" afterDir="false" />
+>>>>>>> parent of fcf5cf4... Rune And Partner Update
     </list>
+=======
+    <list default="true" id="cf9525a9-00e4-4327-b938-16302dc69d24" name="Default Changelist" comment="" />
+>>>>>>> parent of b02d746... Cleaning and continue Mates Rework
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,12 +62,69 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/63DD8BF9-8CFA-4BA9-85AF-735EF1A56BA9/9e/40bffb1f/Void.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Inventory.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/BazaarItemLink.cs" />
+        <option value="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.DAO/BazaarItemDAO.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Inventory.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/SpecialItem.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Networking/ServerManager.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Basic/GameStartPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CBuyPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/UserInterfaceHelper.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CSkillPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CBListPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CSListPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CRegPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CScalcPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Bazaar/CModPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/BIPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/DepositPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/ExcListPacketHandler.cs" />
+>>>>>>> parent of fcf5cf4... Rune And Partner Update
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/MvePacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/PutPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Npc/SellPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Mapping/OpenNos.Mapper/Mappers/BazaarItemMapper.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Master.Library/Client/CommunicationServiceClient.cs" />
+        <option value="$PROJECT_DIR$/Src/Executables/OpenNos.Master.Server/CommunicationService.cs" />
+<<<<<<< HEAD
+        <option value="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/PslPacket.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Mate/UsePartnerSkillPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Mate/UpetPacketHandler.cs" />
+=======
+>>>>>>> parent of 70f84ad... update
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Mate/SuctlPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/PartnerSp.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/MateHelper.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Extension/MateExtension.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Mate/PartnerSkillOpenPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Mate/PslPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Mate.cs" />
+        <option value="$PROJECT_DIR$/Src/Plugins/Plugins.BasicImplementations/Guri/Handler/G4.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/PartnerHelper.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/PartnerSkillHelper.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Extension/FamilyExtensions.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Extension/FamilySystemExtensions.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/CraveRuneHelper.cs" />
+        <option value="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.EF/RuneEffect.cs" />
+        <option value="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.Interface/IRuneEffectDAO.cs" />
+        <option value="$PROJECT_DIR$/Src/Dal/OpenNos.Data/RuneEffectDTO.cs" />
+        <option value="$PROJECT_DIR$/Src/Mapping/OpenNos.Mapper/Mappers/RuneEffectMapper.cs" />
+        <option value="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.EF/ItemInstance.cs" />
+<<<<<<< HEAD
+>>>>>>> parent of b02d746... Cleaning and continue Mates Rework
+=======
+>>>>>>> parent of 70f84ad... update
         <option value="$PROJECT_DIR$/Src/Dal/OpenNos.Data/ItemInstanceDTO.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/UserInterfaceHelper.cs" />
         <option value="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.DAO/RuneEffectDAO.cs" />
@@ -56,13 +134,18 @@
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Domain/RuneScrollType.cs" />
         <option value="$PROJECT_DIR$/Src/Dal/OpenNos.Data/RuneEffectsDTO.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Inventory/UpgradePacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntity.cs" />
         <option value="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.EF/ShellEffect.cs" />
         <option value="$PROJECT_DIR$/Src/Dal/OpenNos.Data/ShellEffectDTO.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Domain/BCardType.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Domain/EventButtonType.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/UpgradeItem.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/Instance/ItemInstance.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Domain/ShellEffectLevelType.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/DamageHelper.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Buff/BCard.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/WearableItem.cs" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Map/MapInstance.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Networking/ServerManager.cs" />
         <option value="$PROJECT_DIR$/Src/Executables/OpenNos.Master.Server/CommunicationService.cs" />
@@ -71,11 +154,15 @@
         <option value="$PROJECT_DIR$/Src/Dal/OpenNos.DAL.EF/PartnerSkill.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/PartnerSkill.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Skill.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntity.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Buff/BCard.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Helpers/DamageHelper.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/TeacherItem.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/PotionItem.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Item/SpecialItem.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Basic/GameStartPacketHandler.cs" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Family/Command/FamilyLeavePacketHandler.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntity.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Buff/BCard.cs" />
@@ -98,6 +185,16 @@
         <option value="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/MultiTargetListPacket.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/NosTale.Packets/Packets/ClientPackets/LoginPacket.cs" />
         <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Battle/BattleEntityExtension.cs" />
+=======
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Character.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.Handler/PacketHandler/Basic/GameStartPacketHandler.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Map/MapInstance.cs" />
+        <option value="$PROJECT_DIR$/Src/Librairies/OpenNos.GameObject/Networking/ServerManager.cs" />
+>>>>>>> parent of b02d746... Cleaning and continue Mates Rework
+=======
+>>>>>>> parent of 70f84ad... update
+=======
+>>>>>>> parent of fcf5cf4... Rune And Partner Update
       </list>
     </option>
   </component>
@@ -199,32 +296,34 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1608404631982</updated>
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
       <workItem from="1608404649487" duration="17925000" />
-      <workItem from="1608568037493" duration="1435000" />
+=======
+      <workItem from="1608404649487" duration="12198000" />
+>>>>>>> parent of b02d746... Cleaning and continue Mates Rework
+=======
+      <workItem from="1608404649487" duration="13873000" />
+>>>>>>> parent of 70f84ad... update
+=======
+      <workItem from="1608404649487" duration="4829000" />
+>>>>>>> parent of fcf5cf4... Rune And Partner Update
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="oldMeFiltersMigrated" value="true" />
-  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
     <state x="-1371" y="344" key="AddNewResourceElement" timestamp="1608492141562">
       <screen x="-1920" y="0" width="1536" height="840" />
     </state>
@@ -234,5 +333,23 @@
     </state>
     <state x="-1422" y="182" width="672" height="543" key="search.everywhere.popup/-1920.0.1536.840/0.0.1920.1050@-1920.0.1536.840" timestamp="1608493880217" />
     <state x="623" y="227" width="672" height="678" key="search.everywhere.popup/-1920.0.1536.840/0.0.1920.1050@0.0.1920.1050" timestamp="1608491068635" />
+=======
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1608416175130">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup/-1920.0.1536.840/0.0.1920.1050@0.0.1920.1050" timestamp="1608416175130" />
+>>>>>>> parent of b02d746... Cleaning and continue Mates Rework
+=======
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1608417794003">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup/-1920.0.1536.840/0.0.1920.1050@0.0.1920.1050" timestamp="1608417794003" />
+>>>>>>> parent of 70f84ad... update
+=======
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1608409004318">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup/-1920.0.1536.840/0.0.1920.1050@0.0.1920.1050" timestamp="1608409004318" />
+>>>>>>> parent of fcf5cf4... Rune And Partner Update
   </component>
 </project>

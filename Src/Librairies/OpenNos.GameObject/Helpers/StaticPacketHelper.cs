@@ -59,14 +59,9 @@ namespace OpenNos.GameObject.Helpers
 
         public static string SkillResetWithCoolDown(int castId, int cooldown) => $"sr -10 {castId} {cooldown}";
 
-        public static string SkillUsed(UserType type, long callerId, byte secondaryType, long targetId, short skillVNum,
-                                       short cooldown, short attackAnimation, short skillEffect, short x, short y, bool isAlive, int health,
-                                       int damage, int hitmode, byte skillType) => $"su {(byte) type} {callerId} {secondaryType} {targetId} {skillVNum} {cooldown} {attackAnimation} {skillEffect} {x} {y} {(isAlive ? 1 : 0)} {health} {damage} {hitmode} {skillType}";
+        public static string SkillUsed(UserType type, long callerId, byte secondaryType, long targetId, short skillVNum, short cooldown, short attackAnimation, short skillEffect, short x, short y, bool isAlive, int health, int damage, int hitmode, byte skillType) => $"su {(byte)type} {callerId} {secondaryType} {targetId} {skillVNum} {cooldown} {attackAnimation} {skillEffect} {x} {y} {(isAlive ? 1 : 0)} {health} {damage} {hitmode} {skillType}";
 
-        public static string SkillUsed(UserType attackerType, long attackerId, UserType defenderType, long defenderId,
-                                       short skillVNum, short cooldown, short attackAnimation, short skillEffect, short x, short y, bool isAlive,
-                                       int hpPercent, int damage, int hitMode, byte skillType) => SkillUsed(attackerType, attackerId, (byte) defenderType, defenderId, skillVNum, cooldown,
-                attackAnimation, skillEffect, x, y, isAlive, hpPercent, damage, hitMode, skillType);
+        public static string SkillUsed(UserType attackerType, long attackerId, UserType defenderType, long defenderId, short skillVNum, short cooldown, short attackAnimation, short skillEffect, short x, short y, bool isAlive, int hpPercent, int damage, int hitMode, byte skillType) => SkillUsed(attackerType, attackerId, (byte)defenderType, defenderId, skillVNum, cooldown, attackAnimation, skillEffect, x, y, isAlive, hpPercent, damage, hitMode, skillType);
 
         #endregion
     }

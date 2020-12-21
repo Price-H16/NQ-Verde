@@ -10,45 +10,54 @@ using System.Threading.Tasks;
 
 namespace OpenNos.Mapper.Mappers
 {
-    public static class RuneEffectsMapper
+    public class RuneEffectMapper : ModuleMapper<RuneEffectDTO, RuneEffect>, IModuleMapper<RuneEffectDTO, RuneEffect>
     {
-        #region Methods
+        public static bool ToEntityStatic(RuneEffectDTO input, RuneEffect output)
+        {
+            return new RuneEffectMapper().ToEntity(input, output);
+        }
 
-        public static bool ToRuneEffect(RuneEffectsDTO input, RuneEffects output)
+        public static bool ToDTOStatic(RuneEffect input, RuneEffectDTO output)
+        {
+            return new RuneEffectMapper().ToDTO(input, output);
+        }
+
+        public override bool ToEntity(RuneEffectDTO input, RuneEffect output)
         {
             if (input == null)
             {
                 return false;
             }
+
             output.RuneEffectId = input.RuneEffectId;
             output.EquipmentSerialId = input.EquipmentSerialId;
             output.Type = input.Type;
             output.SubType = input.SubType;
             output.FirstData = input.FirstData;
             output.SecondData = input.SecondData;
-            output.ThirdDada = input.ThirdDada;
+            output.ThirdData = input.ThirdData;
+            output.IsPower = input.IsPower;
 
             return true;
         }
 
-        public static bool ToRuneEffectDTO(RuneEffects input, RuneEffectsDTO output)
+        public override bool ToDTO(RuneEffect input, RuneEffectDTO output)
         {
             if (input == null)
             {
                 return false;
             }
+
             output.RuneEffectId = input.RuneEffectId;
             output.EquipmentSerialId = input.EquipmentSerialId;
-
             output.Type = input.Type;
             output.SubType = input.SubType;
             output.FirstData = input.FirstData;
             output.SecondData = input.SecondData;
-            output.ThirdDada = input.ThirdDada;
+            output.ThirdData = input.ThirdData;
+            output.IsPower = input.IsPower;
 
             return true;
         }
-
-        #endregion
     }
 }

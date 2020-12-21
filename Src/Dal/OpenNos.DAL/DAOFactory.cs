@@ -55,7 +55,7 @@ namespace OpenNos.DAL
         private static IRespawnDAO _respawnDAO;
         private static IRespawnMapTypeDAO _respawnMapTypeDAO;
         private static IRollGeneratedItemDAO _rollGeneratedItemDAO;
-        private static IRuneEffectsDAO _runeEffectDAO;
+        private static IRuneEffectDAO _runeEffectDAO;
         private static IScriptedInstanceDAO _scriptedInstanceDAO;
         private static IShellEffectDAO _shellEffectDAO;
         private static IShopDAO _shopDAO;
@@ -185,8 +185,8 @@ namespace OpenNos.DAL
         public static IRollGeneratedItemDAO RollGeneratedItemDAO =>
             _rollGeneratedItemDAO ?? (_rollGeneratedItemDAO = new RollGeneratedItemDAO());
 
-        public static IRuneEffectsDAO RuneEffectsDAO => _runeEffectDAO ?? (_runeEffectDAO = new RuneEffectsDAO());
-
+        public static IRuneEffectDAO RuneEffectDAO =>
+            _runeEffectDAO ?? (_runeEffectDAO = new RuneEffectDAO());
 
         public static IScriptedInstanceDAO ScriptedInstanceDAO =>
             _scriptedInstanceDAO ?? (_scriptedInstanceDAO = new ScriptedInstanceDAO());

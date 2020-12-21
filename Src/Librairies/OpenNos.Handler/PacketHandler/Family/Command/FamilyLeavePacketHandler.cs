@@ -55,12 +55,10 @@ namespace OpenNos.Handler.PacketHandler.Family.Command
 
             ServerManager.Instance.FamilyRefresh(familyId);
 
-            Observable.Timer(TimeSpan.FromSeconds(5)).Subscribe(o => ServerManager.Instance.FamilyRefresh(familyId));
-            Observable.Timer(TimeSpan.FromSeconds(10)).Subscribe(o => ServerManager.Instance.FamilyRefresh(familyId));
-
-            // Show in real-time
-            Session.CurrentMapInstance.Broadcast(Session.Character.GenerateIn());
-            Session.CurrentMapInstance.Broadcast(Session.Character.GenerateGidx());
+            Observable.Timer(TimeSpan.FromSeconds(5)).Subscribe(o =>
+                ServerManager.Instance.FamilyRefresh(familyId));
+            Observable.Timer(TimeSpan.FromSeconds(10)).Subscribe(o =>
+                ServerManager.Instance.FamilyRefresh(familyId));
         }
 
         #endregion

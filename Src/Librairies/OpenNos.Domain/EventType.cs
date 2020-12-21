@@ -26,6 +26,7 @@
         FAFNIRBOSS,
         YERTIRANDBOSS,
         GRASSLINBOSS,
-        TOURNAMENT
+        TOURNAMENT,
+        METEORITEGAME
     }
 }
