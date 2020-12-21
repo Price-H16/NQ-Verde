@@ -147,6 +147,10 @@
     <Compile Include="Migrations\202004031430029_changes03042020.designer.cs">
       <DependentUpon>202004031430029_changes03042020.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004172342297_RuneEffects.cs" />
+    <Compile Include="Migrations\202004172342297_RuneEffects.designer.cs">
+      <DependentUpon>202004172342297_RuneEffects.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\202005081717558_levelcap.cs" />
     <Compile Include="Migrations\202005081717558_levelcap.designer.cs">
       <DependentUpon>202005081717558_levelcap.cs</DependentUpon>
@@ -234,10 +238,6 @@
     <Compile Include="Migrations\202012190114206_Chat.cs" />
     <Compile Include="Migrations\202012190114206_Chat.designer.cs">
       <DependentUpon>202012190114206_Chat.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202012192201270_Runes.cs" />
-    <Compile Include="Migrations\202012192201270_Runes.designer.cs">
-      <DependentUpon>202012192201270_Runes.cs</DependentUpon>
     </Compile>
     <Compile Include="PartnerSkill.cs" />
     <Compile Include="Quest.cs" />
@@ -362,6 +362,10 @@
     <EmbeddedResource Include="Migrations\202004031430029_changes03042020.resx">
       <DependentUpon>202004031430029_changes03042020.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004172342297_RuneEffects.resx">
+      <DependentUpon>202004172342297_RuneEffects.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005081717558_levelcap.resx">
       <DependentUpon>202005081717558_levelcap.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -428,9 +432,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012190114206_Chat.resx">
       <DependentUpon>202012190114206_Chat.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202012192201270_Runes.resx">
-      <DependentUpon>202012192201270_Runes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
