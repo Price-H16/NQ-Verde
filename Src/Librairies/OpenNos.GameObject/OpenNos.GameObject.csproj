@@ -89,6 +89,7 @@
     <Compile Include="Event\ACT7\Act7Ship.cs" />
     <Compile Include="Event\ARENA\ArenaEvent.cs" />
     <Compile Include="Event\EventWave.cs" />
+    <Compile Include="Event\GAMES\MeteoriteGame.cs" />
     <Compile Include="Event\GAMES\Tournament.cs" />
     <Compile Include="Event\GAMES\SheepGame.cs" />
     <Compile Include="Event\GAMES\TowerGame.cs" />

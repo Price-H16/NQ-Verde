@@ -218,8 +218,7 @@ namespace OpenNos.World
         portloop:
             try
             {
-                networkManager = new NetworkManager<WorldCryptography>(ipAddress, _port, typeof(Act4Handler),
-                    typeof(LoginCryptography), true);
+                networkManager = new NetworkManager<WorldCryptography>(ipAddress, _port, typeof(Act4Handler), typeof(LoginCryptography), true);
             }
             catch (SocketException ex)
             {
@@ -289,6 +288,10 @@ namespace OpenNos.World
             LogHelper.Instance.InsertAllLogs();
             CommunicationServiceClient.Instance.UnregisterWorldServer(ServerManager.Instance.WorldId);
             ServerManager.Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 5));
+            foreach (ClientSession sess in ServerManager.Instance.Sessions)
+            {
+                sess.Character?.Dispose();
+            }
             ServerManager.Instance.SaveAll();
             ServerManager.Instance.DisconnectAll();
             Thread.Sleep(5000);
@@ -297,6 +300,10 @@ namespace OpenNos.World
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
+            if (e == null)
+            {
+                return;
+            }
             // test
             LogHelper.Instance.InsertAllLogs();
             ServerManager.Instance.InShutdown = true;
@@ -305,8 +312,13 @@ namespace OpenNos.World
             CommunicationServiceClient.Instance.UnregisterWorldServer(ServerManager.Instance.WorldId);
             ServerManager.Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 5));
             ServerManager.Instance.SaveAll();
+            foreach (ClientSession sess in ServerManager.Instance.Sessions)
+            {
+                sess.Character?.Dispose();
+            }
             ServerManager.Instance.DisconnectAll();
             var a = DependencyContainer.Instance.GetInstance<JsonGameConfiguration>().Server;
+
             Process.Start("OpenNos.World.exe",$"--nomsg --port {(ServerManager.Instance.ChannelId == 51 ? $"{a.Act4Port}" : $"{_port}")}");
             Environment.Exit(1);
         }

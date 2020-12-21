@@ -21,7 +21,7 @@ namespace OpenNos.GameObject.Helpers
 
         public static bool CanWearSp(short partnerVNum, short itemVNum)
         {
-            var attackType = GetAttackType(itemVNum);
+            AttackType attackType = GetAttackType(itemVNum);
 
             return Map.ContainsKey(attackType) && Map[attackType].Contains(partnerVNum);
         }
@@ -44,6 +44,8 @@ namespace OpenNos.GameObject.Helpers
                 case 4326: // Bone Warrior Ragnar
                 case 4343: // Mad Professor Macavity
                 case 4446: // One Winged Perti
+                case 4547: // Pharaoh
+                case 8398: // Perti deplumay 2
                     return AttackType.Melee;
 
                 case 4802: // Barni the Clever

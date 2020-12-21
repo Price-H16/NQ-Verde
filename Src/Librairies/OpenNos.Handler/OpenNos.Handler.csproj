@@ -318,6 +318,7 @@
     <Compile Include="PacketHandler\Miniland\MLEditPacketHandler.cs" />
     <Compile Include="PacketHandler\Miniland\RmvobjPacketHandler.cs" />
     <Compile Include="PacketHandler\Miniland\UseobjPacketHandler.cs" />
+    <Compile Include="PacketHandler\Basic\NoS0575PacketHandler.cs" />
     <Compile Include="PacketHandler\Npc\BuyPacketHandler.cs" />
     <Compile Include="PacketHandler\Npc\MShopPacketHandler.cs" />
     <Compile Include="PacketHandler\Npc\NRunPacketHandler.cs" />

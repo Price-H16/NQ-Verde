@@ -342,16 +342,18 @@ namespace OpenNos.GameObject.Helpers
         {
             PetSkills = new List<int>
             {
-                663, // Otter
-                740,
-                743,
                 1513, // Purcival
                 1514, // Baron scratch ?
                 1515, // Amiral (le chat chelou)
                 1516, // roi des pirates pussifer
                 1524, // Miaou fou
-                1575,
-                1576
+                1575, // Marié Bouhmiaou
+                1576, // Marie Bouhmiaou
+                1601, // Mechamiaou
+                1627, // Boris the polar bear
+                663, // Otter
+                740,
+                743
             };
         }
 
@@ -448,9 +450,9 @@ namespace OpenNos.GameObject.Helpers
                 //{501, 4066}, // Seina
                 //{500, 4067}, // Daisy
                 //{503, 4068}, // Whitney
-                //{439, 4062}, // Revenant skeleton
-                //{2521, 4063}, // Sentinel
-                //{2525, 4064}, // Spearman
+                {439, 4062}, // Revenant skeleton
+                {2521, 4063}, // Sentinel
+                {2525, 4064}, // Spearman
                 //{317, 4048}, // BOB CUSTOM
                 //{318, 4049}, // TOM  CUSTOM
                 //{319, 4050}, // KLIFF  CUSTOM
@@ -475,7 +477,9 @@ namespace OpenNos.GameObject.Helpers
                 {2708, 708}, // MARCO
                 {2704, 710}, // FORTUNE BUSHTAIL
                 {2709, 711}, // SUPER FORTUNE BUSHTAIL
-                {2710, 783} // MR TRIKLES
+                {2710, 783}, // MR TRIKLES
+                {709, 840}, // GOLDEN GLOOPY CAKE
+                {687, 842} // GLOOPY CAKE
             };
         }
 
@@ -486,8 +490,9 @@ namespace OpenNos.GameObject.Helpers
                 {4825, 3000}, // Vénus
                 {4326, 3007}, // Guerrier Squelettique Ragnar
                 {4405, 3014}, // Yuna
-                {4413, 3021}, // Cupidia
-                {4446, 3028} // Perti
+                {4413, 3021}, // AMORA
+                {4446, 3028}, // Perti
+                {4547, 3035}  //  AKHENATON
             };
             PartnerSpBuffs = new List<short>
             {

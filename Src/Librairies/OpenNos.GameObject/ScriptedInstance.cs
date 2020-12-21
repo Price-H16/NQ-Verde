@@ -106,12 +106,6 @@ namespace OpenNos.GameObject
 
         #region Methods
 
-        public void Dispose()
-        {
-            Thread.Sleep(10000);
-            _mapInstanceDictionary.Values.ToList().ForEach(m => m.Dispose());
-        }
-
         public void End()
         {
             if (InstanceBag.Lives - InstanceBag.DeadList.Count < 0)
@@ -139,7 +133,11 @@ namespace OpenNos.GameObject
             Dispose();
             _disposable.Dispose();
         }
-
+        public void Dispose()
+        {
+            Thread.Sleep(10000);
+            _mapInstanceDictionary.Values.ToList().ForEach(m => m.Dispose());
+        }
         public string GenerateMainInfo() => $"minfo 0 1 -1.0/0 -1.0/0 -1/0 -1.0/0 1 {InstanceBag.Lives + 1} 0";
 
         public List<string> GenerateMinimap()

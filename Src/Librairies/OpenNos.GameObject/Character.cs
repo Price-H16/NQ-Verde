@@ -7813,6 +7813,7 @@ namespace OpenNos.GameObject
                 Mp = (int) MPLoad();
                 Session.SendPacket(GenerateStat());
                 Session.SendPacket(GenerateLevelUp());
+                Session.Character.Save();
                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("HERO_LEVELUP"),0));
                 Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 8),PositionX, PositionY);
                 Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 198),PositionX, PositionY);
@@ -7852,6 +7853,7 @@ namespace OpenNos.GameObject
                 Session.SendPackets(GenerateQuicklist());
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(8), PositionX, PositionY);
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(198), PositionX, PositionY);
+                Session.Character.Save();
             }
         }
 
@@ -7917,6 +7919,7 @@ namespace OpenNos.GameObject
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(6), PositionX, PositionY);
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(198), PositionX, PositionY);
                 ServerManager.Instance.UpdateGroup(CharacterId);
+                Session.Character.Save();
 
                 //LevelRewards(Level);
             }

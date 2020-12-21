@@ -31,20 +31,23 @@ namespace OpenNos.Handler.PacketHandler.Basic
             {
                 // On Target Dest
                 case 1:
-                    Session.Character.IncrementQuests(QuestType.GoTo, Session.CurrentMapInstance.Map.MapId,
-                        Session.Character.PositionX, Session.Character.PositionY);
+                    Session.Character.IncrementQuests(QuestType.GoTo, Session.CurrentMapInstance.Map.MapId, Session.Character.PositionX, Session.Character.PositionY);
                     break;
 
                 // Give Up Quest
                 case 3:
-                    var charQuest = Session.Character.Quests?.FirstOrDefault(q => q.QuestNumber == qtPacket.Data);
-                    if (charQuest == null || charQuest.IsMainQuest) return;
+                    CharacterQuest charQuest = Session.Character.Quests?.FirstOrDefault(q => q.QuestNumber == qtPacket.Data);
+                    if (charQuest == null || charQuest.IsMainQuest)
+                    {
+                        return;
+                    }
                     Session.Character.RemoveQuest(charQuest.QuestId, true);
                     break;
 
                 // Ask for rewards
                 case 4:
                     break;
+
             }
         }
 

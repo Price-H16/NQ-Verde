@@ -361,13 +361,12 @@ namespace OpenNos.GameObject
 
         private void GenerateHandlerReferences(Type type, bool isWorldServer)
         {
-            var handlerTypes = !isWorldServer
-                ? type.Assembly.GetTypes().Where(t => t.Name.Equals("LoginPacketHandler")) // shitty but it works
-                : type.Assembly.GetTypes().Where(p =>
-                {
-                    var interfaceType = type.GetInterfaces().FirstOrDefault();
-                    return interfaceType != null && !p.IsInterface && interfaceType.IsAssignableFrom(p);
-                });
+            IEnumerable<Type> handlerTypes = !isWorldServer ? type.Assembly.GetTypes().Where(t => t.Name.Equals("NoS0575PacketHandler")) // shitty but it works == hardocde
+                                                            : type.Assembly.GetTypes().Where(p =>
+                                                            {
+                                                                Type interfaceType = type.GetInterfaces().FirstOrDefault();
+                                                                return interfaceType != null && !p.IsInterface && interfaceType.IsAssignableFrom(p);
+                                                            });
 
             // iterate thru each type in the given assembly
             foreach (var handlerType in handlerTypes)

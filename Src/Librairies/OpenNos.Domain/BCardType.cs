@@ -94,15 +94,15 @@
             StealBuff = 84,
             Unknown = 85,
             EffectSummon = 86,
-
-            // ??? = 87~88
+            SpecialWeaponEffects = 87,
+            HeroExpBuff = 87,
             Dracula = 87,
-
+            Hero = 88,
             MartialArts = 89,
 
             // ??? = 90~95,
             SealedLodDamage = 90,
-
+            Unknown1 = 93,
             LotusSkills = 91,
             ApplyBuffs = 95,
             PixieCostumeWings = 96,
@@ -178,6 +178,20 @@
             MagicalAttacksDecreased = 42
         }
 
+        public enum SESpecialist : byte
+        {
+            EnterNumberOfBuffsAndDamage = 12,
+            EnterNumberOfBuffs = 22,
+            MovingAura = 31,
+            DontNeedToEnter = 32, // Same as 42
+            LowerHPStrongerEffect = 41,
+            DoNotNeedToEnter = 42 // Same as 32
+        }
+
+        public enum HeroExpBuff : byte
+        {
+            HeroEXP = 21,
+        }
         public enum AbsorptionAndPowerSkill : byte
         {
             AddDamageToHP = 11,
@@ -967,16 +981,6 @@
             ReduceEnemySkillNegated = 32,
             HitAttacker = 41,
             HitAttackerNegated = 42
-        }
-
-        public enum SESpecialist : byte
-        {
-            EnterNumberOfBuffsAndDamage = 12,
-            EnterNumberOfBuffs = 22,
-            MovingAura = 31,
-            DontNeedToEnter = 32, // Same as 42
-            LowerHPStrongerEffect = 41,
-            DoNotNeedToEnter = 42 // Same as 32
         }
 
         public enum SniperAttack : byte

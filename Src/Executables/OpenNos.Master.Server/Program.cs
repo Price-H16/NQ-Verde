@@ -131,6 +131,7 @@ namespace OpenNos.Master.Server
 
                     _server.Start();
                     Logger.Info(Language.Instance.GetMessageFromKey("STARTED"));
+                    Console.WriteLine($"[Info] Started at: {DateTime.Now}");
 
                 }
                 catch (Exception ex)
@@ -146,12 +147,20 @@ namespace OpenNos.Master.Server
         }
         private static void OnClientConnected(object sender, ServiceClientEventArgs e)
         {
-            Logger.Info(Language.Instance.GetMessageFromKey("NEW_CONNECT") + e.Client.ClientId);
+            if (e.Client.ClientId == 1)
+            {
+                Console.WriteLine("[Connect] World Server has been connected");
+            }
+
+            if (e.Client.ClientId == 2)
+            {
+                Console.WriteLine("[Connect] Login Server has been connected");
+            }
         }
 
         private static void OnClientDisconnected(object sender, ServiceClientEventArgs e)
         {
-            Logger.Info(Language.Instance.GetMessageFromKey("DISCONNECT") + e.Client.ClientId);
+
         }
 
         #endregion

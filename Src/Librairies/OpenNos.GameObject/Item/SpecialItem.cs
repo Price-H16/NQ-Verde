@@ -82,14 +82,12 @@ namespace OpenNos.GameObject
 
                 return;
             }
-            
-           
-            
+
+
+
             if (VNum == 5511)
             {
-                session.Character.GeneralLogs.Where(s =>
-                    s.LogType == "InstanceEntry" && (short.Parse(s.LogData) == 16 || short.Parse(s.LogData) == 17) &&
-                    s.Timestamp.Date == DateTime.Today).ToList().ForEach(s =>
+                session.Character.GeneralLogs.Where(s => s.LogType == "InstanceEntry" && (short.Parse(s.LogData) == 16 || short.Parse(s.LogData) == 17) && s.Timestamp.Date == DateTime.Today).ToList().ForEach(s =>
                 {
                     s.LogType = "NulledInstanceEntry";
                     DAOFactory.GeneralLogDAO.InsertOrUpdate(ref s);
@@ -99,62 +97,22 @@ namespace OpenNos.GameObject
             }
 
             if (session.CurrentMapInstance?.MapInstanceType != MapInstanceType.TalentArenaMapInstance
-                && (VNum == 5936 || VNum == 5937 || VNum == 5938 || VNum == 5939 || VNum == 5940 || VNum == 5942 ||
-                    VNum == 5943 || VNum == 5944 || VNum == 5945 || VNum == 5946))
-            {
-                return;
-            }
-
-            if (session.CurrentMapInstance?.MapInstanceType == MapInstanceType.TalentArenaMapInstance
-             && VNum != 5936 && VNum != 5937 && VNum != 5938 && VNum != 5939 && VNum != 5940 && VNum != 5942 &&
-                VNum != 5943 && VNum != 5944 && VNum != 5945 && VNum != 5946)
+            && (VNum == 5936 || VNum == 5937 || VNum == 5938 || VNum == 5939 || VNum == 5940 || VNum == 5942 || VNum == 5943 || VNum == 5944 || VNum == 5945 || VNum == 5946))
             {
                 return;
             }
 
             if (BCards.Count > 0 && Effect != 1000)
             {
-                if (BCards.Any(s => s.Type == (byte) BCardType.CardType.Buff && s.SubType == 11 &&
-                                    new Buff((short) s.SecondData, session.Character.Level).Card.BCards.Any(newbuff =>
-                                        session.Character.Buff.GetAllItems().Any(b => b.Card.BCards.Any(buff =>
-                                            buff.CardId != newbuff.CardId
-                                            && (buff.Type == 33 && buff.SubType == 51 &&
-                                                (newbuff.Type == 33 || newbuff.Type == 58) || newbuff.Type == 33 &&
-                                                                                           newbuff.SubType == 51 &&
-                                                                                           (buff.Type == 33 ||
-                                                                                            buff.Type == 58)
-                                                                                           || buff.Type == 33 &&
-                                                                                           (buff.SubType == 11 ||
-                                                                                            buff.SubType == 31) &&
-                                                                                           newbuff.Type == 58 &&
-                                                                                           newbuff.SubType == 11 ||
-                                                                                           buff.Type == 33 &&
-                                                                                           (buff.SubType == 21 ||
-                                                                                            buff.SubType == 41) &&
-                                                                                           newbuff.Type == 58 &&
-                                                                                           newbuff.SubType == 31
-                                                                                           || newbuff.Type == 33 &&
-                                                                                           (newbuff.SubType == 11 ||
-                                                                                            newbuff.SubType == 31) &&
-                                                                                           buff.Type == 58 &&
-                                                                                           buff.SubType == 11 ||
-                                                                                           newbuff.Type == 33 &&
-                                                                                           (newbuff.SubType == 21 ||
-                                                                                            newbuff.SubType == 41) &&
-                                                                                           buff.Type == 58 &&
-                                                                                           buff.SubType == 31
-                                                                                           || buff.Type == 33 &&
-                                                                                           newbuff.Type == 33 &&
-                                                                                           buff.SubType ==
-                                                                                           newbuff.SubType ||
-                                                                                           buff.Type == 58 &&
-                                                                                           newbuff.Type == 58 &&
-                                                                                           buff.SubType ==
-                                                                                           newbuff.SubType))))))
+                if (BCards.Any(s => s.Type == (byte)BCardType.CardType.Buff && s.SubType == 1 && new Buff((short)s.SecondData, session.Character.Level).Card.BCards.Any(newbuff => session.Character.Buff.GetAllItems().Any(b => b.Card.BCards.Any(buff =>
+                    buff.CardId != newbuff.CardId
+                 && ((buff.Type == 33 && buff.SubType == 5 && (newbuff.Type == 33 || newbuff.Type == 58)) || (newbuff.Type == 33 && newbuff.SubType == 5 && (buff.Type == 33 || buff.Type == 58))
+                 || (buff.Type == 33 && (buff.SubType == 1 || buff.SubType == 3) && (newbuff.Type == 58 && (newbuff.SubType == 1))) || (buff.Type == 33 && (buff.SubType == 2 || buff.SubType == 4) && (newbuff.Type == 58 && (newbuff.SubType == 3)))
+                 || (newbuff.Type == 33 && (newbuff.SubType == 1 || newbuff.SubType == 3) && (buff.Type == 58 && (buff.SubType == 1))) || (newbuff.Type == 33 && (newbuff.SubType == 2 || newbuff.SubType == 4) && (buff.Type == 58 && (buff.SubType == 3)))
+                 || (buff.Type == 33 && newbuff.Type == 33 && buff.SubType == newbuff.SubType) || (buff.Type == 58 && newbuff.Type == 58 && buff.SubType == newbuff.SubType)))))))
                 {
                     return;
                 }
-
                 BCards.ForEach(c => c.ApplyBCards(session.Character.BattleEntity, session.Character.BattleEntity));
                 session.Character.Inventory.RemoveItemFromInventory(inv.Id);
                 return;
@@ -170,17 +128,17 @@ namespace OpenNos.GameObject
                         case 1: // King 
                             break;
 
-                        //case 2: // sheep
-                        //    session.SendPacket(UserInterfaceHelper.GenerateSay("Sheep game will start in a few seconds", 10));
-                        //    EventHelper.GenerateEvent(EventType.SHEEPGAME);
-                        //    session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                        //    break;
+                        case 2: // sheep
+                            session.SendPacket(UserInterfaceHelper.GenerateSay("Sheep game will start in a few seconds", 10));
+                            EventHelper.GenerateEvent(EventType.SHEEPGAME);
+                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                            break;
 
-                        //case 3: // meteor
-                        //    session.SendPacket(UserInterfaceHelper.GenerateSay("Meteorite game will start in a few seconds", 10));
-                        //    EventHelper.GenerateEvent(EventType.METEORITEGAME);
-                        //    session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                        //    break;
+                        case 3: // meteor
+                            session.SendPacket(UserInterfaceHelper.GenerateSay("Meteorite game will start in a few seconds", 10));
+                            EventHelper.GenerateEvent(EventType.METEORITEGAME);
+                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                            break;
                     }
                     Observable.Timer(TimeSpan.FromSeconds(3)).Subscribe(observer =>
                     {
@@ -1448,6 +1406,25 @@ namespace OpenNos.GameObject
                         break;
                     }
 
+                //Medal of Erenia
+                case 9999:
+                    if (!session.Character.StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.MedalOfErenia))
+                    {
+                        session.Character.StaticBonusList.Add(new StaticBonusDTO
+                        {
+                            CharacterId = session.Character.CharacterId,
+                            DateEnd = DateTime.Now.AddDays(EffectValue),
+                            StaticBonusType = StaticBonusType.MedalOfErenia
+                        });
+                        session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+                        session.SendPacket(session.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("EFFECT_ACTIVATED"), Name), 12));
+                    }
+                    else
+                    {
+                        session.SendPacket(session.Character.GenerateSay("This Item is already in use!", 11));
+                    }
+                    break;
+
                 // Golden Bazaar Medal
                 case 1003:
                     if (!session.Character.StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.BazaarMedalGold || s.StaticBonusType == StaticBonusType.BazaarMedalSilver))
@@ -1646,8 +1623,7 @@ namespace OpenNos.GameObject
                         if (Option == 0)
                         {
                             session.Character.LastDelay = DateTime.Now;
-                            session.SendPacket(UserInterfaceHelper.GenerateDelay(3000, 3,
-                                $"#u_i^1^{session.Character.CharacterId}^{(byte) inv.Type}^{inv.Slot}^1"));
+                            session.SendPacket(UserInterfaceHelper.GenerateDelay(3000, 3, $"#u_i^1^{session.Character.CharacterId}^{(byte)inv.Type}^{inv.Slot}^1"));
                         }
                         else
                         {
@@ -1679,17 +1655,34 @@ namespace OpenNos.GameObject
                                     break;
 
                                 case 2: // Ice Costume
+                                    possibleTransforms = new int[]
+                                    {
+                                    543,
+                                    544,
+                                    545,
+                                    552,
+                                    666,
+                                    668,
+                                    727,
+                                    753,
+                                    754,
+                                    755,
+                                    };
                                     break;
 
                                 case 3: // Bushtail Costume
+                                case 4:
+                                    possibleTransforms = new int[]
+                                    {
+                                        156,
+                                    };
                                     break;
                             }
 
                             if (possibleTransforms != null)
                             {
                                 session.Character.IsMorphed = true;
-                                session.Character.Morph =
-                                    1000 + possibleTransforms[ServerManager.RandomNumber(0, possibleTransforms.Length)];
+                                session.Character.Morph = 1000 + possibleTransforms[ServerManager.RandomNumber(0, possibleTransforms.Length)];
                                 session.CurrentMapInstance?.Broadcast(session.Character.GenerateCMode());
                                 if (VNum != 1914)
                                 {
@@ -1698,7 +1691,6 @@ namespace OpenNos.GameObject
                             }
                         }
                     }
-
                     break;
 
                 //Max Perfections
@@ -2074,94 +2066,95 @@ namespace OpenNos.GameObject
 
                                 case 5931: // Partner Skill Ticket (Single)
                                 case 9109: //Partner Skill Ticket (Limited)
-                                {
-                                    if (session?.Character?.Mates == null)
                                     {
-                                        return;
+                                        if (session?.Character?.Mates == null)
+                                        {
+                                            return;
+                                        }
+
+                                        if (packetsplit.Length != 10 || !byte.TryParse(packetsplit[8], out byte petId) || !byte.TryParse(packetsplit[9], out byte castId))
+                                        {
+                                            return;
+                                        }
+
+                                        if (castId < 0 || castId > 2)
+                                        {
+                                            return;
+                                        }
+
+                                        Mate partner = session.Character.Mates.ToList().FirstOrDefault(s => s.IsTeamMember && s.MateType == MateType.Partner && s.PetId == petId);
+
+                                        if (partner?.Sp == null || partner.IsUsingSp)
+                                        {
+                                            return;
+                                        }
+
+                                        PartnerSkill skill = partner.Sp.GetSkill(castId);
+
+                                        if (skill?.Skill == null)
+                                        {
+                                            return;
+                                        }
+
+                                        if (skill.Level == (byte)PartnerSkillLevelType.S)
+                                        {
+                                            return;
+                                        }
+
+                                        if (partner.Sp.RemoveSkill(castId))
+                                        {
+                                            session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+
+                                            partner.Sp.ReloadSkills();
+                                            partner.Sp.FullXp();
+
+                                            session.SendPacket(UserInterfaceHelper.GenerateModal(Language.Instance.GetMessageFromKey("PSP_SKILL_RESETTED"), 1));
+                                        }
+
+                                        session.SendPacket(partner.GenerateScPacket());
                                     }
-
-                                    if (packetsplit.Length != 10 || !byte.TryParse(packetsplit[8], out var petId) ||
-                                        !byte.TryParse(packetsplit[9], out var castId))
-                                    {
-                                        return;
-                                    }
-
-                                    if (castId < 0 || castId > 2)
-                                    {
-                                        return;
-                                    }
-
-                                    var partner = session.Character.Mates.ToList().FirstOrDefault(s =>
-                                                                  s.IsTeamMember && s.MateType == MateType.Partner && s.PetId == petId);
-
-                                    if (partner?.Sp == null || partner.IsUsingSp)
-                                    {
-                                        return;
-                                    }
-
-                                    var skill = partner.Sp.GetSkill(castId);
-
-                                    if (skill == null)
-                                    {
-                                        return;
-                                    }
-
-                                    if (skill.Level == (byte) PartnerSkillLevelType.S)
-                                    {
-                                        return;
-                                    }
-
-                                    if (partner.Sp.RemoveSkill(castId))
-                                    {
-                                        session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-
-                                        partner.Sp.ReloadSkills();
-                                        partner.Sp.FullXp();
-
-                                        session.SendPacket(UserInterfaceHelper.GenerateModal(
-                                            Language.Instance.GetMessageFromKey("PSP_SKILL_RESETTED"), 1));
-                                    }
-
-                                    session.SendPacket(partner.GenerateScPacket());
-                                }
                                     break;
 
                                 case 5932: // Partner Skill Ticket (All)
                                 case 9110: // Partner Skill Ticket (Limited)
-                                {
-                                    if (packetsplit.Length != 10 || session?.Character?.Mates == null)                                      
                                     {
-                                        return;
+                                        if (packetsplit.Length != 10
+                                            || session?.Character?.Mates == null)
+                                        {
+                                            return;
+                                        }
+
+                                        if (!byte.TryParse(packetsplit[8], out byte petId) || !byte.TryParse(packetsplit[9], out byte castId))
+                                        {
+                                            return;
+                                        }
+
+                                        if (castId < 0 || castId > 2)
+                                        {
+                                            return;
+                                        }
+
+                                        Mate partner = session.Character.Mates.ToList().FirstOrDefault(s => s.IsTeamMember && s.MateType == MateType.Partner && s.PetId == petId);
+
+                                        if (partner?.Sp == null || partner.IsUsingSp)
+                                        {
+                                            return;
+                                        }
+
+                                        if (partner.Sp.GetSkillsCount() < 1)
+                                        {
+                                            return;
+                                        }
+
+                                        session.Character.Inventory.RemoveItemFromInventory(inv.Id);
+
+                                        partner.Sp.ClearSkills();
+                                        partner.Sp.FullXp();
+
+                                        session.SendPacket(UserInterfaceHelper.GenerateModal(Language.Instance.GetMessageFromKey("PSP_ALL_SKILLS_RESETTED"), 1));
+
+                                        session.SendPacket(partner.GenerateScPacket());
                                     }
-
-                                    if (!byte.TryParse(packetsplit[8], out var petId) ||!byte.TryParse(packetsplit[9], out var castId))                                      
-                                    {
-                                        return;
-                                    }
-
-                                    if (castId < 0 || castId > 2)
-                                    {
-                                        return;
-                                    }
-
-                                    var partner = session.Character.Mates.ToList().FirstOrDefault(s => s.IsTeamMember && s.MateType == MateType.Partner && s.PetId == petId);                                                                 
-
-                                    if (partner?.Sp == null || partner.IsUsingSp)
-                                    {
-                                        return;
-                                    }
-
-                                    if (partner.Sp.GetSkillsCount() < 1)
-                                    {
-                                        return;
-                                    }
-
-                                    session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                                    partner.Sp.ClearSkills();
-                                    partner.Sp.FullXp();
-                                    session.SendPacket(UserInterfaceHelper.GenerateModal(  Language.Instance.GetMessageFromKey("PSP_ALL_SKILLS_RESETTED"), 1));                                     
-                                    session.SendPacket(partner.GenerateScPacket());
-                                }
                                     break;
 
                                 #region Flower Quest
