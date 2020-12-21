@@ -55,28 +55,17 @@ namespace OpenNos.GameObject
 
         #region Methods
 
-        public void ApplyBCards(BattleEntity session, BattleEntity sender, short x = 0, short y = 0,
-            short partnerBuffLevel = 0)
+        public void ApplyBCards(BattleEntity session, BattleEntity sender, short x = 0, short y = 0, int partnerBuffLevel = 0)
         {
-            //session.Event.EmitEvent(new BCardEvent
-            //{
-            //    Target = session,
-            //    Sender = sender,
-            //    Card = this
-            //});
-            //return;
-            /*if (Type != (byte)BCardType.CardType.Buff && (CardId != null || SkillVNum != null))
-            {
-                Console.WriteLine($"BCardId: {BCardId} Type: {(BCardType.CardType)Type} SubType: {SubType} CardId: {CardId?.ToString() ?? "null"} ItemVNum: {ItemVNum?.ToString() ?? "null"} SkillVNum: {SkillVNum?.ToString() ?? "null"} SessionType: {session?.EntityType.ToString() ?? "null"} SenderType: {sender?.EntityType.ToString() ?? "null"}");
-            }*/
+            Type type = session.GetType();
 
-            var firstData = FirstData;
+            int firstData = FirstData;
             int senderLevel = sender.MapMonster?.Owner?.Level ?? sender.Level;
 
             Card card = null;
             Skill skill = null;
-            var delayTime = 0;
-            var duration = 0;
+            int delayTime = 0;
+            int duration = 0;
 
             if (CardId is short cardId2 && ServerManager.Instance.GetCardByCardId(cardId2) is Card BuffCard)
             {
@@ -95,15 +84,11 @@ namespace OpenNos.GameObject
                 skill = Skill;
                 if (sender.Character != null)
                 {
-                    var skills = sender.Character.GetSkills();
+                    List<CharacterSkill> skills = sender.Character.GetSkills();
 
                     if (skills != null)
                     {
-                        firstData = skills.Find(s => s.SkillVNum == skill.SkillVNum)?.GetSkillBCards()
-                                        .OrderByDescending(s => s.SkillVNum)
-                                        .FirstOrDefault(b => b.Type == Type && b.SubType == SubType).FirstData ??
-                                    FirstData;
-
+                        firstData = skills.Find(s => s.SkillVNum == skill.SkillVNum)?.GetSkillBCards().OrderByDescending(s => s.SkillVNum).FirstOrDefault(b => b.Type == Type && b.SubType == SubType).FirstData ?? FirstData;
                         //firstData = skills.Where(s => s.SkillVNum == skill.SkillVNum).Sum(s => s.GetSkillBCards().Where(b => b.Type == Type && b.SubType == SubType).Sum(b => b.FirstData));
                         if (firstData == 0)
                         {
@@ -118,17 +103,12 @@ namespace OpenNos.GameObject
                 delayTime = ForceDelay * 100;
             }
 
-            if (BCardId > 0)
+            if (BCardId > 0) session.BCardDisposables[skill?.SkillVNum == 1098 ? skill.SkillVNum * 1000 : BCardId]?.Dispose();
+            session.BCardDisposables[skill?.SkillVNum == 1098 ? skill.SkillVNum * 1000 : BCardId] = Observable.Timer(TimeSpan.FromMilliseconds(delayTime)).Subscribe(o =>
             {
-                session.BCardDisposables[skill?.SkillVNum == 1098 ? skill.SkillVNum * 1000 : BCardId]?.Dispose();
-            }
-
-            session.BCardDisposables[skill?.SkillVNum == 1098 ? skill.SkillVNum * 1000 : BCardId] = Observable
-                .Timer(TimeSpan.FromMilliseconds(delayTime)).Subscribe(o =>
+                switch ((BCardType.CardType)Type)
                 {
-                    switch ((BCardType.CardType) Type)
-                    {
-                        case BCardType.CardType.Buff:
+                    case BCardType.CardType.Buff: //this is not implementation of those potions
                         {
                             var cardId = (short) (SecondData + partnerBuffLevel);
 
@@ -139,41 +119,36 @@ namespace OpenNos.GameObject
                                 return;
                             }
 
-                            var buff = new Buff(cardId, senderLevel)
-                            {
-                                SkillVNum = SkillVNum
-                            };
+                                Buff buff = new Buff(cardId, senderLevel)
+                                {
+                                    SkillVNum = SkillVNum
+                                };
+                            Logger.Info($"{buff.Card?.CardId ?? 0} {cardId}");
 
-                            var Chance = firstData == 0 ? ThirdData : firstData;
-                            var CardsToProtect = new List<short>();
-                            if (buff.Card.BuffType == BuffType.Bad &&
-                                session.GetBuff(BCardType.CardType.DebuffResistance,
-                                        (byte) AdditionalTypes.DebuffResistance.NeverBadEffectChance) is int[]
-                                    NeverBadEffectChance)
+
+                            int Chance = firstData == 0 ? ThirdData : firstData;
+                            List<short> CardsToProtect = new List<short>();
+                            if (buff.Card.BuffType == BuffType.Bad && session.GetBuff(BCardType.CardType.DebuffResistance, (byte)AdditionalTypes.DebuffResistance.NeverBadEffectChance) is int[] NeverBadEffectChance)
                             {
                                 // I divide in NeverBadEffectChance[3] since we have to avoid the Level debuffs being added
-                                if (ServerManager.RandomNumber() < NeverBadEffectChance[1]
-                                    && buff.Card.Level <= (NeverBadEffectChance[0]))
+
+                                if (ServerManager.RandomNumber() < NeverBadEffectChance[3]
+                                    && buff.Card.Level <= -NeverBadEffectChance[0])
                                 {
                                     return;
                                 }
                             }
-
-                            if (session.GetBuff(BCardType.CardType.DebuffResistance,
-                                    (byte) AdditionalTypes.DebuffResistance.NeverBadGeneralEffectChance) is int[]
-                                NeverBadGeneralEffectChance)
+                            if (session.GetBuff(BCardType.CardType.DebuffResistance, (byte)AdditionalTypes.DebuffResistance.NeverBadGeneralEffectChance) is int[] NeverBadGeneralEffectChance)
                             {
                                 if (ServerManager.RandomNumber() < NeverBadGeneralEffectChance[1]
-                                    && buff.Card.Level <= NeverBadGeneralEffectChance[0]
+                                    && buff.Card.Level <= -NeverBadGeneralEffectChance[0]
                                     && buff.Card.BuffType == BuffType.Bad)
                                 {
                                     return;
                                 }
                             }
 
-                            if (session.GetBuff(BCardType.CardType.Buff,
-                                    (byte) AdditionalTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect &&
-                                (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
+                            if (session.GetBuff(BCardType.CardType.Buff, (byte) AdditionalTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect && (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
                             {
                                 var Prob = 100 - PreventingBadEffect[1] * 10;
                                 var ProtectType = PreventingBadEffect[0];

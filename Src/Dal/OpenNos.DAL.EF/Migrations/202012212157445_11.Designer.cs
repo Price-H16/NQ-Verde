@@ -6,14 +6,14 @@ namespace OpenNos.DAL.EF.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.4.0")]
-    public sealed partial class DiscordBot : IMigrationMetadata
+    [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
+    public sealed partial class _11 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(DiscordBot));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(_11));
         
         string IMigrationMetadata.Id
         {
-            get { return "202010191043301_DiscordBot"; }
+            get { return "202012212157445_11"; }
         }
         
         string IMigrationMetadata.Source

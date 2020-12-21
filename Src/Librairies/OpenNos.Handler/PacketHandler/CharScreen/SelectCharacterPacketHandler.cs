@@ -267,8 +267,8 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 Session.SendPacket("OK");
 
 
-                CommunicationServiceClient.Instance.ConnectCharacter(ServerManager.Instance.WorldId,
-                    character.CharacterId);
+                CommunicationServiceClient.Instance.ConnectCharacter(ServerManager.Instance.WorldId, character.CharacterId);
+
 
                 character.Channel = ServerManager.Instance;
 

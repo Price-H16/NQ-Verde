@@ -131,10 +131,8 @@ namespace OpenNos.Master.Library.Client
             return _client.ServiceProxy.ConnectAccountCrossServer(worldId, accountId, sessionId);
         }
 
-        public bool ConnectCharacter(Guid worldId, long characterId)
-        {
-            return _client.ServiceProxy.ConnectCharacter(worldId, characterId);
-        }
+        public bool ConnectCharacter(Guid worldId, long characterId) => _client.ServiceProxy.ConnectCharacter(worldId, characterId);
+
 
         public void DisconnectAccount(long accountId)
         {

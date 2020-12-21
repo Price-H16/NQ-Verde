@@ -45,7 +45,6 @@
     <Compile Include="Mappers\FamilySkillMissionMapper.cs" />
     <Compile Include="Mappers\CharacterTitleMapper.cs" />
     <Compile Include="Mappers\CharacterVisitedMapsMapper.cs" />
-    <Compile Include="Mappers\FamilyQuestsMapper.cs" />
     <Compile Include="Mappers\Logs\LogsCommandsMapper.cs" />
     <Compile Include="Mappers\Logs\ChatLogMapper.cs" />
     <Compile Include="Mappers\ItemInstanceMapper.cs" />

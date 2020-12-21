@@ -66,7 +66,6 @@ namespace OpenNos.DAL
         private static IStaticBuffDAO _staticBuffDAO;
         private static ITeleporterDAO _teleporterDAO;
         private static ILogsCommandsDAO _logsCommandsDAO;
-        private static IFamilyQuestsDAO _familyQuestsDAO;
 
         #endregion
 
@@ -207,7 +206,6 @@ namespace OpenNos.DAL
 
         public static ITeleporterDAO TeleporterDAO => _teleporterDAO ?? (_teleporterDAO = new TeleporterDAO());
 
-        public static IFamilyQuestsDAO FamilyQuestsDAO => _familyQuestsDAO ?? (_familyQuestsDAO = new FamilyQuestsDAO());
 
 
         #endregion

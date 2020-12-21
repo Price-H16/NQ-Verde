@@ -3,16 +3,29 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Chat : DbMigration
+    public partial class _11 : DbMigration
     {
         public override void Up()
         {
-            DropTable("dbo.BotAuthority");
-            DropTable("dbo.ChatLog");
+
         }
         
         public override void Down()
         {
+            CreateTable(
+                "dbo.FamilyQuests",
+                c => new
+                    {
+                        FamilyQuestsId = c.Long(nullable: false, identity: true),
+                        FamilyId = c.Long(nullable: false),
+                        QuestType = c.Byte(nullable: false),
+                        QuestId = c.Short(nullable: false),
+                        Do = c.Boolean(nullable: false),
+                        Date = c.String(),
+                        Count = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.FamilyQuestsId);
+            
             CreateTable(
                 "dbo.ChatLog",
                 c => new
@@ -28,15 +41,7 @@
                         Type = c.Byte(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.BotAuthority",
-                c => new
-                    {
-                        DiscordId = c.Long(nullable: false),
-                        Authority = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.DiscordId);
+           
             
         }
     }

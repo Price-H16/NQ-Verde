@@ -1521,6 +1521,9 @@ namespace OpenNos.GameObject.Battle
         {
             if (indicator.Card != null)
             {
+
+                Logger.Info($"{indicator.Card?.CardId ?? 0}");
+
                 indicator.Level = sender.MapMonster?.Owner?.Level ?? sender.Level;
 
                 indicator.Sender = sender;

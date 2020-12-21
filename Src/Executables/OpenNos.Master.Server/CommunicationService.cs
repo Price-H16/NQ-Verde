@@ -132,24 +132,32 @@ namespace OpenNos.Master.Server
 
         public bool ConnectCharacter(Guid worldId, long characterId)
         {
-            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return false;
-
-            //Multiple WorldGroups not yet supported by DAOFactory
-            var accountId = DAOFactory.CharacterDAO.LoadById(characterId)?.AccountId ?? 0;
-
-            var account = MSManager.Instance.ConnectedAccounts.Find(a =>
-                a.AccountId.Equals(accountId) && a.ConnectedWorld.Id.Equals(worldId));
-
-            if (account != null)
+            if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId)))
             {
-                account.CharacterId = characterId;
-                foreach (var world in MSManager.Instance.WorldServers.Where(w =>
-                    w.WorldGroup.Equals(account.ConnectedWorld.WorldGroup)))
-                    world.CommunicationServiceClient.GetClientProxy<ICommunicationClient>()
-                        .CharacterConnected(characterId);
-                return true;
+                return false;
             }
 
+            //Multiple WorldGroups not yet supported by DAOFactory
+            long accountId = DAOFactory.CharacterDAO.LoadById(characterId)?.AccountId ?? 0;
+
+            AccountConnection account = MSManager.Instance.ConnectedAccounts.Find(a => a.AccountId.Equals(accountId) && a.ConnectedWorld.Id.Equals(worldId));
+            CharacterDTO character = DAOFactory.CharacterDAO.LoadById(characterId);
+            if (account != null || character != null)
+            {
+                try
+                {
+                    account.CharacterId = characterId;
+                    foreach (WorldServer world in MSManager.Instance.WorldServers.Where(w => w.WorldGroup.Equals(account.ConnectedWorld.WorldGroup)))
+                    {
+                        world.CommunicationServiceClient.GetClientProxy<ICommunicationClient>().CharacterConnected(characterId);
+                    }
+                    return true;
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    Logger.LogEventError("NOT_DISPOSED_OBJECT_EXCEPTION", "Error while disposing characters:", ex);
+                }
+            }
             return false;
         }
 
