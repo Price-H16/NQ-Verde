@@ -239,6 +239,10 @@
     <Compile Include="Migrations\202012190114206_Chat.designer.cs">
       <DependentUpon>202012190114206_Chat.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012211734211_run.cs" />
+    <Compile Include="Migrations\202012211734211_run.designer.cs">
+      <DependentUpon>202012211734211_run.cs</DependentUpon>
+    </Compile>
     <Compile Include="PartnerSkill.cs" />
     <Compile Include="Quest.cs" />
     <Compile Include="QuestLog.cs" />
@@ -432,6 +436,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012190114206_Chat.resx">
       <DependentUpon>202012190114206_Chat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012211734211_run.resx">
+      <DependentUpon>202012211734211_run.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
