@@ -1600,15 +1600,15 @@ namespace OpenNos.GameObject.Helpers
 
             // Zanou???
 
-            //chanceAllDecreased =
-            //    GetDefenderBenefitingBuffs(CardType.Block, (byte)AdditionalTypes.Block.ChanceAllDecreased);
+            chanceAllDecreased =
+                GetDefenderBenefitingBuffs(CardType.Block, (byte)AdditionalTypes.Block.ChanceAllDecreased);
 
-            //if (ServerManager.RandomNumber<int>() < chanceAllDecreased[0])
-            //{
-            //    totalDamage -= (int)(totalDamage / 100D * chanceAllDecreased[1]);
+            if (ServerManager.RandomNumber<int>() < chanceAllDecreased[0])
+            {
+                totalDamage -= (int)(totalDamage / 100D * chanceAllDecreased[1]);
 
-            //    if (totalDamage < 1) totalDamage = 100;
-            //}
+                if (totalDamage < 1) totalDamage = 100;
+            }
 
             #endregion
 

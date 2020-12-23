@@ -32,16 +32,15 @@ namespace OpenNos.Handler.PacketHandler.Inventory
 
         public void ExchangeRequest(ExchangeRequestPacket exchangeRequestPacket)
         {
-
-            if (Session.Account?.Authority >= AuthorityType.GM && Session.Account?.Authority < AuthorityType.Administrator)
+            if (!Session.Character.VerifiedLock)
             {
-                Session.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("GM_CANNOT_TRADE")));
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("CHARACTER_LOCKED_USE_UNLOCK"), 0));
                 return;
             }
 
             if (exchangeRequestPacket != null)
             {
-                var sess = ServerManager.Instance.GetSessionByCharacterId(exchangeRequestPacket.CharacterId);
+                ClientSession sess = ServerManager.Instance.GetSessionByCharacterId(exchangeRequestPacket.CharacterId);
 
                 if (sess != null && Session.Character.MapInstanceId != sess.Character.MapInstanceId)
                 {
@@ -53,14 +52,28 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                     switch (exchangeRequestPacket.RequestType)
                     {
                         case RequestExchangeType.Requested:
-                            if (!Session.HasCurrentMapInstance) return;
+                            if (!Session.HasCurrentMapInstance)
+                            {
+                                return;
+                            }
 
-                            var targetSession =
+                            ClientSession targetSession =
                                 Session.CurrentMapInstance.GetSessionByCharacterId(exchangeRequestPacket.CharacterId);
-                            if (targetSession?.Account == null) return;
+                            if (targetSession?.Account == null)
+                            {
+                                return;
+                            }
 
-                            if (targetSession.CurrentMapInstance?.MapInstanceType ==
-                                MapInstanceType.TalentArenaMapInstance) return;
+                            if (!targetSession.Character.VerifiedLock)
+                            {
+                                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("CHARACTER_LOCKED_USE_UNLOCK"), 0));
+                                return;
+                            }
+
+                            if (targetSession.CurrentMapInstance?.MapInstanceType == MapInstanceType.TalentArenaMapInstance)
+                            {
+                                return;
+                            }
 
                             if (targetSession.Character.Group != null
                                 && targetSession.Character.Group?.GroupType != GroupType.Group)
@@ -87,7 +100,9 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                             }
 
                             if (Session.Character.Speed == 0 || targetSession.Character.Speed == 0)
+                            {
                                 Session.Character.ExchangeBlocked = true;
+                            }
 
                             if (targetSession.Character.LastSkillUse.AddSeconds(20) > DateTime.Now
                                 || targetSession.Character.LastDefence.AddSeconds(20) > DateTime.Now)

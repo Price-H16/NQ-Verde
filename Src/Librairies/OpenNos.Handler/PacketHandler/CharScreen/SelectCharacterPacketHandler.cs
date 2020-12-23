@@ -46,21 +46,21 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
 
                 #region Load Character
 
-                var characterDTO = DAOFactory.CharacterDAO.LoadBySlot(Session.Account.AccountId, selectPacket.Slot);
+                CharacterDTO characterDTO = DAOFactory.CharacterDAO.LoadBySlot(Session.Account.AccountId, selectPacket.Slot);
 
                 if (characterDTO == null)
                 {
                     return;
                 }
 
-                var character = new Character(characterDTO);
+                Character character = new Character(characterDTO);
 
                 #endregion
-                
+
                 #region Check If Character is Saving
 
                 // i'll enable this when i find the timeouts error
-                
+
                 //int saveTimes = 0;
                 //while (ServerManager.Instance.IsCharacterSaving(character.AccountId))
                 //{
@@ -73,7 +73,7 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 //}
 
                 #endregion
-                
+
                 #region Unban Character
 
                 if (ServerManager.Instance.BannedCharacters.Contains(character.CharacterId))
@@ -99,7 +99,7 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 #region Limitations
 
                 // If there are > 4 accounts connected, kick this session.
-                if (CommunicationServiceClient.Instance.RetrieveOnlineCharacters(character.CharacterId).Count() > 4)
+                if (CommunicationServiceClient.Instance.RetrieveOnlineCharacters(character.CharacterId).Count() > 2)
                 {
                     Session.Disconnect();
                 }
@@ -126,10 +126,8 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
 
                 #region Other Character Stuffs
 
-                Session.Character.Respawns =
-                    DAOFactory.RespawnDAO.LoadByCharacter(Session.Character.CharacterId).ToList();
-                Session.Character.StaticBonusList = DAOFactory.StaticBonusDAO
-                    .LoadByCharacterId(Session.Character.CharacterId).ToList();
+                Session.Character.Respawns = DAOFactory.RespawnDAO.LoadByCharacter(Session.Character.CharacterId).ToList();
+                Session.Character.StaticBonusList = DAOFactory.StaticBonusDAO.LoadByCharacterId(Session.Character.CharacterId).ToList();
                 Session.Character.LoadInventory();
                 Session.Character.LoadQuicklists();
                 Session.Character.GenerateMiniland();
@@ -209,14 +207,11 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 Observable.Timer(TimeSpan.FromSeconds(1))
                     .Subscribe(o =>
                     {
-                        var amulet =
-                            Session.Character.Inventory.LoadBySlotAndType((byte)EquipmentType.Amulet,
-                                InventoryType.Wear);
+                        ItemInstance amulet = Session.Character.Inventory.LoadBySlotAndType((byte)EquipmentType.Amulet, InventoryType.Wear);
 
                         if (amulet?.ItemDeleteTime != null || amulet?.DurabilityPoint > 0)
                         {
-                            Session.Character.AddBuff(new Buff(62, Session.Character.Level),
-                                    Session.Character.BattleEntity);
+                            Session.Character.AddBuff(new Buff(62, Session.Character.Level), Session.Character.BattleEntity);
                         }
                     });
 

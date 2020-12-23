@@ -1631,115 +1631,68 @@ namespace OpenNos.GameObject
                     RemoveBuff(4035);
                 }
                 #endregion
-                #region Battle Tower Level Up
+                //#region Family Buffs
 
-                switch (BattleTowerExp)
-                {
-                    case 20:
-                        if (Session.Character.BattleTowerStage == 0)
-                        {
-                            Session.Character.BattleTowerStage += 1;
-                            Session.SendPacket("msg 4 You are now at Battle Tower Stage 1!");
-                        }
-                        break;
+                //if (Session.Character.Family != null)
+                //{
+                //    if (FamilyBuff.AddSeconds(60) <= DateTime.Now)
+                //    {
+                //        FamilyBuff = DateTime.Now;
 
-                    case 100:
-                        if (Session.Character.BattleTowerStage == 0)
-                        {
-                            Session.Character.BattleTowerStage += 1;
-                            Session.SendPacket("msg 4 You are now at Battle Tower Stage 2!");
-                        }
-                        break;
+                //        switch (Session.Character.Family.FamilyLevel)
+                //        {
+                //            case 2:
+                //            case 3:
+                //                Session.Character.AddBuff(new Buff(4051, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-                    case 200:
-                        if (Session.Character.BattleTowerStage == 0)
-                        {
-                            Session.Character.BattleTowerStage += 1;
-                            Session.SendPacket("msg 4 You are now at Battle Tower Stage 3!");
-                        }
-                        break;
+                //            case 4:
+                //            case 5:
+                //                Session.Character.AddBuff(new Buff(4052, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-                    case 350:
-                        if (Session.Character.BattleTowerStage == 0)
-                        {
-                            Session.Character.BattleTowerStage += 1;
-                            Session.SendPacket("msg 4 You are now at Battle Tower Stage 4!");
-                        }
-                        break;
+                //            case 6:
+                //            case 7:
+                //                Session.Character.AddBuff(new Buff(4053, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-                    case 500:
-                        if (Session.Character.BattleTowerStage == 0)
-                        {
-                            Session.Character.BattleTowerStage += 1;
-                            Session.SendPacket("msg 4 You are now at Battle Tower Stage 5!");
-                        }
-                        break;
+                //            case 8:
+                //            case 9:
+                //                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-#warning TODO: Add Rewards
-                }
-                #endregion
-                #region Family Buffs
+                //            case 10:
+                //            case 11:
+                //                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-                if (Session.Character.Family != null)
-                {
-                    if (FamilyBuff.AddSeconds(60) <= DateTime.Now)
-                    {
-                        FamilyBuff = DateTime.Now;
+                //            case 12:
+                //            case 13:
+                //                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-                        switch (Session.Character.Family.FamilyLevel)
-                        {
-                            case 2:
-                            case 3:
-                                Session.Character.AddBuff(new Buff(4051, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
+                //            case 14:
+                //            case 15:
+                //                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-                            case 4:
-                            case 5:
-                                Session.Character.AddBuff(new Buff(4052, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
+                //            case 16:
+                //            case 17:
+                //                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-                            case 6:
-                            case 7:
-                                Session.Character.AddBuff(new Buff(4053, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
+                //            case 18:
+                //            case 19:
+                //                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
 
-                            case 8:
-                            case 9:
-                                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
-
-                            case 10:
-                            case 11:
-                                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
-
-                            case 12:
-                            case 13:
-                                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
-
-                            case 14:
-                            case 15:
-                                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
-
-                            case 16:
-                            case 17:
-                                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
-
-                            case 18:
-                            case 19:
-                                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
-
-                            case 20:
-                                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
-                                break;
-                        }
-                    }
-                }
-                #endregion
+                //            case 20:
+                //                Session.Character.AddBuff(new Buff(729, Session.Character.Level), Session.Character.BattleEntity);
+                //                break;
+                //        }
+                //    }
+                //}
+                //#endregion
 
                 #region AntiHacks-Gold
                 if (LastMinimumGoldCheck.AddSeconds(10) < DateTime.Now)

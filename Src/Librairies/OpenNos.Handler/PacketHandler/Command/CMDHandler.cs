@@ -41,7 +41,6 @@ namespace OpenNos.Handler.PacketHandler.Command
             Session.SendPacket(Session.Character.GenerateSay("$Warp", 12));
             Session.SendPacket(Session.Character.GenerateSay("$Unstuck", 12));
             Session.SendPacket(Session.Character.GenerateSay("$Schedule", 12));
-            Session.SendPacket(Session.Character.GenerateSay("$Roll", 12));
             Session.SendPacket(Session.Character.GenerateSay("---------------------------------", 10));
         }
 

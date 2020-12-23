@@ -19,13 +19,13 @@ namespace OpenNos.GameObject
 
         #region Properties
 
-        public long BankGold { get; set; }
-
         public bool Confirmed { get; set; }
 
         public List<ItemInstance> ExchangeList { get; set; }
 
         public long Gold { get; set; }
+
+        public long BankGold { get; set; }
 
         public long TargetCharacterId { get; set; }
 

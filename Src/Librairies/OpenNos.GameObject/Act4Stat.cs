@@ -8,7 +8,7 @@ namespace OpenNos.GameObject
 
         public Act4Stat()
         {
-            var olddate = DateTime.Now.AddMonths(1);
+            DateTime olddate = DateTime.Now.AddMonths(1);
             _nextMonth = new DateTime(olddate.Year, olddate.Month, 1, 0, 0, 0, olddate.Kind);
             _latestUpdate = DateTime.Now;
         }
@@ -28,8 +28,8 @@ namespace OpenNos.GameObject
 
         #region Properties
 
-        public short CurrentTime =>
-            Mode == 0 ? (short) 0 : (short) (_latestUpdate.AddSeconds(_totalTime) - DateTime.Now).TotalSeconds;
+        public short CurrentTime => Mode == 0 ? (short)0 : (short)(_latestUpdate.AddSeconds(_totalTime) - DateTime.Now).TotalSeconds;
+
 
         public bool IsBerios { get; set; }
 
