@@ -312,6 +312,9 @@
           <e p="202004031430029_changes03042020.cs" t="Include" />
           <e p="202004031430029_changes03042020.designer.cs" t="Include" />
           <e p="202004031430029_changes03042020.resx" t="Include" />
+          <e p="202004172342297_RuneEffects.cs" t="Include" />
+          <e p="202004172342297_RuneEffects.designer.cs" t="Include" />
+          <e p="202004172342297_RuneEffects.resx" t="Include" />
           <e p="202005081717558_levelcap.cs" t="Include" />
           <e p="202005081717558_levelcap.designer.cs" t="Include" />
           <e p="202005081717558_levelcap.resx" t="Include" />
@@ -378,9 +381,9 @@
           <e p="202012190114206_Chat.cs" t="Include" />
           <e p="202012190114206_Chat.designer.cs" t="Include" />
           <e p="202012190114206_Chat.resx" t="Include" />
-          <e p="202012192201270_Runes.cs" t="Include" />
-          <e p="202012192201270_Runes.designer.cs" t="Include" />
-          <e p="202012192201270_Runes.resx" t="Include" />
+          <e p="202012211734211_run.cs" t="Include" />
+          <e p="202012211734211_run.designer.cs" t="Include" />
+          <e p="202012211734211_run.resx" t="Include" />
           <e p="Configuration.cs" t="Include" />
         </e>
         <e p="MinigameLog.cs" t="Include" />
@@ -1417,6 +1420,7 @@
           <e p="EventSchedule.cs" t="Include" />
           <e p="EventWave.cs" t="Include" />
           <e p="GAMES" t="Include">
+            <e p="MeteoriteGame.cs" t="Include" />
             <e p="SheepGame.cs" t="Include" />
             <e p="Tournament.cs" t="Include" />
             <e p="TowerGame.cs" t="Include" />
@@ -1616,6 +1620,7 @@
             <e p="HeroPacketHandler.cs" t="Include" />
             <e p="isortpackethandler.cs" t="Include" />
             <e p="NcifPacketHandler.cs" t="Include" />
+            <e p="NoS0575PacketHandler.cs" t="Include" />
             <e p="NpinfoPacketHandler.cs" t="Include" />
             <e p="PinvPacketHandler.cs" t="Include" />
             <e p="PJoinPacketHandler.cs" t="Include" />
