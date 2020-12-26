@@ -80,8 +80,6 @@
     <Compile Include="CharacterTitleDTO.cs" />
     <Compile Include="CharacterVisitedMapsDTO.cs" />
     <Compile Include="FamilySkillMissionDTO.cs" />
-    <Compile Include="FamilyQuestsDTO.cs" />
-    <Compile Include="Logs\ChatLogDTO.cs" />
     <Compile Include="Logs\LogsCommandsDTO.cs" />
     <Compile Include="MaintenanceLogDTO.cs" />
     <Compile Include="PartnerSkillDTO.cs" />

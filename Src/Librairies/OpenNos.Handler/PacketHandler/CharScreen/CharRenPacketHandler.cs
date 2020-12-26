@@ -63,7 +63,12 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 "[",
                 "]",
                 "[gm]",
-                "[nh]"
+                "[nh]",
+                "Zanou",
+                "zanou",
+                "bitch",
+                "Owner",
+
             };
 
             if (BlackListed.Any(s => e.Name.ToLower().Contains(s)))

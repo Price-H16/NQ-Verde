@@ -66,7 +66,7 @@ namespace OpenNos.Handler.PacketHandler.Basic
                                             otherSession.SendPacket(
                                                 $"info {Language.Instance.GetMessageFromKey("MARRIAGE_REJECTED")}");
 
-                                            //ServerManager.Instance.Broadcast(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MARRIAGE_REJECT_SHOUT"), 1));
+                                            ServerManager.Instance.Broadcast(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MARRIAGE_REJECT_SHOUT"), 1));
                                             break;
                                     }
 

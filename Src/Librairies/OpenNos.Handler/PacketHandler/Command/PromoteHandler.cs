@@ -25,7 +25,7 @@ namespace OpenNos.Handler.PacketHandler.Command
 
         #region Methods
 
-        public void Promote(PromotePacket promotePacket)
+        /*public void Promote(PromotePacket promotePacket)
         {
             if (promotePacket != null)
             {
@@ -119,7 +119,7 @@ namespace OpenNos.Handler.PacketHandler.Command
             {
                 Session.SendPacket(Session.Character.GenerateSay(PromotePacket.ReturnHelp(), 10));
             }
-        }
+        }*/
 
         #endregion
     }

@@ -126,55 +126,53 @@ namespace OpenNos.GameObject
             session.BCardDisposables[skill?.SkillVNum == 1098 ? skill.SkillVNum * 1000 : BCardId] = Observable
                 .Timer(TimeSpan.FromMilliseconds(delayTime)).Subscribe(o =>
                 {
-                    switch ((BCardType.CardType) Type)
+                    switch ((BCardType.CardType)Type)
                     {
                         case BCardType.CardType.Buff:
-                        {
-                            var cardId = (short) (SecondData + partnerBuffLevel);
-
-                            // Memorial should only be applied on 1st Mass Teleport activation
-
-                            if (cardId == 620 && sender?.Character?.SavedLocation != null)
                             {
-                                return;
-                            }
+                                var cardId = (short)(SecondData + partnerBuffLevel);
 
-                            var buff = new Buff(cardId, senderLevel)
-                            {
-                                SkillVNum = SkillVNum
-                            };
+                                // Memorial should only be applied on 1st Mass Teleport activation
 
-                            var Chance = firstData == 0 ? ThirdData : firstData;
-                            var CardsToProtect = new List<short>();
-                            if (buff.Card.BuffType == BuffType.Bad &&
-                                session.GetBuff(BCardType.CardType.DebuffResistance,
-                                        (byte) AdditionalTypes.DebuffResistance.NeverBadEffectChance) is int[]
-                                    NeverBadEffectChance)
-                            {
-                                // I divide in NeverBadEffectChance[3] since we have to avoid the Level debuffs being added
-                                if (ServerManager.RandomNumber() < NeverBadEffectChance[1]
-                                    && buff.Card.Level <= (NeverBadEffectChance[0]))
+                                if (cardId == 620 && sender?.Character?.SavedLocation != null)
                                 {
                                     return;
                                 }
-                            }
 
-                            if (session.GetBuff(BCardType.CardType.DebuffResistance,
-                                    (byte) AdditionalTypes.DebuffResistance.NeverBadGeneralEffectChance) is int[]
-                                NeverBadGeneralEffectChance)
-                            {
-                                if (ServerManager.RandomNumber() < NeverBadGeneralEffectChance[1]
-                                    && buff.Card.Level <= NeverBadGeneralEffectChance[0]
-                                    && buff.Card.BuffType == BuffType.Bad)
+                                var buff = new Buff(cardId, senderLevel)
                                 {
-                                    return;
-                                }
-                            }
+                                    SkillVNum = SkillVNum
+                                };
 
-                            if (session.GetBuff(BCardType.CardType.Buff,
-                                    (byte) AdditionalTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect &&
-                                (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
-                            {
+                                var Chance = firstData == 0 ? ThirdData : firstData;
+                                var CardsToProtect = new List<short>();
+                                if (buff.Card.BuffType == BuffType.Bad &&
+                                    session.GetBuff(BCardType.CardType.DebuffResistance,
+                                            (byte)AdditionalTypes.DebuffResistance.NeverBadEffectChance) is int[]
+                                        NeverBadEffectChance)
+                                {
+                                    // I divide in NeverBadEffectChance[3] since we have to avoid the Level debuffs being added
+                                    if (ServerManager.RandomNumber() < NeverBadEffectChance[1]
+                                        && buff.Card.Level <= (NeverBadEffectChance[0]))
+                                    {
+                                        return;
+                                    }
+                                }
+
+                                if (session.GetBuff(BCardType.CardType.DebuffResistance,
+                                        (byte)AdditionalTypes.DebuffResistance.NeverBadGeneralEffectChance) is int[]
+                                    NeverBadGeneralEffectChance)
+                                {
+                                    if (ServerManager.RandomNumber() < NeverBadGeneralEffectChance[1]
+                                        && buff.Card.Level <= NeverBadGeneralEffectChance[0]
+                                        && buff.Card.BuffType == BuffType.Bad)
+                                    {
+                                        return;
+                                    }
+                                }
+
+                                if (session.GetBuff(BCardType.CardType.Buff, (byte) AdditionalTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect && (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
+                                {
                                 var Prob = 100 - PreventingBadEffect[1] * 10;
                                 var ProtectType = PreventingBadEffect[0];
 

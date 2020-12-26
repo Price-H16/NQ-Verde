@@ -445,8 +445,6 @@ namespace OpenNos.DAL.EF
         
         public virtual DbSet<CharacterVisitedMaps> CharacterVisitedMaps { get; set; }
 
-        //public virtual DbSet<ChatLog> ChatLogs { get; set; }
-
         public virtual DbSet<LogCommands> LogCommands { get; set; }
 
         public virtual DbSet<FamilySkillMission> FamilySkillMission { get; set; }
@@ -539,7 +537,6 @@ namespace OpenNos.DAL.EF
 
         public virtual DbSet<Teleporter> Teleporter { get; set; }
 
-        public virtual DbSet<FamilyQuests> FamilyQuests { get; set; }
 
         #endregion
     }

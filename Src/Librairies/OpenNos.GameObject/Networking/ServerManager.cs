@@ -1189,18 +1189,22 @@ namespace OpenNos.GameObject.Networking
                                 break;
                         }
                     }
-                //}
+                    //}
                     //else if (gotoMapInstance != CaligorRaid.CaligorMapInstance && session.Character.MapInstance == CaligorRaid.CaligorMapInstance)
                     //{
                     //    if (session.Character.OriginalFaction != -1 && (byte)session.Character.Faction != session.Character.OriginalFaction)
 
-                //    {
-                //        session.Character.Faction = (FactionType)session.Character.OriginalFaction;
-                //        session.SendPacket(session.Character.GenerateFaction());
-                //    }
-                //}
+                    //    {
+                    //        session.Character.Faction = (FactionType)session.Character.OriginalFaction;
+                    //        session.SendPacket(session.Character.GenerateFaction());
+                    //    }
+                    //}
+                    if (session.Character.IsExchanging)
+                        session.Character.CloseExchangeOrTrade();
 
-                session.CurrentMapInstance.UnregisterSession(session.Character.CharacterId);
+                    if (session.Character.HasShopOpened)
+                        session.Character.CloseShop();
+                    session.CurrentMapInstance.UnregisterSession(session.Character.CharacterId);
                     LeaveMap(session.Character.CharacterId);
 
                     // cleanup sending queue to avoid sending uneccessary packets to it

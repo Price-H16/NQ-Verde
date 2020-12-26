@@ -10,6 +10,8 @@ namespace OpenNos.GameObject
 
         public int Level;
 
+        public bool IsPermaBuff { get; set; }
+
         #endregion
 
         #region Instantiation
@@ -27,19 +29,17 @@ namespace OpenNos.GameObject
 
         public Card Card { get; set; }
 
-        public bool IsPermaBuff { get; set; }
-
         public int RemainingTime { get; set; }
-
-        public BattleEntity Sender { get; set; }
-
-        public short? SkillVNum { get; set; }
 
         public DateTime Start { get; set; }
 
         public bool StaticBuff { get; set; }
 
         public IDisposable StaticVisualEffect { get; set; }
+
+        public BattleEntity Sender { get; set; }
+
+        public short? SkillVNum { get; set; }
 
         #endregion
     }

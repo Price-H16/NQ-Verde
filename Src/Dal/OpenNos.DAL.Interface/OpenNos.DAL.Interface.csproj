@@ -74,11 +74,9 @@
     <Compile Include="ICharacterTitleDAO.cs" />
     <Compile Include="ICharacterVisitedMapsDAO.cs" />
     <Compile Include="IFamilySkillMissionDAO.cs" />
-    <Compile Include="IFamilyQuestsDAO.cs" />
     <Compile Include="IMappingBaseDAO.cs" />
     <Compile Include="IRuneEffectDAO.cs" />
     <Compile Include="Logs\ILogsCommandsDAO.cs" />
-    <Compile Include="Logs\IChatLogDAO.cs" />
     <Compile Include="IFamilyCharacterDAO.cs" />
     <Compile Include="IFamilyDAO.cs" />
     <Compile Include="IFamilyLogDAO.cs" />

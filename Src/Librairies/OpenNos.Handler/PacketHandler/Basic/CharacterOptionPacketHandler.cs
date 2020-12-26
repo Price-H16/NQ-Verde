@@ -144,9 +144,18 @@ namespace OpenNos.Handler.PacketHandler.Basic
                     break;
                 case CharacterOption.HideHat:
                     Session.Character.HideHat = !characterOptionPacket.IsActive;
+                      Session.CurrentMapInstance.Broadcast(Session.Character.GenerateEq());
+                      Session.SendPacket(UserInterfaceHelper.GenerateMsg(
+                          Language.Instance.GetMessageFromKey(Session.Character.HideHat
+                              ? "HAT_NOT_VISIBLE"
+                              : "HAT_VISIBLE"), 0));
                     break;
                 case CharacterOption.UiBlocked:
                     Session.Character.UiBlocked = !characterOptionPacket.IsActive;
+                    Session.SendPacket(UserInterfaceHelper.GenerateMsg(
+                        Language.Instance.GetMessageFromKey(Session.Character.UiBlocked
+                            ? "LOCKED_HUD"
+                            : "UNLOCKED_HUD"), 0));
                     break;
 
                 case CharacterOption.GroupSharing:

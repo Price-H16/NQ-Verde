@@ -522,7 +522,7 @@ namespace OpenNos.GameObject
 
                     break;
 
-                // Atk/Def/HP/Exp potions
+                // Atk/Def/HP/Exp potions  //so i dont have card for that wait a sec
                 case 6600:
                     session.Character.Inventory.RemoveItemFromInventory(inv.Id);
                     break;
@@ -542,7 +542,7 @@ namespace OpenNos.GameObject
                     break;
 
                 case 6602: // Cleansing Pot
-                    var AllowedMaps = new List<MapInstanceType>
+                    var AllowedMaps = new List<MapInstanceType> 
                     {
                         MapInstanceType.ArenaInstance,
                         MapInstanceType.TalentArenaMapInstance

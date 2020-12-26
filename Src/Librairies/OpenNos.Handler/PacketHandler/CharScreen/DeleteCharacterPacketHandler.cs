@@ -33,21 +33,33 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
 
         public void DeleteCharacter(CharacterDeletePacket characterDeletePacket)
         {
-            if (Session.HasCurrentMapInstance) return;
+            if (Session.HasCurrentMapInstance)
+            {
+                return;
+            }
 
-            if (characterDeletePacket.Password == null) return;
+            if (characterDeletePacket.Password == null)
+            {
+                return;
+            }
 
             Logger.LogUserEvent("DELETECHARACTER", Session.GenerateIdentity(),
                 $"[DeleteCharacter]Name: {characterDeletePacket.Slot}");
             var account = DAOFactory.AccountDAO.LoadById(Session.Account.AccountId);
-            if (account == null) return;
+            if (account == null)
+            {
+                return;
+            }
 
             if (account.Password.ToLower() == CryptographyBase.Sha512(characterDeletePacket.Password))
             {
-                var character =
-                    DAOFactory.CharacterDAO.LoadBySlot(account.AccountId, characterDeletePacket.Slot);
-                if (character == null) return;
-                
+                var character = DAOFactory.CharacterDAO.LoadBySlot(account.AccountId, characterDeletePacket.Slot);
+                if (character == null)
+                {
+                    return;
+                }
+
+
                 // Remove all relations from deleted character
                 var relationshipList = ServerManager.Instance.CharacterRelations.Where(s => s.CharacterId == character.CharacterId || s.RelatedCharacterId == character.CharacterId).ToList();
 
@@ -59,7 +71,9 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 //DAOFactory.GeneralLogDAO.SetCharIdNull(Convert.ToInt64(character.CharacterId));
                 DAOFactory.CharacterDAO.DeleteByPrimaryKey(account.AccountId, characterDeletePacket.Slot);
                 new EntryPointPacketHandler(Session).LoadCharacters(new OpenNosEntryPointPacket
-                    {PacketData = string.Empty});
+                {
+                    PacketData = string.Empty
+                }); ;
             }
             else
             {
@@ -69,8 +83,7 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
 
         private static void DeleteRelation(long mainCharacterId, List<CharacterRelationDTO> relations, long characterId, CharacterRelationType relationType)
         {
-            CharacterRelationDTO chara = relations.Find(s => 
-                (s.RelatedCharacterId == characterId || s.CharacterId == characterId) && s.RelationType == relationType);
+            CharacterRelationDTO chara = relations.Find(s =>  (s.RelatedCharacterId == characterId || s.CharacterId == characterId) && s.RelationType == relationType);
             if (chara != null)
             {
                 long id = chara.CharacterRelationId;

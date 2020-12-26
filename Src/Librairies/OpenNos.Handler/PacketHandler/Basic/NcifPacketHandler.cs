@@ -63,18 +63,21 @@ namespace OpenNos.Handler.PacketHandler.Basic
                 // monsters
                 case 3:
                     if (Session.HasCurrentMapInstance)
-                        Session.CurrentMapInstance.Monsters.Where(m => m.MapMonsterId == (int) ncifPacket.TargetId)
+                        Session.CurrentMapInstance.Monsters.Where(m => m.MapMonsterId == (int)ncifPacket.TargetId)
                             .ToList().ForEach(monster =>
                             {
-                                var monsterinfo = ServerManager.GetNpcMonster(monster.MonsterVNum);
-                                if (monsterinfo == null) return;
+                                NpcMonster monsterinfo = ServerManager.GetNpcMonster(monster.MonsterVNum);
+                                if (monsterinfo == null)
+                                {
+                                    return;
+                                }
 
                                 Session.Character.LastNpcMonsterId = monster.MapMonsterId;
                                 Session.SendPacket(
-                                    $"st 3 {ncifPacket.TargetId} {monsterinfo.Level} {monsterinfo.HeroLevel} {(int) ((float) monster.CurrentHp / (float) monster.MaxHp * 100)} {(int) ((float) monster.CurrentMp / (float) monster.MaxMp * 100)} {monster.CurrentHp} {monster.CurrentMp}{monster.Buff.GetAllItems().Aggregate("", (current, buff) => current + $" {buff.Card.CardId}.{buff.Level}")}");
+                                    $"st 3 {ncifPacket.TargetId} {monsterinfo.Level} {monsterinfo.HeroLevel} {(int)((float)monster.CurrentHp / (float)monster.MaxHp * 100)} {(int)((float)monster.CurrentMp / (float)monster.MaxMp * 100)} {monster.CurrentHp} {monster.CurrentMp}{monster.Buff.GetAllItems().Aggregate("", (current, buff) => current + $" {buff.Card.CardId}.{buff.Level}")}");
                             });
 
-                    break;
+            break;
             }
         }
 

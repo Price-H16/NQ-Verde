@@ -87,8 +87,6 @@
     <Compile Include="CharacterTitle.cs" />
     <Compile Include="CharacterVisitedMaps.cs" />
     <Compile Include="FamilySkillMission.cs" />
-    <Compile Include="FamilyQuests.cs" />
-    <Compile Include="Logs\ChatLog.cs" />
     <Compile Include="Logs\LogsCommands.cs" />
     <Compile Include="MaintenanceLog.cs" />
     <Compile Include="Migrations\201904261626285_OpenNos.cs" />
@@ -179,22 +177,6 @@
     <Compile Include="Migrations\202009022254495_FixCharacterOptions.designer.cs">
       <DependentUpon>202009022254495_FixCharacterOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202010060635576_Update1.cs" />
-    <Compile Include="Migrations\202010060635576_Update1.designer.cs">
-      <DependentUpon>202010060635576_Update1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010060646017_Update2.cs" />
-    <Compile Include="Migrations\202010060646017_Update2.designer.cs">
-      <DependentUpon>202010060646017_Update2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010190911250_FamilyQuests.cs" />
-    <Compile Include="Migrations\202010190911250_FamilyQuests.designer.cs">
-      <DependentUpon>202010190911250_FamilyQuests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010191043301_DiscordBot.cs" />
-    <Compile Include="Migrations\202010191043301_DiscordBot.designer.cs">
-      <DependentUpon>202010191043301_DiscordBot.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\202010211031067_LockCoe.cs" />
     <Compile Include="Migrations\202010211031067_LockCoe.designer.cs">
       <DependentUpon>202010211031067_LockCoe.cs</DependentUpon>
@@ -235,13 +217,9 @@
     <Compile Include="Migrations\202012030053456_Tono21.designer.cs">
       <DependentUpon>202012030053456_Tono21.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202012190114206_Chat.cs" />
-    <Compile Include="Migrations\202012190114206_Chat.designer.cs">
-      <DependentUpon>202012190114206_Chat.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202012211734211_run.cs" />
-    <Compile Include="Migrations\202012211734211_run.designer.cs">
-      <DependentUpon>202012211734211_run.cs</DependentUpon>
+    <Compile Include="Migrations\202012212157445_11.cs" />
+    <Compile Include="Migrations\202012212157445_11.designer.cs">
+      <DependentUpon>202012212157445_11.cs</DependentUpon>
     </Compile>
     <Compile Include="PartnerSkill.cs" />
     <Compile Include="Quest.cs" />
@@ -356,6 +334,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001240955496_ChatLog.resx">
       <DependentUpon>202001240955496_ChatLog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001261716037_Act7_Rune_Item.resx">
       <DependentUpon>202001261716037_Act7_Rune_Item.cs</DependentUpon>
@@ -392,18 +371,6 @@
     <EmbeddedResource Include="Migrations\202009022254495_FixCharacterOptions.resx">
       <DependentUpon>202009022254495_FixCharacterOptions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010060635576_Update1.resx">
-      <DependentUpon>202010060635576_Update1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010060646017_Update2.resx">
-      <DependentUpon>202010060646017_Update2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010190911250_FamilyQuests.resx">
-      <DependentUpon>202010190911250_FamilyQuests.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010191043301_DiscordBot.resx">
-      <DependentUpon>202010191043301_DiscordBot.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010211031067_LockCoe.resx">
       <DependentUpon>202010211031067_LockCoe.cs</DependentUpon>
     </EmbeddedResource>
@@ -434,11 +401,8 @@
     <EmbeddedResource Include="Migrations\202012030053456_Tono21.resx">
       <DependentUpon>202012030053456_Tono21.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202012190114206_Chat.resx">
-      <DependentUpon>202012190114206_Chat.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202012211734211_run.resx">
-      <DependentUpon>202012211734211_run.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202012212157445_11.resx">
+      <DependentUpon>202012212157445_11.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
