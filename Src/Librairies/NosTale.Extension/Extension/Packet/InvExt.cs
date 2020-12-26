@@ -94,7 +94,7 @@ namespace NosTale.Extension.Extension.Packet
                     return;
                 }
 
-                if (new[] {4494, 4495, 4496}.Contains(sp.ItemVNum))
+                if (new[] { 4494, 4495, 4496 }.Contains(sp.ItemVNum))
                 {
                     if (Session.Character.Timespace == null)
                     {
@@ -134,7 +134,7 @@ namespace NosTale.Extension.Extension.Packet
                 Session.SendPackets(Session.Character.GenerateStatChar());
                 Session.Character.SkillsSp = new ThreadSafeSortedList<int, CharacterSkill>();
                 foreach (var skill in ServerManager.GetAllSkill())
-                    if (skill.UpgradeType == sp.Item.Morph && skill.SkillType == (byte) SkillType.CharacterSKill && sp.SpLevel >= skill.LevelMinimum)
+                    if (skill.UpgradeType == sp.Item.Morph && skill.SkillType == (byte)SkillType.CharacterSKill && sp.SpLevel >= skill.LevelMinimum)
                         Session.Character.SkillsSp[skill.SkillVNum] = new CharacterSkill
                         {
                             SkillVNum = skill.SkillVNum,

@@ -240,22 +240,6 @@ namespace OpenNos.GameObject
 
         public ItemInstance WeaponInstance { get; set; }
 
-        private int EquipmentDarkResistance =>
-            GetStuffBuff(CardType.ElementResistance, (byte)AdditionalTypes.ElementResistance.DarkIncreased)[0] +
-            GetStuffBuff(CardType.ElementResistance, (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
-
-        private int EquipmentFireResistance =>
-            GetStuffBuff(CardType.ElementResistance, (byte)AdditionalTypes.ElementResistance.FireIncreased)[0] +
-            GetStuffBuff(CardType.ElementResistance, (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
-
-        private int EquipmentLightResistance =>
-            GetStuffBuff(CardType.ElementResistance, (byte)AdditionalTypes.ElementResistance.LightIncreased)[0] +
-            GetStuffBuff(CardType.ElementResistance, (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
-
-        private int EquipmentWaterResistance =>
-            GetStuffBuff(CardType.ElementResistance, (byte)AdditionalTypes.ElementResistance.WaterIncreased)[0] +
-            GetStuffBuff(CardType.ElementResistance, (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
-
         #endregion
 
         #region Methods
@@ -431,15 +415,9 @@ namespace OpenNos.GameObject
             }
         }
 
-        public void DisableBuffs(BuffType type, int level = 100)
-        {
-            BattleEntity.DisableBuffs(type, level);
-        }
+        public void DisableBuffs(BuffType type, int level = 100) => BattleEntity.DisableBuffs(type, level);
 
-        public void DisableBuffs(List<BuffType> types, int level = 100)
-        {
-            BattleEntity.DisableBuffs(types, level);
-        }
+        public void DisableBuffs(List<BuffType> types, int level = 100) => BattleEntity.DisableBuffs(types, level);
 
         public string GenerateCMode(short morphId)
         {
@@ -842,34 +820,84 @@ namespace OpenNos.GameObject
         /// <returns></returns>
         public int[] GetStuffBuff(CardType type, byte subtype)
         {
-            var EquipmentBCards = new List<BCard>();
-            if (WeaponInstance != null) EquipmentBCards.AddRange(WeaponInstance.Item.BCards);
-            if (ArmorInstance != null) EquipmentBCards.AddRange(ArmorInstance.Item.BCards);
+            List<BCard> EquipmentBCards = new List<BCard>();
+            if (WeaponInstance != null)
+            {
+                EquipmentBCards.AddRange(WeaponInstance.Item.BCards);
+            }
+            if (ArmorInstance != null)
+            {
+                EquipmentBCards.AddRange(ArmorInstance.Item.BCards);
+            }
 
-            var value1 = 0;
-            var value2 = 0;
-            foreach (var entry in EquipmentBCards.Where(s =>
-                s.Type.Equals((byte)type) && s.SubType.Equals(subtype) && s.FirstData > 0))
+            int value1 = 0;
+            int value2 = 0;
+            foreach (BCard entry in EquipmentBCards.Where(s => s.Type.Equals((byte)type) && s.SubType.Equals((byte)(subtype / 10)) && s.FirstData > 0))
             {
                 if (entry.IsLevelScaled)
+                {
                     value1 += entry.FirstData * Level;
+                }
                 else
+                {
                     value1 += entry.FirstData;
+                }
                 value2 += entry.SecondData;
             }
 
             return new[] { value1, value2 };
         }
 
-        public bool HasBuff(CardType type, byte subtype)
+        public int EquipmentFireResistance
         {
-            return BattleEntity != null ? BattleEntity.HasBuff(type, subtype) : false;
+            get
+            {
+                return GetStuffBuff(CardType.ElementResistance,
+                           (byte)AdditionalTypes.ElementResistance.FireIncreased)[0] +
+                       GetStuffBuff(CardType.ElementResistance,
+                           (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
+            }
         }
+
+        public int EquipmentWaterResistance
+        {
+            get
+            {
+                return GetStuffBuff(CardType.ElementResistance,
+                           (byte)AdditionalTypes.ElementResistance.WaterIncreased)[0] +
+                       GetStuffBuff(CardType.ElementResistance,
+                           (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
+            }
+        }
+
+        public int EquipmentLightResistance
+        {
+            get
+            {
+                return GetStuffBuff(CardType.ElementResistance,
+                           (byte)AdditionalTypes.ElementResistance.LightIncreased)[0] +
+                       GetStuffBuff(CardType.ElementResistance,
+                           (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
+            }
+        }
+
+        public int EquipmentDarkResistance
+        {
+            get
+            {
+                return GetStuffBuff(CardType.ElementResistance,
+                           (byte)AdditionalTypes.ElementResistance.DarkIncreased)[0] +
+                       GetStuffBuff(CardType.ElementResistance,
+                           (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
+            }
+        }
+
+        public bool HasBuff(CardType type, byte subtype) => BattleEntity != null ? BattleEntity.HasBuff(type, subtype) : false;
+
 
         public int HealthHpLoad()
         {
-            var regen = GetBuff(CardType.Recovery, (byte)AdditionalTypes.Recovery.HPRecoveryIncreased)[0];
-
+            int regen = GetBuff(CardType.Recovery, (byte)AdditionalTypes.Recovery.HPRecoveryIncreased)[0];
             //- GetBuff(CardType.Recovery, (byte)AdditionalTypes.Recovery.HPRecoveryDecreased)[0];
             return IsSitting ? regen + 50 :
                 (DateTime.Now - LastDefence).TotalSeconds > 4 ? regen + 20 : 0;
@@ -877,8 +905,7 @@ namespace OpenNos.GameObject
 
         public int HealthMpLoad()
         {
-            var regen = GetBuff(CardType.Recovery, (byte)AdditionalTypes.Recovery.MPRecoveryIncreased)[0];
-
+            int regen = GetBuff(CardType.Recovery, (byte)AdditionalTypes.Recovery.MPRecoveryIncreased)[0];
             //- GetBuff(CardType.Recovery, (byte)AdditionalTypes.Recovery.MPRecoveryDecreased)[0];
             return IsSitting ? regen + 50 :
                 (DateTime.Now - LastDefence).TotalSeconds > 4 ? regen + 20 : 0;

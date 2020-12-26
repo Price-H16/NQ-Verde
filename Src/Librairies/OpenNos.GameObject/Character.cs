@@ -27,6 +27,7 @@ using OpenNos.GameObject._Event;
 using static OpenNos.Domain.BCardType;
 using OpenNos.GameObject.RainbowBattle;
 using OpenNos.GameObject.Extensions;
+using System.Threading.Tasks;
 
 namespace OpenNos.GameObject
 {
@@ -462,6 +463,8 @@ namespace OpenNos.GameObject
 
         public bool PyjamaDead { get; set; }
 
+        public CharacterSkill LastSkillUsed { get; set; }
+
         public ConcurrentBag<CharacterQuest> Quests { get; internal set; }
 
         public List<QuicklistEntryDTO> QuicklistEntries { get; private set; }
@@ -664,6 +667,7 @@ namespace OpenNos.GameObject
             }
             set { _characterVisitedMaps = value; }
         }
+        public bool OnlyNormalAttacks { get; set; }
 
         public ThreadSafeGenericList<long> TradeRequests { get; set; }
 
@@ -1325,7 +1329,18 @@ namespace OpenNos.GameObject
                 BuffObservables[bf.Card.CardId].Dispose();
                 BuffObservables.Remove(bf.Card.CardId);
             }
+            if (bf.Card.BCards.Any(s => s.Type == (byte)CardType.AngerSkill && s.SubType.Equals((byte)AdditionalTypes.AngerSkill.OnlyNormalAttacks / 10)))
+            {
+                if (GetBuff(CardType.AngerSkill, (byte)AdditionalTypes.AngerSkill.OnlyNormalAttacks / 10)[0] > 0)
+                {
 
+                }
+                else
+                {
+                    OnlyNormalAttacks = false;
+                    Session.SendPacket(GenerateCond());
+                }
+            }
             if (bf.RemainingTime > 0)
             {
                 BuffObservables[bf.Card.CardId] = Observable.Timer(TimeSpan.FromSeconds(bf.RemainingTime)).Subscribe(o =>
@@ -1403,6 +1418,23 @@ namespace OpenNos.GameObject
 
             Session.SendPacket(GenerateFtPtPacket());
             Session.SendPackets(GenerateQuicklist());
+        }
+        public void GenerateCharacterStats()
+        {
+            Session.CurrentMapInstance?.Broadcast(Session.Character.GenerateCMode());
+            Session.SendPacket(Session.Character.GenerateLev());
+            Session.CurrentMapInstance?.Broadcast(
+                StaticPacketHelper.GenerateEff(UserType.Player, Session.Character.CharacterId, 196),
+                Session.Character.PositionX, Session.Character.PositionY);
+            Session.CurrentMapInstance?.Broadcast(
+                UserInterfaceHelper.GenerateGuri(6, 1, Session.Character.CharacterId), Session.Character.PositionX,
+                Session.Character.PositionY);
+            Session.SendPacket(Session.Character.GenerateSpPoint());
+            Session.Character.LoadSpeed();
+            Session.SendPacket(Session.Character.GenerateSki());
+            Session.SendPacket(Session.Character.GenerateCond());
+            Session.SendPacket(Session.Character.GenerateStat());
+            Session.SendPackets(Session.Character.GenerateStatChar());
         }
 
         public void AddWolfBuffs()
@@ -2071,36 +2103,20 @@ namespace OpenNos.GameObject
 
         public void CheckHuntQuest()
         {
-            CharacterQuest quest = Quests?.FirstOrDefault(q =>q?.Quest?.QuestType == (int) QuestType.Hunt && q.Quest?.TargetMap == MapInstance?.Map?.MapId && Math.Abs(PositionX - q.Quest?.TargetX ?? 0) < 2 && Math.Abs(PositionY - q.Quest?.TargetY ?? 0) < 2);
+            CharacterQuest quest = Quests?.FirstOrDefault(q => q?.Quest?.QuestType == (int)QuestType.Hunt && q.Quest?.TargetMap == MapInstance?.Map?.MapId && Math.Abs(PositionX - q.Quest?.TargetX ?? 0) < 2 && Math.Abs(PositionY - q.Quest?.TargetY ?? 0) < 2);
             if (quest == null)
             {
                 return;
             }
-
-            if (MapInstance == null || MapInstance.Monsters == null || MapInstance.Monsters.Where(a => a != null).Any(s => s?.MonsterVNum == (short) (quest?.GetObjectiveByIndex(1)?.Data ?? -1) && Math.Abs(s?.MapX - quest?.Quest?.TargetX ?? 0) < 4 && Math.Abs(s?.MapY - quest?.Quest?.TargetY ?? 0) < 4))
+            List<MonsterToSummon> monsters = new List<MonsterToSummon>();
+            if (!MapInstance.Monsters.Any(s => s.MonsterVNum == (short)(quest.GetObjectiveByIndex(1)?.Data ?? -1) && Math.Abs(s.MapX - quest.Quest.TargetX ?? 0) < 4 && Math.Abs(s.MapY - quest.Quest.TargetY ?? 0) < 4))
             {
-                return;
+                for (int a = 0; a < quest.GetObjectiveByIndex(1)?.Objective / 2 + 1; a++)
+                {
+                    monsters.Add(new MonsterToSummon((short)(quest.GetObjectiveByIndex(1)?.Data ?? -1), new MapCell { X = (short)(PositionX + ServerManager.RandomNumber(-2, 3)), Y = (short)(PositionY + ServerManager.RandomNumber(-2, 3)) }, BattleEntity, true));
+                }
+                EventHelper.Instance.RunEvent(new EventContainer(MapInstance, EventActionType.SPAWNMONSTERS, monsters.AsEnumerable()));
             }
-
-            ConcurrentBag<MonsterToSummon> monsters = new ConcurrentBag<MonsterToSummon>();
-            var monstersToSpawn = quest.GetObjectiveByIndex(1)?.Objective / 2 + 1;
-
-            if (monstersToSpawn > 4)
-            {
-                monstersToSpawn = 4;
-            }
-
-            for (var a = 0; a < monstersToSpawn; a++)
-            {
-                monsters.Add(new MonsterToSummon((short) (quest.GetObjectiveByIndex(1)?.Data ?? -1),
-                    new MapCell
-                    {
-                        X = (short) (PositionX + ServerManager.RandomNumber<int>(-2, 3)),
-                        Y = (short) (PositionY + ServerManager.RandomNumber<int>(-2, 3))
-                    }, this.BattleEntity, true));
-            }
-
-            EventHelper.Instance.RunEvent(new EventContainer(MapInstance, EventActionType.SPAWNMONSTERS,monsters.ToList()));
         }
 
         public void ClearLaurena()
@@ -2383,6 +2399,42 @@ namespace OpenNos.GameObject
             BattleEntity?.RemoveOwnedNpcs();
             RemoveTemporalMates();
         }
+        public void GenerateLastStance()
+        {
+            ItemInstance sp = Session.Character.Inventory.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear);
+            Session.Character.DisableBuffs(BuffType.All);
+            Session.Character.EquipmentBCards.AddRange(sp.Item.BCards);
+            Session.Character.LastTransform = DateTime.Now;
+            Session.Character.UseSp = true;
+            Session.Character.Morph = sp.Item.Morph;
+            Session.Character.MorphUpgrade = sp.Upgrade;
+            Session.Character.MorphUpgrade2 = sp.Design;
+            Session.CurrentMapInstance?.Broadcast(Session.Character.GenerateCMode());
+            Session.SendPacket(Session.Character.GenerateLev());
+            Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, Session.Character.CharacterId, 196), Session.Character.PositionX, Session.Character.PositionY);
+            Session.CurrentMapInstance?.Broadcast(UserInterfaceHelper.GenerateGuri(6, 1, Session.Character.CharacterId), Session.Character.PositionX, Session.Character.PositionY);
+            Session.SendPacket(Session.Character.GenerateSpPoint());
+            Session.Character.LoadSpeed();
+            Session.SendPacket(Session.Character.GenerateCond());
+            Session.SendPacket(Session.Character.GenerateStat());
+            Session.SendPackets(Session.Character.GenerateStatChar());
+            Session.Character.SkillsSp = new ThreadSafeSortedList<int, CharacterSkill>();
+            Parallel.ForEach(ServerManager.GetAllSkill(), skill =>
+            {
+                var morphUpdate = 31;
+
+                if (skill.Class == Session.Character.Morph + morphUpdate && sp.SpLevel >= skill.LevelMinimum)
+                {
+                    Session.Character.SkillsSp[skill.SkillVNum] = new CharacterSkill
+                    {
+                        SkillVNum = skill.SkillVNum,
+                        CharacterId = Session.Character.CharacterId
+                    };
+                }
+            });
+            Session.SendPacket(Session.Character.GenerateSki());
+            Session.SendPackets(Session.Character.GenerateQuicklist());
+        }
 
         public void Dispose()
         {
@@ -2416,12 +2468,56 @@ namespace OpenNos.GameObject
                     Hp = 1;
                 }
 
+                if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.RainbowBattleInstance)
+                {
+                    CharacterDTO characterToMute = DAOFactory.CharacterDAO.LoadByName(Session.Character.Name);
+                    if (Session.Character.IsMuted() == false)
+                    {
+                        Session.SendPacket(UserInterfaceHelper.GenerateInfo(
+                            string.Format(Language.Instance.GetMessageFromKey("MUTED_PLURAL"), "RBB DISCONNECT", "120")));
+                    }
+
+                    PenaltyLogDTO log = new PenaltyLogDTO
+                    {
+                        AccountId = characterToMute.AccountId,
+                        Reason = "RBB DISCONNECT",
+                        Penalty = PenaltyType.Muted,
+                        DateStart = DateTime.Now,
+                        DateEnd = DateTime.Now.AddMinutes(120),
+                        AdminName = "SYSTEM"
+                    };
+                    InsertOrUpdatePenalty(log);
+                    Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("DONE"), 10));
+                }
+
                 if (ServerManager.Instance.Groups != null)
                 {
                     if (ServerManager.Instance.Groups.Any(s => s.IsMemberOfGroup(CharacterId)))
                     {
                         ServerManager.Instance.GroupLeave(Session);
                     }
+                }
+
+                if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.RainbowBattleInstance)
+                {
+                    CharacterDTO characterToMute = DAOFactory.CharacterDAO.LoadByName(Session.Character.Name);
+                    if (Session.Character.IsMuted() == false)
+                    {
+                        Session.SendPacket(UserInterfaceHelper.GenerateInfo(
+                            string.Format(Language.Instance.GetMessageFromKey("MUTED_PLURAL"), "RBB DISCONNECT", "120")));
+                    }
+
+                    PenaltyLogDTO log = new PenaltyLogDTO
+                    {
+                        AccountId = characterToMute.AccountId,
+                        Reason = "RBB DISCONNECT",
+                        Penalty = PenaltyType.Muted,
+                        DateStart = DateTime.Now,
+                        DateEnd = DateTime.Now.AddMinutes(120),
+                        AdminName = "SYSTEM"
+                    };
+                    InsertOrUpdatePenalty(log);
+                    Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("DONE"), 10));
                 }
 
                 LeaveTalentArena(true);
@@ -3412,33 +3508,7 @@ namespace OpenNos.GameObject
             void _handleItemDrop(DropDTO drop, long? owner, short posX, short posY)
             {
                 int amount = drop.Amount;
-                if (ServerManager.Instance.Configuration.LockSystem)
-                {
-                    Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
-                    {
-                        if (Session.HasCurrentMapInstance)
-                        {
-                            if (CharacterId == owner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
-                            {
-                                if (!Session.Character.VerifiedLock)
-                                {
-                                    Session.SendPacket(GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_THIS_ACTION_CHARACTER_IS_LOCKED"), 10));
-                                    return;
-                                }
-                                GiftAdd(drop.ItemVNum, (byte)drop.Amount);
-                            }
-                            else
-                            {
-                                if (!Session.Character.VerifiedLock)
-                                {
-                                    Session.SendPacket(GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_THIS_ACTION_CHARACTER_IS_LOCKED"), 10));
-                                    return;
-                                }
-                                GiftAdd(drop.ItemVNum, (byte)drop.Amount);
-                            }
-                        }
-                    });
-                }
+
                 if (ServerManager.Instance.Configuration.EventDrop > 1)
                 {
                     amount *= ServerManager.Instance.Configuration.EventDrop;
@@ -3447,10 +3517,9 @@ namespace OpenNos.GameObject
                 {
                     Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
                     {
-                        if (CharacterId == owner &&
-                            StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
+                        if (CharacterId == owner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
                         {
-                            GiftAdd(drop.ItemVNum, (byte) drop.Amount);
+                            GiftAdd(drop.ItemVNum, (byte)drop.Amount);
                         }
 
                         //int[] items = { 1012, 2098, 2102, 2010, 2117, 2118, 2114, 2099, 2116, 2046, 2042, 2038, 2035 };
@@ -3479,29 +3548,27 @@ namespace OpenNos.GameObject
                 {
                     return;
                 }
-
                 monsterToAttack.RunDeathEvent();
 
-                // Not 100% sure if this covers all mob kills, have to look it later.
                 if (Killer != null)
                 {
                     if (Killer.Character != null && Killer.Character is Character chara) chara.MobKillCounter++;
-                    if (Killer.Mate != null && Killer.Mate.Owner != null && Killer.Mate.Owner is Character charaMate) charaMate.MobKillCounter++;
+                    if (Killer.Mate != null && Killer.Mate.Owner != null && Killer.Mate.Owner is Character charaMate)
+                        charaMate.MobKillCounter++;
                 }
 
-                if (monsterToAttack.GetBuff(CardType.SpecialEffects, (byte) AdditionalTypes.SpecialEffects.DecreaseKillerHP) is int[] DecreaseKillerHp)
+                if (monsterToAttack.GetBuff(CardType.SpecialEffects, (byte)AdditionalTypes.SpecialEffects.DecreaseKillerHP) is int[] DecreaseKillerHp)
                 {
                     bool EffectResistance = false;
                     if (Killer.MapEntityId != CharacterId)
                     {
-                        if (Killer.HasBuff(CardType.Buff, (byte) AdditionalTypes.Buff.EffectResistance))
+                        if (Killer.HasBuff(CardType.Buff, (byte)AdditionalTypes.Buff.EffectResistance))
                         {
                             if (ServerManager.RandomNumber() < 90)
                             {
                                 EffectResistance = true;
                             }
                         }
-
                         if (!EffectResistance)
                         {
                             if (DecreaseKillerHp[0] > 0)
@@ -3517,15 +3584,13 @@ namespace OpenNos.GameObject
                                     {
                                         DecreasedHp = Killer.Hp - 1;
                                     }
-
                                     Killer.GetDamage(DecreasedHp, monsterToAttack.BattleEntity, true);
                                     Session.SendPacket(Killer.GenerateDm(DecreasedHp));
                                     if (Killer.Mate != null)
                                     {
                                         Session.SendPacket(Killer.Mate.GenerateStatInfo());
                                     }
-
-                                    Session.SendPacket(new EffectPacket{EffectType = Killer.UserType, CallerId = Killer.MapEntityId, EffectId = 6007});
+                                    Session.SendPacket(new EffectPacket { EffectType = Killer.UserType, CallerId = Killer.MapEntityId, EffectId = 6007 });
                                 }
                             }
                         }
@@ -5816,7 +5881,8 @@ namespace OpenNos.GameObject
                         break;
 
                     case QuestType.Wear:
-                        if (quest.Quest.QuestObjectives.Any(q => q.SpecialData == firstData && (Session.Character.Inventory.Any(i => i.ItemVNum == q.Data && i.Type == InventoryType.Wear) || (quest.QuestId == 1541 || quest.QuestId == 1546) && Class != ClassType.Adventurer)))
+                        if (quest.Quest.QuestObjectives.Any(q => q.SpecialData == firstData &&
+                        (Session.Character.Inventory.Any(i => i.ItemVNum == q.Data && i.Type == InventoryType.Wear) || (quest.QuestId == 1541 || quest.QuestId == 1546) && Class != ClassType.Adventurer)))
                         {
                             IncrementObjective(quest, isOver: true);
                         }
@@ -5872,8 +5938,25 @@ namespace OpenNos.GameObject
                     case QuestType.Needed:
                     case QuestType.TargetReput:
                     case QuestType.TransmitGold:
-                    case QuestType.Collect5:
+                        foreach (QuestObjectiveDTO q in quest.Quest.QuestObjectives.Where(o => o.Data == firstData).ToList())
+                        {
+                            if (Session.Character.Gold >= q.Objective)
+                            {
+                                Gold -= (long)q.Objective;
+                                Session.SendPacket(GenerateGold());
+                                quest.Quest.QuestObjectives.Where(o => o.Data == firstData).ToList().ForEach(d => IncrementObjective(quest, d.ObjectiveIndex, isOver: true));
+                                return;
+                            }
+                        }
                         break;
+                    case QuestType.Collect5:
+                        quest.Quest.QuestObjectives.Where(o => o.Data == firstData).ToList().ForEach(d => IncrementObjective(quest, d.ObjectiveIndex));
+                        if (!forGroupMember)
+                        {
+                            IncrementGroupQuest(type, firstData, secondData, thirdData);
+                        }
+                        break;
+                        
                 }
             }
         }
@@ -8366,14 +8449,12 @@ namespace OpenNos.GameObject
             {
                 return;
             }
-
             LastQuest = DateTime.Now;
-            if (CustomQuestRewards((QuestType) quest.Quest.QuestType, quest.Quest.QuestId))
+            if (CustomQuestRewards((QuestType)quest.Quest.QuestType, quest.Quest.QuestId))
             {
                 RemoveQuest(quest.QuestId);
                 return;
             }
-
             Session.SendPacket(quest.Quest.GetRewardPacket(this));
             RemoveQuest(quest.QuestId);
         }

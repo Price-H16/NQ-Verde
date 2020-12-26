@@ -787,25 +787,25 @@ namespace OpenNos.GameObject.Helpers
                         session.Character.BattleEntity, true);
                     break;
 
-                //case 1: //angel wings --> 1685
-                //    session.Character.AddBuff(new Buff(4037, session.Character.Level, true),
-                //        session.Character.BattleEntity, true);
-                //    break;
+                case 1: //angel wings --> 1685
+                    session.Character.AddBuff(new Buff(4037, session.Character.Level, true),
+                        session.Character.BattleEntity, true);
+                    break;
 
-                //case 2: //demon wings --> 1686
-                //    session.Character.AddBuff(new Buff(4038, session.Character.Level, true),
-                //        session.Character.BattleEntity, true);
-                //    break;
+                case 2: //demon wings --> 1686
+                    session.Character.AddBuff(new Buff(4038, session.Character.Level, true),
+                        session.Character.BattleEntity, true);
+                    break;
 
-                //case 3: //fire wings --> 5087
-                //    session.Character.AddBuff(new Buff(4039, session.Character.Level, true),
-                //        session.Character.BattleEntity, true);
-                //    break;
+                case 3: //fire wings --> 5087
+                    session.Character.AddBuff(new Buff(4039, session.Character.Level, true),
+                        session.Character.BattleEntity, true);
+                    break;
 
-                //case 4: //frosty wings --> 5203
-                //    session.Character.AddBuff(new Buff(4040, session.Character.Level, true),
-                //        session.Character.BattleEntity, true);
-                //    break;
+                case 4: //frosty wings --> 5203
+                    session.Character.AddBuff(new Buff(4040, session.Character.Level, true),
+                        session.Character.BattleEntity, true);
+                    break;
 
                 case 17: // Blade Wings 
                     session.Character.AddBuff(new Buff(838, session.Character.Level, true),

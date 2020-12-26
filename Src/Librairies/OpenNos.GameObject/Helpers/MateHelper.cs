@@ -65,11 +65,11 @@ namespace OpenNos.GameObject.Helpers
 
         public int[,] RangeDefenseDodgeData { get; private set; }
 
-        public int[] TrainerDownRate { get; private set; }
+        public short[] TrainerUpgradeHits { get; private set; }
 
-        public int[] TrainerUpgradeHits { get; private set; }
+        public short[] TrainerUpRate { get; private set; }
 
-        public int[] TrainerUpRate { get; private set; }
+        public short[] TrainerDownRate { get; private set; }
 
         public double[] XpData { get; private set; }
 
@@ -338,37 +338,15 @@ namespace OpenNos.GameObject.Helpers
             }
         }
 
-        public void LoadPetSkills()
-        {
-            PetSkills = new List<int>
-            {
-                1513, // Purcival
-                1514, // Baron scratch ?
-                1515, // Amiral (le chat chelou)
-                1516, // roi des pirates pussifer
-                1524, // Miaou fou
-                1575, // Marié Bouhmiaou
-                1576, // Marie Bouhmiaou
-                1601, // Mechamiaou
-                1627, // Boris the polar bear
-                663, // Otter
-                740,
-                743
-            };
-        }
-
-        public void LoadTrainerDownRate()
-        {
-            TrainerDownRate = new[] { 0, 7, 13, 16, 28, 29, 33, 36, 50, 60 };
-        }
+        #region Trainers
 
         public void LoadTrainerUpgradeHits()
         {
-            TrainerUpgradeHits = new int[10];
+            TrainerUpgradeHits = new short[10];
 
-            var baseValue = 0;
+            short baseValue = 0;
 
-            for (var i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 baseValue += 50;
                 TrainerUpgradeHits[i] = baseValue;
@@ -377,8 +355,16 @@ namespace OpenNos.GameObject.Helpers
 
         public void LoadTrainerUpRate()
         {
-            TrainerUpRate = new[] { 67, 67, 44, 34, 22, 15, 14, 8, 1, 0 };
+            TrainerUpRate = new short[] { 67, 67, 44, 34, 22, 15, 14, 8, 1, 0 };
         }
+
+        public void LoadTrainerDownRate()
+        {
+            TrainerDownRate = new short[] { 0, 7, 13, 16, 28, 29, 33, 36, 50, 60 };
+        }
+
+        #endregion
+
 
         public void LoadXpData()
         {
@@ -439,23 +425,43 @@ namespace OpenNos.GameObject.Helpers
 
             foreach (var val in PartnerSpBuffs) session.Character.RemoveBuff(val, true);
         }
+        public void LoadPetSkills()
+        {
+            PetSkills = new List<int>
+            {
+                1513, // Purcival
+                1514, // Baron scratch ?
+                1515, // Amiral (le chat chelou)
+                1516, // roi des pirates pussifer
+                1524, // Miaou fou
+                1575, // Marié Bouhmiaou
+                1576, // Marie Bouhmiaou
+                1601, // Mechamiaou
+                1626, // Boris the polar bear
+                1627, // Boris the polar bear
+                663, // Otter
+                740,
+                743
+            };
+        }
 
         private void LoadMateBuffs()
         {
             MateBuffs = new Dictionary<int, int>
             {
+                //Monster / Buff
                 //{501, 4066}, // Justin
                 //{500, 4067}, // Kupei
                 //{503, 4068}, // Felix
-                //{501, 4066}, // Seina
-                //{500, 4067}, // Daisy
-                //{503, 4068}, // Whitney
+                {501, 4066}, // Seina
+                {500, 4067}, // Daisy
+                {503, 4068}, // Whitney
                 {439, 4062}, // Revenant skeleton
                 {2521, 4063}, // Sentinel
                 {2525, 4064}, // Spearman
-                //{317, 4048}, // BOB CUSTOM
-                //{318, 4049}, // TOM  CUSTOM
-                //{319, 4050}, // KLIFF  CUSTOM
+                {317, 4048}, // BOB CUSTOM
+                {318, 4049}, // TOM  CUSTOM
+                {319, 4050}, // KLIFF  CUSTOM
                 {536, 162}, // LUCKY PIG
                 {178, 108}, // LUCKY PIG
                 {670, 374}, // FIBI
@@ -477,9 +483,7 @@ namespace OpenNos.GameObject.Helpers
                 {2708, 708}, // MARCO
                 {2704, 710}, // FORTUNE BUSHTAIL
                 {2709, 711}, // SUPER FORTUNE BUSHTAIL
-                {2710, 783}, // MR TRIKLES
-                {709, 840}, // GOLDEN GLOOPY CAKE
-                {687, 842} // GLOOPY CAKE
+                {2710, 783} // MR TRIKLES
             };
         }
 
@@ -490,9 +494,8 @@ namespace OpenNos.GameObject.Helpers
                 {4825, 3000}, // Vénus
                 {4326, 3007}, // Guerrier Squelettique Ragnar
                 {4405, 3014}, // Yuna
-                {4413, 3021}, // AMORA
-                {4446, 3028}, // Perti
-                {4547, 3035}  //  AKHENATON
+                {4413, 3021},
+                {4446, 3028},
             };
             PartnerSpBuffs = new List<short>
             {

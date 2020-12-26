@@ -43,7 +43,7 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                 GameObject.Mate mate = null;
                 if (removePacket.Type > 0)
                 {
-                    equipment = (InventoryType) (12 + removePacket.Type);
+                    equipment = (InventoryType)(12 + removePacket.Type);
                     mate = Session.Character.Mates.Find(s =>
                         s.MateType == MateType.Partner && s.PetId == removePacket.Type - 1);
                     if (mate.IsTemporalMate) return;
@@ -68,7 +68,7 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                         var timeSpanSinceLastSpUsage = currentRunningSeconds - Session.Character.LastSp;
                         if (removePacket.Type == 0)
                         {
-                            if (removePacket.InventorySlot == (byte) EquipmentType.Sp && Session.Character.UseSp &&
+                            if (removePacket.InventorySlot == (byte)EquipmentType.Sp && Session.Character.UseSp &&
                                 !Session.Character.IsSeal)
                             {
                                 if (Session.Character.IsVehicled)
@@ -82,7 +82,7 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                                 if (Session.Character.LastSkillUse.AddSeconds(2) > DateTime.Now) return;
 
                                 if (Session.Character.Timespace != null &&
-                                    Session.Character.Timespace.SpNeeded?[(byte) Session.Character.Class] != 0 &&
+                                    Session.Character.Timespace.SpNeeded?[(byte)Session.Character.Class] != 0 &&
                                     Session.Character.Timespace.InstanceBag.Lock) return;
 
                                 if (!Session.Character.RemoveSp(inventory.ItemVNum, false)) return;
@@ -90,17 +90,17 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                                 Session.Character.LastSp =
                                     (DateTime.Now - Process.GetCurrentProcess().StartTime.AddSeconds(-50)).TotalSeconds;
                             }
-                            else if (removePacket.InventorySlot == (byte) EquipmentType.Sp
+                            else if (removePacket.InventorySlot == (byte)EquipmentType.Sp
                                      && !Session.Character.UseSp
                                      && timeSpanSinceLastSpUsage <= Session.Character.SpCooldown)
                             {
                                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(
                                     string.Format(Language.Instance.GetMessageFromKey("SP_INLOADING"),
-                                        Session.Character.SpCooldown - (int) Math.Round(timeSpanSinceLastSpUsage, 0)),
+                                        Session.Character.SpCooldown - (int)Math.Round(timeSpanSinceLastSpUsage, 0)),
                                     0));
                                 return;
                             }
-                            else if (removePacket.InventorySlot == (byte) EquipmentType.Fairy && (Session.Character.IsUsingFairyBooster == 1 || Session.Character.IsUsingFairyBooster == 2))
+                            else if (removePacket.InventorySlot == (byte)EquipmentType.Fairy && (Session.Character.IsUsingFairyBooster == 1 || Session.Character.IsUsingFairyBooster == 2))
 
                             {
                                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(
@@ -155,15 +155,15 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                                     break;
 
                                 case EquipmentType.Sp:
-                                {
-                                    if (mate.IsUsingSp)
                                     {
-                                        mate.RemoveSp();
-                                        mate.StartSpCooldown();
-                                    }
+                                        if (mate.IsUsingSp)
+                                        {
+                                            mate.RemoveSp();
+                                            mate.StartSpCooldown();
+                                        }
 
-                                    mate.Sp = null;
-                                }
+                                        mate.Sp = null;
+                                    }
                                     break;
                             }
 
@@ -171,13 +171,13 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                             Session.SendPacket(mate.GenerateScPacket());
                         }
 
-                        var ring = Session.Character.Inventory.LoadBySlotAndType((byte) EquipmentType.Ring,
+                        var ring = Session.Character.Inventory.LoadBySlotAndType((byte)EquipmentType.Ring,
                             InventoryType.Wear);
                         var bracelet =
-                            Session.Character.Inventory.LoadBySlotAndType((byte) EquipmentType.Bracelet,
+                            Session.Character.Inventory.LoadBySlotAndType((byte)EquipmentType.Bracelet,
                                 InventoryType.Wear);
                         var necklace =
-                            Session.Character.Inventory.LoadBySlotAndType((byte) EquipmentType.Necklace,
+                            Session.Character.Inventory.LoadBySlotAndType((byte)EquipmentType.Necklace,
                                 InventoryType.Wear);
                         Session.Character.CellonOptions.Clear();
                         if (ring != null) Session.Character.CellonOptions.AddRange(ring.CellonOptions);

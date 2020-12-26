@@ -25,7 +25,7 @@ namespace OpenNos.Handler.PacketHandler.Inventory
 
         #region Methods
 
-        private static void CloseExchange (ClientSession session, ClientSession targetSession)
+        private static void CloseExchange(ClientSession session, ClientSession targetSession)
         {
             if (targetSession?.Character.ExchangeInfo != null)
             {

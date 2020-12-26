@@ -2,7 +2,6 @@
 using NosTale.Extension.Extension.Packet;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
-using OpenNos.Core.Handling;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject.Helpers;
@@ -29,112 +28,76 @@ namespace OpenNos.Handler.PacketHandler.Inventory
 
         #region Methods
 
-        [Packet("exc_list")]
-        public void ExchangeList(string packet)
+        public void ExchangeList(ExcListPacket packet)
         {
-            string[] packetsplit = packet.Split(' ');
-
-            if (!long.TryParse(packetsplit[2], out long gold))
-            {
-                return;
-            }
-
-            if (!long.TryParse(packetsplit[3], out long GoldBank))
-            {
-                return;
-            }
-
-            if (gold < 0 || gold > Session.Character.Gold || GoldBank < 0 || GoldBank > Session.Character.GoldBank || Session.Character.ExchangeInfo == null || Session.Character.ExchangeInfo.ExchangeList.Any())
-            {
-                return;
-            }
-
-            if (!Session.Character.VerifiedLock)
-            {
-                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("CHARACTER_LOCKED_USE_UNLOCK"), 0));
-                return;
-            }
 
             Logger.LogUserEvent("EXC_LIST", Session.GenerateIdentity(),
-                $"Packet string: {packet.ToString()}");
+                $"Packet string: {packet}");
 
-            if (Session.Character.ExchangeInfo == null)
-            {
-                return;
-            }
-            ClientSession targetSession =
+            if (Session.Character.ExchangeInfo == null) return;
+
+            if (Session.Character.ExchangeInfo.Gold != 0) return;
+
+            if (Session.Character.ExchangeInfo.BankGold != 0) return;
+
+            var targetSession =
                 ServerManager.Instance.GetSessionByCharacterId(Session.Character.ExchangeInfo.TargetCharacterId);
             if (Session.Character.HasShopOpened || targetSession?.Character.HasShopOpened == true)
             {
-                CloseExchange(Session, targetSession);
+                Session.CloseExchange(targetSession);
                 return;
             }
 
-            if (packetsplit.Length < 4)
+            var packetsplit = packet.PacketData.Split(' ');
+            if (packetsplit.Length < 2)
             {
                 Session.SendPacket("exc_close 0");
                 Session.CurrentMapInstance?.Broadcast(Session, "exc_close 0", ReceiverType.OnlySomeone,
                     "", Session.Character.ExchangeInfo.TargetCharacterId);
 
-                if (targetSession != null)
-                {
-                    targetSession.Character.ExchangeInfo = null;
-                }
+                if (targetSession != null) targetSession.Character.ExchangeInfo = null;
                 Session.Character.ExchangeInfo = null;
                 return;
             }
 
-            byte[] type = new byte[10];
+            if (!long.TryParse(packetsplit[0], out var gold)) return;
+
+            if (!long.TryParse(packetsplit[1], out var bankGold)) return;
+
+            var type = new byte[10];
             short[] slot = new short[10], qty = new short[10];
-            string packetList = "";
+            var packetList = "";
 
-            if (gold < 0 || gold > Session.Character.Gold || Session.Character.ExchangeInfo == null
-                || Session.Character.ExchangeInfo.ExchangeList.Count > 0)
-            {
+            if (gold < 0 || gold > Session.Character.Gold ||
+                bankGold < 0 || bankGold > Session.Account.BankMoney / 1000 ||
+                Session.Character.ExchangeInfo == null || Session.Character.ExchangeInfo.ExchangeList.Any())
                 return;
-            }
 
-            if (GoldBank < 0 || GoldBank > Session.Character.GoldBank || Session.Character.ExchangeInfo == null
-                || Session.Character.ExchangeInfo.ExchangeList.Count > 0)
+            for (int j = 4, i = 0; j <= packetsplit.Length && i < 10; j += 3, i++)
             {
-                return;
-            }
-
-            for (int j = 7, i = 0; j <= packetsplit.Length && i < 10; j += 3, i++)
-            {
-                byte.TryParse(packetsplit[j - 3], out type[i]);
-                short.TryParse(packetsplit[j - 2], out slot[i]);
-                short.TryParse(packetsplit[j - 1], out qty[i]);
+                byte.TryParse(packetsplit[j - 2], out type[i]);
+                short.TryParse(packetsplit[j - 1], out slot[i]);
+                short.TryParse(packetsplit[j], out qty[i]);
                 if ((InventoryType)type[i] == InventoryType.Bazaar)
                 {
-                    CloseExchange(Session, targetSession);
+                    Session.CloseExchange(targetSession);
                     return;
                 }
 
-                ItemInstance item = Session.Character.Inventory.LoadBySlotAndType(slot[i], (InventoryType)type[i]);
-                if (item == null)
-                {
-                    return;
-                }
+                var item = Session.Character.Inventory.LoadBySlotAndType(slot[i], (InventoryType)type[i]);
+                if (item == null) return;
 
-                if (qty[i] <= 0 || item.Amount < qty[i])
-                {
-                    return;
-                }
+                if (qty[i] <= 0 || item.Amount < qty[i]) return;
 
-                ItemInstance it = item.DeepCopy();
+                var it = item.DeepCopy();
                 if (it.Item.IsTradable && !it.IsBound)
                 {
                     it.Amount = qty[i];
                     Session.Character.ExchangeInfo.ExchangeList.Add(it);
                     if (type[i] != 0)
-                    {
                         packetList += $"{i}.{type[i]}.{it.ItemVNum}.{qty[i]} ";
-                    }
                     else
-                    {
                         packetList += $"{i}.{type[i]}.{it.ItemVNum}.{it.Rare}.{it.Upgrade} ";
-                    }
                 }
                 else if (it.IsBound)
                 {
@@ -142,35 +105,20 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                     Session.CurrentMapInstance?.Broadcast(Session, "exc_close 0", ReceiverType.OnlySomeone,
                         "", Session.Character.ExchangeInfo.TargetCharacterId);
 
-                    if (targetSession != null)
-                    {
-                        targetSession.Character.ExchangeInfo = null;
-                    }
+                    if (targetSession != null) targetSession.Character.ExchangeInfo = null;
                     Session.Character.ExchangeInfo = null;
                     return;
                 }
             }
 
             Session.Character.ExchangeInfo.Gold = gold;
-            Session.Character.ExchangeInfo.BankGold = GoldBank;
-            Session.CurrentMapInstance?.Broadcast(Session, $"exc_list 1 {Session.Character.CharacterId} {gold} {GoldBank} {packetList}", ReceiverType.OnlySomeone, string.Empty, Session.Character.ExchangeInfo.TargetCharacterId);
-            Session.Character.ExchangeInfo.Validated = true;
+            Session.Character.ExchangeInfo.BankGold = bankGold * 1000;
+            Session.CurrentMapInstance?.Broadcast(Session,
+                $"exc_list 1 {Session.Character.CharacterId} {gold} {bankGold} {packetList}", ReceiverType.OnlySomeone,
+                "", Session.Character.ExchangeInfo.TargetCharacterId);
+            Session.Character.ExchangeInfo.Validate = true;
         }
 
         #endregion
-        private static void CloseExchange(ClientSession session, ClientSession targetSession)
-        {
-            if (targetSession?.Character.ExchangeInfo != null)
-            {
-                targetSession.SendPacket("exc_close 0");
-                targetSession.Character.ExchangeInfo = null;
-            }
-
-            if (session?.Character.ExchangeInfo != null)
-            {
-                session.SendPacket("exc_close 0");
-                session.Character.ExchangeInfo = null;
-            }
-        }
     }
 }

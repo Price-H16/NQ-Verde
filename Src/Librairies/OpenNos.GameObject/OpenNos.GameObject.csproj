@@ -77,7 +77,6 @@
     <Compile Include="ArenaMember.cs" />
     <Compile Include="ArenaTeamMember.cs" />
     <Compile Include="Battle\BattleEntityExtension.cs" />
-    <Compile Include="Battle\IBattleEntity.cs" />
     <Compile Include="Buff\BCard.cs" />
     <Compile Include="Buff\Buff.cs" />
     <Compile Include="Buff\Card.cs" />
@@ -226,7 +225,6 @@
     <Compile Include="Family.cs" />
     <Compile Include="Skill.cs" />
     <Compile Include="CharacterSkill.cs" />
-    <Compile Include="ToSummon.cs" />
     <Compile Include="UseSkillOnDamage.cs" />
     <Compile Include="_Algorithm\IAlgorithmService.cs" />
     <Compile Include="_Algorithm\IDamageAlgorithm.cs" />

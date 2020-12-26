@@ -16,11 +16,12 @@ namespace OpenNos.GameObject
 
         #region Instantiation
 
-        public Buff(short id, int level, bool isPermaBuff = false)
+        public Buff(short id, int level, bool isPermaBuff = false, BattleEntity sender = null)
         {
             Card = ServerManager.GetCard(id);
             Level = level;
             IsPermaBuff = isPermaBuff;
+            Sender = sender;
         }
 
         #endregion

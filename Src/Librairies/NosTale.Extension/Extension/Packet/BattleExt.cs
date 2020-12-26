@@ -994,6 +994,12 @@ namespace NosTale.Extension.Extension.Packet
                         return;
                     }
 
+                    if (Session.Character.OnlyNormalAttacks == true)
+                    {
+                        Session.SendPacket(StaticPacketHelper.Cancel(2, targetId));
+                        return;
+                    }
+
                     BattleEntity targetEntity = null;
 
                     switch (targetType)
@@ -2537,6 +2543,15 @@ namespace NosTale.Extension.Extension.Packet
                             $"bs 1 {Session.Character.CharacterId} {x} {y} {characterSkill.Skill.SkillVNum}" +
                             $" {(short)(characterSkill.Skill.Cooldown - reducedCooldown)} {characterSkill.Skill.AttackAnimation}" +
                             $" {characterSkill.Skill.Effect} 0 0 1 1 0 0 0");
+
+                        if (characterSkill.Skill.BCards.ToList().Any(s => 
+                        s.Type == (byte)CardType.FairyXPIncrease && s.SubType == ((byte)AdditionalTypes.FairyXPIncrease.TeleportToLocation / 10)))
+                        {
+                            characterSkill.Skill.BCards.ToList().ForEach(s => s.ApplyBCards(Session.Character.BattleEntity, Session.Character.BattleEntity));
+                            Session.Character.MapInstance.Broadcast($"tp 1 {Session.Character.CharacterId} {x} {y}");
+                            Session.Character.PositionX = x;
+                            Session.Character.PositionY = y;
+                        }
 
                         var Range = characterSkill.TargetRange();
                         if (characterSkill.GetSkillBCards().Any(s =>
