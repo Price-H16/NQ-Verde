@@ -27,11 +27,10 @@ namespace Plugins.BasicImplementations.Guri.Handler
             {
                 if (e.Argument == 0 && short.TryParse(e.User.ToString(), out var slot))
                 {
-                    var shell =
-                        Session.Character.Inventory.LoadBySlotAndType(slot, InventoryType.Equipment);
-                    if (shell?.ShellEffects.Count == 0 && shell.Upgrade > 0 && shell.Rare > 0
-                        && Session.Character.Inventory.CountItem(1429) >= shell.Upgrade / 10 + shell.Rare)
+                    var shell = Session.Character.Inventory.LoadBySlotAndType(slot, InventoryType.Equipment);
+                    if (shell?.ShellEffects.Count == 0 && shell.Upgrade > 0 && shell.Rare > 0 && Session.Character.Inventory.CountItem(1429) >= shell.Upgrade / 10 + shell.Rare)
                     {
+             
                         if (!ShellGeneratorHelper.Instance.ShellTypes.TryGetValue(shell.ItemVNum, out var shellType))
                         {
                             // SHELL TYPE NOT IMPLEMENTED
