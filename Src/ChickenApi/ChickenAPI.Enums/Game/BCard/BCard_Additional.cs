@@ -2,8 +2,6 @@
 {
     public static class BCardSubTypes
     {
-     #region Enums
-
         public enum A7Powers1 : byte
         {
             DamageApocalypsePower = 11,
@@ -1123,6 +1121,5 @@
             CanExecuteUltimateSkills = 31
         }
 
-    }   
-    #endregion
+    }
 }

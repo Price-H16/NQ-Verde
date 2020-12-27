@@ -106,15 +106,11 @@ namespace OpenNos.GameObject
 
             if (BCards.Count > 0 && Effect != 1000)
             {
-                if (BCards.Any(s => s.Type == (byte)BCardType.Buff && s.SubType == 1 && new Buff((short)s.SecondData, session.Character.Level).Card.BCards.Any(newbuff => session.Character.Buff.GetAllItems().Any(b => b.Card.BCards.Any(buff =>
-                    buff.CardId != newbuff.CardId
-                 && ((buff.Type == 33 && buff.SubType == 5 && (newbuff.Type == 33 || newbuff.Type == 58)) || (newbuff.Type == 33 && newbuff.SubType == 5 && (buff.Type == 33 || buff.Type == 58))
-                 || (buff.Type == 33 && (buff.SubType == 1 || buff.SubType == 3) && (newbuff.Type == 58 && (newbuff.SubType == 1))) || (buff.Type == 33 && (buff.SubType == 2 || buff.SubType == 4) && (newbuff.Type == 58 && (newbuff.SubType == 3)))
-                 || (newbuff.Type == 33 && (newbuff.SubType == 1 || newbuff.SubType == 3) && (buff.Type == 58 && (buff.SubType == 1))) || (newbuff.Type == 33 && (newbuff.SubType == 2 || newbuff.SubType == 4) && (buff.Type == 58 && (buff.SubType == 3)))
-                 || (buff.Type == 33 && newbuff.Type == 33 && buff.SubType == newbuff.SubType) || (buff.Type == 58 && newbuff.Type == 58 && buff.SubType == newbuff.SubType)))))))
+                if (BCards.Any(s => s.Type == (byte)BCardType.CardType.Buff && s.SubType == 11 && new Buff((short)s.SecondData, session.Character.Level).Card.BCards.Any(newbuff => session.Character.Buff.GetAllItems().Any(b => b.Card.BCards.Any(buff => buff.CardId != newbuff.CardId && (buff.Type == 33 && buff.SubType == 51 && (newbuff.Type == 33 || newbuff.Type == 58) || newbuff.Type == 33 && newbuff.SubType == 51 && (buff.Type == 33 || buff.Type == 58) || buff.Type == 33 && (buff.SubType == 11 || buff.SubType == 31) && newbuff.Type == 58 && newbuff.SubType == 11 || buff.Type == 33 && (buff.SubType == 21 || buff.SubType == 41) && newbuff.Type == 58 && newbuff.SubType == 31 || newbuff.Type == 33 && (newbuff.SubType == 11 || newbuff.SubType == 31) && buff.Type == 58 && buff.SubType == 11 || newbuff.Type == 33 && (newbuff.SubType == 21 || newbuff.SubType == 41) && buff.Type == 58 && buff.SubType == 31 || buff.Type == 33 && newbuff.Type == 33 && buff.SubType == newbuff.SubType || buff.Type == 58 && newbuff.Type == 58 && buff.SubType == newbuff.SubType))))))
                 {
                     return;
                 }
+
                 BCards.ForEach(c => c.ApplyBCards(session.Character.BattleEntity, session.Character.BattleEntity));
                 session.Character.Inventory.RemoveItemFromInventory(inv.Id);
                 return;

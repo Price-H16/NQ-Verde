@@ -132,7 +132,8 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
 
                         ServerManager.Instance.BazaarRefresh(bazaarItemDTO.BazaarItemId);
 
-                        Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(o => new CSListPacketHandler(Session).RefreshPersonalBazarList(new CSListPacket()));                    }
+                        Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(o => new CSListPacketHandler(Session).RefreshPersonalBazarList(new CSListPacket()));
+                    }
                     else
                     {
                         Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
@@ -150,7 +151,7 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                 Session.SendPacket($"rc_scalc 0 -1 -1 -1 -1 -1 -1");
             }
         }
-        
+
         #endregion
     }
 }

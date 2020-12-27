@@ -329,6 +329,7 @@ namespace OpenNos.GameObject
 
         public int[] GetBuff(BCardType type, byte subtype) => BattleEntity.GetBuff(type, subtype);
 
+
         public MapCell GetPos() => BattleEntity.GetPos();
 
         public bool HasBuff(BCardType type, byte subtype) => BattleEntity.HasBuff(type, subtype);
@@ -2579,44 +2580,11 @@ namespace OpenNos.GameObject
                 return;
             }
 
-            if (!MapInstance.BattleEntities.Any())
-            {
-                return;
-            }
+            BattleEntity target = MapInstance.BattleEntities.OrderBy(e => Map.GetDistance(GetPos(), e.GetPos()))
+                .FirstOrDefault(e => BattleEntity.CanAttackEntity(e) && (e.CanBeTargetted) && (e.Mate == null || !BattleEntity.IsMateTrainer(MonsterVNum) || e.MapInstance != e.Mate?.Owner.Miniland || e.TargettedByMonstersList(false).Count() < 9) && (e.Character == null
+                    || !e.Character.InvisibleGm && (!e.Character.Invisible || CanSeeHiddenThings)) && Map.GetDistance(GetPos(), e.GetPos()) < (NoticeRange == 0 ? Monster.NoticeRange : NoticeRange));
 
-            if (!MapInstance.Sessions.Any())
-            {
-                return;
-            }
-
-            var target = MapInstance.BattleEntities.FirstOrDefault(e =>
-                                             Map.GetDistance(GetPos(), e.GetPos()) < (NoticeRange == 0 ? Monster.NoticeRange : NoticeRange));
-
-            if (target == null /* || MoveEvent != null*/)
-            {
-                return;
-            }
-
-            if (!BattleEntity.CanAttackEntity(target) || !target.CanBeTargetted)
-            {
-                return;
-            }
-
-            if (target.Mate != null && BattleEntity.IsMateTrainer(MonsterVNum) &&
-                target.MapInstance == target.Mate?.Owner.Miniland &&
-                target.TargettedByMonstersList(false).Count() > 9)
-            {
-                return;
-            }
-
-            if (target.Character != null && target.Character.InvisibleGm && target.Character.Invisible &&
-                !CanSeeHiddenThings)
-            {
-                return;
-            }
-
-            if (Map.GetDistance(GetPos(), target.GetPos()) >
-                (NoticeRange == 0 ? Monster.NoticeRange : NoticeRange))
+            if (target == null/* || MoveEvent != null*/)
             {
                 return;
             }
@@ -2634,8 +2602,7 @@ namespace OpenNos.GameObject
             AddToAggroList(target);
             if (!Monster.NoAggresiveIcon && target.Character != null)
             {
-                Target.Character.Session.SendPacket(
-                        StaticPacketHelper.GenerateEff(UserType.Monster, MapMonsterId, 5000));
+                Target.Character.Session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Monster, MapMonsterId, 5000));
             }
         }
 

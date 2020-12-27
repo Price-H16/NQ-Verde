@@ -58,8 +58,25 @@ namespace OpenNos.GameObject
 
         #region Methods
 
-        public bool CanBeUsed()
+        public bool CanBeUsed(bool force = false)
         {
+            bool canContinue = true;
+            var online = ServerManager.Instance.GetSessionByCharacterId(CharacterId);
+
+            if (!(online is ClientSession session))
+            {
+                return false;
+            }
+            if (force)
+            {
+                canContinue = true;
+            }
+
+            if (!canContinue)
+            {
+                return false;
+            }
+
             return Skill != null && LastUse.AddMilliseconds(Skill.Cooldown * 100) < DateTime.Now;
         }
 
@@ -75,7 +92,7 @@ namespace OpenNos.GameObject
 
         public List<BCard> GetSkillBCards()
         {
-            var SkillBCards = new List<BCard>();
+            List<BCard> SkillBCards = new List<BCard>();
             SkillBCards.AddRange(Skill.BCards);
             if (ServerManager.Instance.GetSessionByCharacterId(CharacterId) is ClientSession Session)
             {

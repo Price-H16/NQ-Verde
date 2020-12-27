@@ -23,8 +23,8 @@ namespace OpenNos.GameObject.Battle
             reflectedDamage = Math.Min(damage, data);
             attacker.GetDamage(reflectedDamage, target, true);
             target.MapInstance.Broadcast(StaticPacketHelper.SkillUsed(attacker.UserType, attacker.MapEntityId,
-                (byte) attacker.UserType, attacker.MapEntityId,
-                -1, 0, 0, 0, 0, 0, attacker.Hp > 0, (int) (attacker.Hp / attacker.HPLoad() * 100), reflectedDamage,
+                (byte)attacker.UserType, attacker.MapEntityId,
+                -1, 0, 0, 0, 0, 0, attacker.Hp > 0, (int)(attacker.Hp / attacker.HPLoad() * 100), reflectedDamage,
                 0, 1));
             target.Character?.Session?.SendPacket(target.Character.GenerateStat());
 

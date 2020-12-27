@@ -7,10 +7,7 @@ namespace OpenNos.GameObject
     {
         #region Instantiation
 
-        public MonsterToSummon(short vnum, MapCell spawnCell, BattleEntity target, bool move, bool isTarget = false,
-            bool isBonus = false, bool isHostile = true, bool isBoss = false, BattleEntity owner = null,
-            int aliveTime = 0, int aliveTimeMp = 0, byte noticeRange = 0, float hasDelay = 0, int maxHp = 0,
-            int maxMp = 0)
+        public MonsterToSummon(short vnum, MapCell spawnCell, BattleEntity target, bool move, bool isTarget = false, bool isBonus = false, bool isHostile = true, bool isBoss = false, BattleEntity owner = null, int aliveTime = 0, int aliveTimeMp = 0, byte noticeRange = 0, short hasDelay = 0, int maxHp = 0, int maxMp = 0)
         {
             VNum = vnum;
             SpawnCell = spawnCell;
@@ -38,25 +35,21 @@ namespace OpenNos.GameObject
 
         #region Properties
 
-        public List<EventContainer> AfterSpawnEvents { get; set; }
+        public bool IsMeteorite { get; set; }
+
+        public short Damage { get; set; }
 
         public int AliveTime { get; set; }
 
         public int AliveTimeMp { get; set; }
 
-        public short Damage { get; set; }
-
         public List<EventContainer> DeathEvents { get; set; }
-
-        public float HasDelay { get; set; }
 
         public bool IsBonus { get; set; }
 
         public bool IsBoss { get; set; }
 
         public bool IsHostile { get; set; }
-
-        public bool IsMeteorite { get; set; }
 
         public bool IsMoving { get; set; }
 
@@ -72,17 +65,21 @@ namespace OpenNos.GameObject
 
         public List<EventContainer> NoticingEvents { get; set; }
 
+        public List<UseSkillOnDamage> UseSkillOnDamage { get; set; }
+
+        public List<EventContainer> SpawnEvents { get; set; }
+
+        public List<EventContainer> AfterSpawnEvents { get; set; }
+
         public BattleEntity Owner { get; set; }
 
         public MapCell SpawnCell { get; set; }
 
-        public List<EventContainer> SpawnEvents { get; set; }
-
         public BattleEntity Target { get; set; }
 
-        public List<UseSkillOnDamage> UseSkillOnDamage { get; set; }
-
         public short VNum { get; set; }
+
+        public short HasDelay { get; set; }
 
         #endregion
     }
