@@ -1,5 +1,11 @@
 ﻿using System;
-using OpenNos.Domain;
+using ChickenAPI.Enums.Game.Character;
+using CharacterState = OpenNos.Domain.CharacterState;
+using FactionType = OpenNos.Domain.FactionType;
+using GenderType = OpenNos.Domain.GenderType;
+using HairColorType = OpenNos.Domain.HairColorType;
+using HairStyleType = OpenNos.Domain.HairStyleType;
+using MinilandState = OpenNos.Domain.MinilandState;
 
 namespace OpenNos.Data
 {
@@ -28,7 +34,7 @@ namespace OpenNos.Data
 
         public long CharacterId { get; set; }
 
-        public ClassType Class { get; set; }
+        public CharacterClassType Class { get; set; }
 
         public short Compliment { get; set; }
 
@@ -159,6 +165,9 @@ namespace OpenNos.Data
         public byte BattleTowerStage { get; set; }
 
         public long GoldBank { get; set; }
+        
+        public int ItemShopShip { get; set; }
+        
         #endregion
     }
 }

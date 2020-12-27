@@ -72,7 +72,6 @@
     <Compile Include="AttackType.cs" />
     <Compile Include="BankActionType.cs" />
     <Compile Include="BazaarListType.cs" />
-    <Compile Include="BuffType.cs" />
     <Compile Include="CellonOptionType.cs" />
     <Compile Include="DialogType.cs" />
     <Compile Include="EntityType.cs" />
@@ -91,7 +90,6 @@
     <Compile Include="FamilyAuthorityType.cs" />
     <Compile Include="MateType.cs" />
     <Compile Include="MedalType.cs" />
-    <Compile Include="BCardType.cs" />
     <Compile Include="BuyShopType.cs" />
     <Compile Include="CharacterRelationType.cs" />
     <Compile Include="CharacterState.cs" />
@@ -138,8 +136,6 @@
     <Compile Include="RespawnType.cs" />
     <Compile Include="CharacterOption.cs" />
     <Compile Include="ItemType.cs" />
-    <Compile Include="ClassType.cs" />
-    <Compile Include="AuthorityType.cs" />
     <Compile Include="GenderType.cs" />
     <Compile Include="HairColorType.cs" />
     <Compile Include="HairStyleType.cs" />

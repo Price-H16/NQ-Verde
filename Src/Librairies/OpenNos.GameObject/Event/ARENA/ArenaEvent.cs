@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using ChickenAPI.Enums.Game.Buffs;
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -873,10 +875,10 @@ namespace OpenNos.GameObject.Event.ARENA
 
         private static void BuffTeam(List<ArenaTeamMember> team)
         {
-            if (team.Any(ch => ch.Session?.Character.Class == ClassType.Archer) &&
-                team.Any(ch => ch.Session?.Character.Class == ClassType.Magician) &&
-                team.Any(ch => ch.Session?.Character.Class == ClassType.Swordsman) &&
-                team.Any(ch => ch.Session?.Character.Class == ClassType.MartialArtist))
+            if (team.Any(ch => ch.Session?.Character.Class == CharacterClassType.Archer) &&
+                team.Any(ch => ch.Session?.Character.Class == CharacterClassType.Magician) &&
+                team.Any(ch => ch.Session?.Character.Class == CharacterClassType.Swordsman) &&
+                team.Any(ch => ch.Session?.Character.Class == CharacterClassType.MartialArtist))
                 //buff team
             {
                 team.ForEach(sess =>
@@ -888,10 +890,10 @@ namespace OpenNos.GameObject.Event.ARENA
                 });
             }
 
-            if (team.Count(ch => ch.Session?.Character.Class == ClassType.Archer) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == ClassType.Magician) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == ClassType.Swordsman) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == ClassType.MartialArtist) == 3)
+            if (team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Archer) == 3 ||
+                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Magician) == 3 ||
+                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Swordsman) == 3 ||
+                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.MartialArtist) == 3)
                 //debuff team
             {
                 team.ForEach(sess =>

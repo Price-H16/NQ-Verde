@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using ChickenAPI.Enums;
+using ChickenAPI.Enums.Game.Character;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.Domain;
@@ -8,6 +10,7 @@ using OpenNos.GameObject;
 using OpenNos.GameObject.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using FactionType = OpenNos.Domain.FactionType;
 
 namespace OpenNos.Handler.PacketHandler.Basic
 {
@@ -260,10 +263,10 @@ namespace OpenNos.Handler.PacketHandler.Basic
                     }
 
                 if (portal.RequiredClass != null)
-                    if (Session.Character.Class != (ClassType) portal.RequiredClass)
+                    if (Session.Character.Class != (CharacterClassType) portal.RequiredClass)
                     {
                         Session.SendPacket(
-                            Session.Character.GenerateSay($"Only {(ClassType) portal.RequiredClass} can enter !", 10));
+                            Session.Character.GenerateSay($"Only {(CharacterClassType) portal.RequiredClass} can enter !", 10));
                         Session.SendPacket(UserInterfaceHelper.GenerateInfo(
                             string.Format(Language.Instance.GetMessageFromKey("CLASS_REQUIRED_PORTAL"), 0)));
                         return;

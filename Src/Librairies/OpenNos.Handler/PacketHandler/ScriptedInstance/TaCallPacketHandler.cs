@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using ChickenAPI.Enums.Game.Buffs;
 using NosTale.Packets.Packets;
 using OpenNos.Core;
 using OpenNos.Domain;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ChickenAPI.Enums;
 using NosTale.Configuration;
 using NosTale.Configuration.Utilities;
 using NosTale.Extension.GameExtension.Packet;
@@ -22,6 +23,8 @@ namespace OpenNos.Handler.BasicPacket.Login
         #endregion
 
         #region Instantiation
+        
+        private string GetFailPacket(AuthResponse response) => $"failc {(byte)response}";
 
         public LoginPacketHandler(ClientSession session)
         {
@@ -32,128 +35,6 @@ namespace OpenNos.Handler.BasicPacket.Login
 
         #region Methods
 
-        //public void VerifyLogin(LoginPacket loginPacket)
-        //{
-        //    if (loginPacket == null || loginPacket.Name == null || loginPacket.Password == null) return;
-
-        //    var a = DependencyContainer.Instance.GetInstance<JsonGameConfiguration>().Server;
-
-        //    var user = new UserDTO
-        //    {
-        //        Name = loginPacket.Name,
-        //        Password = a.UseOldCrypto
-        //            ? CryptographyBase.Sha512(LoginCryptography.GetPassword(loginPacket.Password)).ToUpper()
-        //            : loginPacket.Password
-        //    };
-        //    if (user == null || user.Name == null || user.Password == null) return;
-        //    var loadedAccount = DAOFactory.AccountDAO.LoadByName(user.Name);
-        //    if (loadedAccount != null && loadedAccount.Name != user.Name)
-        //    {
-        //        _session.SendPacket($"failc {(byte) LoginFailType.WrongCaps}");
-        //        return;
-        //    }
-
-        //    if (loadedAccount?.Password.ToUpper().Equals(user.Password) == true)
-        //    {
-        //        var ipAddress = _session.IpAddress;
-        //        DAOFactory.AccountDAO.WriteGeneralLog(loadedAccount.AccountId, ipAddress, null,
-        //            GeneralLogType.Connection, "LoginServer");
-
-        //        if (DAOFactory.PenaltyLogDAO.LoadByIp(ipAddress).Count() > 0)
-        //        {
-        //            _session.SendPacket($"failc {(byte) LoginFailType.CantConnect}");
-        //            return;
-        //        }
-
-        //        //check if the account is connected
-        //        if (!CommunicationServiceClient.Instance.IsAccountConnected(loadedAccount.AccountId))
-        //        {
-        //            var cleanIp = ipAddress.Replace("tcp://", "");
-        //            cleanIp = cleanIp.Substring(0, cleanIp.LastIndexOf(":") > 0 ? cleanIp.LastIndexOf(":") : cleanIp.Length);
-
-        //            var type = loadedAccount.Authority;
-        //            var penalty = DAOFactory.PenaltyLogDAO.LoadByAccount(loadedAccount.AccountId)
-        //                .FirstOrDefault(s => s.DateEnd > DateTime.Now && s.Penalty == PenaltyType.Banned);
-
-        //            if(penalty == null)
-        //            {
-        //                penalty = DAOFactory.PenaltyLogDAO.LoadByIp(cleanIp)
-        //                .FirstOrDefault(s => s.DateEnd > DateTime.Now && s.Penalty == PenaltyType.IPBanned);
-        //            }
-
-        //            if (penalty != null)
-        //                _session.SendPacket($"failc {(byte) LoginFailType.Banned}");
-        //            else
-        //                switch (type)
-        //                {
-        //                    case AuthorityType.Unconfirmed:
-        //                    {
-        //                        _session.SendPacket($"failc {(byte) LoginFailType.CantConnect}");
-        //                    }
-        //                        break;
-
-        //                    case AuthorityType.Banned:
-        //                    {
-        //                        _session.SendPacket($"failc {(byte) LoginFailType.Banned}");
-        //                    }
-        //                        break;
-
-        //                    case AuthorityType.Closed:
-        //                    {
-        //                        _session.SendPacket($"failc {(byte) LoginFailType.CantConnect}");
-        //                    }
-        //                        break;
-
-        //                    default:
-        //                    {
-        //                        if (loadedAccount.Authority < AuthorityType.SMOD)
-        //                        {
-        //                            var maintenanceLog = DAOFactory.MaintenanceLogDAO.LoadFirst();
-        //                            if (maintenanceLog != null && maintenanceLog.DateStart < DateTime.Now)
-        //                            {
-        //                                _session.SendPacket($"failc {(byte) LoginFailType.Maintenance}");
-        //                                return;
-        //                            }
-        //                        }
-
-        //                        var newSessionId = SessionFactory.Instance.GenerateSessionId();
-        //                        Logger.Debug(string.Format(Language.Instance.GetMessageFromKey("CONNECTION"), user.Name,   newSessionId));
-
-        //                        try
-        //                        {
-        //                            ipAddress = ipAddress.Substring(6, ipAddress.LastIndexOf(':') - 6);
-        //                            CommunicationServiceClient.Instance.RegisterAccountLogin(loadedAccount.AccountId, newSessionId, ipAddress);
-
-        //                        }
-        //                        catch (Exception ex)
-        //                        {
-        //                            Logger.Error("General Error SessionId: " + newSessionId, ex);
-        //                        }
-
-        //                            var clientData = loginPacket.ClientData.Split('.');                                 
-        //                            if (clientData.Length < 2)
-        //                            {
-        //                                clientData = loginPacket.ClientDataOld.Split('.');
-        //                            }                                
-
-        //                            var ignoreUserName = short.TryParse(clientData[3], out var clientVersion) && (clientVersion < 3075 || a.UseOldCrypto);
-        //                            _session.SendPacket(
-        //                            _session.BuildServersPacket(user.Name, newSessionId, ignoreUserName));
-        //                    }
-        //                    break;
-        //                }
-        //        }
-        //        else
-        //        {
-        //            _session.SendPacket($"failc {(byte) LoginFailType.AlreadyConnected}");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        _session.SendPacket($"failc {(byte) LoginFailType.AccountOrPasswordWrong}");
-        //    }
-        //}
-
         private string BuildServersPacket(string username, byte regionType, int sessionId, bool ignoreUserName)
         {
             string channelpacket = CommunicationServiceClient.Instance.RetrieveRegisteredWorldServers(username, regionType, sessionId, ignoreUserName);
@@ -162,7 +43,7 @@ namespace OpenNos.Handler.BasicPacket.Login
             {
                 Logger.Debug(
                     "Could not retrieve Worldserver groups. Please make sure they've already been registered.");
-                _session.SendPacket($"failc {(byte)LoginFailType.Maintenance}");
+                _session.SendPacket(GetFailPacket(AuthResponse.Maintenance));
             }
 
             return channelpacket;
@@ -193,7 +74,7 @@ namespace OpenNos.Handler.BasicPacket.Login
             AccountDTO loadedAccount = DAOFactory.AccountDAO.LoadByName(user.Name);
             if (loadedAccount != null && loadedAccount.Name != user.Name)
             {
-                _session.SendPacket($"failc {(byte)LoginFailType.WrongCaps}");
+                _session.SendPacket(GetFailPacket(AuthResponse.WrongCaps));
                 return;
             }
             if (loadedAccount?.Password.ToUpper().Equals(user.Password) == true)
@@ -204,7 +85,7 @@ namespace OpenNos.Handler.BasicPacket.Login
 
                 if (DAOFactory.PenaltyLogDAO.LoadByIp(ipAddress).Count() > 0)
                 {
-                    _session.SendPacket($"failc {(byte)LoginFailType.CantConnect}");
+                    _session.SendPacket(GetFailPacket(AuthResponse.CantConnect));
                     return;
                 }
 
@@ -216,7 +97,7 @@ namespace OpenNos.Handler.BasicPacket.Login
                         .FirstOrDefault(s => s.DateEnd > DateTime.Now && s.Penalty == PenaltyType.Banned);
                     if (penalty != null)
                     {
-                        _session.SendPacket($"failc {(byte)LoginFailType.Banned}");
+                        _session.SendPacket(GetFailPacket(AuthResponse.Banned));
                     }
                     else
                     {
@@ -225,7 +106,7 @@ namespace OpenNos.Handler.BasicPacket.Login
 
                             case AuthorityType.Banned:
                                 {
-                                    _session.SendPacket($"failc {(byte)LoginFailType.Banned}");
+                                    _session.SendPacket(GetFailPacket(AuthResponse.Banned));
                                 }
                                 break;
 
@@ -236,7 +117,7 @@ namespace OpenNos.Handler.BasicPacket.Login
                                         MaintenanceLogDTO maintenanceLog = DAOFactory.MaintenanceLogDAO.LoadFirst();
                                         if (maintenanceLog != null && maintenanceLog.DateStart < DateTime.Now)
                                         {
-                                            _session.SendPacket($"failc {(byte)LoginFailType.Maintenance}");
+                                            _session.SendPacket(GetFailPacket(AuthResponse.Maintenance));
                                             return;
                                         }
                                     }
@@ -285,12 +166,12 @@ namespace OpenNos.Handler.BasicPacket.Login
                 }
                 else
                 {
-                    _session.SendPacket($"failc {(byte)LoginFailType.AlreadyConnected}");
+                    _session.SendPacket(GetFailPacket(AuthResponse.AlreadyConnected));
                 }
             }
             else
             {
-                _session.SendPacket($"failc {(byte)LoginFailType.AccountOrPasswordWrong}");
+                _session.SendPacket(GetFailPacket(AuthResponse.AccountOrPasswordWrong));
             }
         }
 

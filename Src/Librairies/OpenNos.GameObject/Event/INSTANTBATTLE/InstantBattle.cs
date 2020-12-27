@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
+using ChickenAPI.Enums.Game.BCard;
 using OpenNos.GameObject.Networking;
 
 namespace OpenNos.GameObject.Event
@@ -124,9 +125,9 @@ namespace OpenNos.GameObject.Event
                     mapinstance.Item1.Sessions.Where(s => s.Character != null).ToList().ForEach(s => {
                         s.Character.RemoveBuffByBCardTypeSubType(new List<KeyValuePair<byte, byte>>()
                         {
-                            new KeyValuePair<byte, byte>((byte)BCardType.CardType.SpecialActions, (byte)AdditionalTypes.SpecialActions.Hide),
-                            new KeyValuePair<byte, byte>((byte)BCardType.CardType.FalconSkill, (byte)AdditionalTypes.FalconSkill.Hide),
-                            new KeyValuePair<byte, byte>((byte)BCardType.CardType.FalconSkill, (byte)AdditionalTypes.FalconSkill.Ambush)
+                            new KeyValuePair<byte, byte>((byte)BCardType.SpecialActions, (byte)BCardSubTypes.SpecialActions.Hide),
+                            new KeyValuePair<byte, byte>((byte)BCardType.FalconSkill, (byte)BCardSubTypes.FalconSkill.Hide),
+                            new KeyValuePair<byte, byte>((byte)BCardType.FalconSkill, (byte)BCardSubTypes.FalconSkill.Ambush)
                         });
                         ServerManager.Instance.ChangeMap(s.Character.CharacterId, s.Character.MapId, s.Character.MapX, s.Character.MapY);
                     });

@@ -71,7 +71,7 @@ namespace OpenNos.GameObject
             Sessions.Where(s => s != player).ForEach(session =>
             {
                 str.Add(
-                    $"pst 1 {session.Character.CharacterId} {++i} {(int) (session.Character.Hp / session.Character.HPLoad() * 100)} {(int) (session.Character.Mp / session.Character.MPLoad() * 100)} {session.Character.HPLoad()} {session.Character.MPLoad()} {(byte) session.Character.Class} {(byte) session.Character.Gender} {(session.Character.UseSp ? session.Character.Morph : 0)}{session.Character.Buff.GetAllItems().Where(s => !s.StaticBuff || new short[] {339, 340}.Contains(s.Card.CardId)).Aggregate("", (current, buff) => current + $" {buff.Card.CardId}")}");
+                    $"pst 1 {session.Character.CharacterId} {++i} {(int) (session.Character.Hp / session.Character.HPLoad() * 100)} {(int) (session.Character.Mp / session.Character.MPLoad() * 100)} {session.Character.HPLoad()} {session.Character.MPLoad()} {(byte) session.Character.Class} {(byte) session.Character.Gender} {(session.Character.UseSp ? session.Character.Morph : 0)}{session.Character.Buff.GetAllItems().Where(s => !s.IsStaticBuff || new short[] {339, 340}.Contains(s.Card.CardId)).Aggregate("", (current, buff) => current + $" {buff.Card.CardId}")}");
             });
             Sessions.Where(s => s == player).ForEach(session =>
             {

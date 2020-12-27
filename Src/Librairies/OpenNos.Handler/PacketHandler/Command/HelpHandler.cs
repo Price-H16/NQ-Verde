@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ChickenAPI.Enums;
 using NosTale.Packets.Packets.CommandPackets;
 using OpenNos.Core;
 using OpenNos.Domain;

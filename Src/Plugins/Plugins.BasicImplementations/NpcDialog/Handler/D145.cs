@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
@@ -34,15 +35,15 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                }
                switch (Session.Character.Class)
                {
-                   case ClassType.Swordsman:
+                   case CharacterClassType.Swordsman:
                        Session.Character.GiftAdd(4500, 1);
                        break;
 
-                   case ClassType.Archer:
+                   case CharacterClassType.Archer:
                        Session.Character.GiftAdd(4501, 1);
                        break;
 
-                   case ClassType.Magician:
+                   case CharacterClassType.Magician:
                        Session.Character.GiftAdd(4502, 1);
                        break;
                }

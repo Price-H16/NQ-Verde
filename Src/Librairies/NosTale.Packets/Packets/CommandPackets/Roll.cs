@@ -1,9 +1,11 @@
 ﻿//using OpenNos.Core;
-//using OpenNos.Domain;
+//using ChickenAPI.Enums;
+
 
 //namespace NosTale.Packets.Packets.CommandPackets
 //{
-//    [PacketHeader("$Roll", PassNonParseablePacket = true, Authorities = new[] {AuthorityType.User})]
+
+//[PacketHeader("$Roll", PassNonParseablePacket = true, Authorities = new[] {AuthorityType.User})]
 //    public class RollPacket : PacketDefinition
 //    {
 //        #region Methods

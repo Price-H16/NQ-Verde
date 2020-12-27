@@ -1,4 +1,5 @@
 ﻿using System;
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.Domain;
 
 namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.HpMp
@@ -9,21 +10,21 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.HpMp
         {
         }
 
-        public int GetStat(ClassType type, byte level)
+        public int GetStat(CharacterClassType type, byte level)
         {
             switch (type)
             {
-                case ClassType.Adventurer:
+                case CharacterClassType.Adventurer:
                     return 30;
-                case ClassType.Swordsman:
+                case CharacterClassType.Swordsman:
                     return 90;
-                case ClassType.Archer:
+                case CharacterClassType.Archer:
                     return 60;
-                case ClassType.Magician:
+                case CharacterClassType.Magician:
                     return 30;
-                case ClassType.MartialArtist:
+                case CharacterClassType.MartialArtist:
                     return 80;
-                case ClassType.Unknown:
+                case CharacterClassType.Unknown:
                     return 50;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

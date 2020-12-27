@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject.Helpers;
@@ -138,7 +139,7 @@ namespace OpenNos.GameObject
 
                         case QuestRewardType.JobExp: // JobExperience
                             character.GetJobExp(
-                                (long) ((character.Class == (byte) ClassType.Adventurer
+                                (long) ((character.Class == (byte) CharacterClassType.Adventurer
                                             ? CharacterHelper.FirstJobXPData[reward.Data > 255 ? 255 : reward.Data]
                                             : CharacterHelper.SecondJobXPData[reward.Data > 255 ? 255 : reward.Data]) *
                                         reward.Amount / 100D));
@@ -147,7 +148,7 @@ namespace OpenNos.GameObject
 
                         case QuestRewardType.SecondJobExp: // % JobExperience
                             character.GetJobExp(
-                                (long) ((character.Class == (byte) ClassType.Adventurer
+                                (long) ((character.Class == (byte) CharacterClassType.Adventurer
                                             ? CharacterHelper.FirstJobXPData[character.JobLevel]
                                             : CharacterHelper.SecondJobXPData[character.JobLevel]) * reward.Amount /
                                         100D));

@@ -28,30 +28,40 @@ namespace OpenNos.Handler.PacketHandler.Family.Command
 
         #region Methods
 
-        public void FamilyCall(FamilyShoutPacket packet)
+        public void FamilyCall(string packet)
         {
             if (Session.Character.Family != null && Session.Character.FamilyCharacter != null)
+            {
                 if (Session.Character.FamilyCharacter.Authority == FamilyAuthority.Familydeputy
-                    || Session.Character.FamilyCharacter.Authority == FamilyAuthority.Familykeeper
-                    && Session.Character.Family.ManagerCanShout
+                    || (Session.Character.FamilyCharacter.Authority == FamilyAuthority.Familykeeper
+                     && Session.Character.Family.ManagerCanShout)
                     || Session.Character.FamilyCharacter.Authority == FamilyAuthority.Head)
                 {
-                    var msg = packet.Data?.Split(' ');
-                    var output = string.Empty;
-                    if (msg == null) return;
+                    string msg = "";
+                    int i = 0;
+                    foreach (string str in packet.Split(' '))
+                    {
+                        if (i > 1)
+                        {
+                            msg += str + " ";
+                        }
 
-                    for (var i = 0; i < msg.Length; i++) output += msg[i] + " ";
+                        i++;
+                    }
 
+                    Logger.LogUserEvent("GUILDCOMMAND", Session.GenerateIdentity(),
+                        $"[FamilyShout][{Session.Character.Family.FamilyId}]Message: {msg}");
                     CommunicationServiceClient.Instance.SendMessageToCharacter(new SCSCharacterMessage
                     {
                         DestinationCharacterId = Session.Character.Family.FamilyId,
                         SourceCharacterId = Session.Character.CharacterId,
                         SourceWorldId = ServerManager.Instance.WorldId,
                         Message = UserInterfaceHelper.GenerateMsg(
-                            $"<{Language.Instance.GetMessageFromKey("FAMILYCALL")}> {output}", 0),
+                            $"<{Language.Instance.GetMessageFromKey("FAMILYCALL")}> {msg}", 0),
                         Type = MessageType.Family
                     });
                 }
+            }
         }
 
         #endregion

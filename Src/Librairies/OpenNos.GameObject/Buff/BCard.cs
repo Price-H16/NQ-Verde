@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Media.Media3D;
+using ChickenAPI.Enums.Game.BCard;
+using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -126,9 +128,9 @@ namespace OpenNos.GameObject
             session.BCardDisposables[skill?.SkillVNum == 1098 ? skill.SkillVNum * 1000 : BCardId] = Observable
                 .Timer(TimeSpan.FromMilliseconds(delayTime)).Subscribe(o =>
                 {
-                    switch ((BCardType.CardType)Type)
+                    switch ((BCardType)Type)
                     {
-                        case BCardType.CardType.Buff:
+                        case BCardType.Buff:
                             {
                                 var cardId = (short)(SecondData + partnerBuffLevel);
 
@@ -147,8 +149,8 @@ namespace OpenNos.GameObject
                                 var Chance = firstData == 0 ? ThirdData : firstData;
                                 var CardsToProtect = new List<short>();
                                 if (buff.Card.BuffType == BuffType.Bad &&
-                                    session.GetBuff(BCardType.CardType.DebuffResistance,
-                                            (byte)AdditionalTypes.DebuffResistance.NeverBadEffectChance) is int[]
+                                    session.GetBuff(BCardType.DebuffResistance,
+                                            (byte)BCardSubTypes.DebuffResistance.NeverBadEffectChance) is int[]
                                         NeverBadEffectChance)
                                 {
                                     // I divide in NeverBadEffectChance[3] since we have to avoid the Level debuffs being added
@@ -159,8 +161,8 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
-                                if (session.GetBuff(BCardType.CardType.DebuffResistance,
-                                        (byte)AdditionalTypes.DebuffResistance.NeverBadGeneralEffectChance) is int[]
+                                if (session.GetBuff(BCardType.DebuffResistance,
+                                        (byte)BCardSubTypes.DebuffResistance.NeverBadGeneralEffectChance) is int[]
                                     NeverBadGeneralEffectChance)
                                 {
                                     if (ServerManager.RandomNumber() < NeverBadGeneralEffectChance[1]
@@ -171,7 +173,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
-                                if (session.GetBuff(BCardType.CardType.Buff, (byte) AdditionalTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect && (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
+                                if (session.GetBuff(BCardType.Buff, (byte) BCardSubTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect && (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
                                 {
                                 var Prob = 100 - PreventingBadEffect[1] * 10;
                                 var ProtectType = PreventingBadEffect[0];
@@ -226,8 +228,8 @@ namespace OpenNos.GameObject
                             }
 
                             if (buff.Card.BuffType == BuffType.Bad &&
-                                session.GetBuff(BCardType.CardType.SpecialisationBuffResistance,
-                                    (byte) AdditionalTypes.SpecialisationBuffResistance.ResistanceToEffect,
+                                session.GetBuff(BCardType.SpecialisationBuffResistance,
+                                    (byte) BCardSubTypes.SpecialisationBuffResistance.ResistanceToEffect,
                                     buff.Card.CardId) is int[] ResistanceToEffect)
                             {
                                 if (ServerManager.RandomNumber() < ResistanceToEffect[0])
@@ -241,7 +243,7 @@ namespace OpenNos.GameObject
                                 return;
                             }
 
-                            if (SubType == (byte) AdditionalTypes.Buff.ChanceCausing)
+                            if (SubType == (byte) BCardSubTypes.Buff.ChanceCausing)
                             {
                                 if (Chance > 0 && ServerManager.RandomNumber() < Chance)
                                 {
@@ -250,8 +252,8 @@ namespace OpenNos.GameObject
                                         sender.AddBuff(buff, sender, x: x, y: y, forced: true);
                                     }
                                     else if (buff.Card?.BuffType == BuffType.Bad
-                                             && session.HasBuff(BCardType.CardType.TauntSkill,
-                                                 (byte) AdditionalTypes.TauntSkill.ReflectBadEffect)
+                                             && session.HasBuff(BCardType.TauntSkill,
+                                                 (byte) BCardSubTypes.TauntSkill.ReflectBadEffect)
                                         //&& ServerManager.RandomNumber() < FirstData
                                     )
                                     {
@@ -270,7 +272,7 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.Move:
+                        case BCardType.Move:
                         {
                             if (session.Character != null)
                             {
@@ -281,7 +283,7 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.Summons:
+                        case BCardType.Summons:
                             if (sender.MapMonster?.MonsterVNum == 154)
                             {
                                 return;
@@ -323,7 +325,7 @@ namespace OpenNos.GameObject
                             {
                                 switch (SubType)
                                 {
-                                    case (byte) AdditionalTypes.Summons.Summons:
+                                    case (byte) BCardSubTypes.Summons.Summons:
                                         if (CardId == null && SkillVNum == null)
                                         {
                                             if (sender.MapMonster != null)
@@ -374,7 +376,7 @@ namespace OpenNos.GameObject
 
                                         break;
 
-                                    case (byte) AdditionalTypes.Summons.SummonTrainingDummy: //Check
+                                    case (byte) BCardSubTypes.Summons.SummonTrainingDummy: //Check
                                         summonParameters = new List<MonsterToSummon>();
                                         for (var i = 0; i < amountToSpawn; i++)
                                         {
@@ -400,14 +402,14 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.SpecialAttack:
+                        case BCardType.SpecialAttack:
                             break;
 
-                        case BCardType.CardType.SpecialDefence:
+                        case BCardType.SpecialDefence:
                             break;
 
-                        case BCardType.CardType.AttackPower:
-                            if (SubType == (byte) AdditionalTypes.AttackPower.AllAttacksIncreased)
+                        case BCardType.AttackPower:
+                            if (SubType == (byte) BCardSubTypes.AttackPower.AllAttacksIncreased)
                             {
                                 if (session.Character != null && sender.Character != null &&
                                     session.Character == sender.Character)
@@ -424,7 +426,7 @@ namespace OpenNos.GameObject
                                 }
                             }
 
-                            if (SubType == (byte) AdditionalTypes.AttackPower.MeleeAttacksIncreased)
+                            if (SubType == (byte) BCardSubTypes.AttackPower.MeleeAttacksIncreased)
                             {
                                 if (session.Character != null && sender.Character != null &&
                                     session.Character == sender.Character)
@@ -441,7 +443,7 @@ namespace OpenNos.GameObject
                                 }
                             }
 
-                            if (SubType == (byte) AdditionalTypes.AttackPower.RangedAttacksIncreased)
+                            if (SubType == (byte) BCardSubTypes.AttackPower.RangedAttacksIncreased)
                             {
                                 if (session.Character != null && sender.Character != null &&
                                     session.Character == sender.Character)
@@ -458,7 +460,7 @@ namespace OpenNos.GameObject
                                 }
                             }
 
-                            if (SubType == (byte) AdditionalTypes.AttackPower.MagicalAttacksIncreased)
+                            if (SubType == (byte) BCardSubTypes.AttackPower.MagicalAttacksIncreased)
                             {
                                 if (session.Character != null && sender.Character != null &&
                                     session.Character == sender.Character)
@@ -477,53 +479,53 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.Target:
+                        case BCardType.Target:
                             break;
 
-                        case BCardType.CardType.Critical:
+                        case BCardType.Critical:
                             break;
 
-                        case BCardType.CardType.SpecialCritical:
+                        case BCardType.SpecialCritical:
                             break;
 
-                        case BCardType.CardType.Element:
+                        case BCardType.Element:
                             break;
 
-                        case BCardType.CardType.IncreaseDamage:
+                        case BCardType.IncreaseDamage:
                             break;
 
-                        case BCardType.CardType.Defence:
+                        case BCardType.Defence:
                             break;
 
-                        case BCardType.CardType.DodgeAndDefencePercent:
+                        case BCardType.DodgeAndDefencePercent:
                             break;
 
-                        case BCardType.CardType.Block:
+                        case BCardType.Block:
                             break;
 
-                        case BCardType.CardType.Absorption:
+                        case BCardType.Absorption:
                             break;
 
-                        case BCardType.CardType.ElementResistance:
+                        case BCardType.ElementResistance:
                             break;
 
-                        case BCardType.CardType.EnemyElementResistance:
+                        case BCardType.EnemyElementResistance:
                             break;
 
-                        case BCardType.CardType.Damage:
+                        case BCardType.Damage:
                             break;
 
-                        case BCardType.CardType.GuarantedDodgeRangedAttack:
+                        case BCardType.GuarantedDodgeRangedAttack:
                             break;
 
-                        case BCardType.CardType.Morale:
+                        case BCardType.Morale:
                             break;
 
-                        case BCardType.CardType.Casting:
+                        case BCardType.Casting:
                             break;
 
-                        case BCardType.CardType.Reflection:
-                            if (SubType == (byte) AdditionalTypes.Reflection.EnemyMPDecreased)
+                        case BCardType.Reflection:
+                            if (SubType == (byte) BCardSubTypes.Reflection.EnemyMPDecreased)
                             {
                                 if (ServerManager.RandomNumber() < firstData)
                                 {
@@ -537,8 +539,8 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.DrainAndSteal:
-                            if (SubType == (byte) AdditionalTypes.DrainAndSteal.ConvertEnemyHPToMP)
+                        case BCardType.DrainAndSteal:
+                            if (SubType == (byte) BCardSubTypes.DrainAndSteal.ConvertEnemyHPToMP)
                             {
                                 var bonus = 0;
                                 if (IsLevelScaled)
@@ -567,7 +569,7 @@ namespace OpenNos.GameObject
                                     sender.Character?.Session?.SendPacket(sender.Character?.GenerateStat());
                                 }
                             }
-                            else if (SubType == (byte) AdditionalTypes.DrainAndSteal.LeechEnemyHP)
+                            else if (SubType == (byte) BCardSubTypes.DrainAndSteal.LeechEnemyHP)
                             {
                                 // FirstData = -1 SecondData = 0 SkillVNum = 400 (Tumble) IsLevelScaled
                                 // = 1
@@ -603,7 +605,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType == (byte) AdditionalTypes.DrainAndSteal.LeechEnemyMP)
+                            else if (SubType == (byte) BCardSubTypes.DrainAndSteal.LeechEnemyMP)
                             {
                                 // FirstData = -100 SecondData = 3 CardId = 228 (MAna Drain) ThirdData = 1
 
@@ -641,7 +643,7 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.HealingBurningAndCasting:
+                        case BCardType.HealingBurningAndCasting:
                         {
                             /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
                              {
@@ -679,7 +681,7 @@ namespace OpenNos.GameObject
 
                                 switch (SubType)
                                 {
-                                    case (byte) AdditionalTypes.HealingBurningAndCasting.RestoreHP:
+                                    case (byte) BCardSubTypes.HealingBurningAndCasting.RestoreHP:
 
                                         if (session.Hp + amount > session.HpMax)
                                         {
@@ -701,7 +703,7 @@ namespace OpenNos.GameObject
 
                                         break;
 
-                                    case (byte) AdditionalTypes.HealingBurningAndCasting.RestoreMP:
+                                    case (byte) BCardSubTypes.HealingBurningAndCasting.RestoreMP:
 
                                         if (session.Mp + amount > session.MpMax)
                                         {
@@ -712,14 +714,14 @@ namespace OpenNos.GameObject
 
                                         break;
 
-                                    case (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseHP:
+                                    case (byte) BCardSubTypes.HealingBurningAndCasting.DecreaseHP:
 
                                         session.Hp = session.Hp - amount <= 0 ? 1 : session.Hp - amount;
                                         session.MapInstance?.Broadcast(session.GenerateDm(amount));
 
                                         break;
 
-                                    case (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseMP:
+                                    case (byte) BCardSubTypes.HealingBurningAndCasting.DecreaseMP:
 
                                         session.Mp = session.Mp - amount <= 0 ? 1 : session.Mp - amount;
 
@@ -755,8 +757,8 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.HPMP:
-                            if (SubType == (byte) AdditionalTypes.HPMP.DecreaseRemainingMP)
+                        case BCardType.HPMP:
+                            if (SubType == (byte) BCardSubTypes.HPMP.DecreaseRemainingMP)
                             {
                                 var bonus = (int) (session.Mp * firstData / 100D);
                                 var change = false;
@@ -803,7 +805,7 @@ namespace OpenNos.GameObject
                                     {
                                         switch (SubType)
                                         {
-                                            case (byte) AdditionalTypes.HPMP.HPRestored:
+                                            case (byte) BCardSubTypes.HPMP.HPRestored:
 
                                                 if (session.Hp + bonus <= session.HPLoad())
                                                 {
@@ -826,7 +828,7 @@ namespace OpenNos.GameObject
 
                                                 break;
 
-                                            case (byte) AdditionalTypes.HPMP.HPReduced:
+                                            case (byte) BCardSubTypes.HPMP.HPReduced:
 
                                                 if (session.Hp - bonus > 1)
                                                 {
@@ -852,7 +854,7 @@ namespace OpenNos.GameObject
 
                                                 break;
 
-                                            case (byte) AdditionalTypes.HPMP.MPRestored:
+                                            case (byte) BCardSubTypes.HPMP.MPRestored:
                                                 if (session.Mp + bonus <= session.MPLoad())
                                                 {
                                                     session.Mp += bonus;
@@ -873,7 +875,7 @@ namespace OpenNos.GameObject
 
                                                 break;
 
-                                            case (byte) AdditionalTypes.HPMP.MPReduced:
+                                            case (byte) BCardSubTypes.HPMP.MPReduced:
                                                 if (session.Mp - bonus > 1)
                                                 {
                                                     session.Mp -= bonus;
@@ -925,11 +927,11 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.SpecialisationBuffResistance:
+                        case BCardType.SpecialisationBuffResistance:
 
                             if (session == null) return; // had to do this, still i don't know the cause
 
-                            if (SubType.Equals((byte) AdditionalTypes.SpecialisationBuffResistance.RemoveBadEffects))
+                            if (SubType.Equals((byte) BCardSubTypes.SpecialisationBuffResistance.RemoveBadEffects))
                             {
                                 // bad
                                 if (ServerManager.RandomNumber() < FirstData && sender.BCardDisposables[BCardId] == null
@@ -1026,7 +1028,7 @@ namespace OpenNos.GameObject
                                 }
                             }
 
-                            if (SubType.Equals((byte) AdditionalTypes.SpecialisationBuffResistance.RemoveGoodEffects))
+                            if (SubType.Equals((byte) BCardSubTypes.SpecialisationBuffResistance.RemoveGoodEffects))
                             {
                                 if (ServerManager.RandomNumber() < FirstData)
                                 {
@@ -1036,8 +1038,8 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.SpecialEffects:
-                            if (SubType.Equals((byte) AdditionalTypes.SpecialEffects.ShadowAppears))
+                        case BCardType.SpecialEffects:
+                            if (SubType.Equals((byte) BCardSubTypes.SpecialEffects.ShadowAppears))
                             {
                                 session.MapInstance.Broadcast(
                                     $"guri 0 {(short) session.UserType} {session.MapEntityId} {firstData} {SecondData}");
@@ -1045,7 +1047,7 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.Capture:
+                        case BCardType.Capture:
                             if (sender.Character?.Session is ClientSession senderSession)
                             {
                                 if (session.MapMonster is MapMonster mapMonster)
@@ -1157,11 +1159,11 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.SpecialDamageAndExplosions:
+                        case BCardType.SpecialDamageAndExplosions:
                             break;
 
-                        case BCardType.CardType.SpecialEffects2:
-                            if (SubType.Equals((byte) AdditionalTypes.SpecialEffects2.TeleportInRadius))
+                        case BCardType.SpecialEffects2:
+                            if (SubType.Equals((byte) BCardSubTypes.SpecialEffects2.TeleportInRadius))
                             {
                                 if (session.Character != null && session.MapEntityId == sender.MapEntityId)
                                 {
@@ -1171,22 +1173,22 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.CalculatingLevel:
+                        case BCardType.CalculatingLevel:
                             break;
 
-                        case BCardType.CardType.Recovery:
+                        case BCardType.Recovery:
                             break;
 
-                        case BCardType.CardType.MaxHPMP: // test
+                        case BCardType.MaxHPMP: // test
                         {
                             if (session.Character != null)
                             {
-                                if (SubType == (byte) AdditionalTypes.MaxHPMP.IncreasesMaximumHP)
+                                if (SubType == (byte) BCardSubTypes.MaxHPMP.IncreasesMaximumHP)
                                 {
                                     session.Character.HPLoad();
                                     session.Character.Session?.SendPacket(session.Character.GenerateStat());
                                 }
-                                else if (SubType == (byte) AdditionalTypes.MaxHPMP.IncreasesMaximumMP)
+                                else if (SubType == (byte) BCardSubTypes.MaxHPMP.IncreasesMaximumMP)
                                 {
                                     session.Character.MPLoad();
                                     session.Character.Session?.SendPacket(session.Character.GenerateStat());
@@ -1195,18 +1197,18 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.MultAttack:
+                        case BCardType.MultAttack:
                             break;
 
-                        case BCardType.CardType.MultDefence:
+                        case BCardType.MultDefence:
                             break;
 
-                        case BCardType.CardType.TimeCircleSkills:
+                        case BCardType.TimeCircleSkills:
                             break;
 
-                        case BCardType.CardType.RecoveryAndDamagePercent:
+                        case BCardType.RecoveryAndDamagePercent:
                         {
-                            /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
+                            /* if (session.HasBuff(BCardType.RecoveryAndDamagePercent, 01))
                              {
                                  return;
                              }*/
@@ -1229,7 +1231,7 @@ namespace OpenNos.GameObject
                                     
                                     switch (SubType)
                                     {
-                                        case (byte) AdditionalTypes.RecoveryAndDamagePercent.HPRecovered:
+                                        case (byte) BCardSubTypes.RecoveryAndDamagePercent.HPRecovered:
 
                                             if (session.Hp >= session.HPLoad()) return;
                                             
@@ -1254,7 +1256,7 @@ namespace OpenNos.GameObject
 
                                             break;
 
-                                        case (byte) AdditionalTypes.RecoveryAndDamagePercent.HPReduced:
+                                        case (byte) BCardSubTypes.RecoveryAndDamagePercent.HPReduced:
                                             bonus = session.GetDamage(bonus, sender, true, true);
                                             if (bonus > 0)
                                             {
@@ -1265,7 +1267,7 @@ namespace OpenNos.GameObject
 
                                             break;
 
-                                        case (byte) AdditionalTypes.RecoveryAndDamagePercent.MPRecovered:
+                                        case (byte) BCardSubTypes.RecoveryAndDamagePercent.MPRecovered:
                                             if (session.Mp + bonus < session.MPLoad())
                                             {
                                                 session.Mp += bonus;
@@ -1289,7 +1291,7 @@ namespace OpenNos.GameObject
 
                                             break;
 
-                                        case (byte) AdditionalTypes.RecoveryAndDamagePercent.MPReduced:
+                                        case (byte) BCardSubTypes.RecoveryAndDamagePercent.MPReduced:
                                             if (session.Mp - bonus > 1)
                                             {
                                                 session.DecreaseMp(bonus);
@@ -1348,21 +1350,21 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.Count:
+                        case BCardType.Count:
                             break;
 
-                        case BCardType.CardType.NoDefeatAndNoDamage:
+                        case BCardType.NoDefeatAndNoDamage:
                             break;
 
-                        case BCardType.CardType.SpecialActions:
-                            if (SubType.Equals((byte) AdditionalTypes.SpecialActions.PushBack))
+                        case BCardType.SpecialActions:
+                            if (SubType.Equals((byte) BCardSubTypes.SpecialActions.PushBack))
                             {
                                 if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
                                 {
                                     PushBackSession(firstData, session, sender);
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.SpecialActions.Hide))
+                            else if (SubType.Equals((byte) BCardSubTypes.SpecialActions.Hide))
                             {
                                 if (session.Character is Character charact)
                                 {
@@ -1380,7 +1382,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.SpecialActions.FocusEnemies))
+                            else if (SubType.Equals((byte) BCardSubTypes.SpecialActions.FocusEnemies))
                             {
                                 if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
                                 {
@@ -1406,7 +1408,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.SpecialActions.RunAway))
+                            else if (SubType.Equals((byte) BCardSubTypes.SpecialActions.RunAway))
                             {
                                 if (session.MapMonster != null && session.MapMonster.IsMoving &&
                                     !session.MapMonster.IsBoss &&
@@ -1432,8 +1434,8 @@ namespace OpenNos.GameObject
                                             RunToY = RunToPos.Y;
                                         }
 
-                                        /*session.MapMonster.Path = BestFirstSearch.FindPathJagged(new Node { X = session.MapMonster.MapX, Y = session.MapMonster.MapY }, new Node { X = RunToX, Y = RunToY },
-                                            session.MapMonster.MapInstance.Map.JaggedGrid);*/
+                                        session.MapMonster.Path = BestFirstSearch.FindPathJagged(new Node { X = session.MapMonster.MapX, Y = session.MapMonster.MapY }, new Node { X = RunToX, Y = RunToY },
+                                            session.MapMonster.MapInstance.Map.JaggedGrid);
                                         session.MapMonster.RunToX = RunToX;
                                         session.MapMonster.RunToY = RunToY;
                                         Observable.Timer(
@@ -1449,32 +1451,32 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.Mode:
+                        case BCardType.Mode:
                             break;
 
-                        case BCardType.CardType.NoCharacteristicValue:
+                        case BCardType.NoCharacteristicValue:
                             break;
 
-                        case BCardType.CardType.LightAndShadow:
-                            if (SubType == (byte) AdditionalTypes.LightAndShadow.RemoveBadEffects)
+                        case BCardType.LightAndShadow:
+                            if (SubType == (byte) BCardSubTypes.LightAndShadow.RemoveBadEffects)
                             {
                                 session.DisableBuffs(new List<BuffType> {BuffType.Bad}, firstData);
                             }
 
                             break;
 
-                        case BCardType.CardType.Item:
+                        case BCardType.Item:
                             break;
 
-                        case BCardType.CardType.Dracula:
+                        case BCardType.Dracula:
                             break;
 
-                        case BCardType.CardType.DebuffResistance:
+                        case BCardType.DebuffResistance:
                             break;
 
 
-                        case BCardType.CardType.SpecialBehaviour:
-                            if (SubType == (byte) AdditionalTypes.SpecialBehaviour.TeleportRandom)
+                        case BCardType.SpecialBehaviour:
+                            if (SubType == (byte) BCardSubTypes.SpecialBehaviour.TeleportRandom)
                             {
                                 if (sender.Character != null)
                                 {
@@ -1503,7 +1505,7 @@ namespace OpenNos.GameObject
                                     sender.MapInstance.Broadcast(sender.GenerateTp());
                                 }
                             }
-                            else if (SubType == (byte) AdditionalTypes.SpecialBehaviour.InflictOnTeam)
+                            else if (SubType == (byte) BCardSubTypes.SpecialBehaviour.InflictOnTeam)
                             {
                                 if (CardId != null && CardId.Value == SecondData) // Checked on official server
                                 {
@@ -1549,10 +1551,10 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.Quest:
+                        case BCardType.Quest:
                             break;
 
-                        case BCardType.CardType.SecondSPCard:
+                        case BCardType.SecondSPCard:
                             var summonParameters2 = new List<MonsterToSummon>();
                             if (session.Character != null)
                             {
@@ -1589,7 +1591,7 @@ namespace OpenNos.GameObject
                                 {
                                     switch (SubType)
                                     {
-                                        case (byte) AdditionalTypes.SecondSPCard.PlantBomb:
+                                        case (byte) BCardSubTypes.SecondSPCard.PlantBomb:
                                         {
                                             if (session.MapInstance.Monsters.Any(s =>
                                                 s.Owner != null && s.Owner.MapEntityId == session.MapEntityId &&
@@ -1643,7 +1645,7 @@ namespace OpenNos.GameObject
                                         }
                                             break;
 
-                                        case (byte) AdditionalTypes.SecondSPCard.PlantSelfDestructionBomb:
+                                        case (byte) BCardSubTypes.SecondSPCard.PlantSelfDestructionBomb:
                                         {
                                             EventHelper.Instance.RunEvent(new EventContainer(session.MapInstance,
                                                 EventActionType.SPAWNMONSTERS, summonParameters2));
@@ -1657,11 +1659,11 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.SPCardUpgrade:
+                        case BCardType.SPCardUpgrade:
                             break;
 
-                        case BCardType.CardType.HugeSnowman:
-                            if (SubType == (byte) AdditionalTypes.HugeSnowman.SnowStorm)
+                        case BCardType.HugeSnowman:
+                            if (SubType == (byte) BCardSubTypes.HugeSnowman.SnowStorm)
                             {
                                 if (sender.CanAttackEntity(session))
                                 {
@@ -1685,7 +1687,7 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.Drain:
+                        case BCardType.Drain:
 
                             /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
                              {
@@ -1695,7 +1697,7 @@ namespace OpenNos.GameObject
                             {
                                 if (session.Hp > 0 && sender.Hp > 0)
                                 {
-                                    if (SubType == (byte) AdditionalTypes.Drain.TransferEnemyHP)
+                                    if (SubType == (byte) BCardSubTypes.Drain.TransferEnemyHP)
                                     {
                                         var bonus = 0;
                                         var senderChange = false;
@@ -1760,17 +1762,17 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.BossMonstersSkill:
+                        case BCardType.BossMonstersSkill:
                             break;
 
-                        case BCardType.CardType.LordHatus:
+                        case BCardType.LordHatus:
                             break;
 
-                        case BCardType.CardType.LordCalvinas:
+                        case BCardType.LordCalvinas:
                             break;
 
-                        case BCardType.CardType.SESpecialist:
-                            if (SubType.Equals((byte) AdditionalTypes.SESpecialist.LowerHPStrongerEffect))
+                        case BCardType.SESpecialist:
+                            if (SubType.Equals((byte) BCardSubTypes.SESpecialist.LowerHPStrongerEffect))
                             {
                                 var hpPercentage = session.Hp / session.HPLoad() * 100;
                                 if (hpPercentage < 35)
@@ -1789,27 +1791,27 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.FourthGlacernonFamilyRaid:
+                        case BCardType.FourthGlacernonFamilyRaid:
                             break;
 
-                        case BCardType.CardType.SummonedMonsterAttack:
+                        case BCardType.SummonedMonsterAttack:
                             break;
 
-                        case BCardType.CardType.BearSpirit:
+                        case BCardType.BearSpirit:
                             break;
 
-                        case BCardType.CardType.SummonSkill:
-                            if (SubType.Equals((byte) AdditionalTypes.SummonSkill.Summon12) ||
-                                SubType.Equals((byte) AdditionalTypes.SummonSkill.Summon10))
+                        case BCardType.SummonSkill:
+                            if (SubType.Equals((byte) BCardSubTypes.SummonSkill.Summon12) ||
+                                SubType.Equals((byte) BCardSubTypes.SummonSkill.Summon10))
                             {
                                 var amount = 0;
 
-                                if (SubType.Equals((byte) AdditionalTypes.SummonSkill.Summon12))
+                                if (SubType.Equals((byte) BCardSubTypes.SummonSkill.Summon12))
                                 {
                                     amount = 12;
                                 }
 
-                                if (SubType.Equals((byte) AdditionalTypes.SummonSkill.Summon10))
+                                if (SubType.Equals((byte) BCardSubTypes.SummonSkill.Summon10))
                                 {
                                     amount = 10;
                                 }
@@ -1857,19 +1859,19 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.InflictSkill:
+                        case BCardType.InflictSkill:
                             break;
 
-                        case BCardType.CardType.HideBarrelSkill:
+                        case BCardType.HideBarrelSkill:
                             break;
 
-                        case BCardType.CardType.FocusEnemyAttentionSkill:
+                        case BCardType.FocusEnemyAttentionSkill:
                             break;
 
-                        case BCardType.CardType.TauntSkill:
+                        case BCardType.TauntSkill:
                             switch (SubType)
                             {
-                                case (byte) AdditionalTypes.TauntSkill.TauntWhenKnockdown:
+                                case (byte) BCardSubTypes.TauntSkill.TauntWhenKnockdown:
                                     if (session.Buffs.Any(s => s.Card.CardId == 500) &&
                                         ServerManager.RandomNumber() < FirstData)
                                     {
@@ -1878,7 +1880,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.TauntSkill.TauntWhenNormal:
+                                case (byte) BCardSubTypes.TauntSkill.TauntWhenNormal:
                                     if (!session.Buffs.Any(s => s.Card.CardId == 500) &&
                                         ServerManager.RandomNumber() < FirstData)
                                     {
@@ -1890,14 +1892,14 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.FireCannoneerRangeBuff:
+                        case BCardType.FireCannoneerRangeBuff:
                             break;
 
-                        case BCardType.CardType.VulcanoElementBuff:
+                        case BCardType.VulcanoElementBuff:
                             break;
 
-                        case BCardType.CardType.DamageConvertingSkill:
-                            if (SubType.Equals((byte) AdditionalTypes.DamageConvertingSkill.TransferInflictedDamage))
+                        case BCardType.DamageConvertingSkill:
+                            if (SubType.Equals((byte) BCardSubTypes.DamageConvertingSkill.TransferInflictedDamage))
                             {
                                 if (sender.Character != null)
                                 {
@@ -1948,11 +1950,11 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.MeditationSkill:
+                        case BCardType.MeditationSkill:
                         {
                             if (sender.Character is Character character)
                             {
-                                if (SubType.Equals((byte) AdditionalTypes.MeditationSkill.Sacrifice))
+                                if (SubType.Equals((byte) BCardSubTypes.MeditationSkill.Sacrifice))
                                 {
                                     session.AddBuff(new Buff((short) SecondData, senderLevel), sender);
                                 }
@@ -1971,7 +1973,7 @@ namespace OpenNos.GameObject
                                         var newSkillVNum = (short) SecondData;
 
                                         if (SkillVNum.HasValue
-                                            && SubType.Equals((byte) AdditionalTypes.MeditationSkill.CausingChance)
+                                            && SubType.Equals((byte) BCardSubTypes.MeditationSkill.CausingChance)
                                             && ServerManager.RandomNumber() < firstData)
                                         {
                                             if (character.SkillComboCount < 7)
@@ -2047,17 +2049,17 @@ namespace OpenNos.GameObject
                                             {
                                                 switch (SubType)
                                                 {
-                                                    case (byte) AdditionalTypes.MeditationSkill.ShortMeditation:
+                                                    case (byte) BCardSubTypes.MeditationSkill.ShortMeditation:
                                                         character.MeditationDictionary[newSkillVNum] =
                                                             DateTime.Now.AddSeconds(4);
                                                         break;
 
-                                                    case (byte) AdditionalTypes.MeditationSkill.RegularMeditation:
+                                                    case (byte) BCardSubTypes.MeditationSkill.RegularMeditation:
                                                         character.MeditationDictionary[newSkillVNum] =
                                                             DateTime.Now.AddSeconds(8);
                                                         break;
 
-                                                    case (byte) AdditionalTypes.MeditationSkill.LongMeditation:
+                                                    case (byte) BCardSubTypes.MeditationSkill.LongMeditation:
                                                         character.MeditationDictionary[newSkillVNum] =
                                                             DateTime.Now.AddSeconds(12);
                                                         break;
@@ -2070,9 +2072,9 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.FalconSkill:
-                            if (SubType.Equals((byte) AdditionalTypes.FalconSkill.Hide) ||
-                                SubType.Equals((byte) AdditionalTypes.FalconSkill.Ambush))
+                        case BCardType.FalconSkill:
+                            if (SubType.Equals((byte) BCardSubTypes.FalconSkill.Hide) ||
+                                SubType.Equals((byte) BCardSubTypes.FalconSkill.Ambush))
                             {
                                 if (session.Character is Character chara)
                                 {
@@ -2097,7 +2099,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.FalconSkill.CausingChanceLocation))
+                            else if (SubType.Equals((byte) BCardSubTypes.FalconSkill.CausingChanceLocation))
                             {
                                 if (session.Character is Character chara)
                                 {
@@ -2150,7 +2152,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.FalconSkill.FalconFollowing))
+                            else if (SubType.Equals((byte) BCardSubTypes.FalconSkill.FalconFollowing))
                             {
                                 if (sender.Character != null)
                                 {
@@ -2184,14 +2186,14 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.AbsorptionAndPowerSkill:
+                        case BCardType.AbsorptionAndPowerSkill:
                             break;
 
-                        case BCardType.CardType.LeonaPassiveSkill:
+                        case BCardType.LeonaPassiveSkill:
                             break;
 
-                        case BCardType.CardType.FearSkill:
-                            if (SubType.Equals((byte) AdditionalTypes.FearSkill.TimesUsed))
+                        case BCardType.FearSkill:
+                            if (SubType.Equals((byte) BCardSubTypes.FearSkill.TimesUsed))
                             {
                                 if (sender.Character != null)
                                 {
@@ -2202,21 +2204,21 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.FearSkill.AttackRangedIncreased))
+                            else if (SubType.Equals((byte) BCardSubTypes.FearSkill.AttackRangedIncreased))
                             {
                                 if (session.Character != null)
                                 {
                                     session.Character.Session.SendPacket($"bf_d {FirstData} 1");
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.FearSkill.MoveAgainstWill))
+                            else if (SubType.Equals((byte) BCardSubTypes.FearSkill.MoveAgainstWill))
                             {
                                 if (session.Character != null)
                                 {
                                     session.Character.Session.SendPacket($"rv_m {session.MapEntityId} 1 1");
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.FearSkill.ProduceWhenAmbushe))
+                            else if (SubType.Equals((byte) BCardSubTypes.FearSkill.ProduceWhenAmbushe))
                             {
                                 if (sender == session && (x != 0 || y != 0) && SecondData > 0)
                                 {
@@ -2229,13 +2231,13 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.SniperAttack:
+                        case BCardType.SniperAttack:
                             if (session == sender)
                             {
                                 return;
                             }
 
-                            if (SubType.Equals((byte) AdditionalTypes.SniperAttack.ChanceCausing))
+                            if (SubType.Equals((byte) BCardSubTypes.SniperAttack.ChanceCausing))
                             {
                                 if (ServerManager.RandomNumber() < firstData)
                                 {
@@ -2251,12 +2253,12 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) AdditionalTypes.SniperAttack.ProduceChance))
+                            else if (SubType.Equals((byte) BCardSubTypes.SniperAttack.ProduceChance))
                             {
                                 if (sender.Buffs.Any(s => s.Card.BCards.Any(b =>
-                                    b.Type == (byte) BCardType.CardType.FalconSkill &&
-                                    (b.SubType == (byte) AdditionalTypes.FalconSkill.Hide ||
-                                     b.SubType == (byte) AdditionalTypes.FalconSkill.Ambush))))
+                                    b.Type == (byte) BCardType.FalconSkill &&
+                                    (b.SubType == (byte) BCardSubTypes.FalconSkill.Hide ||
+                                     b.SubType == (byte) BCardSubTypes.FalconSkill.Ambush))))
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
@@ -2276,9 +2278,9 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.FrozenDebuff:
+                        case BCardType.FrozenDebuff:
                             //{
-                            //    if (SubType == (byte)AdditionalTypes.FrozenDebuff.GlacerusSkill)
+                            //    if (SubType == (byte)BCardSubTypes.FrozenDebuff.GlacerusSkill)
                             //    {
                             //        var mapInstance = sender.MapInstance;
 
@@ -2319,7 +2321,7 @@ namespace OpenNos.GameObject
 
                             //                    if (character.Hp < 1
                             //                        || character.HasBuff(BCardType.CardType.FrozenDebuff,
-                            //                            (byte)AdditionalTypes.FrozenDebuff.EternalIce))
+                            //                            (byte)BCardSubTypes.FrozenDebuff.EternalIce))
                             //                    {
                             //                        continue;
                             //                    }
@@ -2335,7 +2337,7 @@ namespace OpenNos.GameObject
                             //                        if (!mapInstance.Sessions.Any(s => s.Character != null
                             //                                                           && !s.Character.HasBuff(
                             //                                                               BCardType.CardType.FrozenDebuff,
-                            //                                                               (byte)AdditionalTypes
+                            //                                                               (byte)BCardSubTypes
                             //                                                                   .FrozenDebuff.EternalIce)))
                             //                        {
                             //                            EventHelper.Instance.RunEvent(new EventContainer(mapInstance,
@@ -2354,10 +2356,10 @@ namespace OpenNos.GameObject
                             //}
                             break;
 
-                        case BCardType.CardType.JumpBackPush:
+                        case BCardType.JumpBackPush:
                             if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
                             {
-                                if (SubType.Equals((byte) AdditionalTypes.JumpBackPush.JumpBackChance))
+                                if (SubType.Equals((byte) BCardSubTypes.JumpBackPush.JumpBackChance))
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
@@ -2365,7 +2367,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
-                                if (SubType.Equals((byte) AdditionalTypes.JumpBackPush.PushBackChance))
+                                if (SubType.Equals((byte) BCardSubTypes.JumpBackPush.PushBackChance))
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
@@ -2376,10 +2378,10 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.FairyXPIncrease:
+                        case BCardType.FairyXPIncrease:
                             break;
 
-                        case BCardType.CardType.SummonAndRecoverHP:
+                        case BCardType.SummonAndRecoverHP:
                             var summonParameters3 = new List<MonsterToSummon>();
                             if (ServerManager.RandomNumber() <= Math.Abs(ThirdData) || ThirdData == 0 || ThirdData < 0)
                             {
@@ -2433,15 +2435,15 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.TeamArenaBuff:
+                        case BCardType.TeamArenaBuff:
                             break;
 
-                        case BCardType.CardType.ArenaCamera:
+                        case BCardType.ArenaCamera:
                             break;
 
-                        case BCardType.CardType.DarkCloneSummon:
+                        case BCardType.DarkCloneSummon:
                         {
-                            if (SubType == (byte) AdditionalTypes.DarkCloneSummon.SummonDarkCloneChance)
+                            if (SubType == (byte) BCardSubTypes.DarkCloneSummon.SummonDarkCloneChance)
                             {
                                 if (ServerManager.RandomNumber() < FirstData)
                                 {
@@ -2473,13 +2475,13 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.AbsorbedSpirit:
+                        case BCardType.AbsorbedSpirit:
                         {
                             var hasSpiritAbsorption = session.HasBuff(596);
 
                             switch (SubType)
                             {
-                                case (byte) AdditionalTypes.AbsorbedSpirit.ApplyEffectIfPresent:
+                                case (byte) BCardSubTypes.AbsorbedSpirit.ApplyEffectIfPresent:
                                     if (hasSpiritAbsorption)
                                     {
                                         session.AddBuff(new Buff((short) SecondData, session.Level), session);
@@ -2488,7 +2490,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.AbsorbedSpirit.ApplyEffectIfNotPresent:
+                                case (byte) BCardSubTypes.AbsorbedSpirit.ApplyEffectIfNotPresent:
                                     if (!hasSpiritAbsorption && !session.HasBuff(599))
                                     {
                                         session.AddBuff(new Buff((short) SecondData, session.Level), session);
@@ -2499,12 +2501,12 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.AngerSkill:
+                        case BCardType.AngerSkill:
                             break;
 
-                        case BCardType.CardType.MeteoriteTeleport:
+                        case BCardType.MeteoriteTeleport:
                         {
-                            if (SubType == (byte) AdditionalTypes.MeteoriteTeleport.SummonInVisualRange)
+                            if (SubType == (byte) BCardSubTypes.MeteoriteTeleport.SummonInVisualRange)
                             {
                                 var mapInstance = session?.MapInstance;
 
@@ -2522,7 +2524,7 @@ namespace OpenNos.GameObject
                                         EventActionType.SPAWNMONSTERS, monstersToSummon));
                                 }
                             }
-                            else if (SubType == (byte) AdditionalTypes.MeteoriteTeleport.TransformTarget)
+                            else if (SubType == (byte) BCardSubTypes.MeteoriteTeleport.TransformTarget)
                             {
                                 int[] morphVNums = {1000099, 1000156};
 
@@ -2551,13 +2553,13 @@ namespace OpenNos.GameObject
                                     session.Character.MapInstance.Broadcast(session.Character.GenerateCMode());
                                 }
                             }
-                            else if (SubType == (byte) AdditionalTypes.MeteoriteTeleport.TeleportForward)
+                            else if (SubType == (byte) BCardSubTypes.MeteoriteTeleport.TeleportForward)
                             {
                                 session.TeleportTo(
                                     session.MapInstance.Map.GetRandomPositionByDistance(session.PositionX,
                                         session.PositionY, (short) FirstData));
                             }
-                            else if (SubType == (byte) AdditionalTypes.MeteoriteTeleport.CauseMeteoriteFall)
+                            else if (SubType == (byte) BCardSubTypes.MeteoriteTeleport.CauseMeteoriteFall)
                             {
                                 var mapInstance = session?.MapInstance;
 
@@ -2595,7 +2597,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType == (byte) AdditionalTypes.MeteoriteTeleport
+                            else if (SubType == (byte) BCardSubTypes.MeteoriteTeleport
                                 .TeleportYouAndGroupToSavedLocation)
                             {
                                 if (session.Character is Character character &&
@@ -2671,19 +2673,19 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.StealBuff:
+                        case BCardType.StealBuff:
                             break;
 
-                        case BCardType.CardType.Unknown:
+                        case BCardType.Unknown:
                             break;
 
-                        case BCardType.CardType.EffectSummon:
+                        case BCardType.EffectSummon:
                             break;
 
-                        case BCardType.CardType.MartialArts:
+                        case BCardType.MartialArts:
                             switch (SubType)
                             {
-                                case (byte) AdditionalTypes.MartialArts.TransformationInverted:
+                                case (byte) BCardSubTypes.MartialArts.TransformationInverted:
                                     if (session.Character is Character reversedMorph)
                                     {
                                         reversedMorph.Morph = 29;
@@ -2696,7 +2698,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.MartialArts.Transformation:
+                                case (byte) BCardSubTypes.MartialArts.Transformation:
                                     if (!CardId.HasValue)
                                     {
                                         break;
@@ -2733,10 +2735,10 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.LotusSkills:
+                        case BCardType.LotusSkills:
                             break;
 
-                        case BCardType.CardType.WolfMaster:
+                        case BCardType.WolfMaster:
                         {
                             var user = sender.Character ?? session.Character;
 
@@ -2747,7 +2749,7 @@ namespace OpenNos.GameObject
 
                             switch (SubType)
                             {
-                                case (byte) AdditionalTypes.WolfMaster.AddUltimatePoints:
+                                case (byte) BCardSubTypes.WolfMaster.AddUltimatePoints:
                                 {
                                     user.AddUltimatePoints((short) FirstData);
                                     user.Session.SendPacket(user.GenerateFtPtPacket());
@@ -2755,7 +2757,7 @@ namespace OpenNos.GameObject
                                 }
                                     break;
 
-                                case (byte) AdditionalTypes.WolfMaster.CanExecuteUltimateSkills:
+                                case (byte) BCardSubTypes.WolfMaster.CanExecuteUltimateSkills:
                                 {
                                     user.Session.SendPacket(user.GenerateFtPtPacket());
                                     user.Session.SendPackets(user.GenerateQuicklist());
@@ -2765,19 +2767,19 @@ namespace OpenNos.GameObject
                         }
                             break;
 
-                        case BCardType.CardType.Idk:
+                        case BCardType.Idk:
                             break;
 
-                        case BCardType.CardType.IncreaseDamageVsChar:
+                        case BCardType.IncreaseDamageVsChar:
                             break;
 
-                        case BCardType.CardType.ApplyBuffs:
+                        case BCardType.ApplyBuffs:
                             break;
 
-                        case BCardType.CardType.A7Powers1:
+                        case BCardType.A7Powers1:
                             switch (SubType)
                             {
-                                case (byte) AdditionalTypes.A7Powers1.DamageApocalypsePower:
+                                case (byte) BCardSubTypes.A7Powers1.DamageApocalypsePower:
 
                                     if (sender == null) return;
 
@@ -2793,7 +2795,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.A7Powers1.ReflectionPower:
+                                case (byte) BCardSubTypes.A7Powers1.ReflectionPower:
 
                                     if (sender == null) return;
 
@@ -2804,7 +2806,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.A7Powers1.DamageWolfPower:
+                                case (byte) BCardSubTypes.A7Powers1.DamageWolfPower:
 
                                     if (sender == null) return;
 
@@ -2820,7 +2822,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.A7Powers1.EnemyKnockedBack:
+                                case (byte) BCardSubTypes.A7Powers1.EnemyKnockedBack:
 
                                     if (sender == null) return;
 
@@ -2833,7 +2835,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.A7Powers1.DamageExplosionPower:
+                                case (byte) BCardSubTypes.A7Powers1.DamageExplosionPower:
 
                                     if (sender == null) return;
 
@@ -2852,10 +2854,10 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CardType.A7Powers2:
+                        case BCardType.A7Powers2:
                             switch (SubType)
                             {
-                                case (byte) AdditionalTypes.A7Powers2.ReceiveAgilityPower:
+                                case (byte) BCardSubTypes.A7Powers2.ReceiveAgilityPower:
 
                                     if (sender == null) return;
 
@@ -2866,7 +2868,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.A7Powers2.DamageLightingPower:
+                                case (byte) BCardSubTypes.A7Powers2.DamageLightingPower:
 
                                     if (sender == null) return;
 
@@ -2882,7 +2884,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.A7Powers2.TriggerCursePower:
+                                case (byte) BCardSubTypes.A7Powers2.TriggerCursePower:
 
                                     if (sender == null) return;
 
@@ -2893,7 +2895,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.A7Powers2.DamageBearPower:
+                                case (byte) BCardSubTypes.A7Powers2.DamageBearPower:
 
                                     if (sender == null) return;
 
@@ -2909,7 +2911,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) AdditionalTypes.A7Powers2.ReceiveFrostPower:
+                                case (byte) BCardSubTypes.A7Powers2.ReceiveFrostPower:
 
                                     if (sender == null) return;
 

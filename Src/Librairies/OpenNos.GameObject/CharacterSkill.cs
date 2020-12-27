@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ChickenAPI.Enums.Game.BCard;
 using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
-using static OpenNos.Domain.BCardType;
 
 namespace OpenNos.GameObject
 {
@@ -103,19 +103,19 @@ namespace OpenNos.GameObject
                 if (Skill.SkillVNum == 1123)
                     foreach (var ambushBCard in Session.Character.Buff.GetAllItems().SelectMany(s =>
                         s.Card.BCards.Where(b =>
-                            b.Type == (byte) CardType.FearSkill &&
-                            b.SubType == (byte) AdditionalTypes.FearSkill.ProduceWhenAmbushe)))
+                            b.Type == (byte) BCardType.FearSkill &&
+                            b.SubType == (byte) BCardSubTypes.FearSkill.ProduceWhenAmbushe)))
                         SkillBCards.Add(ambushBCard);
                 else if (Skill.SkillVNum == 1124)
                     foreach (var sniperAttackBCard in Session.Character.Buff.GetAllItems().SelectMany(s =>
                         s.Card.BCards.Where(b =>
-                            b.Type == (byte) CardType.SniperAttack &&
-                            b.SubType == (byte) AdditionalTypes.SniperAttack.ChanceCausing)))
+                            b.Type == (byte) BCardType.SniperAttack &&
+                            b.SubType == (byte) BCardSubTypes.SniperAttack.ChanceCausing)))
                         SkillBCards.Add(sniperAttackBCard);
                 foreach (var ambushAttackBCard in Session.Character.Buff.GetAllItems().SelectMany(s =>
                     s.Card.BCards.Where(b =>
-                        b.Type == (byte) CardType.SniperAttack &&
-                        b.SubType == (byte) AdditionalTypes.SniperAttack.ProduceChance)))
+                        b.Type == (byte) BCardType.SniperAttack &&
+                        b.SubType == (byte) BCardSubTypes.SniperAttack.ProduceChance)))
                     SkillBCards.Add(ambushAttackBCard);
             }
 
@@ -126,8 +126,8 @@ namespace OpenNos.GameObject
         {
             int skillRange = Skill.Range;
             if (ServerManager.Instance.GetSessionByCharacterId(CharacterId) is ClientSession Session)
-                skillRange += Session.Character.GetBuff(CardType.FearSkill,
-                    (byte) AdditionalTypes.FearSkill.AttackRangedIncreased)[0];
+                skillRange += Session.Character.GetBuff(BCardType.FearSkill,
+                    (byte) BCardSubTypes.FearSkill.AttackRangedIncreased)[0];
             return skillRange;
         }
 
@@ -155,8 +155,8 @@ namespace OpenNos.GameObject
             if (Skill.HitType != 0)
                 if (ServerManager.Instance.GetSessionByCharacterId(CharacterId) is ClientSession Session)
                     Session.Character.Buff.GetAllItems().SelectMany(s => s.Card.BCards).Where(s =>
-                            s.Type == (byte) CardType.FireCannoneerRangeBuff
-                            && s.SubType == (byte) AdditionalTypes.FireCannoneerRangeBuff.AOEIncreased).ToList()
+                            s.Type == (byte) BCardType.FireCannoneerRangeBuff
+                            && s.SubType == (byte) BCardSubTypes.FireCannoneerRangeBuff.AOEIncreased).ToList()
                         .ForEach(s => targetRange += (byte) s.FirstData);
 
             return targetRange;
