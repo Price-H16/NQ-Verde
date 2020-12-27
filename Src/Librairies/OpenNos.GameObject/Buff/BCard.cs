@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Windows.Media.Media3D;
 using ChickenAPI.Enums.Game.BCard;
 using ChickenAPI.Enums.Game.Buffs;
@@ -68,9 +67,9 @@ namespace OpenNos.GameObject
             //    Card = this
             //});
             //return;
-            /*if (Type != (byte)BCardType.CardType.Buff && (CardId != null || SkillVNum != null))
+            /*if (Type != (byte)BCardType.Buff && (CardId != null || SkillVNum != null))
             {
-                Console.WriteLine($"BCardId: {BCardId} Type: {(BCardType.CardType)Type} SubType: {SubType} CardId: {CardId?.ToString() ?? "null"} ItemVNum: {ItemVNum?.ToString() ?? "null"} SkillVNum: {SkillVNum?.ToString() ?? "null"} SessionType: {session?.EntityType.ToString() ?? "null"} SenderType: {sender?.EntityType.ToString() ?? "null"}");
+                Console.WriteLine($"BCardId: {BCardId} Type: {(BCardType)Type} SubType: {SubType} CardId: {CardId?.ToString() ?? "null"} ItemVNum: {ItemVNum?.ToString() ?? "null"} SkillVNum: {SkillVNum?.ToString() ?? "null"} SessionType: {session?.EntityType.ToString() ?? "null"} SenderType: {sender?.EntityType.ToString() ?? "null"}");
             }*/
 
             var firstData = FirstData;
@@ -174,114 +173,116 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
-                                if (session.GetBuff(BCardType.Buff, (byte) BCardSubTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect && (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
+                                if (session.GetBuff(BCardType.Buff,
+                                        (byte)BCardSubTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect &&
+                                    (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
                                 {
-                                var Prob = 100 - PreventingBadEffect[1] * 10;
-                                var ProtectType = PreventingBadEffect[0];
+                                    var Prob = 100 - PreventingBadEffect[1] * 10;
+                                    var ProtectType = PreventingBadEffect[0];
 
-                                if (PreventingBadEffect[2] > 0)
-                                {
-                                    Prob = PreventingBadEffect[2];
-                                    ProtectType = PreventingBadEffect[1];
-                                }
-
-                                if (ServerManager.RandomNumber() < Prob && buff.Card.BuffType == BuffType.Bad)
-                                {
-                                    switch (ProtectType)
+                                    if (PreventingBadEffect[2] > 0)
                                     {
-                                        case 0:
+                                        Prob = PreventingBadEffect[2];
+                                        ProtectType = PreventingBadEffect[1];
+                                    }
 
-                                            //Bleedings
-                                            CardsToProtect.Add(1);
-                                            CardsToProtect.Add(21);
-                                            CardsToProtect.Add(42);
-                                            CardsToProtect.Add(82);
-                                            CardsToProtect.Add(189);
-                                            CardsToProtect.Add(190);
-                                            CardsToProtect.Add(191);
-                                            CardsToProtect.Add(192);
-                                            break;
+                                    if (ServerManager.RandomNumber() < Prob && buff.Card.BuffType == BuffType.Bad)
+                                    {
+                                        switch (ProtectType)
+                                        {
+                                            case 0:
 
-                                        case 4:
+                                                //Bleedings
+                                                CardsToProtect.Add(1);
+                                                CardsToProtect.Add(21);
+                                                CardsToProtect.Add(42);
+                                                CardsToProtect.Add(82);
+                                                CardsToProtect.Add(189);
+                                                CardsToProtect.Add(190);
+                                                CardsToProtect.Add(191);
+                                                CardsToProtect.Add(192);
+                                                break;
 
-                                            //Blackouts
-                                            CardsToProtect.Add(7);
-                                            CardsToProtect.Add(66);
-                                            CardsToProtect.Add(100);
-                                            CardsToProtect.Add(195);
-                                            CardsToProtect.Add(196);
-                                            CardsToProtect.Add(197);
-                                            CardsToProtect.Add(198);
-                                            break;
+                                            case 4:
 
-                                        case 32:
+                                                //Blackouts
+                                                CardsToProtect.Add(7);
+                                                CardsToProtect.Add(66);
+                                                CardsToProtect.Add(100);
+                                                CardsToProtect.Add(195);
+                                                CardsToProtect.Add(196);
+                                                CardsToProtect.Add(197);
+                                                CardsToProtect.Add(198);
+                                                break;
 
-                                            //Side-effects of resurrecting
-                                            CardsToProtect.Add(44);
-                                            break;
+                                            case 32:
 
-                                        case 85:
-                                            CardsToProtect.Add(113);
-                                            //Foggy Colossus' poison
-                                            break;
+                                                //Side-effects of resurrecting
+                                                CardsToProtect.Add(44);
+                                                break;
+
+                                            case 85:
+                                                CardsToProtect.Add(113);
+                                                //Foggy Colossus' poison
+                                                break;
+                                        }
                                     }
                                 }
-                            }
 
-                            if (buff.Card.BuffType == BuffType.Bad &&
-                                session.GetBuff(BCardType.SpecialisationBuffResistance,
-                                    (byte) BCardSubTypes.SpecialisationBuffResistance.ResistanceToEffect,
-                                    buff.Card.CardId) is int[] ResistanceToEffect)
-                            {
-                                if (ServerManager.RandomNumber() < ResistanceToEffect[0])
+                                if (buff.Card.BuffType == BuffType.Bad &&
+                                    session.GetBuff(BCardType.SpecialisationBuffResistance,
+                                        (byte)BCardSubTypes.SpecialisationBuffResistance.ResistanceToEffect,
+                                        buff.Card.CardId) is int[] ResistanceToEffect)
                                 {
-                                    CardsToProtect.Add((short) ResistanceToEffect[1]);
-                                }
-                            }
-
-                            if (CardsToProtect.Contains(buff.Card.CardId))
-                            {
-                                return;
-                            }
-
-                            if (SubType == (byte) BCardSubTypes.Buff.ChanceCausing)
-                            {
-                                if (Chance > 0 && ServerManager.RandomNumber() < Chance)
-                                {
-                                    if (SkillVNum != null && (buff.Card.CardId == 570 || buff.Card.CardId == 56))
+                                    if (ServerManager.RandomNumber() < ResistanceToEffect[0])
                                     {
-                                        sender.AddBuff(buff, sender, x: x, y: y, forced: true);
+                                        CardsToProtect.Add((short)ResistanceToEffect[1]);
                                     }
-                                    else if (buff.Card?.BuffType == BuffType.Bad
-                                             && session.HasBuff(BCardType.TauntSkill,
-                                                 (byte) BCardSubTypes.TauntSkill.ReflectBadEffect)
+                                }
+
+                                if (CardsToProtect.Contains(buff.Card.CardId))
+                                {
+                                    return;
+                                }
+
+                                if (SubType == (byte)BCardSubTypes.Buff.ChanceCausing)
+                                {
+                                    if (Chance > 0 && ServerManager.RandomNumber() < Chance)
+                                    {
+                                        if (SkillVNum != null && (buff.Card.CardId == 570 || buff.Card.CardId == 56))
+                                        {
+                                            sender.AddBuff(buff, sender, x: x, y: y, forced: true);
+                                        }
+                                        else if (buff.Card?.BuffType == BuffType.Bad
+                                                 && session.HasBuff(BCardType.TauntSkill,
+                                                     (byte)BCardSubTypes.TauntSkill.ReflectBadEffect)
                                         //&& ServerManager.RandomNumber() < FirstData
-                                    )
-                                    {
-                                        sender.AddBuff(buff, sender, x: x, y: y);
+                                        )
+                                        {
+                                            sender.AddBuff(buff, sender, x: x, y: y);
+                                        }
+                                        else
+                                        {
+                                            session.AddBuff(buff, sender, x: x, y: y);
+                                        }
                                     }
-                                    else
+                                    else if (Chance < 0 && ServerManager.RandomNumber() < -Chance)
                                     {
-                                        session.AddBuff(buff, sender, x: x, y: y);
+                                        session.RemoveBuff(cardId);
                                     }
-                                }
-                                else if (Chance < 0 && ServerManager.RandomNumber() < -Chance)
-                                {
-                                    session.RemoveBuff(cardId);
                                 }
                             }
-                        }
                             break;
 
                         case BCardType.Move:
-                        {
-                            if (session.Character != null)
                             {
-                                session.Character.LastSpeedChange = DateTime.Now;
-                                session.Character.LoadSpeed();
-                                session.Character.Session?.SendPacket(session.Character.GenerateCond());
+                                if (session.Character != null)
+                                {
+                                    session.Character.LastSpeedChange = DateTime.Now;
+                                    session.Character.LoadSpeed();
+                                    session.Character.Session?.SendPacket(session.Character.GenerateCond());
+                                }
                             }
-                        }
                             break;
 
                         case BCardType.Summons:
@@ -290,87 +291,117 @@ namespace OpenNos.GameObject
                                 return;
                             }
 
-                            bool move = SecondData != 1382;
-                            List<MonsterToSummon> summonParameters = new List<MonsterToSummon>();
-                            int amountToSpawn = firstData;
-                            int aliveTime = ServerManager.GetNpcMonster((short)SecondData).RespawnTime / (ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 2400 ? ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 150 ? 1 : 10 : 40) * (ServerManager.GetNpcMonster((short)SecondData).RespawnTime >= 150 ? 4 : 1);
-                            for (int i = 0; i < amountToSpawn; i++)
+                            var move = SecondData != 1382;
+                            var summonParameters = new List<MonsterToSummon>();
+                            var amountToSpawn = firstData;
+                            var aliveTime = ServerManager.GetNpcMonster((short)SecondData).RespawnTime /
+                                (ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 2400
+                                    ? ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 150
+                                        ? 1
+                                        : 10
+                                    : 40) * (ServerManager.GetNpcMonster((short)SecondData).RespawnTime >=
+                                             150
+                                    ? 4
+                                    : 1);
+                            for (var i = 0; i < amountToSpawn; i++)
                             {
                                 x = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionX);
                                 y = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionY);
                                 if (skill != null && sender.Character == null)
                                 {
-                                    MapCell randomCell = sender.MapInstance.Map.GetRandomPositionByDistance(sender.PositionX, sender.PositionY, skill.Range, true);
+                                    var randomCell =
+                                        sender.MapInstance.Map.GetRandomPositionByDistance(sender.PositionX,
+                                            sender.PositionY, skill.Range, true);
                                     if (randomCell != null)
                                     {
                                         x = randomCell.X;
                                         y = randomCell.Y;
                                     }
                                 }
-                                summonParameters.Add(new MonsterToSummon((short)SecondData, new MapCell { X = x, Y = y }, null, move, aliveTime: aliveTime, owner: sender));
+
+                                summonParameters.Add(new MonsterToSummon((short)SecondData, new MapCell { X = x, Y = y },
+                                    null, move, aliveTime: aliveTime, owner: sender));
                             }
+
                             if (ServerManager.RandomNumber() <= Math.Abs(ThirdData) || ThirdData == 0 || ThirdData < 0)
                             {
                                 switch (SubType)
                                 {
-                                    case (byte) BCardSubTypes.Summons.Summons:
+                                    case (byte)BCardSubTypes.Summons.Summons:
                                         if (CardId == null && SkillVNum == null)
                                         {
-
                                             if (sender.MapMonster != null)
                                             {
                                                 sender.BCardDisposables[BCardId]?.Dispose();
                                                 IDisposable bcardDisposable = null;
                                                 bcardDisposable = Observable
-                                                   .Interval(TimeSpan.FromSeconds(5))
-                                                   .Subscribe(s =>
-                                                   {
-                                                       if (sender.BCardDisposables[BCardId] != bcardDisposable)
-                                                       {
-                                                           bcardDisposable.Dispose();
-                                                           return;
-                                                       }
-                                                       summonParameters = new List<MonsterToSummon>();
-                                                       for (int i = 0; i < amountToSpawn; i++)
-                                                       {
-                                                           x = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionX);
-                                                           y = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionY);
-                                                           summonParameters.Add(new MonsterToSummon((short)SecondData, new MapCell { X = x, Y = y }, null, move, aliveTime: aliveTime, owner: sender));
-                                                       }
-                                                       if (sender.MapMonster.Target != null && sender.MapInstance.GetCharactersInRange(sender.PositionX, sender.PositionY, 5).Any(c => c.BattleEntity.MapEntityId == sender.MapMonster.Target.MapEntityId))
-                                                       {
-                                                           EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance, EventActionType.SPAWNMONSTERS, summonParameters));
-                                                       }
-                                                   });
+                                                    .Interval(TimeSpan.FromSeconds(5))
+                                                    .Subscribe(s =>
+                                                    {
+                                                        if (sender.BCardDisposables[BCardId] != bcardDisposable)
+                                                        {
+                                                            bcardDisposable.Dispose();
+                                                            return;
+                                                        }
+
+                                                        summonParameters = new List<MonsterToSummon>();
+                                                        for (var i = 0; i < amountToSpawn; i++)
+                                                        {
+                                                            x = (short)(ServerManager.RandomNumber(-1, 1) +
+                                                                         sender.PositionX);
+                                                            y = (short)(ServerManager.RandomNumber(-1, 1) +
+                                                                         sender.PositionY);
+                                                            summonParameters.Add(new MonsterToSummon((short)SecondData,
+                                                                new MapCell { X = x, Y = y }, null, move,
+                                                                aliveTime: aliveTime, owner: sender));
+                                                        }
+
+                                                        if (sender.MapMonster.Target != null && sender.MapInstance
+                                                            .GetCharactersInRange(sender.PositionX,
+                                                                sender.PositionY, 5)
+                                                            .Any(c => c.BattleEntity.MapEntityId ==
+                                                                      sender.MapMonster.Target.MapEntityId))
+                                                        {
+                                                            EventHelper.Instance.RunEvent(
+                                                                new EventContainer(sender.MapInstance,
+                                                                    EventActionType.SPAWNMONSTERS, summonParameters));
+                                                        }
+                                                    });
                                                 sender.BCardDisposables[BCardId] = bcardDisposable;
                                             }
                                         }
                                         else
                                         {
-                                            EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance, EventActionType.SPAWNMONSTERS, summonParameters));
+                                            EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance,
+                                                EventActionType.SPAWNMONSTERS, summonParameters));
                                         }
+
                                         break;
 
-                                    case (byte) BCardSubTypes.Summons.SummonTrainingDummy: //Check
+                                    case (byte)BCardSubTypes.Summons.SummonTrainingDummy: //Check
                                         summonParameters = new List<MonsterToSummon>();
-                                        for (int i = 0; i < amountToSpawn; i++)
+                                        for (var i = 0; i < amountToSpawn; i++)
                                         {
                                             x = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionX);
                                             y = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionY);
                                             summonParameters.Add(new MonsterToSummon((short)SecondData, new MapCell { X = x, Y = y }, null, move, aliveTimeMp: aliveTime, owner: sender));
                                         }
 
-                                        EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance, EventActionType.SPAWNMONSTERS, summonParameters));
+                                        EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance,
+                                            EventActionType.SPAWNMONSTERS, summonParameters));
                                         break;
 
                                     default:
-                                        if (!sender.OnDeathEvents.ToList().Any(s => s.EventActionType == EventActionType.SPAWNMONSTERS))
+                                        if (!sender.OnDeathEvents.ToList().Any(s => s != null && s.EventActionType == EventActionType.SPAWNMONSTERS))
                                         {
-                                            sender.OnDeathEvents.Add(new EventContainer(sender.MapInstance, EventActionType.SPAWNMONSTERS, summonParameters));
+                                            sender.OnDeathEvents.Add(new EventContainer(sender.MapInstance,
+                                                EventActionType.SPAWNMONSTERS, summonParameters));
                                         }
+
                                         break;
                                 }
                             }
+
                             break;
 
                         case BCardType.SpecialAttack:
@@ -380,61 +411,74 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.AttackPower:
-                            if (SubType == (byte) BCardSubTypes.AttackPower.AllAttacksIncreased)
+                            if (SubType == (byte)BCardSubTypes.AttackPower.AllAttacksIncreased)
                             {
-                                if (session.Character != null && sender.Character != null && session.Character == sender.Character)
+                                if (session.Character != null && sender.Character != null &&
+                                    session.Character == sender.Character)
                                 {
                                     if (skill != null && skill.UpgradeSkill == 0)
                                     {
-                                        List<CharacterSkill> skills = session.Character.GetSkills();
+                                        var skills = session.Character.GetSkills();
 
-                                        session.Character.ChargeValue = skills.Where(s => s.SkillVNum == skill.SkillVNum).Sum(s => s.GetSkillBCards().Sum(b => b.FirstData));
+                                        session.Character.ChargeValue = skills
+                                            .Where(s => s.SkillVNum == skill.SkillVNum)
+                                            .Sum(s => s.GetSkillBCards().Sum(b => b.FirstData));
                                         session.AddBuff(new Buff(0, session.Level), session);
                                     }
                                 }
                             }
 
-                            if (SubType == (byte) BCardSubTypes.AttackPower.MeleeAttacksIncreased)
+                            if (SubType == (byte)BCardSubTypes.AttackPower.MeleeAttacksIncreased)
                             {
-                                if (session.Character != null && sender.Character != null && session.Character == sender.Character)
+                                if (session.Character != null && sender.Character != null &&
+                                    session.Character == sender.Character)
                                 {
                                     if (skill != null && skill.UpgradeSkill == 0)
                                     {
-                                        List<CharacterSkill> skills = session.Character.GetSkills();
+                                        var skills = session.Character.GetSkills();
 
-                                        session.Character.ChargeValue = skills.Where(s => s.SkillVNum == skill.SkillVNum).Sum(s => s.GetSkillBCards().Sum(b => b.FirstData));
+                                        session.Character.ChargeValue = skills
+                                            .Where(s => s.SkillVNum == skill.SkillVNum)
+                                            .Sum(s => s.GetSkillBCards().Sum(b => b.FirstData));
                                         session.AddBuff(new Buff(0, session.Level), session);
                                     }
                                 }
                             }
 
-                            if (SubType == (byte) BCardSubTypes.AttackPower.RangedAttacksIncreased)
+                            if (SubType == (byte)BCardSubTypes.AttackPower.RangedAttacksIncreased)
                             {
-                                if (session.Character != null && sender.Character != null && session.Character == sender.Character)
+                                if (session.Character != null && sender.Character != null &&
+                                    session.Character == sender.Character)
                                 {
                                     if (skill != null && skill.UpgradeSkill == 0)
                                     {
-                                        List<CharacterSkill> skills = session.Character.GetSkills();
+                                        var skills = session.Character.GetSkills();
 
-                                        session.Character.ChargeValue = skills.Where(s => s.SkillVNum == skill.SkillVNum).Sum(s => s.GetSkillBCards().Sum(b => b.FirstData));
+                                        session.Character.ChargeValue = skills
+                                            .Where(s => s.SkillVNum == skill.SkillVNum)
+                                            .Sum(s => s.GetSkillBCards().Sum(b => b.FirstData));
                                         session.AddBuff(new Buff(0, session.Level), session);
                                     }
                                 }
                             }
 
-                            if (SubType == (byte) BCardSubTypes.AttackPower.MagicalAttacksIncreased)
+                            if (SubType == (byte)BCardSubTypes.AttackPower.MagicalAttacksIncreased)
                             {
-                                if (session.Character != null && sender.Character != null && session.Character == sender.Character)
+                                if (session.Character != null && sender.Character != null &&
+                                    session.Character == sender.Character)
                                 {
                                     if (skill != null && skill.UpgradeSkill == 0)
                                     {
-                                        List<CharacterSkill> skills = session.Character.GetSkills();
+                                        var skills = session.Character.GetSkills();
 
-                                        session.Character.ChargeValue = skills.Where(s => s.SkillVNum == skill.SkillVNum).Sum(s => s.GetSkillBCards().Sum(b => b.FirstData));
+                                        session.Character.ChargeValue = skills
+                                            .Where(s => s.SkillVNum == skill.SkillVNum)
+                                            .Sum(s => s.GetSkillBCards().Sum(b => b.FirstData));
                                         session.AddBuff(new Buff(0, session.Level), session);
                                     }
                                 }
                             }
+
                             break;
 
                         case BCardType.Target:
@@ -469,8 +513,6 @@ namespace OpenNos.GameObject
 
                         case BCardType.EnemyElementResistance:
                             break;
-                        case BCardType.CardType.Hero:
-                            break;
 
                         case BCardType.Damage:
                             break;
@@ -479,37 +521,15 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.Morale:
-                            {
-                                if (SubType == (byte)BCardSubTypes.Morale.MoraleIncreased / 10)
-                                {
-                                    if (session.Character is Character moralechar)
-                                    {
-                                        var moralecard = ServerManager.GetCard(CardId);
-
-                                        if (moralecard == null)
-                                        {
-                                            return;
-
-                                        }
-
-                                        if (IsLevelScaled)
-                                        {
-                                            moralechar.DistanceDefenceRate += FirstData * 20 * moralechar.Level;
-                                            moralechar.DefenceRate += FirstData * 20 * moralechar.Level;
-                                            moralechar.HitRate += moralechar.Level * 5 * FirstData;
-                                        }
-                                    }
-                                }
-                            }
                             break;
 
                         case BCardType.Casting:
                             break;
 
                         case BCardType.Reflection:
-                            if (SubType == (byte)BCardSubTypes.Reflection.EnemyMPDecreased / 10)
+                            if (SubType == (byte)BCardSubTypes.Reflection.EnemyMPDecreased)
                             {
-                                if (ServerManager.RandomNumber() < -firstData)
+                                if (ServerManager.RandomNumber() < firstData)
                                 {
                                     session.DecreaseMp(session.Mp * SecondData / 100);
                                     if (session.Character != null)
@@ -518,65 +538,55 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            if (SubType == (byte)BCardSubTypes.Reflection.HPIncreased / 10 && (CardId == 413 || CardId == 416))
-                            {
-                                session.Character.Session.CurrentMapInstance?.Broadcast(session.Character.GenerateRc(session.Character.ConvertedDamageToHP));
-                                session.Character.Hp += session.Character.ConvertedDamageToHP;
-                                session.Character.Session.SendPacket(session.Character.GenerateStat());
-                            }
-                            if (SubType == (byte)BCardSubTypes.Reflection.MPIncreased / 10 && CardId == 416)
-                            {
-                                session.Character.Mp += session.Character.ConvertedDamageToHP;
-                                session.Character.Session.SendPacket(session.Character.GenerateStat());
-                            }
+
                             break;
 
                         case BCardType.DrainAndSteal:
-                            if (SubType == (byte) BCardSubTypes.DrainAndSteal.ConvertEnemyHPToMP)
+                            if (SubType == (byte)BCardSubTypes.DrainAndSteal.ConvertEnemyHPToMP)
                             {
-                                int bonus = 0;
-                                if (firstData < 0)
+                                var bonus = 0;
+                                if (IsLevelScaled)
                                 {
-                                    if (IsLevelScaled)
+                                    bonus = senderLevel * (firstData - 1);
+                                }
+                                else
+                                {
+                                    bonus = firstData;
+                                }
+
+                                bonus = session.GetDamage(bonus, sender, true, true);
+                                if (bonus > 0)
+                                {
+                                    session.MapInstance?.Broadcast(session.GenerateDm(bonus));
+                                    session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
+                                    if (sender.Mp + bonus > sender.MPLoad())
                                     {
-                                        bonus = (senderLevel * (firstData - 1)) * -1;
+                                        sender.Mp = (int)sender.MPLoad();
                                     }
                                     else
                                     {
-                                        bonus = firstData * -1;
+                                        sender.Mp += bonus;
                                     }
-                                    bonus = session.GetDamage(bonus, sender, true, true);
-                                    if (bonus > 0)
-                                    {
-                                        session.MapInstance?.Broadcast(session.GenerateDm(bonus));
-                                        session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                        if (sender.Mp + bonus > sender.MPLoad())
-                                        {
-                                            sender.Mp = (int)sender.MPLoad();
-                                        }
-                                        else
-                                        {
-                                            sender.Mp += bonus;
-                                        }
-                                        sender.Character?.Session?.SendPacket(sender.Character?.GenerateStat());
-                                    }
+
+                                    sender.Character?.Session?.SendPacket(sender.Character?.GenerateStat());
                                 }
                             }
-                            else if (SubType == (byte) BCardSubTypes.DrainAndSteal.LeechEnemyHP)
+                            else if (SubType == (byte)BCardSubTypes.DrainAndSteal.LeechEnemyHP)
                             {
-                                // FirstData = -1 SecondData = 0 SkillVNum = 400 (Tumble) IsLevelScaled = 1
+                                // FirstData = -1 SecondData = 0 SkillVNum = 400 (Tumble) IsLevelScaled
+                                // = 1
 
                                 if (SecondData == 0)
                                 {
                                     break; // Wtf !? !? !!!
                                 }
 
-                                if (ServerManager.RandomNumber() < (FirstData * -1))
+                                if (ServerManager.RandomNumber() < FirstData)
                                 {
                                     if (session.Hp > 1
                                         && session.MapInstance != null)
                                     {
-                                        int amount = senderLevel * SecondData;
+                                        var amount = SecondData;
 
                                         if (amount >= session.Hp)
                                         {
@@ -591,14 +601,13 @@ namespace OpenNos.GameObject
                                         session.Hp -= amount;
                                         sender.Hp += amount;
 
-                                        sender.MapInstance.Broadcast(StaticPacketHelper.GenerateEff(sender.UserType, sender.MapEntityId, 18));
-                                        sender.MapInstance.Broadcast(sender.GenerateRc(amount));
+                                        sender.MapInstance?.Broadcast(sender.GenerateRc(amount));
                                         sender.Character?.Session?.SendPacket(sender.Character?.GenerateStat());
                                         session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
                                     }
                                 }
                             }
-                            else if (SubType == (byte) BCardSubTypes.DrainAndSteal.LeechEnemyMP)
+                            else if (SubType == (byte)BCardSubTypes.DrainAndSteal.LeechEnemyMP)
                             {
                                 // FirstData = -100 SecondData = 3 CardId = 228 (MAna Drain) ThirdData = 1
 
@@ -608,12 +617,12 @@ namespace OpenNos.GameObject
                                     break;
                                 }
 
-                                if (ServerManager.RandomNumber() < (FirstData * -1))
+                                if (ServerManager.RandomNumber() < FirstData)
                                 {
                                     if (session.Mp > 1
                                         && session.MapInstance != null)
                                     {
-                                        int amount = senderLevel * SecondData;
+                                        var amount = SecondData;
 
                                         if (amount >= session.Mp)
                                         {
@@ -633,45 +642,48 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+
                             break;
 
                         case BCardType.HealingBurningAndCasting:
-                        {
-                            /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
-                             {
-                                 return;
-                             }*/
-
-                            // WTF ? Why Cryless ?
-
-                            var amount = 0;
-
-                            void HealingBurningAndCastingAction()
                             {
-                                if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
-                                {
-                                    return;
-                                }
+                                /* if (session.HasBuff(BCardType.RecoveryAndDamagePercent, 01))
+                                 {
+                                     return;
+                                 }*/
+
+                                // WTF ? Why Cryless ?
+
+                                var amount = 0;
 
                                 void HealingBurningAndCastingAction()
                                 {
-                                    case (byte) BCardSubTypes.HealingBurningAndCasting.RestoreHP:
-
-                                    int amount = 0;
-
-                                    if (SubType == (byte)BCardSubTypes.HealingBurningAndCasting.RestoreHP / 10
-                                        || SubType == (byte)BCardSubTypes.HealingBurningAndCasting.DecreaseHP / 10)
+                                    if (session.Hp < 1
+                                        || session.MapInstance == null)
                                     {
-                                        if (firstData > 0)
-                                        {
-                                            if (IsLevelScaled)
-                                            {
-                                                amount = senderLevel * firstData;
-                                            }
-                                            else
-                                            {
-                                                amount = firstData;
-                                            }
+                                        return;
+                                    }
+
+                                    if (IsLevelDivided)
+                                    {
+                                        amount = senderLevel / (firstData + 1);
+                                    }
+                                    else if (IsLevelDivided && IsLevelScaled)
+                                    {
+                                        amount = senderLevel / (firstData + 1);
+                                    }
+                                    else if (IsLevelScaled)
+                                    {
+                                        amount = senderLevel * (firstData + 1);
+                                    }
+                                    else
+                                    {
+                                        amount = firstData;
+                                    }
+
+                                    switch (SubType)
+                                    {
+                                        case (byte)BCardSubTypes.HealingBurningAndCasting.RestoreHP:
 
                                             if (session.Hp + amount > session.HpMax)
                                             {
@@ -680,90 +692,50 @@ namespace OpenNos.GameObject
 
                                             if (amount > 0)
                                             {
-                                                if (session.HasBuff(BCardType.CardType.DarkCloneSummon,
-                                                    (byte)BCardSubTypes.DarkCloneSummon.ConvertRecoveryToDamage))
-                                                {
-                                                    amount = session.GetDamage(amount, sender, true, true);
+                                                session.Hp += amount;
 
-                                                    session.MapInstance.Broadcast(session.GenerateDm(amount));
-                                                }
-                                                else
-                                                {
-                                                    session.Hp += amount;
-
-                                                    session.MapInstance.Broadcast(session.GenerateRc(amount));
-                                                }
+                                                session.MapInstance.Broadcast(session.GenerateRc(amount));
                                             }
-                                        }
-                                        else
-                                        {
-                                            if (IsLevelScaled)
+                                            else if (amount < 0)
                                             {
-                                                amount = senderLevel * (firstData - 1);
-                                            }
-                                            else
-                                            {
-                                                amount = firstData;
-                                            }
-
-                                            amount *= -1;
-
-                                            if (session.Hp - amount < 1)
-                                            {
-                                                amount = session.Hp - 1;
-                                            }
-
-                                    case (byte) BCardSubTypes.HealingBurningAndCasting.RestoreMP:
+                                                amount = session.GetDamage(amount, sender, true, true);
 
                                                 session.MapInstance.Broadcast(session.GenerateDm(amount));
                                             }
-                                        }
 
-                                        session?.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                    }
-                                    else if (SubType == (byte)BCardSubTypes.HealingBurningAndCasting.RestoreMP / 10
-                                        || SubType == (byte)BCardSubTypes.HealingBurningAndCasting.DecreaseMP / 10)
-                                    {
-                                        if (firstData > 0)
-                                        {
-                                            if (IsLevelScaled)
-                                            {
-                                                amount = senderLevel * firstData;
-                                            }
-                                            else
-                                            {
-                                                amount = firstData;
-                                            }
+                                            break;
 
-                                    case (byte) BCardSubTypes.HealingBurningAndCasting.DecreaseHP:
+                                        case (byte)BCardSubTypes.HealingBurningAndCasting.RestoreMP:
+
+                                            if (session.Mp + amount > session.MpMax)
+                                            {
+                                                amount = session.MpMax - session.Mp;
+                                            }
 
                                             session.Mp += amount;
-                                        }
-                                        else
-                                        {
-                                            if (IsLevelScaled)
-                                            {
-                                                amount = senderLevel * (firstData - 1);
-                                            }
-                                            else
-                                            {
-                                                amount = firstData;
-                                            }
 
-                                            amount *= -1;
+                                            break;
 
-                                    case (byte) BCardSubTypes.HealingBurningAndCasting.DecreaseMP:
+                                        case (byte)BCardSubTypes.HealingBurningAndCasting.DecreaseHP:
 
-                                            session.DecreaseMp(amount);
-                                        }
+                                            session.Hp = session.Hp - amount <= 0 ? 1 : session.Hp - amount;
+                                            session.MapInstance?.Broadcast(session.GenerateDm(amount));
 
-                                        session?.Character?.Session?.SendPacket(session.Character?.GenerateStat());
+                                            break;
+
+                                        case (byte)BCardSubTypes.HealingBurningAndCasting.DecreaseMP:
+
+                                            session.Mp = session.Mp - amount <= 0 ? 1 : session.Mp - amount;
+
+                                            break;
                                     }
+
+                                    session?.Character?.Session?.SendPacket(session.Character?.GenerateStat());
                                 }
 
                                 HealingBurningAndCastingAction();
 
-                                int interval = ThirdData > 0 ? (ThirdData * 2) : (CastType * 2);
+                                var interval = ThirdData > 0 ? ThirdData * 2 : CastType * 2;
 
                                 if (CardId != null && interval > 0)
                                 {
@@ -776,6 +748,7 @@ namespace OpenNos.GameObject
                                                 bcardDisposable.Dispose();
                                                 return;
                                             }
+
                                             if (session != null)
                                             {
                                                 HealingBurningAndCastingAction();
@@ -787,42 +760,54 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.HPMP:
-                            if (SubType == (byte) BCardSubTypes.HPMP.DecreaseRemainingMP)
+                            if (SubType == (byte)BCardSubTypes.HPMP.DecreaseRemainingMP)
                             {
-                                if (firstData < 0)
+                                var bonus = (int)(session.Mp * firstData / 100D);
+                                var change = false;
+                                if (session.Mp - bonus > 1)
                                 {
-                                    int bonus = (int)(session.Mp * -firstData / 100D);
-                                    bool change = false;
-                                    if (session.Mp - bonus > 1)
+                                    session.DecreaseMp(bonus);
+                                    change = true;
+                                }
+                                else
+                                {
+                                    if (session.Mp != 1)
                                     {
-                                        session.DecreaseMp(bonus);
+                                        bonus = session.Mp - 1;
+                                        session.Mp = 1;
                                         change = true;
                                     }
-                                    else
-                                    {
-                                        if (session.Mp != 1)
-                                        {
-                                            bonus = session.Mp - 1;
-                                            session.Mp = 1;
-                                            change = true;
-                                        }
-                                    }
-                                    if (change)
-                                    {
-                                        session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                    }
+                                }
+
+                                if (change)
+                                {
+                                    session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
                                 }
                             }
                             else
                             {
+                                var bonus = 0;
+                                var change = false;
+                                if (IsLevelScaled)
+                                {
+                                    bonus = senderLevel * (firstData += 1);
+                                }
+                                else if (IsLevelDivided)
+                                {
+                                    bonus = senderLevel / (firstData += 1);
+                                }
+                                else
+                                {
+                                    bonus = firstData;
+                                }
+
                                 void HPMPAction()
                                 {
                                     if (session.Hp > 0)
                                     {
-                                        if (SubType == (byte)BCardSubTypes.HPMP.HPRestored / 10
-                                         || SubType == (byte)BCardSubTypes.HPMP.HPReduced / 10)
+                                        switch (SubType)
                                         {
-                                            case (byte) BCardSubTypes.HPMP.HPRestored:
+                                            case (byte)BCardSubTypes.HPMP.HPRestored:
 
                                                 if (session.Hp + bonus <= session.HPLoad())
                                                 {
@@ -835,51 +820,43 @@ namespace OpenNos.GameObject
                                                     session.Hp = (int)session.HPLoad();
                                                     change = true;
                                                 }
+
                                                 if (change)
                                                 {
                                                     session.MapInstance?.Broadcast(session.GenerateRc(bonus));
-                                                    session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
+                                                    session.Character?.Session?.SendPacket(session.Character
+                                                        ?.GenerateStat());
                                                 }
 
                                                 break;
 
-                                            case (byte) BCardSubTypes.HPMP.HPReduced:
+                                            case (byte)BCardSubTypes.HPMP.HPReduced:
 
                                                 if (session.Hp - bonus > 1)
                                                 {
-                                                    bonus = (senderLevel * (firstData + 1)) * -1;
+                                                    session.Hp -= bonus;
+                                                    change = true;
                                                 }
                                                 else
                                                 {
-                                                    bonus = firstData * -1;
+                                                    if (session.Hp != 1)
+                                                    {
+                                                        bonus = session.Hp - 1;
+                                                        session.Hp = 1;
+                                                        change = true;
+                                                    }
                                                 }
-                                                bonus = session.GetDamage(bonus, sender, true, true);
-                                                if (bonus > 0)
+
+                                                if (change)
                                                 {
                                                     session.MapInstance?.Broadcast(session.GenerateDm(bonus));
-                                                    session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                                }
-                                            }
-                                        }
-                                        if (SubType == (byte)BCardSubTypes.HPMP.MPRestored / 10
-                                         || SubType == (byte)BCardSubTypes.HPMP.MPReduced / 10)
-                                        {
-                                            int bonus = 0;
-                                            bool change = false;
-                                            if (firstData > 0)
-                                            {
-                                                if (IsLevelScaled)
-                                                {
-                                                    bonus = senderLevel * firstData;
-                                                }
-                                                else
-                                                {
-                                                    bonus = firstData;
+                                                    session.Character?.Session?.SendPacket(session.Character
+                                                        ?.GenerateStat());
                                                 }
 
                                                 break;
 
-                                            case (byte) BCardSubTypes.HPMP.MPRestored:
+                                            case (byte)BCardSubTypes.HPMP.MPRestored:
                                                 if (session.Mp + bonus <= session.MPLoad())
                                                 {
                                                     session.Mp += bonus;
@@ -891,28 +868,19 @@ namespace OpenNos.GameObject
                                                     session.Mp = (int)session.MPLoad();
                                                     change = true;
                                                 }
+
                                                 if (change)
                                                 {
-                                                    session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if (IsLevelScaled)
-                                                {
-                                                    bonus = (senderLevel * (firstData + 1)) * -1;
-                                                }
-                                                else
-                                                {
-                                                    bonus = firstData;
+                                                    session.Character?.Session?.SendPacket(session.Character
+                                                        ?.GenerateStat());
                                                 }
 
                                                 break;
 
-                                            case (byte) BCardSubTypes.HPMP.MPReduced:
+                                            case (byte)BCardSubTypes.HPMP.MPReduced:
                                                 if (session.Mp - bonus > 1)
                                                 {
-                                                    session.DecreaseMp(bonus);
+                                                    session.Mp -= bonus;
                                                     change = true;
                                                 }
                                                 else
@@ -924,14 +892,18 @@ namespace OpenNos.GameObject
                                                         change = true;
                                                     }
                                                 }
+
                                                 if (change)
                                                 {
-                                                    session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
+                                                    session.Character?.Session?.SendPacket(session.Character
+                                                        ?.GenerateStat());
                                                 }
-                                            }
+
+                                                break;
                                         }
                                     }
                                 }
+
                                 HPMPAction();
                                 if (ThirdData > 0)
                                 {
@@ -945,6 +917,7 @@ namespace OpenNos.GameObject
                                                 bcardDisposable.Dispose();
                                                 return;
                                             }
+
                                             if (session != null)
                                             {
                                                 HPMPAction();
@@ -953,13 +926,14 @@ namespace OpenNos.GameObject
                                     session.BCardDisposables[BCardId] = bcardDisposable;
                                 }
                             }
+
                             break;
 
                         case BCardType.SpecialisationBuffResistance:
 
                             if (session == null) return; // had to do this, still i don't know the cause
 
-                            if (SubType.Equals((byte) BCardSubTypes.SpecialisationBuffResistance.RemoveBadEffects))
+                            if (SubType.Equals((byte)BCardSubTypes.SpecialisationBuffResistance.RemoveBadEffects))
                             {
                                 // bad
                                 if (ServerManager.RandomNumber() < FirstData && sender.BCardDisposables[BCardId] == null
@@ -1023,7 +997,7 @@ namespace OpenNos.GameObject
                                     {
                                         session.MapInstance
                                             .GetBattleEntitiesInRange(
-                                                new MapCell {X = session.PositionX, Y = session.PositionY},
+                                                new MapCell { X = session.PositionX, Y = session.PositionY },
                                                 skill.TargetRange)
                                             .Where(e => e.MapMonster == null && e.Hp > 0 && !session.CanAttackEntity(e))
                                             .ToList().ForEach(b =>
@@ -1056,7 +1030,7 @@ namespace OpenNos.GameObject
                                 }
                             }
 
-                            if (SubType.Equals((byte) BCardSubTypes.SpecialisationBuffResistance.RemoveGoodEffects))
+                            if (SubType.Equals((byte)BCardSubTypes.SpecialisationBuffResistance.RemoveGoodEffects))
                             {
                                 if (ServerManager.RandomNumber() < FirstData)
                                 {
@@ -1067,10 +1041,12 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.SpecialEffects:
-                            if (SubType.Equals((byte) BCardSubTypes.SpecialEffects.ShadowAppears))
+                            if (SubType.Equals((byte)BCardSubTypes.SpecialEffects.ShadowAppears))
                             {
-                                session.MapInstance.Broadcast($"guri 0 {(short)session.UserType} {session.MapEntityId} {firstData} {SecondData}");
+                                session.MapInstance.Broadcast(
+                                    $"guri 0 {(short)session.UserType} {session.MapEntityId} {firstData} {SecondData}");
                             }
+
                             break;
 
                         case BCardType.Capture:
@@ -1092,12 +1068,12 @@ namespace OpenNos.GameObject
                                                 {
                                                     // Algo
                                                     var capturerate =
-                                                        100 - (int) ((mapMonster.CurrentHp / mapMonster.Monster.MaxHP +
+                                                        100 - (int)((mapMonster.CurrentHp / mapMonster.Monster.MaxHP +
                                                                       1) * 100 / 3);
                                                     if (ServerManager.RandomNumber() <= capturerate)
                                                     {
                                                         if (senderSession.Character.Quests.Any(q =>
-                                                            q.Quest.QuestType == (int) QuestType.Capture1 &&
+                                                            q.Quest.QuestType == (int)QuestType.Capture1 &&
                                                             q.Quest.QuestObjectives.Any(d =>
                                                                 d.Data == mapMonster.MonsterVNum &&
                                                                 q.GetObjectives()[d.ObjectiveIndex - 1] <
@@ -1132,8 +1108,8 @@ namespace OpenNos.GameObject
                                                                         senderSession.Character.CharacterId, 3,
                                                                         mapMonster.MapMonsterId, -1, 0, 15, -1, -1, -1,
                                                                         true,
-                                                                        (int) ((float) mapMonster.CurrentHp /
-                                                                            (float) mapMonster.MaxHp * 100), 0, -1,
+                                                                        (int)((float)mapMonster.CurrentHp /
+                                                                            (float)mapMonster.MaxHp * 100), 0, -1,
                                                                         0));
                                                                 mapMonster.SetDeathStatement();
                                                                 senderSession.CurrentMapInstance?.Broadcast(
@@ -1189,13 +1165,14 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.SpecialEffects2:
-                            if (SubType.Equals((byte) BCardSubTypes.SpecialEffects2.TeleportInRadius))
+                            if (SubType.Equals((byte)BCardSubTypes.SpecialEffects2.TeleportInRadius))
                             {
                                 if (session.Character != null && session.MapEntityId == sender.MapEntityId)
                                 {
                                     session.Character.TeleportToDir(session.Character.Direction, firstData);
                                 }
                             }
+
                             break;
 
                         case BCardType.CalculatingLevel:
@@ -1205,22 +1182,15 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.MaxHPMP: // test
-                        {
-                            if (session.Character != null)
                             {
-                                if (SubType == (byte) BCardSubTypes.MaxHPMP.IncreasesMaximumHP)
+                                if (session.Character != null)
                                 {
-                                    session.Character.HPLoad();
-                                    session.Character.Session?.SendPacket(session.Character.GenerateStat());
-                                }
-                                else if (SubType == (byte) BCardSubTypes.MaxHPMP.IncreasesMaximumMP)
-                                {
-                                    if (SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumHP / 10)
+                                    if (SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumHP)
                                     {
                                         session.Character.HPLoad();
                                         session.Character.Session?.SendPacket(session.Character.GenerateStat());
                                     }
-                                    else if (SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumMP / 10)
+                                    else if (SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumMP)
                                     {
                                         session.Character.MPLoad();
                                         session.Character.Session?.SendPacket(session.Character.GenerateStat());
@@ -1239,124 +1209,146 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.RecoveryAndDamagePercent:
-                        {
-                            /* if (session.HasBuff(BCardType.RecoveryAndDamagePercent, 01))
-                             {
-                                 return;
-                             }*/
-
-                            var bonus = 0;
-                            var change = false;
-
-                            void RecoveryAndDamagePercentAction()
                             {
-                                if (session.Hp > 0)
-                                {
-                                    int bonus = 0;
-                                    bool change = false;
-                                    if (SubType == (byte)BCardSubTypes.RecoveryAndDamagePercent.HPRecovered / 10
-                                     || SubType == (byte)BCardSubTypes.RecoveryAndDamagePercent.HPReduced / 10)
-                                    {
-                                        case (byte) BCardSubTypes.RecoveryAndDamagePercent.HPRecovered:
+                                /* if (session.HasBuff(BCardType.RecoveryAndDamagePercent, 01))
+                                 {
+                                     return;
+                                 }*/
 
-                                            if (session.Hp >= session.HPLoad()) return;
-                                            
-                                            if (session.Hp + bonus < session.HPLoad())
-                                            {
-                                                session.Hp += bonus;
-                                                change = true;
-                                            }
-                                            else
-                                            {
-                                                if (session.Hp != (int)session.HPLoad())
+                                var bonus = 0;
+                                var change = false;
+
+                                void RecoveryAndDamagePercentAction()
+                                {
+                                    if (session.Hp > 0)
+                                    {
+                                        if (IsLevelDivided)
+                                        {
+                                            bonus = (int)(senderLevel / firstData * (session.HPLoad() / 100));
+                                        }
+                                        else
+                                        {
+                                            bonus = (int)(firstData * (session.HPLoad() / 100));
+                                        }
+
+                                        switch (SubType)
+                                        {
+                                            case (byte)BCardSubTypes.RecoveryAndDamagePercent.HPRecovered:
+
+                                                if (session.Hp >= session.HPLoad()) return;
+
+                                                if (session.Hp + bonus < session.HPLoad())
+                                                {
+                                                    session.Hp += bonus;
+                                                    change = true;
+                                                }
+                                                else if (session.Hp + bonus >= (int)session.HPLoad())
                                                 {
                                                     bonus = (int)session.HPLoad() - session.Hp;
                                                     session.Hp = (int)session.HPLoad();
                                                     change = true;
                                                 }
-                                            }
-                                            if (change)
-                                            {
-                                                session.MapInstance?.Broadcast(session.GenerateRc(bonus));
-                                                session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                            }
 
-                                            break;
-
-                                        case (byte) BCardSubTypes.RecoveryAndDamagePercent.HPReduced:
-                                            bonus = session.GetDamage(bonus, sender, true, true);
-                                            if (bonus > 0)
-                                            {
-                                                session.MapInstance?.Broadcast(session.GenerateDm(bonus));
-                                                session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                            }
-
-                                            break;
-
-                                        case (byte) BCardSubTypes.RecoveryAndDamagePercent.MPRecovered:
-                                            if (session.Mp + bonus < session.MPLoad())
-                                            {
-                                                session.Mp += bonus;
-                                                change = true;
-                                            }
-                                            else
-                                            {
-                                                if (session.Mp != (int)session.MPLoad())
+                                                if (change)
                                                 {
-                                                    bonus = (int)session.MPLoad() - session.Mp;
-                                                    session.Mp = (int)session.MPLoad();
+                                                    session.MapInstance?.Broadcast(session.GenerateRc(bonus));
+                                                    session.Character?.Session?.SendPacket(
+                                                        session.Character?.GenerateStat());
+                                                }
+
+                                                break;
+
+                                            case (byte)BCardSubTypes.RecoveryAndDamagePercent.HPReduced:
+                                                bonus = session.GetDamage(bonus, sender, true, true);
+                                                if (bonus > 0)
+                                                {
+                                                    session.MapInstance?.Broadcast(session.GenerateDm(bonus));
+                                                    session.Character?.Session?.SendPacket(
+                                                        session.Character?.GenerateStat());
+                                                }
+
+                                                break;
+
+                                            case (byte)BCardSubTypes.RecoveryAndDamagePercent.MPRecovered:
+                                                if (session.Mp + bonus < session.MPLoad())
+                                                {
+                                                    session.Mp += bonus;
                                                     change = true;
                                                 }
-                                            }
-                                            if (change)
-                                            {
-                                                session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                            }
-
-                                            break;
-
-                                        case (byte) BCardSubTypes.RecoveryAndDamagePercent.MPReduced:
-                                            if (session.Mp - bonus > 1)
-                                            {
-                                                session.DecreaseMp(bonus);
-                                                change = true;
-                                            }
-                                            else
-                                            {
-                                                if (session.Mp != 1)
+                                                else
                                                 {
-                                                    bonus = session.Mp - 1;
-                                                    session.Mp = 1;
+                                                    if (session.Mp != (int)session.MPLoad())
+                                                    {
+                                                        bonus = (int)session.MPLoad() - session.Mp;
+                                                        session.Mp = (int)session.MPLoad();
+                                                        change = true;
+                                                    }
+                                                }
+
+                                                if (change)
+                                                {
+                                                    session.Character?.Session?.SendPacket(
+                                                        session.Character?.GenerateStat());
+                                                }
+
+                                                break;
+
+                                            case (byte)BCardSubTypes.RecoveryAndDamagePercent.MPReduced:
+                                                if (session.Mp - bonus > 1)
+                                                {
+                                                    session.DecreaseMp(bonus);
                                                     change = true;
                                                 }
-                                            }
-                                            if (change)
-                                            {
-                                                session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
-                                            }
+                                                else
+                                                {
+                                                    if (session.Mp != 1)
+                                                    {
+                                                        bonus = session.Mp - 1;
+                                                        session.Mp = 1;
+                                                        change = true;
+                                                    }
+                                                }
+
+                                                if (change)
+                                                {
+                                                    session.Character?.Session?.SendPacket(
+                                                        session.Character?.GenerateStat());
+                                                }
+
+                                                break;
                                         }
                                     }
                                 }
-                            }
-                            if (ThirdData > 0 && CastType == 0)
-                            {
-                                RecoveryAndDamagePercentAction();
-                                IDisposable bcardDisposable = null;
-                                bcardDisposable = Observable
-                                    .Interval(TimeSpan.FromSeconds(ThirdData * 2))
-                                    .Subscribe(s =>
-                                    {
-                                        if (session.BCardDisposables[BCardId] != bcardDisposable)
+
+                                if (ThirdData > 0 && CastType == 0)
+                                {
+                                    RecoveryAndDamagePercentAction();
+                                    IDisposable bcardDisposable = null;
+                                    bcardDisposable = Observable
+                                        .Interval(TimeSpan.FromSeconds(ThirdData * 2))
+                                        .Subscribe(s =>
                                         {
-                                            bcardDisposable.Dispose();
-                                            return;
-                                        }
-                                        if (session != null)
-                                        {
-                                            RecoveryAndDamagePercentAction();
-                                        }
-                                    });
-                                session.BCardDisposables[BCardId] = bcardDisposable;
+                                            if (session.BCardDisposables[BCardId] != bcardDisposable)
+                                            {
+                                                bcardDisposable.Dispose();
+                                                return;
+                                            }
+
+                                            if (session != null &&
+                                                ((session.Character != null && !session.Character.IsDisposed)
+                                                 || (session.Mate != null)
+                                                 || (session.MapMonster != null)
+                                                 || (session.MapNpc != null)))
+                                            {
+                                                RecoveryAndDamagePercentAction();
+                                            }
+                                            else
+                                            {
+                                                bcardDisposable.Dispose();
+                                            }
+                                        });
+                                    session.BCardDisposables[BCardId] = bcardDisposable;
+                                }
                             }
                             break;
 
@@ -1367,80 +1359,98 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.SpecialActions:
-                            if (SubType.Equals((byte) BCardSubTypes.SpecialActions.PushBack))
+                            if (SubType.Equals((byte)BCardSubTypes.SpecialActions.PushBack))
                             {
-                                if (session.ResistForcedMovement <= 0
-                                    || ServerManager.RandomNumber() < session.ResistForcedMovement)
+                                if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
                                 {
                                     PushBackSession(firstData, session, sender);
                                 }
                             }
-                            else if (SubType.Equals((byte) BCardSubTypes.SpecialActions.Hide))
+                            else if (SubType.Equals((byte)BCardSubTypes.SpecialActions.Hide))
                             {
-                                //if (FirstData >= 0)
-                                //{
-                                //    if (session.Character is Character charact)
-                                //    {
-                                //        if (charact.MapInstance.MapInstanceType != MapInstanceType.NormalInstance || charact.MapInstance.Map.MapId != 2004)
-                                //        {
-                                //            charact.Invisible = true;
-                                //            charact.Mates.Where(s => s.IsTeamMember).ToList().ForEach(s => charact.Session.CurrentMapInstance?.Broadcast(s.GenerateOut()));
-                                //            charact.Session.CurrentMapInstance?.Broadcast(charact.GenerateInvisible());
-                                //        }
-                                //        else if (card != null)
-                                //        {
-                                //            charact.RemoveBuff(card.CardId);
-                                //        }
-                                //    }
-                                //}
-                            }
-                            else if (SubType.Equals((byte) BCardSubTypes.SpecialActions.FocusEnemies))
-                            {
-                                if (session.ResistForcedMovement <= 0
-                                    || ServerManager.RandomNumber() < session.ResistForcedMovement)
+                                if (session.Character is Character charact)
                                 {
-                                    if ((session.MapMonster == null || !session.MapMonster.IsBoss && !ServerManager.Instance.BossVNums.Contains(session.MapMonster.MonsterVNum) || session.MapMonster.Owner?.Character != null || session.MapMonster.Owner?.Mate != null)
-                                        && (session.MapNpc == null || !ServerManager.Instance.BossVNums.Contains(session.MapNpc.NpcVNum)))
+                                    if (charact.MapInstance.MapInstanceType != MapInstanceType.NormalInstance ||
+                                        charact.MapInstance.Map.MapId != 2004)
+                                    {
+                                        charact.Invisible = true;
+                                        charact.Mates.Where(s => s.IsTeamMember).ToList().ForEach(s =>
+                                            charact.Session.CurrentMapInstance?.Broadcast(s.GenerateOut()));
+                                        charact.Session.CurrentMapInstance?.Broadcast(charact.GenerateInvisible());
+                                    }
+                                    else if (card != null)
+                                    {
+                                        charact.RemoveBuff(card.CardId);
+                                    }
+                                }
+                            }
+                            else if (SubType.Equals((byte)BCardSubTypes.SpecialActions.FocusEnemies))
+                            {
+                                if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
+                                {
+                                    if ((session.MapMonster == null ||
+                                         !session.MapMonster.IsBoss &&
+                                         !ServerManager.Instance.BossVNums.Contains(session.MapMonster.MonsterVNum) ||
+                                         session.MapMonster.Owner?.Character != null ||
+                                         session.MapMonster.Owner?.Mate != null)
+                                        && (session.MapNpc == null ||
+                                            !ServerManager.Instance.BossVNums.Contains(session.MapNpc.NpcVNum)))
                                     {
                                         Observable.Timer(TimeSpan.FromMilliseconds(skill.CastTime * 100)).Subscribe(s =>
                                         {
-                                            if (!session.MapInstance.Map.isBlockedZone(session.PositionX, session.PositionY, sender.PositionX, sender.PositionY))
+                                            if (!session.MapInstance.Map.isBlockedZone(session.PositionX,
+                                                session.PositionY, sender.PositionX, sender.PositionY))
                                             {
                                                 session.PositionX = sender.PositionX;
                                                 session.PositionY = sender.PositionY;
-                                                session.MapInstance.Broadcast($"guri 3 {(short)session.UserType} {session.MapEntityId} {session.PositionX} {session.PositionY} 3 {SecondData} 2 -1");
+                                                session.MapInstance.Broadcast(
+                                                    $"guri 3 {(short)session.UserType} {session.MapEntityId} {session.PositionX} {session.PositionY} 3 {SecondData} 2 -1");
                                             }
                                         });
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) BCardSubTypes.SpecialActions.RunAway))
+                            else if (SubType.Equals((byte)BCardSubTypes.SpecialActions.RunAway))
                             {
-                                if (session.MapMonster != null && session.MapMonster.IsMoving && !session.MapMonster.IsBoss && !ServerManager.Instance.BossVNums.Contains(session.MapMonster.MonsterVNum) && session.MapMonster.Owner?.Character == null && session.MapMonster.Owner?.Mate == null)
+                                if (session.MapMonster != null && session.MapMonster.IsMoving &&
+                                    !session.MapMonster.IsBoss &&
+                                    !ServerManager.Instance.BossVNums.Contains(session.MapMonster.MonsterVNum) &&
+                                    session.MapMonster.Owner?.Character == null &&
+                                    session.MapMonster.Owner?.Mate == null)
                                 {
                                     if (session.MapMonster.Target != null)
                                     {
-                                        (session.MapMonster.Path ?? (session.MapMonster.Path = new List<Node>())).Clear();
+                                        (session.MapMonster.Path ?? (session.MapMonster.Path = new List<Node>()))
+                                            .Clear();
                                         session.MapMonster.Target = null;
 
-                                        short RunToX = session.MapMonster.FirstX;
-                                        short RunToY = session.MapMonster.FirstY;
+                                        var RunToX = session.MapMonster.FirstX;
+                                        var RunToY = session.MapMonster.FirstY;
 
-                                        MapCell RunToPos = session.MapInstance.Map.GetRandomPositionByDistance(session.PositionX, session.PositionY, 20);
+                                        var RunToPos =
+                                            session.MapInstance.Map.GetRandomPositionByDistance(session.PositionX,
+                                                session.PositionY, 20);
                                         if (RunToPos != null)
                                         {
                                             RunToX = RunToPos.X;
                                             RunToY = RunToPos.Y;
                                         }
 
-                                        session.MapMonster.Path = BestFirstSearch.FindPathJagged(new Node { X = session.MapMonster.MapX, Y = session.MapMonster.MapY }, new Node { X = RunToX, Y = RunToY },
-                                            session.MapMonster.MapInstance.Map.JaggedGrid);
+                                        /*session.MapMonster.Path = BestFirstSearch.FindPathJagged(new Node { X = session.MapMonster.MapX, Y = session.MapMonster.MapY }, new Node { X = RunToX, Y = RunToY },
+                                            session.MapMonster.MapInstance.Map.JaggedGrid);*/
                                         session.MapMonster.RunToX = RunToX;
                                         session.MapMonster.RunToY = RunToY;
-                                        Observable.Timer(TimeSpan.FromMilliseconds(card != null ? card.Duration * 100 : 10000)).Subscribe(s => { session.MapMonster.RunToX = 0; session.MapMonster.RunToY = 0; });
+                                        Observable.Timer(
+                                                TimeSpan.FromMilliseconds(card != null ? card.Duration * 100 : 10000))
+                                            .Subscribe(s =>
+                                            {
+                                                session.MapMonster.RunToX = 0;
+                                                session.MapMonster.RunToY = 0;
+                                            });
                                     }
                                 }
                             }
+
                             break;
 
                         case BCardType.Mode:
@@ -1450,10 +1460,11 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.LightAndShadow:
-                            if (SubType == (byte) BCardSubTypes.LightAndShadow.RemoveBadEffects)
+                            if (SubType == (byte)BCardSubTypes.LightAndShadow.RemoveBadEffects)
                             {
-                                session.Buffs.Where(b => b.Card.BuffType == BuffType.Bad && b.Card.Level <= firstData).ForEach(s => session.RemoveBuff(s.Card.CardId));
+                                session.DisableBuffs(new List<BuffType> { BuffType.Bad }, firstData);
                             }
+
                             break;
 
                         case BCardType.Item:
@@ -1467,11 +1478,11 @@ namespace OpenNos.GameObject
 
 
                         case BCardType.SpecialBehaviour:
-                            if (SubType == (byte) BCardSubTypes.SpecialBehaviour.TeleportRandom)
+                            if (SubType == (byte)BCardSubTypes.SpecialBehaviour.TeleportRandom)
                             {
                                 if (sender.Character != null)
                                 {
-                                    MapCell randomCell = session.MapInstance.Map.GetRandomPosition();
+                                    var randomCell = session.MapInstance.Map.GetRandomPosition();
                                     session.PositionX = randomCell.X;
                                     session.PositionY = randomCell.Y;
                                     session.MapInstance.Broadcast(session.GenerateTp());
@@ -1482,7 +1493,9 @@ namespace OpenNos.GameObject
 
                                     if (SecondData > 0)
                                     {
-                                        randomCell = sender.MapInstance.Map.GetRandomPositionByDistance(sender.PositionX, sender.PositionY, (short)SecondData, true);
+                                        randomCell =
+                                            sender.MapInstance.Map.GetRandomPositionByDistance(sender.PositionX,
+                                                sender.PositionY, (short)SecondData, true);
                                     }
                                     else
                                     {
@@ -1494,12 +1507,13 @@ namespace OpenNos.GameObject
                                     sender.MapInstance.Broadcast(sender.GenerateTp());
                                 }
                             }
-                            else if (SubType == (byte) BCardSubTypes.SpecialBehaviour.InflictOnTeam)
+                            else if (SubType == (byte)BCardSubTypes.SpecialBehaviour.InflictOnTeam)
                             {
                                 if (CardId != null && CardId.Value == SecondData) // Checked on official server
                                 {
                                     return;
                                 }
+
                                 void InflictOnTeamAction()
                                 {
                                     if (session.Hp < 1
@@ -1508,8 +1522,14 @@ namespace OpenNos.GameObject
                                         return;
                                     }
 
-                                    session.MapInstance.GetBattleEntitiesInRange(new MapCell { X = session.PositionX, Y = session.PositionY }, (byte)FirstData)
-                                        .Where(s => s.EntityType != EntityType.Npc && (s.EntityType != session.EntityType || s.MapEntityId != session.MapEntityId) && !session.CanAttackEntity(s)).ToList()
+                                    session.MapInstance
+                                        .GetBattleEntitiesInRange(
+                                            new MapCell { X = session.PositionX, Y = session.PositionY },
+                                            (byte)FirstData)
+                                        .Where(s => s.EntityType != EntityType.Npc &&
+                                                    (s.EntityType != session.EntityType ||
+                                                     s.MapEntityId != session.MapEntityId) &&
+                                                    !session.CanAttackEntity(s)).ToList()
                                         .ForEach(s => s.AddBuff(new Buff((short)SecondData, senderLevel), sender));
                                 }
 
@@ -1524,11 +1544,13 @@ namespace OpenNos.GameObject
                                                 bcardDisposable.Dispose();
                                                 return;
                                             }
+
                                             InflictOnTeamAction();
                                         });
                                     session.BCardDisposables[BCardId] = bcardDisposable;
                                 }
                             }
+
                             break;
 
                         case BCardType.Quest:
@@ -1538,89 +1560,112 @@ namespace OpenNos.GameObject
                             var summonParameters2 = new List<MonsterToSummon>();
                             if (session.Character != null)
                             {
-                                aliveTime = ServerManager.GetNpcMonster((short)SecondData).RespawnTime / (ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 2400 ? ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 150 ? 1 : 10 : 40) * (ServerManager.GetNpcMonster((short)SecondData).RespawnTime >= 150 ? 4 : 1);
-                                for (int i = 0; i < firstData; i++)
+                                aliveTime = ServerManager.GetNpcMonster((short)SecondData).RespawnTime /
+                                    (ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 2400
+                                        ? ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 150
+                                            ? 1
+                                            : 10
+                                        : 40) * (ServerManager.GetNpcMonster((short)SecondData).RespawnTime >=
+                                                 150
+                                        ? 4
+                                        : 1);
+                                for (var i = 0; i < firstData; i++)
                                 {
-                                    x = SecondData == 945 ? session.PositionX : (short)(ServerManager.RandomNumber(-1, 1) + session.PositionX);
-                                    y = SecondData == 945 ? session.PositionY : (short)(ServerManager.RandomNumber(-1, 1) + session.PositionY);
+                                    x = SecondData == 945
+                                        ? session.PositionX
+                                        : (short)(ServerManager.RandomNumber(-1, 1) + session.PositionX);
+                                    y = SecondData == 945
+                                        ? session.PositionY
+                                        : (short)(ServerManager.RandomNumber(-1, 1) + session.PositionY);
                                     if (session.MapInstance.Map.IsBlockedZone(x, y))
                                     {
                                         x = session.PositionX;
                                         y = session.PositionY;
                                     }
-                                    summonParameters2.Add(new MonsterToSummon((short)SecondData, new MapCell { X = x, Y = y }, null, true, isHostile: SecondData != 945, owner: session, aliveTime: aliveTime));
+
+                                    summonParameters2.Add(new MonsterToSummon((short)SecondData,
+                                        new MapCell { X = x, Y = y }, null, true, isHostile: SecondData != 945,
+                                        owner: session, aliveTime: aliveTime));
                                 }
-                                if (ServerManager.RandomNumber() <= Math.Abs(ThirdData) || ThirdData == 0 || ThirdData < 0)
+
+                                if (ServerManager.RandomNumber() <= Math.Abs(ThirdData) || ThirdData == 0 ||
+                                    ThirdData < 0)
                                 {
                                     switch (SubType)
                                     {
-                                        case (byte) BCardSubTypes.SecondSPCard.PlantBomb:
-                                        {
-                                            if (session.MapInstance.Monsters.Any(s =>
-                                                s.Owner != null && s.Owner.MapEntityId == session.MapEntityId &&
-                                                s.MonsterVNum == SecondData))
+                                        case (byte)BCardSubTypes.SecondSPCard.PlantBomb:
                                             {
-                                                if (session.MapInstance.Monsters.Any(s => s.Owner != null && s.Owner.MapEntityId == session.MapEntityId && s.MonsterVNum == SecondData))
+                                                if (session.MapInstance.Monsters.Any(s =>
+                                                    s.Owner != null && s.Owner.MapEntityId == session.MapEntityId &&
+                                                    s.MonsterVNum == SecondData))
                                                 {
                                                     //Attack
-                                                    session.MapInstance.Monsters.Where(s => s.Owner?.MapEntityId == session.MapEntityId && s.MonsterVNum == SecondData).ToList().ForEach(s =>
-                                                    {
-                                                        s.Target = s.BattleEntity;
-                                                    });
+                                                    session.MapInstance.Monsters
+                                                        .Where(s => s.Owner?.MapEntityId == session.MapEntityId &&
+                                                                    s.MonsterVNum == SecondData).ToList().ForEach(s =>
+                                                                    {
+                                                                        s.Target = s.BattleEntity;
+                                                                    });
 
                                                     short NewCooldown = 300;
-                                                    Observable.Timer(TimeSpan.FromMilliseconds(skill.Cooldown * 100 + 50)).Subscribe(s =>
-                                                    {
-                                                        session.Character.Session.CurrentMapInstance.Broadcast(StaticPacketHelper.SkillUsed(UserType.Player,
-                                                            session.Character.CharacterId, 1, session.Character.CharacterId, skill.SkillVNum,
-                                                            NewCooldown, 2, skill.Effect,
-                                                            session.Character.PositionX, session.Character.PositionY, true,
-                                                            (int)(session.Character.Hp / session.Character.HPLoad() * 100), 0, -1,
-                                                            (byte)(skill.SkillType - 1)));
-                                                    });
-                                                    DateTime EndCooldownTime = DateTime.Now.AddMilliseconds(NewCooldown * 100);
-                                                    session.Character.SkillsSp.FirstOrDefault(s => s.SkillVNum == SkillVNum).LastUse = EndCooldownTime;
+                                                    Observable.Timer(TimeSpan.FromMilliseconds(skill.Cooldown * 100 + 50))
+                                                        .Subscribe(s =>
+                                                        {
+                                                            session.Character.Session.CurrentMapInstance.Broadcast(
+                                                                StaticPacketHelper.SkillUsed(UserType.Player,
+                                                                    session.Character.CharacterId, 1,
+                                                                    session.Character.CharacterId, skill.SkillVNum,
+                                                                    NewCooldown, 2, skill.Effect,
+                                                                    session.Character.PositionX,
+                                                                    session.Character.PositionY, true,
+                                                                    (int)(session.Character.Hp /
+                                                                        session.Character.HPLoad() * 100), 0, -1,
+                                                                    (byte)(skill.SkillType - 1)));
+                                                        });
+                                                    var EndCooldownTime = DateTime.Now.AddMilliseconds(NewCooldown * 100);
+                                                    session.Character.SkillsSp.FirstOrDefault(s => s.SkillVNum == SkillVNum)
+                                                        .LastUse = EndCooldownTime;
                                                     Observable.Timer(EndCooldownTime).Subscribe(s =>
                                                     {
-                                                        if (session.Character.SkillsSp != null && session.Character.SkillsSp.FirstOrDefault(c => c.SkillVNum == SkillVNum) is CharacterSkill cSkill)
+                                                        if (session.Character.SkillsSp != null &&
+                                                            session.Character.SkillsSp.FirstOrDefault(c =>
+                                                                c.SkillVNum == SkillVNum) is CharacterSkill cSkill)
                                                         {
                                                             if (cSkill.LastUse <= EndCooldownTime)
                                                             {
-                                                                session.Character.Session.SendPacket(StaticPacketHelper.SkillReset(skill.CastId));
+                                                                session.Character.Session.SendPacket(
+                                                                    StaticPacketHelper.SkillReset(skill.CastId));
                                                             }
                                                         }
                                                     });
                                                 }
                                                 else
                                                 {
-                                                    EventHelper.Instance.RunEvent(new EventContainer(session.MapInstance, EventActionType.SPAWNMONSTERS, summonParameters2));
+                                                    EventHelper.Instance.RunEvent(new EventContainer(session.MapInstance,
+                                                        EventActionType.SPAWNMONSTERS, summonParameters2));
                                                 }
                                             }
                                             break;
-                                        case ((byte)BCardSubTypes.SecondSPCard.PlantSelfDestructionBomb / 10):
-                                            {
-                                                EventHelper.Instance.RunEvent(new EventContainer(session.MapInstance, EventActionType.SPAWNMONSTERS, summonParameters2));
-                                            }
-                                        }
-                                            break;
 
-                                        case (byte) BCardSubTypes.SecondSPCard.PlantSelfDestructionBomb:
-                                        {
-                                            EventHelper.Instance.RunEvent(new EventContainer(session.MapInstance,
-                                                EventActionType.SPAWNMONSTERS, summonParameters2));
-                                        }
+                                        case (byte)BCardSubTypes.SecondSPCard.PlantSelfDestructionBomb:
+                                            {
+                                                EventHelper.Instance.RunEvent(new EventContainer(session.MapInstance,
+                                                    EventActionType.SPAWNMONSTERS, summonParameters2));
+                                            }
                                             break;
                                     }
                                 }
+
                                 session.Character.Session.SendPacket(session.Character.GenerateStat());
                             }
+
                             break;
 
                         case BCardType.SPCardUpgrade:
                             break;
 
                         case BCardType.HugeSnowman:
-                            if (SubType == (byte) BCardSubTypes.HugeSnowman.SnowStorm)
+                            if (SubType == (byte)BCardSubTypes.HugeSnowman.SnowStorm)
                             {
                                 if (sender.CanAttackEntity(session))
                                 {
@@ -1629,7 +1674,8 @@ namespace OpenNos.GameObject
                                     session.Mate?.Owner.Session.SendPacket(session.Mate.GenerateStatInfo());
                                     if (session.Hp <= 0)
                                     {
-                                        session.MapInstance.Broadcast(StaticPacketHelper.Die(session.UserType, session.MapEntityId, session.UserType, session.MapEntityId));
+                                        session.MapInstance.Broadcast(StaticPacketHelper.Die(session.UserType,
+                                            session.MapEntityId, session.UserType, session.MapEntityId));
                                         if (session.Character != null)
                                         {
                                             Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(obs =>
@@ -1640,11 +1686,12 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+
                             break;
 
                         case BCardType.Drain:
 
-                            /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
+                            /* if (session.HasBuff(BCardType.RecoveryAndDamagePercent, 01))
                              {
                                  return;
                              }*/
@@ -1652,47 +1699,47 @@ namespace OpenNos.GameObject
                             {
                                 if (session.Hp > 0 && sender.Hp > 0)
                                 {
-                                    if (SubType == (byte) BCardSubTypes.Drain.TransferEnemyHP)
+                                    if (SubType == (byte)BCardSubTypes.Drain.TransferEnemyHP)
                                     {
-                                        int bonus = 0;
-                                        bool senderChange = false;
-                                        if (firstData > 0)
+                                        var bonus = 0;
+                                        var senderChange = false;
+                                        if (IsLevelScaled)
                                         {
-                                            if (IsLevelScaled)
+                                            bonus = senderLevel * (firstData += 1);
+                                        }
+                                        else
+                                        {
+                                            bonus = firstData;
+                                        }
+
+                                        bonus = session.GetDamage(bonus, sender, true, true);
+                                        if (bonus > 0)
+                                        {
+                                            session.MapInstance?.Broadcast(session.GenerateDm(bonus));
+                                            session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
+
+                                            if (sender.Hp + bonus <= sender.HPLoad())
                                             {
-                                                bonus = senderLevel * firstData;
+                                                sender.Hp += bonus;
+                                                senderChange = true;
                                             }
                                             else
                                             {
-                                                bonus = firstData;
+                                                bonus = (int)sender.HPLoad() - sender.Hp;
+                                                sender.Hp = (int)sender.HPLoad();
+                                                senderChange = true;
                                             }
-                                            bonus = session.GetDamage(bonus, sender, true, true);
-                                            if (bonus > 0)
-                                            {
-                                                session.MapInstance?.Broadcast(session.GenerateDm(bonus));
-                                                session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
 
-                                                if (sender.Hp + bonus <= sender.HPLoad())
-                                                {
-                                                    sender.Hp += bonus;
-                                                    senderChange = true;
-                                                }
-                                                else
-                                                {
-                                                    bonus = (int)sender.HPLoad() - sender.Hp;
-                                                    sender.Hp = (int)sender.HPLoad();
-                                                    senderChange = true;
-                                                }
-                                                if (senderChange)
-                                                {
-                                                    sender.MapInstance?.Broadcast(sender.GenerateRc(bonus));
-                                                    sender.Character?.Session?.SendPacket(sender.Character?.GenerateStat());
-                                                }
+                                            if (senderChange)
+                                            {
+                                                sender.MapInstance?.Broadcast(sender.GenerateRc(bonus));
+                                                sender.Character?.Session?.SendPacket(sender.Character?.GenerateStat());
                                             }
                                         }
                                     }
                                 }
                             }
+
                             DrainAction();
                             if (ThirdData > 0)
                             {
@@ -1706,6 +1753,7 @@ namespace OpenNos.GameObject
                                             bcardDisposable.Dispose();
                                             return;
                                         }
+
                                         if (session != null)
                                         {
                                             DrainAction();
@@ -1713,6 +1761,7 @@ namespace OpenNos.GameObject
                                     });
                                 session.BCardDisposables[BCardId] = bcardDisposable;
                             }
+
                             break;
 
                         case BCardType.BossMonstersSkill:
@@ -1725,9 +1774,9 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.SESpecialist:
-                            if (SubType.Equals((byte) BCardSubTypes.SESpecialist.LowerHPStrongerEffect))
+                            if (SubType.Equals((byte)BCardSubTypes.SESpecialist.LowerHPStrongerEffect))
                             {
-                                double hpPercentage = session.Hp / session.HPLoad() * 100;
+                                var hpPercentage = session.Hp / session.HPLoad() * 100;
                                 if (hpPercentage < 35)
                                 {
                                     session.AddBuff(new Buff(274, senderLevel), sender);
@@ -1741,6 +1790,7 @@ namespace OpenNos.GameObject
                                     session.AddBuff(new Buff(272, senderLevel), sender);
                                 }
                             }
+
                             break;
 
                         case BCardType.FourthGlacernonFamilyRaid:
@@ -1753,34 +1803,44 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.SummonSkill:
-                            if (SubType.Equals((byte) BCardSubTypes.SummonSkill.Summon12) ||
-                                SubType.Equals((byte) BCardSubTypes.SummonSkill.Summon10))
+                            if (SubType.Equals((byte)BCardSubTypes.SummonSkill.Summon12) ||
+                                SubType.Equals((byte)BCardSubTypes.SummonSkill.Summon10))
                             {
-                                int amount = 0;
+                                var amount = 0;
 
-                                if (SubType.Equals((byte) BCardSubTypes.SummonSkill.Summon12))
+                                if (SubType.Equals((byte)BCardSubTypes.SummonSkill.Summon12))
                                 {
                                     amount = 12;
                                 }
 
-                                if (SubType.Equals((byte) BCardSubTypes.SummonSkill.Summon10))
+                                if (SubType.Equals((byte)BCardSubTypes.SummonSkill.Summon10))
                                 {
                                     amount = 10;
                                 }
 
                                 if (ServerManager.RandomNumber() < firstData)
                                 {
-                                    aliveTime = ServerManager.GetNpcMonster((short)SecondData).RespawnTime / (ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 2400 ? ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 150 ? 1 : 10 : 40) * (ServerManager.GetNpcMonster((short)SecondData).RespawnTime >= 150 ? 4 : 1);
-                                    bool canMove = SecondData != 797 && SecondData != 798 && SecondData != 2013 && SecondData != 2016;
-                                    List<MonsterToSummon> monstersToSummon = new List<MonsterToSummon>();
-                                    for (int i = 0; i < (amount > 0 ? amount : 1); i++)
+                                    aliveTime = ServerManager.GetNpcMonster((short)SecondData).RespawnTime /
+                                                (ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 2400
+                                                    ? ServerManager.GetNpcMonster((short)SecondData).RespawnTime <
+                                                      150 ? 1 : 10
+                                                    : 40) *
+                                                (ServerManager.GetNpcMonster((short)SecondData).RespawnTime >= 150
+                                                    ? 4
+                                                    : 1);
+                                    var canMove = SecondData != 797 && SecondData != 798 && SecondData != 2013 &&
+                                                  SecondData != 2016;
+                                    var monstersToSummon = new List<MonsterToSummon>();
+                                    for (var i = 0; i < (amount > 0 ? amount : 1); i++)
                                     {
                                         x = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionX);
                                         y = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionY);
 
                                         if (skill != null && sender.Character == null)
                                         {
-                                            MapCell randomCell = sender.MapInstance.Map.GetRandomPositionByDistance(sender.PositionX, sender.PositionY, skill.Range, true);
+                                            var randomCell =
+                                                sender.MapInstance.Map.GetRandomPositionByDistance(sender.PositionX,
+                                                    sender.PositionY, skill.Range, true);
 
                                             if (randomCell != null)
                                             {
@@ -1789,11 +1849,16 @@ namespace OpenNos.GameObject
                                             }
                                         }
 
-                                        monstersToSummon.Add(new MonsterToSummon((short)SecondData, new MapCell { X = x, Y = y }, null, canMove, aliveTimeMp: aliveTime, owner: sender));
+                                        monstersToSummon.Add(new MonsterToSummon((short)SecondData,
+                                            new MapCell { X = x, Y = y }, null, canMove, aliveTimeMp: aliveTime,
+                                            owner: sender));
                                     }
-                                    EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance, EventActionType.SPAWNMONSTERS, monstersToSummon));
+
+                                    EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance,
+                                        EventActionType.SPAWNMONSTERS, monstersToSummon));
                                 }
                             }
+
                             break;
 
                         case BCardType.InflictSkill:
@@ -1808,7 +1873,7 @@ namespace OpenNos.GameObject
                         case BCardType.TauntSkill:
                             switch (SubType)
                             {
-                                case (byte) BCardSubTypes.TauntSkill.TauntWhenKnockdown:
+                                case (byte)BCardSubTypes.TauntSkill.TauntWhenKnockdown:
                                     if (session.Buffs.Any(s => s.Card.CardId == 500) &&
                                         ServerManager.RandomNumber() < FirstData)
                                     {
@@ -1817,18 +1882,16 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) BCardSubTypes.TauntSkill.TauntWhenNormal:
+                                case (byte)BCardSubTypes.TauntSkill.TauntWhenNormal:
                                     if (!session.Buffs.Any(s => s.Card.CardId == 500) &&
                                         ServerManager.RandomNumber() < FirstData)
-                                }
-                                else
-                                {
-                                    if (!session.Buffs.Any(s => s.Card.CardId == 500) && ServerManager.RandomNumber() < -FirstData)
                                     {
                                         session.AddBuff(new Buff((short)SecondData, senderLevel), sender);
                                     }
-                                }
+
+                                    break;
                             }
+
                             break;
 
                         case BCardType.FireCannoneerRangeBuff:
@@ -1836,117 +1899,147 @@ namespace OpenNos.GameObject
 
                         case BCardType.VulcanoElementBuff:
                             break;
-                        
+
                         case BCardType.DamageConvertingSkill:
-                            if (SubType.Equals((byte) BCardSubTypes.DamageConvertingSkill.TransferInflictedDamage))
-                                case BCardType.DamageConvertingSkill:
                             if (SubType.Equals((byte)BCardSubTypes.DamageConvertingSkill.TransferInflictedDamage))
                             {
                                 if (sender.Character != null)
                                 {
-                                    sender.Character.Session.SendPacket(UserInterfaceHelper.GenerateMsg(string.Format(Language.Instance.GetMessageFromKey("SACRIFICES_THEMSELVES"), sender.Character.Name, session.Character?.Name ?? session.Mate?.Name ?? session.MapNpc?.Name ?? session.MapMonster?.Name), 3));
-                                    session.Character?.Session.SendPacket(UserInterfaceHelper.GenerateMsg(string.Format(Language.Instance.GetMessageFromKey("SACRIFICES_THEMSELVES"), sender.Character.Name, session.Character.Name), 3));
+                                    sender.Character.Session.SendPacket(UserInterfaceHelper.GenerateMsg(
+                                        string.Format(Language.Instance.GetMessageFromKey("SACRIFICES_THEMSELVES"),
+                                            sender.Character.Name,
+                                            session.Character?.Name ?? session.Mate?.Name ??
+                                            session.MapNpc?.Name ?? session.MapMonster?.Name), 3));
+                                    session.Character?.Session.SendPacket(
+                                        UserInterfaceHelper.GenerateMsg(
+                                            string.Format(Language.Instance.GetMessageFromKey("SACRIFICES_THEMSELVES"),
+                                                sender.Character.Name, session.Character.Name), 3));
 
                                     IDisposable bcardDisposable = null;
-                                    bcardDisposable = Observable.Interval(TimeSpan.FromMilliseconds(1000)).Subscribe(s =>
-                                    {
-                                        if (session.BCardDisposables[BCardId] != bcardDisposable)
+                                    bcardDisposable = Observable.Interval(TimeSpan.FromMilliseconds(1000)).Subscribe(
+                                        s =>
                                         {
-                                            bcardDisposable.Dispose();
-                                            return;
-                                        }
-                                        if (!sender.Character.Session.HasCurrentMapInstance || Map.GetDistance(new MapCell { X = session.PositionX, Y = session.PositionY }, new MapCell { X = sender.PositionX, Y = sender.PositionY }) > 10 || session.MapInstance != sender.MapInstance || !sender.Buffs.Any(c => c.Card.CardId == 546))
-                                        {
-                                            sender.Character.Session.SendPacket(UserInterfaceHelper.GenerateMsg(string.Format(Language.Instance.GetMessageFromKey("SACRIFICE_OUT_OF_RANGE")), 3));
-                                            session.Character?.Session.SendPacket(UserInterfaceHelper.GenerateMsg(string.Format(Language.Instance.GetMessageFromKey("SACRIFICE_OUT_OF_RANGE")), 3));
-                                            session.ClearSacrificeBuff();
-                                            session.BCardDisposables[BCardId].Dispose();
-                                        }
-                                    });
+                                            if (session.BCardDisposables[BCardId] != bcardDisposable)
+                                            {
+                                                bcardDisposable.Dispose();
+                                                return;
+                                            }
+
+                                            if (!sender.Character.Session.HasCurrentMapInstance ||
+                                                Map.GetDistance(
+                                                    new MapCell { X = session.PositionX, Y = session.PositionY },
+                                                    new MapCell { X = sender.PositionX, Y = sender.PositionY }) > 10 ||
+                                                session.MapInstance != sender.MapInstance ||
+                                                !sender.Buffs.Any(c => c.Card.CardId == 546))
+                                            {
+                                                sender.Character.Session.SendPacket(
+                                                    UserInterfaceHelper.GenerateMsg(
+                                                        string.Format(
+                                                            Language.Instance.GetMessageFromKey(
+                                                                "SACRIFICE_OUT_OF_RANGE")), 3));
+                                                session.Character?.Session.SendPacket(
+                                                    UserInterfaceHelper.GenerateMsg(
+                                                        string.Format(
+                                                            Language.Instance.GetMessageFromKey(
+                                                                "SACRIFICE_OUT_OF_RANGE")), 3));
+                                                session.ClearSacrificeBuff();
+                                                session.BCardDisposables[BCardId].Dispose();
+                                            }
+                                        });
                                     session.BCardDisposables[BCardId] = bcardDisposable;
                                 }
                             }
+
                             break;
-                        
+
                         case BCardType.MeditationSkill:
-                        {
-                            if (sender.Character is Character character)
-                            {
-                                if (SubType.Equals((byte) BCardSubTypes.MeditationSkill.Sacrifice))
-                                    case BCardType.MeditationSkill:
                             {
                                 if (sender.Character is Character character)
                                 {
-                                    if (SubType.Equals((byte)BCardSubTypes.MeditationSkill.Sacrifice / 10))
+                                    if (SubType.Equals((byte)BCardSubTypes.MeditationSkill.Sacrifice))
                                     {
                                         session.AddBuff(new Buff((short)SecondData, senderLevel), sender);
                                     }
                                     else if (character.LastSkillComboUse < DateTime.Now)
                                     {
                                         ItemInstance sp = null;
-                                        
-                                        if (SkillVNum.HasValue
-                                            && SubType.Equals((byte) BCardSubTypes.MeditationSkill.CausingChance)
-                                            && ServerManager.RandomNumber() < firstData)
-                                            if (character.Inventory != null)
 
+                                        if (character.Inventory != null)
                                         {
-                                            sp = character.Inventory.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear);
+                                            sp = character.Inventory.LoadBySlotAndType((byte)EquipmentType.Sp,
+                                                InventoryType.Wear);
                                         }
 
                                         if (sp != null)
                                         {
-                                            short newSkillVNum = (short)SecondData;
+                                            var newSkillVNum = (short)SecondData;
 
                                             if (SkillVNum.HasValue
-                                                && SubType.Equals((byte)BCardSubTypes.MeditationSkill.CausingChance / 10)
+                                                && SubType.Equals((byte)BCardSubTypes.MeditationSkill.CausingChance)
                                                 && ServerManager.RandomNumber() < firstData)
                                             {
-                                                if (SkillHelper.IsCausingChance(SkillVNum.Value)
-                                                    && session != sender)
+                                                if (character.SkillComboCount < 7)
                                                 {
-                                                    return;
-                                                }
-
-                                                CharacterSkill oldSkill = character.GetSkill(SkillVNum.Value);
-                                                CharacterSkill newSkill = character.GetSkill(newSkillVNum);
-
-                                                if (oldSkill?.Skill != null && newSkill?.Skill != null)
-                                                {
-                                                    newSkill.FirstCastId = oldSkill.FirstCastId;
-
-                                                    if ((newSkillVNum == 1126 && character.SkillComboCount > 4)
-                                                     || (newSkillVNum == 1140 && character.SkillComboCount > 8))
+                                                    if (SkillHelper.IsCausingChance(SkillVNum.Value)
+                                                        && session != sender)
                                                     {
-                                                        character.SkillComboCount = 0;
-                                                        character.LastSkillComboUse = DateTime.Now.AddSeconds(3);
+                                                        return;
                                                     }
-                                                    else
+
+                                                    var oldSkill = character.GetSkill(SkillVNum.Value);
+                                                    var newSkill = character.GetSkill(newSkillVNum);
+
+                                                    if (oldSkill?.Skill != null && newSkill?.Skill != null)
                                                     {
-                                                        character.SkillComboCount++;
-                                                        character.LastSkillComboUse = DateTime.Now;
+                                                        newSkill.FirstCastId = oldSkill.FirstCastId;
 
-                                                        Observable.Timer(TimeSpan.FromMilliseconds(100)).Subscribe(observer =>
+                                                        if ((newSkillVNum == 1126 || newSkillVNum == 1125) && character.SkillComboCount > 7
+                                                            || (newSkillVNum == 1139 || newSkillVNum == 1140) && character.SkillComboCount > 11)
                                                         {
-                                                            character.Session.SendPacket($"mslot {newSkill.Skill.CastId} -1");
-
-                                                            IEnumerable<QuicklistEntryDTO> quicklistEntries = character.QuicklistEntries.Where(s => s.Morph == sp.Item.Morph && s.Pos.Equals(oldSkill.FirstCastId.Value));
-
-                                                            foreach (QuicklistEntryDTO quicklistEntry in quicklistEntries)
-                                                            {
-                                                                character.Session.SendPacket($"qset {quicklistEntry.Q1} {quicklistEntry.Q2} {quicklistEntry.Type}.{quicklistEntry.Slot}.{newSkill.Skill.CastId}.0");
-                                                            }
-                                                        });
-
-                                                        if (oldSkill.Skill.CastId > 10)
+                                                            character.SkillComboCount = 0;
+                                                            character.LastSkillComboUse = DateTime.Now.AddSeconds(5);
+                                                        }
+                                                        else
                                                         {
-                                                            Observable.Timer(TimeSpan.FromMilliseconds((oldSkill.Skill.Cooldown * 100) + 500)).Subscribe(observer =>
-                                                            {
-                                                                if (character.SkillsSp != null && character.SkillsSp.Any(s => s.Skill.SkillVNum == oldSkill.SkillVNum && s.CanBeUsed()))
+                                                            character.SkillComboCount++;
+                                                            character.LastSkillComboUse = DateTime.Now;
+
+                                                            Observable.Timer(TimeSpan.FromMilliseconds(100)).Subscribe(
+                                                                observer =>
                                                                 {
-                                                                    character.Session.SendPacket(StaticPacketHelper.SkillReset(oldSkill.Skill.CastId));
-                                                                }
-                                                            });
+                                                                    character.Session.SendPacket(
+                                                                        $"mslot {newSkill.Skill.CastId} -1");
+
+                                                                    var quicklistEntries =
+                                                                        character.QuicklistEntries.Where(s =>
+                                                                            s.Morph == sp.Item.Morph &&
+                                                                            s.Pos.Equals(oldSkill.FirstCastId.Value));
+
+                                                                    foreach (var quicklistEntry in quicklistEntries)
+                                                                    {
+                                                                        character.Session.SendPacket(
+                                                                            $"qset {quicklistEntry.Q1} {quicklistEntry.Q2} {quicklistEntry.Type}.{quicklistEntry.Slot}.{newSkill.Skill.CastId}.0");
+                                                                    }
+                                                                });
+
+                                                            if (oldSkill.Skill.CastId > 10)
+                                                            {
+                                                                Observable.Timer(
+                                                                    TimeSpan.FromMilliseconds(
+                                                                        oldSkill.Skill.Cooldown * 100 + 500)).Subscribe(
+                                                                    observer =>
+                                                                    {
+                                                                        if (character.SkillsSp != null &&
+                                                                            character.SkillsSp.Any(s =>
+                                                                                s.Skill.SkillVNum == oldSkill.SkillVNum &&
+                                                                                s.CanBeUsed()))
+                                                                        {
+                                                                            character.Session.SendPacket(
+                                                                                StaticPacketHelper.SkillReset(oldSkill.Skill
+                                                                                    .CastId));
+                                                                        }
+                                                                    });
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -1956,20 +2049,23 @@ namespace OpenNos.GameObject
                                             {
                                                 lock (character.MeditationDictionary)
                                                 {
-                                                    case (byte) BCardSubTypes.MeditationSkill.ShortMeditation:
-                                                        character.MeditationDictionary[newSkillVNum] =
-                                                            DateTime.Now.AddSeconds(4);
-                                                        break;
+                                                    switch (SubType)
+                                                    {
+                                                        case (byte)BCardSubTypes.MeditationSkill.ShortMeditation:
+                                                            character.MeditationDictionary[newSkillVNum] =
+                                                                DateTime.Now.AddSeconds(4);
+                                                            break;
 
-                                                    case (byte) BCardSubTypes.MeditationSkill.RegularMeditation:
-                                                        character.MeditationDictionary[newSkillVNum] =
-                                                            DateTime.Now.AddSeconds(8);
-                                                        break;
+                                                        case (byte)BCardSubTypes.MeditationSkill.RegularMeditation:
+                                                            character.MeditationDictionary[newSkillVNum] =
+                                                                DateTime.Now.AddSeconds(8);
+                                                            break;
 
-                                                    case (byte) BCardSubTypes.MeditationSkill.LongMeditation:
-                                                        character.MeditationDictionary[newSkillVNum] =
-                                                            DateTime.Now.AddSeconds(12);
-                                                        break;
+                                                        case (byte)BCardSubTypes.MeditationSkill.LongMeditation:
+                                                            character.MeditationDictionary[newSkillVNum] =
+                                                                DateTime.Now.AddSeconds(12);
+                                                            break;
+                                                    }
                                                 }
                                             }
                                         }
@@ -1979,8 +2075,8 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.FalconSkill:
-                            if (SubType.Equals((byte) BCardSubTypes.FalconSkill.Hide) ||
-                                SubType.Equals((byte) BCardSubTypes.FalconSkill.Ambush))
+                            if (SubType.Equals((byte)BCardSubTypes.FalconSkill.Hide) ||
+                                SubType.Equals((byte)BCardSubTypes.FalconSkill.Ambush))
                             {
                                 if (session.Character is Character chara)
                                 {
@@ -2005,19 +2101,22 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) BCardSubTypes.FalconSkill.CausingChanceLocation))
+                            else if (SubType.Equals((byte)BCardSubTypes.FalconSkill.CausingChanceLocation))
                             {
                                 if (session.Character is Character chara)
                                 {
                                     if (chara.Session.CurrentMapInstance != null)
                                     {
-                                        ConcurrentBag<MapMonster> ownedMonsters = new ConcurrentBag<MapMonster>();
-                                        ServerManager.GetAllMapInstances().ForEach(s => s.Monsters.Where(m => m.Owner?.MapEntityId == chara.CharacterId).ToList().ForEach(mon => ownedMonsters.Add(mon)));
+                                        var ownedMonsters = new ConcurrentBag<MapMonster>();
+                                        ServerManager.GetAllMapInstances().ForEach(s =>
+                                            s.Monsters.Where(m => m.Owner?.MapEntityId == chara.CharacterId).ToList()
+                                                .ForEach(mon => ownedMonsters.Add(mon)));
                                         if (ownedMonsters.Count >= 3)
                                         {
                                             chara.BattleEntity.RemoveOwnedMonsters(true);
                                         }
-                                        MapMonster monster = new MapMonster
+
+                                        var monster = new MapMonster
                                         {
                                             MonsterVNum = (short)SecondData,
                                             MapX = x > 0 ? x : chara.Session.Character.PositionX,
@@ -2027,7 +2126,11 @@ namespace OpenNos.GameObject
                                             MapMonsterId = chara.Session.CurrentMapInstance.GetNextMonsterId(),
                                             ShouldRespawn = false,
                                             Invisible = true,
-                                            AliveTime = SecondData == 1436 ? 20 : ServerManager.GetNpcMonster((short)SecondData).BasicCooldown > 0 ? ServerManager.GetNpcMonster((short)SecondData).BasicCooldown : ServerManager.GetNpcMonster((short)SecondData).RespawnTime,
+                                            AliveTime = SecondData == 1436
+                                                ? 20
+                                                : ServerManager.GetNpcMonster((short)SecondData).BasicCooldown > 0
+                                                    ? ServerManager.GetNpcMonster((short)SecondData).BasicCooldown
+                                                    : ServerManager.GetNpcMonster((short)SecondData).RespawnTime,
                                             Owner = chara.BattleEntity
                                         };
                                         monster.Initialize(chara.Session.CurrentMapInstance);
@@ -2038,28 +2141,35 @@ namespace OpenNos.GameObject
                                         {
                                             monster.Target = monster.BattleEntity;
                                             monster.StartLife();
-                                            NpcMonsterSkill npcMonsterSkill = monster.Skills.FirstOrDefault();
-                                            session.MapInstance.Broadcast(StaticPacketHelper.SkillUsed(UserType.Monster, monster.MapMonsterId, (byte)UserType.Monster, monster.MapMonsterId,
-                                                    npcMonsterSkill.SkillVNum, npcMonsterSkill.Skill.Cooldown,
-                                                    npcMonsterSkill.Skill.AttackAnimation, npcMonsterSkill.Skill.Effect, monster.MapX, monster.MapY,
-                                                    monster.CurrentHp > 0,
-                                                    (int)(monster.CurrentHp / monster.MaxHp * 100), 0,
-                                                    0, 0));
+                                            var npcMonsterSkill = monster.Skills.FirstOrDefault();
+                                            session.MapInstance.Broadcast(StaticPacketHelper.SkillUsed(UserType.Monster,
+                                                monster.MapMonsterId, (byte)UserType.Monster, monster.MapMonsterId,
+                                                npcMonsterSkill.SkillVNum, npcMonsterSkill.Skill.Cooldown,
+                                                npcMonsterSkill.Skill.AttackAnimation, npcMonsterSkill.Skill.Effect,
+                                                monster.MapX, monster.MapY,
+                                                monster.CurrentHp > 0,
+                                                (int)(monster.CurrentHp / monster.MaxHp * 100), 0,
+                                                0, 0));
                                         }
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) BCardSubTypes.FalconSkill.FalconFollowing))
+                            else if (SubType.Equals((byte)BCardSubTypes.FalconSkill.FalconFollowing))
                             {
                                 if (sender.Character != null)
                                 {
                                     sender.Character.BattleEntity.ClearOwnFalcon();
                                     sender.Character.BattleEntity.FalconFocusedEntityId = session.MapEntityId;
-                                    sender.MapInstance.Broadcast($"eff_ob  {(byte)session.UserType} {session.MapEntityId} 1 4269");
+                                    sender.MapInstance.Broadcast(
+                                        $"eff_ob  {(byte)session.UserType} {session.MapEntityId} 1 4269");
                                     if (skill != null)
                                     {
-                                        session.MapInstance.Broadcast(StaticPacketHelper.SkillUsed(sender.UserType, sender.MapEntityId, (byte)session.UserType, session.MapEntityId, skill.SkillVNum, skill.Cooldown, skill.AttackAnimation, skill.Effect, x, y, true, session.Hp * 100 / session.HpMax, 0, -1, 0));
+                                        session.MapInstance.Broadcast(StaticPacketHelper.SkillUsed(sender.UserType,
+                                            sender.MapEntityId, (byte)session.UserType, session.MapEntityId,
+                                            skill.SkillVNum, skill.Cooldown, skill.AttackAnimation, skill.Effect, x, y,
+                                            true, session.Hp * 100 / session.HpMax, 0, -1, 0));
                                     }
+
                                     sender.Character.BattleEntity.BCardDisposables[BCardId]?.Dispose();
                                     IDisposable bcardDisposable = null;
                                     bcardDisposable = Observable.Timer(TimeSpan.FromSeconds(60)).Subscribe(s =>
@@ -2069,11 +2179,13 @@ namespace OpenNos.GameObject
                                             bcardDisposable.Dispose();
                                             return;
                                         }
+
                                         sender.Character.BattleEntity.ClearOwnFalcon();
                                     });
                                     sender.Character.BattleEntity.BCardDisposables[BCardId] = bcardDisposable;
                                 }
                             }
+
                             break;
 
                         case BCardType.AbsorptionAndPowerSkill:
@@ -2083,31 +2195,32 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.FearSkill:
-                            if (SubType.Equals((byte) BCardSubTypes.FearSkill.TimesUsed))
+                            if (SubType.Equals((byte)BCardSubTypes.FearSkill.TimesUsed))
                             {
                                 if (sender.Character != null)
                                 {
-                                    if ((FirstData == 1 && sender.Character.SkillComboCount == 3) || (FirstData == 2 && sender.Character.SkillComboCount == 5))
+                                    if (FirstData == 1 && sender.Character.SkillComboCount == 3 ||
+                                        FirstData == 2 && sender.Character.SkillComboCount == 5)
                                     {
                                         sender.AddBuff(new Buff((short)SecondData, senderLevel), sender);
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) BCardSubTypes.FearSkill.AttackRangedIncreased))
+                            else if (SubType.Equals((byte)BCardSubTypes.FearSkill.AttackRangedIncreased))
                             {
                                 if (session.Character != null)
                                 {
                                     session.Character.Session.SendPacket($"bf_d {FirstData} 1");
                                 }
                             }
-                            else if (SubType.Equals((byte) BCardSubTypes.FearSkill.MoveAgainstWill))
+                            else if (SubType.Equals((byte)BCardSubTypes.FearSkill.MoveAgainstWill))
                             {
                                 if (session.Character != null)
                                 {
                                     session.Character.Session.SendPacket($"rv_m {session.MapEntityId} 1 1");
                                 }
                             }
-                            else if (SubType.Equals((byte) BCardSubTypes.FearSkill.ProduceWhenAmbushe))
+                            else if (SubType.Equals((byte)BCardSubTypes.FearSkill.ProduceWhenAmbushe))
                             {
                                 if (sender == session && (x != 0 || y != 0) && SecondData > 0)
                                 {
@@ -2117,6 +2230,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+
                             break;
 
                         case BCardType.SniperAttack:
@@ -2125,12 +2239,13 @@ namespace OpenNos.GameObject
                                 return;
                             }
 
-                            if (SubType.Equals((byte) BCardSubTypes.SniperAttack.ChanceCausing))
+                            if (SubType.Equals((byte)BCardSubTypes.SniperAttack.ChanceCausing))
                             {
                                 if (ServerManager.RandomNumber() < firstData)
                                 {
-                                    Buff ChanceCausingBuff = new Buff((short)SecondData, senderLevel);
-                                    if (ChanceCausingBuff.Card.BuffType == BuffType.Good || ChanceCausingBuff.Card.BuffType == BuffType.Neutral)
+                                    var ChanceCausingBuff = new Buff((short)SecondData, senderLevel);
+                                    if (ChanceCausingBuff.Card.BuffType == BuffType.Good ||
+                                        ChanceCausingBuff.Card.BuffType == BuffType.Neutral)
                                     {
                                         sender.AddBuff(ChanceCausingBuff, sender);
                                     }
@@ -2140,17 +2255,18 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
-                            else if (SubType.Equals((byte) BCardSubTypes.SniperAttack.ProduceChance))
+                            else if (SubType.Equals((byte)BCardSubTypes.SniperAttack.ProduceChance))
                             {
                                 if (sender.Buffs.Any(s => s.Card.BCards.Any(b =>
-                                    b.Type == (byte) BCardType.FalconSkill &&
-                                    (b.SubType == (byte) BCardSubTypes.FalconSkill.Hide ||
-                                     b.SubType == (byte) BCardSubTypes.FalconSkill.Ambush))))
+                                    b.Type == (byte)BCardType.FalconSkill &&
+                                    (b.SubType == (byte)BCardSubTypes.FalconSkill.Hide ||
+                                     b.SubType == (byte)BCardSubTypes.FalconSkill.Ambush))))
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
-                                        Buff ProduceChanceBuff = new Buff((short)SecondData, senderLevel);
-                                        if (ProduceChanceBuff.Card.BuffType == BuffType.Good || ProduceChanceBuff.Card.BuffType == BuffType.Neutral)
+                                        var ProduceChanceBuff = new Buff((short)SecondData, senderLevel);
+                                        if (ProduceChanceBuff.Card.BuffType == BuffType.Good ||
+                                            ProduceChanceBuff.Card.BuffType == BuffType.Neutral)
                                         {
                                             sender.AddBuff(ProduceChanceBuff, sender);
                                         }
@@ -2161,6 +2277,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+
                             break;
 
                         case BCardType.FrozenDebuff:
@@ -2205,7 +2322,7 @@ namespace OpenNos.GameObject
                             //                    // Freeze
 
                             //                    if (character.Hp < 1
-                            //                        || character.HasBuff(BCardType.CardType.FrozenDebuff,
+                            //                        || character.HasBuff(BCardType.FrozenDebuff,
                             //                            (byte)BCardSubTypes.FrozenDebuff.EternalIce))
                             //                    {
                             //                        continue;
@@ -2221,7 +2338,7 @@ namespace OpenNos.GameObject
 
                             //                        if (!mapInstance.Sessions.Any(s => s.Character != null
                             //                                                           && !s.Character.HasBuff(
-                            //                                                               BCardType.CardType.FrozenDebuff,
+                            //                                                               BCardType.FrozenDebuff,
                             //                                                               (byte)BCardSubTypes
                             //                                                                   .FrozenDebuff.EternalIce)))
                             //                        {
@@ -2244,7 +2361,7 @@ namespace OpenNos.GameObject
                         case BCardType.JumpBackPush:
                             if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
                             {
-                                if (SubType.Equals((byte) BCardSubTypes.JumpBackPush.JumpBackChance))
+                                if (SubType.Equals((byte)BCardSubTypes.JumpBackPush.JumpBackChance))
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
@@ -2252,7 +2369,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
-                                if (SubType.Equals((byte) BCardSubTypes.JumpBackPush.PushBackChance))
+                                if (SubType.Equals((byte)BCardSubTypes.JumpBackPush.PushBackChance))
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
@@ -2260,6 +2377,7 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+
                             break;
 
                         case BCardType.FairyXPIncrease:
@@ -2269,34 +2387,54 @@ namespace OpenNos.GameObject
                             var summonParameters3 = new List<MonsterToSummon>();
                             if (ServerManager.RandomNumber() <= Math.Abs(ThirdData) || ThirdData == 0 || ThirdData < 0)
                             {
-                                aliveTime = ServerManager.GetNpcMonster((short)SecondData).RespawnTime / (ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 2400 ? ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 150 ? 1 : 10 : 40) * (ServerManager.GetNpcMonster((short)SecondData).RespawnTime >= 150 ? 4 : 1);
+                                aliveTime = ServerManager.GetNpcMonster((short)SecondData).RespawnTime /
+                                    (ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 2400
+                                        ? ServerManager.GetNpcMonster((short)SecondData).RespawnTime < 150
+                                            ? 1
+                                            : 10
+                                        : 40) * (ServerManager.GetNpcMonster((short)SecondData).RespawnTime >=
+                                                 150
+                                        ? 4
+                                        : 1);
                                 switch (SubType)
                                 {
-                                    case 1:
-                                        if (sender.GetOwnedMonsters().Where(s => s.MonsterVNum == SecondData).Count() == 0)
+                                    case 11:
+                                        if (sender.GetOwnedMonsters().Where(s => s.MonsterVNum == SecondData).Count() ==
+                                            0)
                                         {
-                                            summonParameters3.Add(new MonsterToSummon((short)SecondData, new MapCell { X = sender.PositionX, Y = sender.PositionY }, null, true, aliveTime: aliveTime, owner: sender));
-                                            EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance, EventActionType.SPAWNMONSTERS, summonParameters3));
+                                            summonParameters3.Add(new MonsterToSummon((short)SecondData,
+                                                new MapCell { X = sender.PositionX, Y = sender.PositionY }, null, true,
+                                                aliveTime: aliveTime, owner: sender));
+                                            EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance,
+                                                EventActionType.SPAWNMONSTERS, summonParameters3));
                                         }
+
                                         break;
 
-                                    case 2:
+                                    case 12:
                                         Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(spawn =>
                                         {
-                                            if (sender.MapMonster != null && sender.MapMonster.Owner != null && sender.MapMonster.Owner.GetOwnedMonsters().Where(s => s.MonsterVNum == sender.MapMonster.MonsterVNum).Count() == 1)
+                                            if (sender.MapMonster != null && sender.MapMonster.Owner != null &&
+                                                sender.MapMonster.Owner.GetOwnedMonsters().Where(s =>
+                                                    s.MonsterVNum == sender.MapMonster.MonsterVNum).Count() == 1)
                                             {
-                                                for (int i = 0; i < firstData - 1; i++)
+                                                for (var i = 0; i < firstData - 1; i++)
                                                 {
                                                     x = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionX);
                                                     y = (short)(ServerManager.RandomNumber(-1, 1) + sender.PositionY);
-                                                    summonParameters3.Add(new MonsterToSummon(sender.MapMonster.MonsterVNum, new MapCell { X = x, Y = y }, null, true, aliveTime: aliveTime, owner: sender.MapMonster.Owner));
+                                                    summonParameters3.Add(new MonsterToSummon(
+                                                        sender.MapMonster.MonsterVNum, new MapCell { X = x, Y = y }, null,
+                                                        true, aliveTime: aliveTime, owner: sender.MapMonster.Owner));
                                                 }
-                                                EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance, EventActionType.SPAWNMONSTERS, summonParameters3));
+
+                                                EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance,
+                                                    EventActionType.SPAWNMONSTERS, summonParameters3));
                                             }
                                         });
                                         break;
                                 }
                             }
+
                             break;
 
                         case BCardType.TeamArenaBuff:
@@ -2306,21 +2444,20 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.DarkCloneSummon:
-                        {
-                            if (SubType == (byte) BCardSubTypes.DarkCloneSummon.SummonDarkCloneChance)
                             {
-                                if (SubType == (byte)BCardSubTypes.DarkCloneSummon.SummonDarkCloneChance / 10)
+                                if (SubType == (byte)BCardSubTypes.DarkCloneSummon.SummonDarkCloneChance)
                                 {
                                     if (ServerManager.RandomNumber() < FirstData)
                                     {
-                                        List<MonsterToSummon> monstersToSummon = new List<MonsterToSummon>();
+                                        var monstersToSummon = new List<MonsterToSummon>();
 
-                                        List<short> monsterVNums = Enumerable.Range(2112, SecondData).OrderBy(t => ServerManager.RandomNumber()).Select(t => (short)t).ToList();
+                                        var monsterVNums = Enumerable.Range(2112, SecondData)
+                                            .OrderBy(t => ServerManager.RandomNumber()).Select(t => (short)t).ToList();
 
-                                        for (int i = 0; i < ServerManager.RandomNumber(1, monsterVNums.Count + 1); i++)
+                                        for (var i = 0; i < ServerManager.RandomNumber(1, monsterVNums.Count + 1); i++)
                                         {
-                                            short mapX = (short)(sender.PositionX + ServerManager.RandomNumber(-2, 2));
-                                            short mapY = (short)(sender.PositionY + ServerManager.RandomNumber(-2, 2));
+                                            var mapX = (short)(sender.PositionX + ServerManager.RandomNumber(-2, 2));
+                                            var mapY = (short)(sender.PositionY + ServerManager.RandomNumber(-2, 2));
 
                                             if (sender.MapInstance.Map.IsBlockedZone(mapX, mapY))
                                             {
@@ -2328,42 +2465,40 @@ namespace OpenNos.GameObject
                                                 mapY = sender.PositionY;
                                             }
 
-                                            monstersToSummon.Add(new MonsterToSummon(monsterVNums[i], new MapCell { X = mapX, Y = mapY }, session,
-                                                true, false, false, false, false, sender, 5, 0, 0, 1 /* second(s) */, 0, 0));
+                                            monstersToSummon.Add(new MonsterToSummon(monsterVNums[i],
+                                                new MapCell { X = mapX, Y = mapY }, session,
+                                                true, false, false, false, false, sender, 5, 0, 0, 1 /* second(s) */));
                                         }
 
-                                        EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance, EventActionType.SPAWNMONSTERS, monstersToSummon));
+                                        EventHelper.Instance.RunEvent(new EventContainer(sender.MapInstance,
+                                            EventActionType.SPAWNMONSTERS, monstersToSummon));
                                     }
                                 }
                             }
                             break;
 
                         case BCardType.AbsorbedSpirit:
-                        {
-                            var hasSpiritAbsorption = session.HasBuff(596);
-
-                            switch (SubType)
                             {
-                                case (byte) BCardSubTypes.AbsorbedSpirit.ApplyEffectIfPresent:
-                                    if (hasSpiritAbsorption)
-                                    {
+                                var hasSpiritAbsorption = session.HasBuff(596);
+
+                                switch (SubType)
+                                {
+                                    case (byte)BCardSubTypes.AbsorbedSpirit.ApplyEffectIfPresent:
                                         if (hasSpiritAbsorption)
                                         {
                                             session.AddBuff(new Buff((short)SecondData, session.Level), session);
                                             session.RemoveBuff(596);
                                         }
-                                    }
 
-                                    break;
+                                        break;
 
-                                case (byte) BCardSubTypes.AbsorbedSpirit.ApplyEffectIfNotPresent:
-                                    if (!hasSpiritAbsorption && !session.HasBuff(599))
-                                    {
+                                    case (byte)BCardSubTypes.AbsorbedSpirit.ApplyEffectIfNotPresent:
                                         if (!hasSpiritAbsorption && !session.HasBuff(599))
                                         {
                                             session.AddBuff(new Buff((short)SecondData, session.Level), session);
                                         }
-                                    }
+
+                                        break;
                                 }
                             }
                             break;
@@ -2372,31 +2507,28 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.MeteoriteTeleport:
-                        {
-                            if (SubType == (byte) BCardSubTypes.MeteoriteTeleport.SummonInVisualRange)
                             {
-                                if (SubType == (byte)BCardSubTypes.MeteoriteTeleport.SummonInVisualRange / 10)
+                                if (SubType == (byte)BCardSubTypes.MeteoriteTeleport.SummonInVisualRange)
                                 {
-                                    MapInstance mapInstance = session?.MapInstance;
+                                    var mapInstance = session?.MapInstance;
 
                                     if (mapInstance != null)
                                     {
-                                        List<MonsterToSummon> monstersToSummon = new List<MonsterToSummon>();
+                                        var monstersToSummon = new List<MonsterToSummon>();
 
-                                    EventHelper.Instance.RunEvent(new EventContainer(mapInstance,
-                                        EventActionType.SPAWNMONSTERS, monstersToSummon));
-                                }
-                            }
-                            else if (SubType == (byte) BCardSubTypes.MeteoriteTeleport.TransformTarget)
-                            {
-                                int[] morphVNums = {1000099, 1000156};
+                                        for (var i = 0; i < 73; i++)
+                                        {
+                                            monstersToSummon.Add(new MonsterToSummon(2328, new MapCell { X = 0, Y = 0 }, null,
+                                                false, hasDelay: (short)ServerManager.RandomNumber(0, 5)));
+                                        }
 
-                                        EventHelper.Instance.RunEvent(new EventContainer(mapInstance, EventActionType.SPAWNMONSTERS, monstersToSummon));
+                                        EventHelper.Instance.RunEvent(new EventContainer(mapInstance,
+                                            EventActionType.SPAWNMONSTERS, monstersToSummon));
                                     }
                                 }
-                                else if (SubType == (byte)BCardSubTypes.MeteoriteTeleport.TransformTarget / 10)
+                                else if (SubType == (byte)BCardSubTypes.MeteoriteTeleport.TransformTarget)
                                 {
-                                    int[] morphVNums = new int[] { 1000099, 1000156 };
+                                    int[] morphVNums = { 1000099, 1000156 };
 
                                     if (sender != null
                                         && session?.Character?.MapInstance != null
@@ -2406,13 +2538,15 @@ namespace OpenNos.GameObject
                                         session.Character.MapInstance.Broadcast(session.Character.GenerateEff(4054));
                                         session.Character.IsMorphed = true;
                                         session.Character.PreviousMorph = session.Character.Morph;
-                                        session.Character.Morph = morphVNums.OrderBy(rnd => ServerManager.RandomNumber()).First();
+                                        session.Character.Morph =
+                                            morphVNums.OrderBy(rnd => ServerManager.RandomNumber()).First();
 
                                         switch (session.Character.Morph)
                                         {
                                             case 1000099: // Hamster
                                                 session.AddBuff(new Buff(478, sender.Level, true), sender);
                                                 break;
+
                                             case 1000156: // Bushtail
                                                 session.AddBuff(new Buff(477, sender.Level, true), sender);
                                                 break;
@@ -2421,59 +2555,55 @@ namespace OpenNos.GameObject
                                         session.Character.MapInstance.Broadcast(session.Character.GenerateCMode());
                                     }
                                 }
-                            }
-                            else if (SubType == (byte) BCardSubTypes.MeteoriteTeleport.TeleportForward)
-                            {
-                                session.TeleportTo(
-                                    session.MapInstance.Map.GetRandomPositionByDistance(session.PositionX,
-                                        session.PositionY, (short) FirstData));
-                            }
-                            else if (SubType == (byte) BCardSubTypes.MeteoriteTeleport.CauseMeteoriteFall)
-                            {
-                                var mapInstance = session?.MapInstance;
-
-                                if (mapInstance != null)
+                                else if (SubType == (byte)BCardSubTypes.MeteoriteTeleport.TeleportForward)
                                 {
-                                    session.TeleportTo(session.MapInstance.Map.GetRandomPositionByDistance(session.PositionX, session.PositionY, (short)FirstData));
+                                    session.TeleportTo(
+                                        session.MapInstance.Map.GetRandomPositionByDistance(session.PositionX,
+                                            session.PositionY, (short)FirstData));
                                 }
-                                else if (SubType == (byte)BCardSubTypes.MeteoriteTeleport.CauseMeteoriteFall / 10)
+                                else if (SubType == (byte)BCardSubTypes.MeteoriteTeleport.CauseMeteoriteFall)
                                 {
-                                    MapInstance mapInstance = session?.MapInstance;
+                                    var mapInstance = session?.MapInstance;
 
                                     if (mapInstance != null)
                                     {
-                                        List<MonsterToSummon> monstersToSummon = new List<MonsterToSummon>();
+                                        var monstersToSummon = new List<MonsterToSummon>();
 
-                                        int range = 10;
+                                        var range = 10;
 
-                                        for (int i = 0; i < 10 + (int)(session.Level / (double)FirstData); i++)
+                                        for (var i = 0; i < 10 + (int)(session.Level / (double)FirstData); i++)
                                         {
-                                            MapCell mapCell = new MapCell
+                                            var mapCell = new MapCell
                                             {
-                                                X = (short)(session.PositionX + ServerManager.RandomNumber(-range, range + 1)),
-                                                Y = (short)(session.PositionY + ServerManager.RandomNumber(-range, range + 1)),
+                                                X = (short)(session.PositionX +
+                                                             ServerManager.RandomNumber(-range, range + 1)),
+                                                Y = (short)(session.PositionY +
+                                                             ServerManager.RandomNumber(-range, range + 1))
                                             };
 
-                                            monstersToSummon.Add(new MonsterToSummon((short)ServerManager.RandomNumber(2352, 2353 + 1), mapCell, null, false, owner: session, hasDelay: ServerManager.RandomNumber<short>(0, 10 + 1))
-                                            {
-                                                IsMeteorite = true,
-                                            });
+                                            monstersToSummon.Add(
+                                                new MonsterToSummon((short)ServerManager.RandomNumber(2352, 2353 + 1),
+                                                        mapCell, null, false, owner: session,
+                                                        hasDelay: ServerManager.TrueRandomNumber<short>(0,
+                                                            (10 + 1) *
+                                                            1000)) // Multiply x1000 because now it's on miliseconds
+                                                {
+                                                    IsMeteorite = true
+                                                });
                                         }
 
                                         if (monstersToSummon.Any())
                                         {
-                                            EventHelper.Instance.RunEvent(new EventContainer(mapInstance, EventActionType.SPAWNMONSTERS, monstersToSummon));
+                                            EventHelper.Instance.RunEvent(new EventContainer(mapInstance,
+                                                EventActionType.SPAWNMONSTERS, monstersToSummon));
                                         }
                                     }
                                 }
-                            }
-                            else if (SubType == (byte) BCardSubTypes.MeteoriteTeleport
-                                .TeleportYouAndGroupToSavedLocation)
-                            {
-                                if (session.Character is Character character &&
-                                    character.CharacterId == sender?.Character?.CharacterId)
+                                else if (SubType == (byte)BCardSubTypes.MeteoriteTeleport
+                                    .TeleportYouAndGroupToSavedLocation)
                                 {
-                                    if (session.Character is Character character && character.CharacterId == sender?.Character?.CharacterId)
+                                    if (session.Character is Character character &&
+                                        character.CharacterId == sender?.Character?.CharacterId)
                                     {
                                         if (character.SavedLocation == null)
                                         {
@@ -2483,46 +2613,61 @@ namespace OpenNos.GameObject
                                                 Y = character.PositionY
                                             };
 
-                                            session.MapInstance?.Broadcast($"eff_g 4497 {character.CharacterId} {character.SavedLocation.X} {character.SavedLocation.Y} 0");
+                                            session.MapInstance?.Broadcast(
+                                                $"eff_g 4497 {character.CharacterId} {character.SavedLocation.X} {character.SavedLocation.Y} 0");
                                         }
                                         else
                                         {
-                                            MapCell mapCellTo = new MapCell
+                                            var mapCellTo = new MapCell
                                             {
                                                 X = character.SavedLocation.X,
-                                                Y = character.SavedLocation.Y,
+                                                Y = character.SavedLocation.Y
                                             };
 
-                                            MapCell mapCellFrom = new MapCell
+                                            var mapCellFrom = new MapCell
                                             {
                                                 X = session.PositionX,
                                                 Y = session.PositionY
                                             };
 
-                                            session.MapInstance?.Broadcast($"eff_g 4483 {character.CharacterId} {mapCellFrom.X} {mapCellFrom.Y} 0");
+                                            session.MapInstance?.Broadcast(
+                                                $"eff_g 4483 {character.CharacterId} {mapCellFrom.X} {mapCellFrom.Y} 0");
 
                                             Observable.Timer(TimeSpan.FromSeconds(1))
                                                 .Subscribe(t =>
                                                 {
                                                     session.TeleportTo(mapCellTo);
 
-                                                    session.MapInstance?.Broadcast($"eff_g 4497 {character.CharacterId} {mapCellTo.X} {mapCellTo.Y} 1");
+                                                    session.MapInstance?.Broadcast(
+                                                        $"eff_g 4497 {character.CharacterId} {mapCellTo.X} {mapCellTo.Y} 1");
 
-                                                    List<Character> friendCharacters = new List<Character>();
+                                                    var friendCharacters = new List<Character>();
 
                                                     if (character.Family?.FamilyCharacters != null)
                                                     {
-                                                        friendCharacters.AddRange(character.Family.FamilyCharacters.Select(fc => ServerManager.Instance.GetCharacterById(fc.CharacterId)).Where(c => c != null));
+                                                        friendCharacters.AddRange(character.Family.FamilyCharacters
+                                                            .Select(fc =>
+                                                                ServerManager.Instance.GetCharacterById(fc.CharacterId))
+                                                            .Where(c => c != null));
                                                     }
 
                                                     if (character.Group?.Sessions != null)
                                                     {
-                                                        friendCharacters.AddRange(character.Group.Sessions.Where(s => s.Character != null).Select(s => s.Character));
+                                                        friendCharacters.AddRange(character.Group.Sessions
+                                                            .Where(s => s.Character != null).Select(s => s.Character));
                                                     }
 
-                                                    friendCharacters.Where(c => c.CharacterId != character.CharacterId && c.MapInstanceId == character.MapInstanceId
-                                                        && Map.GetDistance(c.BattleEntity.GetPos(), mapCellFrom) <= skill.TargetRange).OrderBy(c => Map.GetDistance(c.BattleEntity.GetPos(), mapCellFrom)).Take(FirstData).ToList()
-                                                    .ForEach(c => c.BattleEntity.TeleportTo(mapCellTo, 3));
+                                                    friendCharacters.Where(c =>
+                                                            c.CharacterId != character.CharacterId && c.MapInstanceId ==
+                                                                                                   character.MapInstanceId
+                                                                                                   && Map.GetDistance(
+                                                                                                       c.BattleEntity
+                                                                                                           .GetPos(),
+                                                                                                       mapCellFrom) <=
+                                                                                                   skill.TargetRange)
+                                                        .OrderBy(c => Map.GetDistance(c.BattleEntity.GetPos(), mapCellFrom))
+                                                        .Take(FirstData).ToList()
+                                                        .ForEach(c => c.BattleEntity.TeleportTo(mapCellTo, 3));
                                                 });
                                         }
                                     }
@@ -2542,7 +2687,7 @@ namespace OpenNos.GameObject
                         case BCardType.MartialArts:
                             switch (SubType)
                             {
-                                case (byte) BCardSubTypes.MartialArts.TransformationInverted:
+                                case (byte)BCardSubTypes.MartialArts.TransformationInverted:
                                     if (session.Character is Character reversedMorph)
                                     {
                                         reversedMorph.Morph = 29;
@@ -2555,7 +2700,7 @@ namespace OpenNos.GameObject
 
                                     break;
 
-                                case (byte) BCardSubTypes.MartialArts.Transformation:
+                                case (byte)BCardSubTypes.MartialArts.Transformation:
                                     if (!CardId.HasValue)
                                     {
                                         break;
@@ -2596,20 +2741,15 @@ namespace OpenNos.GameObject
                             break;
 
                         case BCardType.WolfMaster:
-                        {
-                            var user = sender.Character ?? session.Character;
-
-                            if (user == null)
                             {
-                                Character user = sender.Character != null ? sender.Character : session.Character;
+                                var user = sender.Character ?? session.Character;
 
-                            switch (SubType)
-                            {
-                                case (byte) BCardSubTypes.WolfMaster.AddUltimatePoints:
+                                if (user == null)
                                 {
                                     break;
+                                }
 
-                                case (byte) BCardSubTypes.WolfMaster.CanExecuteUltimateSkills:
+                                switch (SubType)
                                 {
                                     case (byte)BCardSubTypes.WolfMaster.AddUltimatePoints:
                                         {
@@ -2618,6 +2758,7 @@ namespace OpenNos.GameObject
                                             user.AddWolfBuffs();
                                         }
                                         break;
+
                                     case (byte)BCardSubTypes.WolfMaster.CanExecuteUltimateSkills:
                                         {
                                             user.Session.SendPacket(user.GenerateFtPtPacket());
@@ -2640,7 +2781,7 @@ namespace OpenNos.GameObject
                         case BCardType.A7Powers1:
                             switch (SubType)
                             {
-                                case (byte) BCardSubTypes.A7Powers1.DamageApocalypsePower:
+                                case (byte)BCardSubTypes.A7Powers1.DamageApocalypsePower:
 
                                     if (sender == null) return;
 
@@ -2651,23 +2792,23 @@ namespace OpenNos.GameObject
                                         session.GetDamage(damageToTake, sender, true);
                                         session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
 
-                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        session.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
 
-                                case (byte) BCardSubTypes.A7Powers1.ReflectionPower:
+                                case (byte)BCardSubTypes.A7Powers1.ReflectionPower:
 
                                     if (sender == null) return;
 
                                     if (ServerManager.RandomProbabilityCheck(FirstData))
                                     {
-                                        sender.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        sender.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
 
-                                case (byte) BCardSubTypes.A7Powers1.DamageWolfPower:
+                                case (byte)BCardSubTypes.A7Powers1.DamageWolfPower:
 
                                     if (sender == null) return;
 
@@ -2678,12 +2819,12 @@ namespace OpenNos.GameObject
                                         session.GetDamage(damageToTake, sender, true);
                                         session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
 
-                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        session.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
 
-                                case (byte) BCardSubTypes.A7Powers1.EnemyKnockedBack:
+                                case (byte)BCardSubTypes.A7Powers1.EnemyKnockedBack:
 
                                     if (sender == null) return;
 
@@ -2691,12 +2832,12 @@ namespace OpenNos.GameObject
                                     {
                                         PushBackSession(4, session, sender);
 
-                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        session.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
 
-                                case (byte) BCardSubTypes.A7Powers1.DamageExplosionPower:
+                                case (byte)BCardSubTypes.A7Powers1.DamageExplosionPower:
 
                                     if (sender == null) return;
 
@@ -2707,7 +2848,7 @@ namespace OpenNos.GameObject
                                         session.GetDamage(damageToTake, sender, true);
                                         session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
 
-                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        session.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
@@ -2718,18 +2859,18 @@ namespace OpenNos.GameObject
                         case BCardType.A7Powers2:
                             switch (SubType)
                             {
-                                case (byte) BCardSubTypes.A7Powers2.ReceiveAgilityPower:
+                                case (byte)BCardSubTypes.A7Powers2.ReceiveAgilityPower:
 
                                     if (sender == null) return;
 
                                     if (ServerManager.RandomProbabilityCheck(FirstData))
                                     {
-                                        sender.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        sender.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
 
-                                case (byte) BCardSubTypes.A7Powers2.DamageLightingPower:
+                                case (byte)BCardSubTypes.A7Powers2.DamageLightingPower:
 
                                     if (sender == null) return;
 
@@ -2740,23 +2881,23 @@ namespace OpenNos.GameObject
                                         session.GetDamage(damageToTake, sender, true);
                                         session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
 
-                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        session.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
 
-                                case (byte) BCardSubTypes.A7Powers2.TriggerCursePower:
+                                case (byte)BCardSubTypes.A7Powers2.TriggerCursePower:
 
                                     if (sender == null) return;
 
                                     if (ServerManager.RandomProbabilityCheck(FirstData))
                                     {
-                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        session.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
 
-                                case (byte) BCardSubTypes.A7Powers2.DamageBearPower:
+                                case (byte)BCardSubTypes.A7Powers2.DamageBearPower:
 
                                     if (sender == null) return;
 
@@ -2767,18 +2908,18 @@ namespace OpenNos.GameObject
                                         session.GetDamage(damageToTake, sender, true);
                                         session.MapInstance.Broadcast(session.GenerateDm(damageToTake));
 
-                                        session.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        session.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
 
-                                case (byte) BCardSubTypes.A7Powers2.ReceiveFrostPower:
+                                case (byte)BCardSubTypes.A7Powers2.ReceiveFrostPower:
 
                                     if (sender == null) return;
 
                                     if (ServerManager.RandomProbabilityCheck(FirstData))
                                     {
-                                        sender.AddBuff(new Buff((short) SecondData, sender.Level), sender);
+                                        sender.AddBuff(new Buff((short)SecondData, sender.Level), sender);
                                     }
 
                                     break;
@@ -2795,27 +2936,29 @@ namespace OpenNos.GameObject
             void PushBackSession(int PushDistance, BattleEntity receiver, BattleEntity point)
             {
                 if (receiver.MapMonster != null
-                && (receiver.MapMonster.IsBoss
-                 || ServerManager.Instance.BossVNums.Contains(receiver.MapMonster.MonsterVNum)
-                 || receiver.MapMonster.Owner?.Character != null || receiver.MapMonster.Owner?.Mate != null))
+                    && (receiver.MapMonster.IsBoss
+                        || ServerManager.Instance.BossVNums.Contains(receiver.MapMonster.MonsterVNum)
+                        || receiver.MapMonster.Owner?.Character != null || receiver.MapMonster.Owner?.Mate != null))
                 {
                     return;
                 }
 
                 if (receiver.MapNpc != null
-                && (ServerManager.Instance.BossVNums.Contains(receiver.MapNpc.NpcVNum)))
+                    && ServerManager.Instance.BossVNums.Contains(receiver.MapNpc.NpcVNum))
                 {
                     return;
                 }
 
                 receiver.Character?.WalkDisposable?.Dispose();
 
-                short NewX = receiver.PositionX;
-                short NewY = receiver.PositionY;
+                var NewX = receiver.PositionX;
+                var NewY = receiver.PositionY;
 
                 if (point.PositionX == receiver.PositionX && point.PositionY == receiver.PositionY)
                 {
-                    MapCell randomCell = receiver.MapInstance.Map.GetRandomPositionByDistance(point.PositionX, point.PositionY, (short)PushDistance);
+                    var randomCell =
+                        receiver.MapInstance.Map.GetRandomPositionByDistance(point.PositionX, point.PositionY,
+                            (short)PushDistance);
                     if (randomCell != null)
                     {
                         NewX = randomCell.X;
@@ -2824,15 +2967,19 @@ namespace OpenNos.GameObject
                 }
                 else
                 {
-                    Point3D pointPosition = new Point3D(point.PositionX, point.PositionY, 0.0);
-                    Point3D receiverPosition = new Point3D(receiver.PositionX, receiver.PositionY, 0.0);
-                    Point3D newPosition = new Point3D(receiver.PositionX, receiver.PositionY, 0.0);
-                    for (int i = 0; i == 0 || (PushDistance - i >= 0 && receiver.MapInstance.Map.isBlockedZone(receiver.PositionX, receiver.PositionY, (int)Math.Round(newPosition.X), (int)Math.Round(newPosition.Y))); i++)
+                    var pointPosition = new Point3D(point.PositionX, point.PositionY, 0.0);
+                    var receiverPosition = new Point3D(receiver.PositionX, receiver.PositionY, 0.0);
+                    var newPosition = new Point3D(receiver.PositionX, receiver.PositionY, 0.0);
+                    for (var i = 0;
+                        i == 0 || PushDistance - i >= 0 && receiver.MapInstance.Map.isBlockedZone(receiver.PositionX,
+                            receiver.PositionY, (int)Math.Round(newPosition.X), (int)Math.Round(newPosition.Y));
+                        i++)
                     {
-                        Vector3D v = receiverPosition - pointPosition;
+                        var v = receiverPosition - pointPosition;
                         double offset = PushDistance - i;
                         newPosition = ExtendLine(receiverPosition, offset, v);
                     }
+
                     NewX = (short)Math.Round(newPosition.X);
                     NewY = (short)Math.Round(newPosition.Y);
                 }
@@ -2842,23 +2989,25 @@ namespace OpenNos.GameObject
 
                 if (receiver == sender)
                 {
-                    receiver.MapInstance.Broadcast($"guri 3 {(short)receiver.UserType} {receiver.MapEntityId} {receiver.PositionX} {receiver.PositionY} 3 {(int)(SecondData / 4)} 2 -1");
+                    receiver.MapInstance.Broadcast(
+                        $"guri 3 {(short)receiver.UserType} {receiver.MapEntityId} {receiver.PositionX} {receiver.PositionY} 3 {SecondData / 4} 2 -1");
                 }
                 else
                 {
-                    receiver.MapInstance.Broadcast($"guri 3 {(short)receiver.UserType} {receiver.MapEntityId} {receiver.PositionX} {receiver.PositionY} 3 {SecondData} 2 -1");
+                    receiver.MapInstance.Broadcast(
+                        $"guri 3 {(short)receiver.UserType} {receiver.MapEntityId} {receiver.PositionX} {receiver.PositionY} 3 {SecondData} 2 -1");
                 }
             }
         }
 
-        static Point3D ExtendLine(Point3D point, double offset, Vector3D vector)
+        private static Point3D ExtendLine(Point3D point, double offset, Vector3D vector)
         {
             vector.Normalize();
-            double _offset = offset / vector.Length;
-            Vector3D _vector = vector * _offset;
-            Matrix3D m = new Matrix3D();
+            var _offset = offset / vector.Length;
+            var _vector = vector * _offset;
+            var m = new Matrix3D();
             m.Translate(_vector);
-            Point3D result = m.Transform(point);
+            var result = m.Transform(point);
             return result;
         }
 

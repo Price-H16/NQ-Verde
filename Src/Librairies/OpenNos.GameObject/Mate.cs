@@ -242,6 +242,22 @@ namespace OpenNos.GameObject
 
         public ItemInstance WeaponInstance { get; set; }
 
+        private int EquipmentDarkResistance =>
+            GetStuffBuff(BCardType.ElementResistance, (byte)BCardSubTypes.ElementResistance.DarkIncreased)[0] +
+            GetStuffBuff(BCardType.ElementResistance, (byte)BCardSubTypes.ElementResistance.AllIncreased)[0];
+
+        private int EquipmentFireResistance =>
+            GetStuffBuff(BCardType.ElementResistance, (byte)BCardSubTypes.ElementResistance.FireIncreased)[0] +
+            GetStuffBuff(BCardType.ElementResistance, (byte)BCardSubTypes.ElementResistance.AllIncreased)[0];
+
+        private int EquipmentLightResistance =>
+            GetStuffBuff(BCardType.ElementResistance, (byte)BCardSubTypes.ElementResistance.LightIncreased)[0] +
+            GetStuffBuff(BCardType.ElementResistance, (byte)BCardSubTypes.ElementResistance.AllIncreased)[0];
+
+        private int EquipmentWaterResistance =>
+            GetStuffBuff(BCardType.ElementResistance, (byte)BCardSubTypes.ElementResistance.WaterIncreased)[0] +
+            GetStuffBuff(BCardType.ElementResistance, (byte)BCardSubTypes.ElementResistance.AllIncreased)[0];
+
         #endregion
 
         #region Methods
@@ -417,9 +433,15 @@ namespace OpenNos.GameObject
             }
         }
 
-        public void DisableBuffs(BuffType type, int level = 100) => BattleEntity.DisableBuffs(type, level);
+        public void DisableBuffs(BuffType type, int level = 100)
+        {
+            BattleEntity.DisableBuffs(type, level);
+        }
 
-        public void DisableBuffs(List<BuffType> types, int level = 100) => BattleEntity.DisableBuffs(types, level);
+        public void DisableBuffs(List<BuffType> types, int level = 100)
+        {
+            BattleEntity.DisableBuffs(types, level);
+        }
 
         public string GenerateCMode(short morphId)
         {
@@ -643,7 +665,7 @@ namespace OpenNos.GameObject
                         s.SendPacket(GenerateIn(true, ServerManager.Instance.ChannelId == 51, s.Account.Authority));
                 }
 
-            //Owner.Session.SendPacket(GenerateCond());
+            Owner.Session.SendPacket(GenerateCond());
             if (Owner.Session == null) return;
             Owner.Session.SendPacket(Owner.GeneratePinit());
             Owner.Session.SendPackets(Owner.GeneratePst());
@@ -822,28 +844,19 @@ namespace OpenNos.GameObject
         /// <returns></returns>
         public int[] GetStuffBuff(BCardType type, byte subtype)
         {
-            List<BCard> EquipmentBCards = new List<BCard>();
-            if (WeaponInstance != null)
-            {
-                EquipmentBCards.AddRange(WeaponInstance.Item.BCards);
-            }
-            if (ArmorInstance != null)
-            {
-                EquipmentBCards.AddRange(ArmorInstance.Item.BCards);
-            }
+            var EquipmentBCards = new List<BCard>();
+            if (WeaponInstance != null) EquipmentBCards.AddRange(WeaponInstance.Item.BCards);
+            if (ArmorInstance != null) EquipmentBCards.AddRange(ArmorInstance.Item.BCards);
 
-            int value1 = 0;
-            int value2 = 0;
-            foreach (BCard entry in EquipmentBCards.Where(s => s.Type.Equals((byte)type) && s.SubType.Equals((byte)(subtype / 10)) && s.FirstData > 0))
+            var value1 = 0;
+            var value2 = 0;
+            foreach (var entry in EquipmentBCards.Where(s =>
+                s.Type.Equals((byte)type) && s.SubType.Equals(subtype) && s.FirstData > 0))
             {
                 if (entry.IsLevelScaled)
-                {
                     value1 += entry.FirstData * Level;
-                }
                 else
-                {
                     value1 += entry.FirstData;
-                }
                 value2 += entry.SecondData;
             }
 
@@ -852,20 +865,14 @@ namespace OpenNos.GameObject
 
         public bool HasBuff(BCardType type, byte subtype)
         {
-            get
-            {
-                return GetStuffBuff(CardType.ElementResistance,
-                           (byte)AdditionalTypes.ElementResistance.FireIncreased)[0] +
-                       GetStuffBuff(CardType.ElementResistance,
-                           (byte)AdditionalTypes.ElementResistance.AllIncreased)[0];
-            }
+            return BattleEntity != null ? BattleEntity.HasBuff(type, subtype) : false;
         }
 
-        public int EquipmentWaterResistance
+        public int HealthHpLoad()
         {
             var regen = GetBuff(BCardType.Recovery, (byte)BCardSubTypes.Recovery.HPRecoveryIncreased)[0];
 
-            //- GetBuff(BCardType.Recovery, (byte)BCardSubTypes.Recovery.HPRecoveryDecreased)[0];
+            //- GetBuff(CardType.Recovery, (byte)AdditionalTypes.Recovery.HPRecoveryDecreased)[0];
             return IsSitting ? regen + 50 :
                 (DateTime.Now - LastDefence).TotalSeconds > 4 ? regen + 20 : 0;
         }
@@ -874,7 +881,7 @@ namespace OpenNos.GameObject
         {
             var regen = GetBuff(BCardType.Recovery, (byte)BCardSubTypes.Recovery.MPRecoveryIncreased)[0];
 
-            //- GetBuff(BCardType.Recovery, (byte)BCardSubTypes.Recovery.MPRecoveryDecreased)[0];
+            //- GetBuff(CardType.Recovery, (byte)AdditionalTypes.Recovery.MPRecoveryDecreased)[0];
             return IsSitting ? regen + 50 :
                 (DateTime.Now - LastDefence).TotalSeconds > 4 ? regen + 20 : 0;
         }

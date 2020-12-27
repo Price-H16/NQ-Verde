@@ -28,13 +28,13 @@ using ChickenAPI.Enums.Game.BCard;
 using ChickenAPI.Enums.Game.Buffs;
 using ChickenAPI.Enums.Game.Character;
 using OpenNos.GameObject._Event;
-using static OpenNos.Domain.BCardType;
 using OpenNos.GameObject.RainbowBattle;
 using OpenNos.GameObject.Extensions;
 using CharacterOption = OpenNos.Domain.CharacterOption;
 using FactionType = OpenNos.Domain.FactionType;
 using GenderType = OpenNos.Domain.GenderType;
 using HairStyleType = OpenNos.Domain.HairStyleType;
+using System.Threading.Tasks;
 
 namespace OpenNos.GameObject
 {
@@ -1287,6 +1287,10 @@ namespace OpenNos.GameObject
             Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("SKILL_LEARNED"),0));
             return true;
         }
+        public void RemoveBuffByBCardTypeSubType(List<KeyValuePair<byte, byte>> bcardTypes)
+        {
+            bcardTypes.ForEach(bt => Buff.Where(b => b.Card.BCards.Any(s => s.Type.Equals((byte)bt.Key) && s.SubType.Equals((byte)(bt.Value)) && (s.CastType == 0 || b.Start.AddMilliseconds(b.Card.Delay * 100 + 1500) < DateTime.Now))).ToList().ForEach(a => RemoveBuff(a.Card.CardId)));
+        }
 
         public void AddStaticBuff(StaticBuffDTO staticBuff, bool isPermaBuff = false)
         {
@@ -1337,9 +1341,9 @@ namespace OpenNos.GameObject
                 BuffObservables[bf.Card.CardId].Dispose();
                 BuffObservables.Remove(bf.Card.CardId);
             }
-            if (bf.Card.BCards.Any(s => s.Type == (byte)CardType.AngerSkill && s.SubType.Equals((byte)AdditionalTypes.AngerSkill.OnlyNormalAttacks / 10)))
+            if (bf.Card.BCards.Any(s => s.Type == (byte)BCardType.AngerSkill && s.SubType.Equals((byte)BCardSubTypes.AngerSkill.OnlyNormalAttacks / 10)))
             {
-                if (GetBuff(CardType.AngerSkill, (byte)AdditionalTypes.AngerSkill.OnlyNormalAttacks / 10)[0] > 0)
+                if (GetBuff(BCardType.AngerSkill, (byte)BCardSubTypes.AngerSkill.OnlyNormalAttacks / 10)[0] > 0)
                 {
 
                 }
@@ -1471,9 +1475,9 @@ namespace OpenNos.GameObject
 
         public bool CanAddMate(Mate mate) => mate.MateType == MateType.Pet   ? MaxMateCount > Mates.Count(s => s.MateType == MateType.Pet) : MaxPartnerCount > Mates.Count(s => s.MateType == MateType.Partner);
 
-        public bool CanAttack() => !NoAttack && !HasBuff(CardType.SpecialAttack, (byte) AdditionalTypes.SpecialAttack.NoAttack) &&  !HasBuff(CardType.FrozenDebuff, (byte) AdditionalTypes.FrozenDebuff.EternalIce);
+        public bool CanAttack() => !NoAttack && !HasBuff(BCardType.SpecialAttack, (byte) BCardSubTypes.SpecialAttack.NoAttack) &&  !HasBuff(BCardType.FrozenDebuff, (byte) BCardSubTypes.FrozenDebuff.EternalIce);
 
-        public bool CanMove() => !NoMove && !HasBuff(CardType.Move, (byte) AdditionalTypes.Move.MovementImpossible) &&!HasBuff(CardType.FrozenDebuff, (byte) AdditionalTypes.FrozenDebuff.EternalIce);
+        public bool CanMove() => !NoMove && !HasBuff(BCardType.Move, (byte) BCardSubTypes.Move.MovementImpossible) &&!HasBuff(BCardType.FrozenDebuff, (byte) BCardSubTypes.FrozenDebuff.EternalIce);
 
         public bool CanUseNosBazaar()
         {
@@ -1790,7 +1794,7 @@ namespace OpenNos.GameObject
                     MessageCounter--;
                 }
 
-                if (MapInstance != null && HasBuff(CardType.FrozenDebuff, (byte) AdditionalTypes.FrozenDebuff.EternalIce) && LastFreeze.AddSeconds(1) <= DateTime.Now)
+                if (MapInstance != null && HasBuff(BCardType.FrozenDebuff, (byte) BCardSubTypes.FrozenDebuff.EternalIce) && LastFreeze.AddSeconds(1) <= DateTime.Now)
                 {
                     LastFreeze = DateTime.Now;
                     MapInstance.Broadcast(GenerateEff(35));
@@ -1841,7 +1845,7 @@ namespace OpenNos.GameObject
                         {
                             if (amulet.ItemVNum == 4503 || amulet.ItemVNum == 4504)
                             {
-                                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, amulet.Item.EffectValue + (Class == ClassType.Adventurer ? 0 : (byte) Class - 1)), PositionX, PositionY);
+                                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, amulet.Item.EffectValue + (Class == CharacterClassType.Adventurer ? 0 : (byte) Class - 1)), PositionX, PositionY);
                             }
                             else
                             {
@@ -1990,7 +1994,7 @@ namespace OpenNos.GameObject
                 {
                     LastPermBuffRefresh = DateTime.Now;
 
-                    foreach (BCard bcard in EquipmentBCards.Where(b =>b.Type.Equals(CardType.Buff) && new Buff((short) b.CardId, Level).Card?.BuffType == BuffType.Good))
+                    foreach (BCard bcard in EquipmentBCards.Where(b =>b.Type.Equals(BCardType.Buff) && new Buff((short) b.CardId, Level).Card?.BuffType == BuffType.Good))
                     {
                         bcard.ApplyBCards(BattleEntity, BattleEntity);
                     }
@@ -2217,17 +2221,17 @@ namespace OpenNos.GameObject
 
                 case 307: //Title #1
                 {
-                    if (Session.Character.Class == ClassType.Swordsman || Session.Character.Class == ClassType.MartialArtist)
+                    if (Session.Character.Class == CharacterClassType.Swordsman || Session.Character.Class == CharacterClassType.MartialArtist)
                     {
                         GiftAdd(9316, 1);
                     }
 
-                    if (Session.Character.Class == ClassType.Archer)
+                    if (Session.Character.Class == CharacterClassType.Archer)
                     {
                         GiftAdd(9313, 1);
                     }
 
-                    if (Session.Character.Class == ClassType.Magician)
+                    if (Session.Character.Class == CharacterClassType.Magician)
                     {
                         GiftAdd(9310, 1);
                     }
@@ -2236,17 +2240,17 @@ namespace OpenNos.GameObject
 
                 case 306: // TItle #2
                 {
-                    if (Session.Character.Class == ClassType.Swordsman || Session.Character.Class == ClassType.MartialArtist)
+                    if (Session.Character.Class == CharacterClassType.Swordsman || Session.Character.Class == CharacterClassType.MartialArtist)
                     {
                         GiftAdd(9317, 1);
                     }
 
-                    if (Session.Character.Class == ClassType.Archer)
+                    if (Session.Character.Class == CharacterClassType.Archer)
                     {
                         GiftAdd(9314, 1);
                     }
 
-                    if (Session.Character.Class == ClassType.Magician)
+                    if (Session.Character.Class == CharacterClassType.Magician)
                     {
                         GiftAdd(9311, 1);
                     }
@@ -2255,17 +2259,17 @@ namespace OpenNos.GameObject
 
                 case 305: //Title #3
                 {
-                    if (Session.Character.Class == ClassType.Swordsman || Session.Character.Class == ClassType.MartialArtist)
+                    if (Session.Character.Class == CharacterClassType.Swordsman || Session.Character.Class == CharacterClassType.MartialArtist)
                     {
                         GiftAdd(9318, 1);
                     }
 
-                    if (Session.Character.Class == ClassType.Archer)
+                    if (Session.Character.Class == CharacterClassType.Archer)
                     {
                         GiftAdd(9315, 1);
                     }
 
-                    if (Session.Character.Class == ClassType.Magician)
+                    if (Session.Character.Class == CharacterClassType.Magician)
                     {
                         GiftAdd(9312, 1);
                     }
@@ -3441,6 +3445,7 @@ namespace OpenNos.GameObject
 
         public void GenerateKillBonus(MapMonster monsterToAttack, BattleEntity Killer)
         {
+            RewardsHelper.Instance.MobKillRewards(Session);
             #region RBB
 
             if (Session?.CurrentMapInstance?.MapInstanceType == MapInstanceType.RainbowBattleInstance && monsterToAttack?.MonsterVNum == 2558)
@@ -3464,87 +3469,84 @@ namespace OpenNos.GameObject
             }
 
             #endregion
-            
             void _handleGoldDrop(DropDTO drop, long maxGold, long? dropOwner, short posX, short posY)
             {
-                if (ServerManager.Instance.Configuration.AutoLootEnable)
+                int amount = drop.Amount;
+                if (ServerManager.Instance.Configuration.EventGold > 1)
                 {
-                    Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
-                    {
-                        if (Session.HasCurrentMapInstance)
-                        {
-                            if (CharacterId == dropOwner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
-                            {
-                                double multiplier = 1 + (Session.Character.GetBuff(CardType.Item, (byte)AdditionalTypes.Item.IncreaseEarnedGold)[0] / 100D);
-                                multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
-                                if (ServerManager.Instance.Configuration.DobleGold == true)
-                                {
-
-                                    Gold += (int)(drop.Amount * multiplier) * 2;
-
-                                    if (Gold > maxGold)
-                                    {
-                                        Gold = maxGold;
-                                        Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
-                                    }
-
-                                    Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount * 2}{(multiplier > 1 ? $" + {(int)((drop.Amount * 2) * multiplier) - drop.Amount * 2}" : "")}", 12));
-                                    Session.SendPacket(GenerateGold());
-                                }
-                            }
-                            else
-                            {
-                                if (ServerManager.Instance.Configuration.DobleGold == false)
-                                {
-                                    double multiplier = 1 + (Session.Character.GetBuff(CardType.Item, (byte)AdditionalTypes.Item.IncreaseEarnedGold)[0] / 100D);
-                                    multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
-                                    Gold += (int)(drop.Amount * multiplier);
-                                    if (Gold > maxGold)
-                                    {
-                                        Gold = maxGold;
-                                        Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
-                                    }
-                                    Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")} {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount}{(multiplier > 1 ? $" + {(int)(drop.Amount * multiplier) - drop.Amount}" : string.Empty)}", 12));
-                                    Session.SendPacket(GenerateGold());
-                                }
-                            }
-                        }
-                    });
+                    amount *= ServerManager.Instance.Configuration.EventGold;
                 }
-                else
+                Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
                 {
-                    Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
+                    if (Session.HasCurrentMapInstance)
                     {
-                        if (Session.HasCurrentMapInstance)
+                        if (CharacterId == dropOwner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
                         {
-                            if (CharacterId == dropOwner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
-                            {
-                                double multiplier = 1 + (Session.Character.GetBuff(CardType.Item, (byte)AdditionalTypes.Item.IncreaseEarnedGold)[0] / 100D);
-                                multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
-                                Gold += (int)(drop.Amount * multiplier);
+                            double multiplier = 1 + (Session.Character.GetBuff(BCardType.Item, (byte)BCardSubTypes.Item.IncreaseEarnedGold)[0] / 100D);
+                            multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
 
-                                if (Gold > maxGold)
-                                {
-                                    Gold = maxGold;
-                                    Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
-                                }
+                            Gold += (int)(drop.Amount * multiplier);
 
-                                Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")} {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount}{(multiplier > 1 ? $" + {(int)(drop.Amount * multiplier) - drop.Amount}" : "")}", 12));
-                                Session.SendPacket(GenerateGold());
-                            }
-                            else
+                            if (Gold > maxGold)
                             {
-                                Session.CurrentMapInstance.DropItemByMonster(dropOwner, drop, monsterToAttack.MapX, monsterToAttack.MapY);
+                                Gold = maxGold;
+                                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
                             }
+
+                            Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount}{(multiplier > 1 ? $" + {(int)(drop.Amount * multiplier) - drop.Amount}" : "")}", 12));
+                            Session.SendPacket(GenerateGold());
                         }
-                    });
-                }
+                        else
+                        {
+                            double multiplier = 1 + (Session.Character.GetBuff(BCardType.Item, (byte)BCardSubTypes.Item.IncreaseEarnedGold)[0] / 100D);
+                            multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
+
+                            Gold += (int)(drop.Amount * multiplier);
+
+                            if (Gold > maxGold)
+                            {
+                                Gold = maxGold;
+                                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
+                            }
+
+                            Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount}{(multiplier > 1 ? $" + {(int)(drop.Amount * multiplier) - drop.Amount}" : "")}", 12));
+                            Session.SendPacket(GenerateGold());
+                        }
+                    }
+                });
             }
+
 
             void _handleItemDrop(DropDTO drop, long? owner, short posX, short posY)
             {
                 int amount = drop.Amount;
-
+                if (ServerManager.Instance.Configuration.LockSystem)
+                {
+                    Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
+                    {
+                        if (Session.HasCurrentMapInstance)
+                        {
+                            if (CharacterId == owner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
+                            {
+                                if (!Session.Character.VerifiedLock)
+                                {
+                                    Session.SendPacket(GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_THIS_ACTION_CHARACTER_IS_LOCKED"), 10));
+                                    return;
+                                }
+                                GiftAdd(drop.ItemVNum, (byte)drop.Amount);
+                            }
+                            else
+                            {
+                                if (!Session.Character.VerifiedLock)
+                                {
+                                    Session.SendPacket(GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_THIS_ACTION_CHARACTER_IS_LOCKED"), 10));
+                                    return;
+                                }
+                                GiftAdd(drop.ItemVNum, (byte)drop.Amount);
+                            }
+                        }
+                    });
+                }
                 if (ServerManager.Instance.Configuration.EventDrop > 1)
                 {
                     amount *= ServerManager.Instance.Configuration.EventDrop;
@@ -3553,16 +3555,27 @@ namespace OpenNos.GameObject
                 {
                     Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
                     {
-                        if (Session.HasCurrentMapInstance)
+                        if (CharacterId == owner &&
+                            StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
                         {
-                            if (CharacterId == owner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
-                            {
-                                GiftAdd(drop.ItemVNum, (byte)drop.Amount);
-                            }
-                            else
-                            {
-                                Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q => (q.Quest?.QuestType == (int)QuestType.Collect5 || q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
-                            }
+                            GiftAdd(drop.ItemVNum, (byte)drop.Amount);
+                        }
+
+                        //int[] items = { 1012, 2098, 2102, 2010, 2117, 2118, 2114, 2099, 2116, 2046, 2042, 2038, 2035 };
+                        //if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance || Session.Character.MapInstance.MapInstanceType == MapInstanceType.Act4Instance && items.Contains(drop.ItemVNum))
+                        //{
+                        //    GiftAdd(drop.ItemVNum, (byte)drop.Amount);
+                        //}
+
+                        //int[] items2 = { 1013, 2900, 1031, 1032, 1033, 1034, 2118, 1029 };
+                        //if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance && items.Contains(drop.ItemVNum))
+                        //{
+                        //    Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q => (q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
+                        //}
+
+                        else
+                        {
+                            Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q => (q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
                         }
                     });
                 }
@@ -3574,27 +3587,29 @@ namespace OpenNos.GameObject
                 {
                     return;
                 }
+
                 monsterToAttack.RunDeathEvent();
 
+                // Not 100% sure if this covers all mob kills, have to look it later.
                 if (Killer != null)
                 {
                     if (Killer.Character != null && Killer.Character is Character chara) chara.MobKillCounter++;
-                    if (Killer.Mate != null && Killer.Mate.Owner != null && Killer.Mate.Owner is Character charaMate)
-                        charaMate.MobKillCounter++;
+                    if (Killer.Mate != null && Killer.Mate.Owner != null && Killer.Mate.Owner is Character charaMate) charaMate.MobKillCounter++;
                 }
 
-                if (monsterToAttack.GetBuff(CardType.SpecialEffects, (byte)AdditionalTypes.SpecialEffects.DecreaseKillerHP) is int[] DecreaseKillerHp)
+                if (monsterToAttack.GetBuff(BCardType.SpecialEffects, (byte)BCardSubTypes.SpecialEffects.DecreaseKillerHP) is int[] DecreaseKillerHp)
                 {
                     bool EffectResistance = false;
                     if (Killer.MapEntityId != CharacterId)
                     {
-                        if (Killer.HasBuff(CardType.Buff, (byte)AdditionalTypes.Buff.EffectResistance))
+                        if (Killer.HasBuff(BCardType.Buff, (byte)BCardSubTypes.Buff.EffectResistance))
                         {
                             if (ServerManager.RandomNumber() < 90)
                             {
                                 EffectResistance = true;
                             }
                         }
+
                         if (!EffectResistance)
                         {
                             if (DecreaseKillerHp[0] > 0)
@@ -3610,12 +3625,14 @@ namespace OpenNos.GameObject
                                     {
                                         DecreasedHp = Killer.Hp - 1;
                                     }
+
                                     Killer.GetDamage(DecreasedHp, monsterToAttack.BattleEntity, true);
                                     Session.SendPacket(Killer.GenerateDm(DecreasedHp));
                                     if (Killer.Mate != null)
                                     {
                                         Session.SendPacket(Killer.Mate.GenerateStatInfo());
                                     }
+
                                     Session.SendPacket(new EffectPacket { EffectType = Killer.UserType, CallerId = Killer.MapEntityId, EffectId = 6007 });
                                 }
                             }
@@ -3623,13 +3640,14 @@ namespace OpenNos.GameObject
                     }
                     else
                     {
-                        if (HasBuff(CardType.Buff, (byte)AdditionalTypes.Buff.EffectResistance))
+                        if (HasBuff(BCardType.Buff, (byte)BCardSubTypes.Buff.EffectResistance))
                         {
                             if (ServerManager.RandomNumber() < 90)
                             {
                                 EffectResistance = true;
                             }
                         }
+
                         if (!EffectResistance)
                         {
                             if (DecreaseKillerHp[0] > 0)
@@ -3645,6 +3663,7 @@ namespace OpenNos.GameObject
                                     {
                                         DecreasedHp = Hp - 1;
                                     }
+
                                     GetDamage(DecreasedHp, monsterToAttack.BattleEntity, true);
                                     Session.SendPacket(GenerateDm(DecreasedHp));
                                     Session.SendPacket(GenerateStat());
@@ -3667,12 +3686,11 @@ namespace OpenNos.GameObject
                 Group group = null;
                 if (dropOwner != null)
                 {
-                    group = ServerManager.Instance.Groups.Find(g => g.IsMemberOfGroup((long)dropOwner) && g.GroupType == GroupType.Group);
+                    group = ServerManager.Instance.Groups.Find(g =>
+                        g.IsMemberOfGroup((long)dropOwner) && g.GroupType == GroupType.Group);
                 }
-                IncrementQuests(QuestType.Hunt, monsterToAttack.MonsterVNum);
 
-                int drop1 = ServerManager.RandomNumber(1, 100);
-                int rnd = ServerManager.RandomNumber(0, 7);
+                IncrementQuests(QuestType.Hunt, monsterToAttack.MonsterVNum);
 
                 if (ServerManager.Instance.ChannelId == 51)
                 {
@@ -3687,12 +3705,14 @@ namespace OpenNos.GameObject
                             ServerManager.Instance.Act4DemonStat.Percentage++;
                         }
                     }
+
                     if (monsterToAttack.MonsterVNum == 556)
                     {
                         if (ServerManager.Instance.Act4AngelStat.Mode == 1 && Faction != FactionType.Angel)
                         {
                             ServerManager.Instance.Act4AngelStat.Mode = 0;
                         }
+
                         if (ServerManager.Instance.Act4DemonStat.Mode == 1 && Faction != FactionType.Demon)
                         {
                             ServerManager.Instance.Act4DemonStat.Mode = 0;
@@ -3701,21 +3721,26 @@ namespace OpenNos.GameObject
                 }
 
                 // end owner set
-                if (Session.HasCurrentMapInstance && ((MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance || MapInstance.MapInstanceType == MapInstanceType.LodInstance) || MapInstance.DropAllowed))
+                if (Session.HasCurrentMapInstance &&
+                    ((MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance ||
+                      MapInstance.MapInstanceType == MapInstanceType.LodInstance) || MapInstance.DropAllowed))
                 {
                     short[] explodeMonsters = new short[] { 1348, 1906 };
 
-                    List<DropDTO> droplist = monsterToAttack.Monster.Drops.Where(s => (!explodeMonsters.Contains(monsterToAttack.MonsterVNum) && Session.CurrentMapInstance.Map.MapTypes.Any(m => m.MapTypeId == s.MapTypeId)) || s.MapTypeId == null).ToList();
+                    List<DropDTO> droplist = monsterToAttack.Monster.Drops.Where(s =>
+                        (!explodeMonsters.Contains(monsterToAttack.MonsterVNum) &&
+                         Session.CurrentMapInstance.Map.MapTypes.Any(m => m.MapTypeId == s.MapTypeId)) ||
+                        s.MapTypeId == null).ToList();
 
                     int levelDifference = Session.Character.Level - monsterToAttack.Monster.Level;
 
                     #region Quest
 
                     Quests.Where(q =>
-                            (q.Quest?.QuestType == (int) QuestType.Collect4 ||
-                             q.Quest?.QuestType == (int) QuestType.Collect2 ||
-                             (q.Quest?.QuestType == (int) QuestType.Collect1 &&
-                              MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short) MapTypeEnum.Act4)))).ToList()
+                            (q.Quest?.QuestType == (int)QuestType.Collect4 ||
+                             q.Quest?.QuestType == (int)QuestType.Collect2 ||
+                             (q.Quest?.QuestType == (int)QuestType.Collect1 &&
+                              MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4)))).ToList()
                         .ForEach(qst =>
                         {
                             qst.Quest.QuestObjectives.ForEach(d =>
@@ -3724,10 +3749,10 @@ namespace OpenNos.GameObject
                                 {
                                     droplist.Add(new DropDTO()
                                     {
-                                        ItemVNum = (short) d.Data,
+                                        ItemVNum = (short)d.Data,
                                         Amount = 1,
                                         MonsterVNum = monsterToAttack.MonsterVNum,
-                                        DropChance = (int) ((d.DropRate ?? 100) * 100 *
+                                        DropChance = (int)((d.DropRate ?? 100) * 100 *
                                                             ServerManager.Instance.Configuration
                                                                 .QuestDropRate) // Approx
                                     });
@@ -3738,7 +3763,6 @@ namespace OpenNos.GameObject
                     IncrementQuests(QuestType.FlowerQuest, monsterToAttack.Monster.Level);
 
                     #endregion
-
 
                     if (explodeMonsters.Contains(monsterToAttack.MonsterVNum) && ServerManager.RandomNumber() < 50)
                     {
@@ -3756,6 +3780,7 @@ namespace OpenNos.GameObject
                                 {
                                     DecreasedHp = Killer.Hp - 1;
                                 }
+
                                 Killer.GetDamage(DecreasedHp, monsterToAttack.BattleEntity, true);
                                 if (Killer.Mate != null)
                                 {
@@ -3776,10 +3801,12 @@ namespace OpenNos.GameObject
                                 {
                                     DecreasedHp = Hp - 1;
                                 }
+
                                 GetDamage(DecreasedHp, monsterToAttack.BattleEntity, true);
                                 Session.SendPacket(GenerateStat());
                             }
                         }
+
                         return;
                     }
 
@@ -3798,14 +3825,19 @@ namespace OpenNos.GameObject
                                 {
                                     rndamount = ServerManager.RandomNumber() * random.NextDouble();
                                 }
+
                                 bool divideRate = true;
                                 if (MapInstance.Map.MapTypes.Any(m => m.MapTypeId == (byte)MapTypeEnum.Act4)
-                                 || MapInstance.Map.MapId == 20001 // Miniland
-                                 || explodeMonsters.Contains(monsterToAttack.MonsterVNum))
+                                    || MapInstance.Map.MapId == 20001 // Miniland
+                                    || MapInstance.Map.MapId == 103
+                                    || explodeMonsters.Contains(monsterToAttack.MonsterVNum))
                                 {
                                     divideRate = false;
                                 }
-                                double divider = !divideRate ? 1D : levelDifference >= 20 ? (levelDifference - 19) * 1.2D : levelDifference <= -20 ? (levelDifference + 19) * 1.2D : 1D;
+
+                                double divider = !divideRate ? 1D :
+                                    levelDifference >= 20 ? (levelDifference - 19) * 1.2D :
+                                    levelDifference <= -20 ? (levelDifference + 19) * 1.2D : 1D;
                                 if (rndamount <= (double)drop.DropChance * dropRate / 1000.000 / divider)
                                 {
                                     x++;
@@ -3825,20 +3857,27 @@ namespace OpenNos.GameObject
                                             {
                                                 if (!alreadyGifted.Contains(damager.MapEntityId))
                                                 {
-                                                    ClientSession giftsession = ServerManager.Instance.GetSessionByCharacterId(damager.MapEntityId);
+                                                    ClientSession giftsession =
+                                                        ServerManager.Instance.GetSessionByCharacterId(
+                                                            damager.MapEntityId);
                                                     giftsession?.Character.GiftAdd(drop.ItemVNum, (byte)drop.Amount);
                                                     alreadyGifted.Add(damager.MapEntityId);
                                                 }
                                             }
                                         }
-                                        else if (Session.CurrentMapInstance.Map.MapTypes.Any(s => s.MapTypeId == (short)MapTypeEnum.Act4))
+                                        else if (Session.CurrentMapInstance.Map.MapTypes.Any(s =>
+                                            s.MapTypeId == (short)MapTypeEnum.Act4))
                                         {
                                             List<long> alreadyGifted = new List<long>();
                                             List<Character> hitters;
 
                                             lock (monsterToAttack.DamageList)
                                             {
-                                                hitters = monsterToAttack.DamageList.Where(s => s.Key?.Character != null && s.Key.Character.MapInstance == monsterToAttack.MapInstance && s.Value > 0).Select(s => s.Key.Character).ToList();
+                                                hitters = monsterToAttack.DamageList
+                                                    .Where(s => s.Key?.Character != null &&
+                                                                s.Key.Character.MapInstance ==
+                                                                monsterToAttack.MapInstance && s.Value > 0)
+                                                    .Select(s => s.Key.Character).ToList();
                                             }
 
                                             foreach (Character hitter in hitters)
@@ -3859,18 +3898,33 @@ namespace OpenNos.GameObject
                                                     dropOwner = group.GetNextOrderedCharacterId(this);
                                                     if (dropOwner.HasValue)
                                                     {
-                                                        group.Sessions.ForEach(s => s.SendPacket(s.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("ITEM_BOUND_TO"), ServerManager.GetItem(drop.ItemVNum).Name, group.Sessions.Single(c => c.Character.CharacterId == (long)dropOwner).Character.Name, drop.Amount), 10)));
+                                                        group.Sessions.ForEach(s =>
+                                                            s.SendPacket(s.Character.GenerateSay(
+                                                                string.Format(
+                                                                    Language.Instance
+                                                                        .GetMessageFromKey("ITEM_BOUND_TO"),
+                                                                    ServerManager.GetItem(drop.ItemVNum).Name,
+                                                                    group.Sessions.Single(c =>
+                                                                            c.Character.CharacterId == (long)dropOwner)
+                                                                        .Character.Name, drop.Amount), 10)));
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    group.Sessions.ForEach(s => s.SendPacket(s.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("DROPPED_ITEM"), ServerManager.GetItem(drop.ItemVNum).Name, drop.Amount), 10)));
+                                                    group.Sessions.ForEach(s =>
+                                                        s.SendPacket(s.Character.GenerateSay(
+                                                            string.Format(
+                                                                Language.Instance.GetMessageFromKey("DROPPED_ITEM"),
+                                                                ServerManager.GetItem(drop.ItemVNum).Name, drop.Amount),
+                                                            10)));
                                                 }
                                             }
 
-                                            _handleItemDrop(drop, dropOwner, monsterToAttack.MapX, monsterToAttack.MapY);
+                                            _handleItemDrop(drop, dropOwner, monsterToAttack.MapX,
+                                                monsterToAttack.MapY);
                                         }
                                     }
+
                                     if (explodeMonsters.Contains(monsterToAttack.MonsterVNum))
                                     {
                                         break;
@@ -3880,6 +3934,7 @@ namespace OpenNos.GameObject
                                 {
                                     rndamount -= (double)drop.DropChance * dropRate / 1000.000 / divider;
                                 }
+
                             }
                         }
 
@@ -3891,13 +3946,13 @@ namespace OpenNos.GameObject
                         int gold = GetGold(monsterToAttack);
                         gold *= ServerManager.Instance.Configuration.RateGold;
                         long maxGold = ServerManager.Instance.Configuration.MaxGold;
-                        gold = gold > maxGold ? (int) maxGold : gold;
+                        gold = gold > maxGold ? (int)maxGold : gold;
                         double randChance = ServerManager.RandomNumber() * random.NextDouble();
 
                         if (Session.CurrentMapInstance.MapInstanceType != MapInstanceType.LodInstance && gold > 0 &&
-                            randChance <= (int) (ServerManager.Instance.Configuration.RateGoldDrop * 10 *
+                            randChance <= (int)(ServerManager.Instance.Configuration.RateGoldDrop * 10 *
                                                  (Session.CurrentMapInstance.Map.MapTypes.Any(s =>
-                                                     s.MapTypeId == (short) MapTypeEnum.Act4)
+                                                     s.MapTypeId == (short)MapTypeEnum.Act4)
                                                      ? 1
                                                      : CharacterHelper.GoldPenalty(Level,
                                                          monsterToAttack.Monster.Level))))
@@ -3911,7 +3966,7 @@ namespace OpenNos.GameObject
                             if (Session.CurrentMapInstance != null)
                             {
                                 if (Session.CurrentMapInstance.Map.MapTypes.Any(s =>
-                                        s.MapTypeId == (short) MapTypeEnum.Act4) ||
+                                        s.MapTypeId == (short)MapTypeEnum.Act4) ||
                                     monsterToAttack.Monster.MonsterType == MonsterType.Elite)
                                 {
                                     List<long> alreadyGifted = new List<long>();
@@ -3929,17 +3984,17 @@ namespace OpenNos.GameObject
                                             ClientSession session = ServerManager.Instance.GetSessionByCharacterId(damager.MapEntityId);
                                             if (session != null)
                                             {
-                                                double multiplier = 1 + (GetBuff(CardType.Item,(byte) AdditionalTypes.Item.IncreaseEarnedGold)[0] / 100D);
-                                                multiplier +=(ShellEffectMain.FirstOrDefault(s =>s.Effect == (byte) ShellWeaponEffectType.GainMoreGold) ?.Value ?? 0) / 100D;
+                                                double multiplier = 1 + (GetBuff(BCardType.Item, (byte)BCardSubTypes.Item.IncreaseEarnedGold)[0] / 100D);
+                                                multiplier += (ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
 
-                                                session.Character.Gold += (int) (drop2.Amount * multiplier);
+                                                session.Character.Gold += (int)(drop2.Amount * multiplier);
                                                 if (session.Character.Gold > maxGold)
                                                 {
                                                     session.Character.Gold = maxGold;
                                                     session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
                                                 }
 
-                                                session.SendPacket(session.Character.GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop2.ItemVNum).Name} x {drop2.Amount}{(multiplier > 1 ? $" + {(int) (drop2.Amount * multiplier) - drop2.Amount}" : "")}",10));
+                                                session.SendPacket(session.Character.GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop2.ItemVNum).Name} x {drop2.Amount}{(multiplier > 1 ? $" + {(int)(drop2.Amount * multiplier) - drop2.Amount}" : "")}", 10));
                                                 session.SendPacket(session.Character.GenerateGold());
                                             }
 
@@ -3951,22 +4006,22 @@ namespace OpenNos.GameObject
                                 {
                                     if (group != null && MapInstance.MapInstanceType != MapInstanceType.LodInstance)
                                     {
-                                        if (group.SharingMode == (byte) GroupSharingType.ByOrder)
+                                        if (group.SharingMode == (byte)GroupSharingType.ByOrder)
                                         {
                                             dropOwner = group.GetNextOrderedCharacterId(this);
 
                                             if (dropOwner.HasValue)
                                             {
-                                                group.Sessions.ForEach(s =>s.SendPacket(s.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("ITEM_BOUND_TO"),ServerManager.GetItem(drop2.ItemVNum).Name,group.Sessions.Single(c =>c.Character.CharacterId == (long) dropOwner).Character.Name, drop2.Amount), 10)));
+                                                group.Sessions.ForEach(s => s.SendPacket(s.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("ITEM_BOUND_TO"), ServerManager.GetItem(drop2.ItemVNum).Name, group.Sessions.Single(c => c.Character.CharacterId == (long)dropOwner).Character.Name, drop2.Amount), 10)));
                                             }
                                         }
                                         else
                                         {
-                                            group.Sessions.ForEach(s =>s.SendPacket(s.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("DROPPED_ITEM"),ServerManager.GetItem(drop2.ItemVNum).Name, drop2.Amount),10)));
+                                            group.Sessions.ForEach(s => s.SendPacket(s.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("DROPPED_ITEM"), ServerManager.GetItem(drop2.ItemVNum).Name, drop2.Amount), 10)));
                                         }
                                     }
 
-                                    _handleGoldDrop(drop2, maxGold, dropOwner, monsterToAttack.MapX,monsterToAttack.MapY);
+                                    _handleGoldDrop(drop2, maxGold, dropOwner, monsterToAttack.MapX, monsterToAttack.MapY);
                                 }
                             }
                         }
@@ -3978,7 +4033,7 @@ namespace OpenNos.GameObject
                 #region act.4 % from monsters
 
                 //if (monsterToAttack.MapInstance?.MapInstanceType == MapInstanceType.Act4Instance)
-                if (monsterToAttack.MapInstance.Map.MapTypes.Any(m => m.MapTypeId == (byte) MapTypeEnum.Act4 == true))
+                if (monsterToAttack.MapInstance.Map.MapTypes.Any(m => m.MapTypeId == (byte)MapTypeEnum.Act4 == true))
                 {
                     if (ServerManager.Instance.Act4AngelStat.Mode == 0 && ServerManager.Instance.Act4DemonStat.Mode == 0 && ServerManager.Instance.ChannelId == 51)
                     {
@@ -4001,7 +4056,7 @@ namespace OpenNos.GameObject
 
                 #region Act6Stats
 
-                if (monsterToAttack.MapInstance.Map.MapTypes.Any(m => m.MapTypeId == (byte) MapTypeEnum.Act61 == true))
+                if (monsterToAttack.MapInstance.Map.MapTypes.Any(m => m.MapTypeId == (byte)MapTypeEnum.Act61 == true))
                 {
                     if (monsterToAttack.MapInstance?.Map.MapId == 232 && ServerManager.Instance.Act6Zenas.Mode == 0)
                     {
@@ -4134,7 +4189,7 @@ namespace OpenNos.GameObject
             {
                 //exclude magical fairy
                 shouldChangeMorph = IsUsingFairyBooster != 0 && (fairy.Item.Morph > 4 && fairy.Item.Morph != 9 && fairy.Item.Morph != 14);
-                ElementRate += fairy.ElementRate + fairy.Item.ElementRate + (IsUsingFairyBooster == 1 ? 30 : IsUsingFairyBooster == 2 ? 60 : 0) + GetStuffBuff(CardType.PixieCostumeWings,(byte) AdditionalTypes.PixieCostumeWings.IncreaseFairyElement)[0];
+                ElementRate += fairy.ElementRate + fairy.Item.ElementRate + (IsUsingFairyBooster == 1 ? 30 : IsUsingFairyBooster == 2 ? 60 : 0) + GetStuffBuff(BCardType.PixieCostumeWings,(byte) BCardSubTypes.PixieCostumeWings.IncreaseFairyElement)[0];
                 Element = fairy.Item.Element;
             }
 
@@ -4263,7 +4318,7 @@ namespace OpenNos.GameObject
         {
             string[] pktQs = {"qslot 0", "qslot 1"};
             var morph = Morph;
-            if (Class == ClassType.MartialArtist && Morph == 29 || Morph == 30)
+            if (Class == CharacterClassType.MartialArtist && Morph == 29 || Morph == 30)
             {
                 morph = 30;
             }
@@ -4271,11 +4326,11 @@ namespace OpenNos.GameObject
 
             switch (Class)
             {
-                case ClassType.MartialArtist when Morph == 31 && UseSp && SpInstance != null && SpInstance.SpLevel >= 20 && HasBuff(CardType.LotusSkills,(byte) AdditionalTypes.LotusSkills.ChangeLotusSkills):
+                case CharacterClassType.MartialArtist when Morph == 31 && UseSp && SpInstance != null && SpInstance.SpLevel >= 20 && HasBuff(BCardType.LotusSkills,(byte) BCardSubTypes.LotusSkills.ChangeLotusSkills):
                     GenerateQuickListSp2Am(ref pktQs);
                     break;
 
-                case ClassType.MartialArtist when Morph == 33 && UseSp && SpInstance != null && SpInstance.SpLevel >= 20 && HasBuff(CardType.WolfMaster,(byte) AdditionalTypes.WolfMaster.CanExecuteUltimateSkills):
+                case CharacterClassType.MartialArtist when Morph == 33 && UseSp && SpInstance != null && SpInstance.SpLevel >= 20 && HasBuff(BCardType.WolfMaster,(byte) BCardSubTypes.WolfMaster.CanExecuteUltimateSkills):
                     GenerateQuickListSp3Am(ref pktQs);
                     break;
 
@@ -4670,7 +4725,7 @@ namespace OpenNos.GameObject
                     }
 
 
-                    int point = CharacterHelper.SlPoint(specialist.SlDamage, 0) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseDamage);
+                    int point = CharacterHelper.SlPoint(specialist.SlDamage, 0) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(BCardType.IncreaseSlPoint,(byte) BCardSubTypes.IncreaseSlPoint.IncreaseDamage);
                     if (point > 100)
                     {
                         point = 100;
@@ -4737,7 +4792,7 @@ namespace OpenNos.GameObject
                     SecondWeaponMaxHit += p;
                     SecondWeaponMinHit += p;
 
-                    point = CharacterHelper.SlPoint(specialist.SlDefence, 1) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseDefence);
+                    point = CharacterHelper.SlPoint(specialist.SlDefence, 1) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(BCardType.IncreaseSlPoint,(byte) BCardSubTypes.IncreaseSlPoint.IncreaseDefence);
                     if (point > 100)
                     {
                         point = 100;
@@ -4789,7 +4844,7 @@ namespace OpenNos.GameObject
                     MagicalDefence += p;
                     DistanceDefence += p;
 
-                    point = CharacterHelper.SlPoint(specialist.SlElement, 2) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseEllement);
+                    point = CharacterHelper.SlPoint(specialist.SlElement, 2) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(BCardType.IncreaseSlPoint,(byte) BCardSubTypes.IncreaseSlPoint.IncreaseEllement);
                     if (point > 100)
                     {
                         point = 100;
@@ -4800,7 +4855,7 @@ namespace OpenNos.GameObject
                     p = point <= 50 ? point : 50 + ((point - 50) * 2);
                     ElementRateSP += p;
 
-                    slhpbonus = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(CardType.IncreaseSlPoint,(byte) AdditionalTypes.IncreaseSlPoint.IncreaseHPMP);
+                    slhpbonus = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) + GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) + GetTitleEffectValue(BCardType.IncreaseSlPoint,(byte) BCardSubTypes.IncreaseSlPoint.IncreaseHPMP);
                 }
             }
 
@@ -4845,7 +4900,7 @@ namespace OpenNos.GameObject
             ItemInstance fairy = Inventory?.LoadBySlotAndType((byte) EquipmentType.Fairy, InventoryType.Wear);
             if (fairy != null)
             {
-                ElementRate += fairy.ElementRate + fairy.Item.ElementRate + (IsUsingFairyBooster == 1 ? 30 : IsUsingFairyBooster == 2 ? 60 : 0) + GetStuffBuff(CardType.PixieCostumeWings,(byte) AdditionalTypes.PixieCostumeWings.IncreaseFairyElement)[0];
+                ElementRate += fairy.ElementRate + fairy.Item.ElementRate + (IsUsingFairyBooster == 1 ? 30 : IsUsingFairyBooster == 2 ? 60 : 0) + GetStuffBuff(BCardType.PixieCostumeWings,(byte) BCardSubTypes.PixieCostumeWings.IncreaseFairyElement)[0];
             }
 
             for (short i = 1; i < 14; i++)
@@ -4869,56 +4924,56 @@ namespace OpenNos.GameObject
             }
 
             //BCards
-            int BCardFireResistance = GetStuffBuff(CardType.ElementResistance, (byte) AdditionalTypes.ElementResistance.FireIncreased)[0] + GetStuffBuff(CardType.ElementResistance, (byte) AdditionalTypes.ElementResistance.AllIncreased)[0];
-            int BCardLightResistance = GetStuffBuff(CardType.ElementResistance, (byte) AdditionalTypes.ElementResistance.LightIncreased)[0] + GetStuffBuff(CardType.ElementResistance, (byte) AdditionalTypes.ElementResistance.AllIncreased)[0];
-            int BCardWaterResistance = GetStuffBuff(CardType.ElementResistance, (byte) AdditionalTypes.ElementResistance.WaterIncreased)[0] + GetStuffBuff(CardType.ElementResistance, (byte) AdditionalTypes.ElementResistance.AllIncreased)[0];
-            int BCardDarkResistance = GetStuffBuff(CardType.ElementResistance, (byte) AdditionalTypes.ElementResistance.DarkIncreased)[0] + GetStuffBuff(CardType.ElementResistance, (byte) AdditionalTypes.ElementResistance.AllIncreased)[0];
+            int BCardFireResistance = GetStuffBuff(BCardType.ElementResistance, (byte) BCardSubTypes.ElementResistance.FireIncreased)[0] + GetStuffBuff(BCardType.ElementResistance, (byte) BCardSubTypes.ElementResistance.AllIncreased)[0];
+            int BCardLightResistance = GetStuffBuff(BCardType.ElementResistance, (byte) BCardSubTypes.ElementResistance.LightIncreased)[0] + GetStuffBuff(BCardType.ElementResistance, (byte) BCardSubTypes.ElementResistance.AllIncreased)[0];
+            int BCardWaterResistance = GetStuffBuff(BCardType.ElementResistance, (byte) BCardSubTypes.ElementResistance.WaterIncreased)[0] + GetStuffBuff(BCardType.ElementResistance, (byte) BCardSubTypes.ElementResistance.AllIncreased)[0];
+            int BCardDarkResistance = GetStuffBuff(BCardType.ElementResistance, (byte) BCardSubTypes.ElementResistance.DarkIncreased)[0] + GetStuffBuff(BCardType.ElementResistance, (byte) BCardSubTypes.ElementResistance.AllIncreased)[0];
 
-            int BCardHitCritical = GetStuffBuff(CardType.Critical, (byte) AdditionalTypes.Critical.DamageIncreased)[0] + GetStuffBuff(CardType.Critical,(byte) AdditionalTypes.Critical.DamageFromCriticalIncreased)[0];
-            int BCardHitCriticalRate = GetStuffBuff(CardType.Critical, (byte) AdditionalTypes.Critical.InflictingIncreased)[0];
+            int BCardHitCritical = GetStuffBuff(BCardType.Critical, (byte) BCardSubTypes.Critical.DamageIncreased)[0] + GetStuffBuff(BCardType.Critical,(byte) BCardSubTypes.Critical.DamageFromCriticalIncreased)[0];
+            int BCardHitCriticalRate = GetStuffBuff(BCardType.Critical, (byte) BCardSubTypes.Critical.InflictingIncreased)[0];
 
-            int BCardHit = GetStuffBuff(CardType.AttackPower, (byte) AdditionalTypes.AttackPower.AllAttacksIncreased)[0];
-            int BCardSecondHit = GetStuffBuff(CardType.AttackPower, (byte) AdditionalTypes.AttackPower.AllAttacksIncreased)[0];
+            int BCardHit = GetStuffBuff(BCardType.AttackPower, (byte) BCardSubTypes.AttackPower.AllAttacksIncreased)[0];
+            int BCardSecondHit = GetStuffBuff(BCardType.AttackPower, (byte) BCardSubTypes.AttackPower.AllAttacksIncreased)[0];
 
-            int BCardHitRate = GetStuffBuff(CardType.Target, (byte) AdditionalTypes.Target.AllHitRateIncreased)[0];
-            int BCardSecondHitRate = GetStuffBuff(CardType.Target, (byte) AdditionalTypes.Target.AllHitRateIncreased)[0];
+            int BCardHitRate = GetStuffBuff(BCardType.Target, (byte) BCardSubTypes.Target.AllHitRateIncreased)[0];
+            int BCardSecondHitRate = GetStuffBuff(BCardType.Target, (byte) BCardSubTypes.Target.AllHitRateIncreased)[0];
 
-            int BCardMeleeDodge = GetStuffBuff(CardType.DodgeAndDefencePercent,(byte) AdditionalTypes.Target.AllHitRateIncreased)[0];
-            int BCardRangeDodge = GetStuffBuff(CardType.DodgeAndDefencePercent,(byte) AdditionalTypes.Target.AllHitRateIncreased)[0];
+            int BCardMeleeDodge = GetStuffBuff(BCardType.DodgeAndDefencePercent,(byte) BCardSubTypes.Target.AllHitRateIncreased)[0];
+            int BCardRangeDodge = GetStuffBuff(BCardType.DodgeAndDefencePercent,(byte) BCardSubTypes.Target.AllHitRateIncreased)[0];
 
-            int BCardMeleeDefence = GetStuffBuff(CardType.Defence, (byte) AdditionalTypes.Defence.AllIncreased)[0] +GetStuffBuff(CardType.Defence, (byte) AdditionalTypes.Defence.MeleeIncreased)[0];
-            int BCardRangeDefence = GetStuffBuff(CardType.Defence, (byte) AdditionalTypes.Defence.AllIncreased)[0] +GetStuffBuff(CardType.Defence, (byte) AdditionalTypes.Defence.RangedIncreased)[0];
-            int BCardMagicDefence = GetStuffBuff(CardType.Defence, (byte) AdditionalTypes.Defence.AllIncreased)[0] +GetStuffBuff(CardType.Defence, (byte) AdditionalTypes.Defence.MagicalIncreased)[0];
+            int BCardMeleeDefence = GetStuffBuff(BCardType.Defence, (byte) BCardSubTypes.Defence.AllIncreased)[0] +GetStuffBuff(BCardType.Defence, (byte) BCardSubTypes.Defence.MeleeIncreased)[0];
+            int BCardRangeDefence = GetStuffBuff(BCardType.Defence, (byte) BCardSubTypes.Defence.AllIncreased)[0] +GetStuffBuff(BCardType.Defence, (byte) BCardSubTypes.Defence.RangedIncreased)[0];
+            int BCardMagicDefence = GetStuffBuff(BCardType.Defence, (byte) BCardSubTypes.Defence.AllIncreased)[0] +GetStuffBuff(BCardType.Defence, (byte) BCardSubTypes.Defence.MagicalIncreased)[0];
 
             switch (Class)
             {
-                case ClassType.Adventurer:
-                case ClassType.Swordsman:
-                    BCardHit += GetStuffBuff(CardType.AttackPower,(byte) AdditionalTypes.AttackPower.MeleeAttacksIncreased)[0];
-                    BCardSecondHit += GetStuffBuff(CardType.AttackPower,(byte) AdditionalTypes.AttackPower.RangedAttacksIncreased)[0];
-                    BCardHitRate += GetStuffBuff(CardType.Target, (byte) AdditionalTypes.Target.MeleeHitRateIncreased)[0];
-                    BCardSecondHitRate += GetStuffBuff(CardType.Target, (byte) AdditionalTypes.Target.RangedHitRateIncreased)[0];
+                case CharacterClassType.Adventurer:
+                case CharacterClassType.Swordsman:
+                    BCardHit += GetStuffBuff(BCardType.AttackPower,(byte) BCardSubTypes.AttackPower.MeleeAttacksIncreased)[0];
+                    BCardSecondHit += GetStuffBuff(BCardType.AttackPower,(byte) BCardSubTypes.AttackPower.RangedAttacksIncreased)[0];
+                    BCardHitRate += GetStuffBuff(BCardType.Target, (byte) BCardSubTypes.Target.MeleeHitRateIncreased)[0];
+                    BCardSecondHitRate += GetStuffBuff(BCardType.Target, (byte) BCardSubTypes.Target.RangedHitRateIncreased)[0];
                     break;
 
-                case ClassType.Archer:
-                    BCardHit += GetStuffBuff(CardType.AttackPower,(byte) AdditionalTypes.AttackPower.RangedAttacksIncreased)[0];
-                    BCardSecondHit += GetStuffBuff(CardType.AttackPower,(byte) AdditionalTypes.AttackPower.MeleeAttacksIncreased)[0];
-                    BCardHitRate += GetStuffBuff(CardType.Target, (byte) AdditionalTypes.Target.RangedHitRateIncreased)[0];
-                    BCardSecondHitRate += GetStuffBuff(CardType.Target, (byte) AdditionalTypes.Target.MeleeHitRateIncreased)[0];
+                case CharacterClassType.Archer:
+                    BCardHit += GetStuffBuff(BCardType.AttackPower,(byte) BCardSubTypes.AttackPower.RangedAttacksIncreased)[0];
+                    BCardSecondHit += GetStuffBuff(BCardType.AttackPower,(byte) BCardSubTypes.AttackPower.MeleeAttacksIncreased)[0];
+                    BCardHitRate += GetStuffBuff(BCardType.Target, (byte) BCardSubTypes.Target.RangedHitRateIncreased)[0];
+                    BCardSecondHitRate += GetStuffBuff(BCardType.Target, (byte) BCardSubTypes.Target.MeleeHitRateIncreased)[0];
                     break;
 
-                case ClassType.Magician:
-                    BCardHit += GetStuffBuff(CardType.AttackPower,(byte) AdditionalTypes.AttackPower.MagicalAttacksIncreased)[0];
-                    BCardSecondHit += GetStuffBuff(CardType.AttackPower,(byte) AdditionalTypes.AttackPower.RangedAttacksIncreased)[0];
-                    BCardHitRate += GetStuffBuff(CardType.Target,(byte) AdditionalTypes.Target.MagicalConcentrationIncreased)[0];
-                    BCardSecondHitRate += GetStuffBuff(CardType.Target, (byte) AdditionalTypes.Target.RangedHitRateIncreased)[0];
+                case CharacterClassType.Magician:
+                    BCardHit += GetStuffBuff(BCardType.AttackPower,(byte) BCardSubTypes.AttackPower.MagicalAttacksIncreased)[0];
+                    BCardSecondHit += GetStuffBuff(BCardType.AttackPower,(byte) BCardSubTypes.AttackPower.RangedAttacksIncreased)[0];
+                    BCardHitRate += GetStuffBuff(BCardType.Target,(byte) BCardSubTypes.Target.MagicalConcentrationIncreased)[0];
+                    BCardSecondHitRate += GetStuffBuff(BCardType.Target, (byte) BCardSubTypes.Target.RangedHitRateIncreased)[0];
                     break;
             }
 
-            byte type = Class == ClassType.Adventurer ? (byte) 0 : (byte) (Class - 1);
+            byte type = Class == CharacterClassType.Adventurer ? (byte) 0 : (byte) (Class - 1);
 
             List<string> packets = new List<string>();
-            packets.Add( $"sc {type} {(weaponUpgrade == 10 ? weaponUpgrade : weaponUpgrade + GetBuff(CardType.AttackPower, (byte) AdditionalTypes.AttackPower.AttackLevelIncreased)[0])} {MinHit + BCardHit} {MaxHit + BCardHit} {HitRate + BCardHitRate} {HitCriticalChance + BCardHitCriticalRate} {HitCriticalRate + BCardHitCritical} {(Class == ClassType.Archer ? 1 : 0)} {(secondaryUpgrade == 10 ? secondaryUpgrade : secondaryUpgrade + GetBuff(CardType.AttackPower, (byte) AdditionalTypes.AttackPower.AttackLevelIncreased)[0])} {SecondWeaponMinHit + BCardSecondHit} {SecondWeaponMaxHit + BCardSecondHit} {SecondWeaponHitRate + BCardSecondHitRate} {SecondWeaponCriticalChance + BCardHitCriticalRate} {SecondWeaponCriticalRate + BCardHitCritical} {(armorUpgrade == 10 ? armorUpgrade : armorUpgrade + GetBuff(CardType.Defence, (byte) AdditionalTypes.Defence.DefenceLevelIncreased)[0])} {Defence + BCardMeleeDefence} {DefenceRate + BCardMeleeDodge} {DistanceDefence + BCardRangeDefence} {DistanceDefenceRate + BCardRangeDodge} {MagicalDefence + BCardMagicDefence} {FireResistance + BCardFireResistance} {WaterResistance + BCardWaterResistance} {LightResistance + BCardLightResistance} {DarkResistance + BCardDarkResistance}");
+            packets.Add( $"sc {type} {(weaponUpgrade == 10 ? weaponUpgrade : weaponUpgrade + GetBuff(BCardType.AttackPower, (byte) BCardSubTypes.AttackPower.AttackLevelIncreased)[0])} {MinHit + BCardHit} {MaxHit + BCardHit} {HitRate + BCardHitRate} {HitCriticalChance + BCardHitCriticalRate} {HitCriticalRate + BCardHitCritical} {(Class == CharacterClassType.Archer ? 1 : 0)} {(secondaryUpgrade == 10 ? secondaryUpgrade : secondaryUpgrade + GetBuff(BCardType.AttackPower, (byte) BCardSubTypes.AttackPower.AttackLevelIncreased)[0])} {SecondWeaponMinHit + BCardSecondHit} {SecondWeaponMaxHit + BCardSecondHit} {SecondWeaponHitRate + BCardSecondHitRate} {SecondWeaponCriticalChance + BCardHitCriticalRate} {SecondWeaponCriticalRate + BCardHitCritical} {(armorUpgrade == 10 ? armorUpgrade : armorUpgrade + GetBuff(BCardType.Defence, (byte) BCardSubTypes.Defence.DefenceLevelIncreased)[0])} {Defence + BCardMeleeDefence} {DefenceRate + BCardMeleeDodge} {DistanceDefence + BCardRangeDefence} {DistanceDefenceRate + BCardRangeDodge} {MagicalDefence + BCardMagicDefence} {FireResistance + BCardFireResistance} {WaterResistance + BCardWaterResistance} {LightResistance + BCardLightResistance} {DarkResistance + BCardDarkResistance}");
             packets.AddRange(GenerateScN());
             packets.AddRange(GenerateScP());
 
@@ -4927,7 +4982,7 @@ namespace OpenNos.GameObject
             return packets;
         }
 
-        public string GenerateStatInfo() => $"st 1 {CharacterId} {Level} {HeroLevel} {(int) (Hp / (float) HPLoad() * 100)} {(int) (Mp / (float) MPLoad() * 100)} {Hp} {Mp}{Buff.GetAllItems().Where(s => !s.StaticBuff || new short[] {339, 340}.Contains(s.Card.CardId)).Aggregate("", (current, buff) => current + $" {buff.Card.CardId}.{buff.Level}")}";
+        public string GenerateStatInfo() => $"st 1 {CharacterId} {Level} {HeroLevel} {(int) (Hp / (float) HPLoad() * 100)} {(int) (Mp / (float) MPLoad() * 100)} {Hp} {Mp}{Buff.GetAllItems().Where(s => !s.IsStaticBuff || new short[] {339, 340}.Contains(s.Card.CardId)).Aggregate("", (current, buff) => current + $" {buff.Card.CardId}.{buff.Level}")}";
 
         public string GenerateTaF(byte victoriousteam)
         {
@@ -5275,7 +5330,7 @@ namespace OpenNos.GameObject
                 return;
             }
 
-            HeroXp += val * (applyRate ? ServerManager.Instance.Configuration.RateHeroicXP : 1) * (int) (1 + GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] / 100D +  GetBuff(CardType.Dracula, (byte) AdditionalTypes.Dracula.ExpHeroIncrease)[0] / 100D);
+            HeroXp += val * (applyRate ? ServerManager.Instance.Configuration.RateHeroicXP : 1) * (int) (1 + GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] / 100D +  GetBuff(BCardType.Dracula, (byte) BCardSubTypes.Dracula.ExpHeroIncrease)[0] / 100D);
 
             GenerateLevelXpLevelUp();
             Session.SendPacket(GenerateLev());
@@ -5302,7 +5357,7 @@ namespace OpenNos.GameObject
                 }
 
                 int multiplier = SpInstance.SpLevel < 10 ? 10 : SpInstance.SpLevel < 19 ? 5 : 1;
-                SpInstance.XP += (int) ((val * (multiplier + GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] /100D + GetBuff(CardType.Item, (byte) AdditionalTypes.Item.IncreaseSPXP)[0] / 100D)));
+                SpInstance.XP += (int) ((val * (multiplier + GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] /100D + GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.IncreaseSPXP)[0] / 100D)));
                 GenerateSpXpLevelUp(SpInstance);
                 return;
             }
@@ -5312,7 +5367,7 @@ namespace OpenNos.GameObject
                 return;
             }
 
-            JobLevelXp += (int) (val * (1 + GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] / 100D));
+            JobLevelXp += (int) (val * (1 + GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] / 100D));
             GenerateJobXpLevelUp();
             Session.SendPacket(GenerateLev());
         }
@@ -5416,11 +5471,11 @@ namespace OpenNos.GameObject
                 amount *= ServerManager.Instance.Configuration.EventRep;
             }
             long val2 = amount * (amount > 0 && applyRate ? ServerManager.Instance.Configuration.RateReputation : 1);
-            int bonus = GetBuff(CardType.Dracula, (byte) AdditionalTypes.Dracula.ReputationIncrease)[0];
+            int bonus = GetBuff(BCardType.Dracula, (byte) BCardSubTypes.Dracula.ReputationIncrease)[0];
             double Last = val2 * (bonus * 0.01);
 
             int beforeReputIco = GetReputationIco();
-            Reputation += HasBuff(CardType.Dracula, (byte) AdditionalTypes.Dracula.ReputationIncrease) ? (val2 + (long) Last) * 1 : val2;
+            Reputation += HasBuff(BCardType.Dracula, (byte) BCardSubTypes.Dracula.ReputationIncrease) ? (val2 + (long) Last) * 1 : val2;
             Session.SendPacket(GenerateFd());
             if (beforeReputIco != GetReputationIco())
             {
@@ -5675,7 +5730,7 @@ namespace OpenNos.GameObject
         /// <param name="type"></param>
         /// <param name="subtype"></param>
         /// <returns></returns>
-        public int[] GetStuffBuff(CardType type, byte subtype)
+        public int[] GetStuffBuff(BCardType type, byte subtype)
         {
             int[] result = new int[2] {0, 0};
 
@@ -5724,7 +5779,7 @@ namespace OpenNos.GameObject
                 return;
             }
 
-            LevelXp += val * (applyRate ? ServerManager.Instance.Configuration.RateXP : 1) * (int) (1 + GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] / 100D);
+            LevelXp += val * (applyRate ? ServerManager.Instance.Configuration.RateXP : 1) * (int) (1 + GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] / 100D);
             GenerateLevelXpLevelUp();
             Session.SendPacket(GenerateLev());
         }
@@ -5873,7 +5928,7 @@ namespace OpenNos.GameObject
 
                     case QuestType.Wear:
                         if (quest.Quest.QuestObjectives.Any(q => q.SpecialData == firstData &&
-                        (Session.Character.Inventory.Any(i => i.ItemVNum == q.Data && i.Type == InventoryType.Wear) || (quest.QuestId == 1541 || quest.QuestId == 1546) && Class != ClassType.Adventurer)))
+                        (Session.Character.Inventory.Any(i => i.ItemVNum == q.Data && i.Type == InventoryType.Wear) || (quest.QuestId == 1541 || quest.QuestId == 1546) && Class != CharacterClassType.Adventurer)))
                         {
                             IncrementObjective(quest, isOver: true);
                         }
@@ -6370,7 +6425,7 @@ namespace OpenNos.GameObject
                         }
                     }
 
-                    byte fixSpeed = (byte) GetBuff(CardType.Move, (byte) AdditionalTypes.Move.SetMovement)[0];
+                    byte fixSpeed = (byte) GetBuff(BCardType.Move, (byte) BCardSubTypes.Move.SetMovement)[0];
 
                     if (fixSpeed != 0)
                     {
@@ -6378,10 +6433,10 @@ namespace OpenNos.GameObject
                     }
                     else
                     {
-                        Speed += (byte) GetBuff(CardType.Move, (byte) AdditionalTypes.Move.MovementSpeedIncreased)[0];
-                        Speed -= (byte) GetBuff(CardType.Move, (byte) AdditionalTypes.Move.MovementSpeedDecreased)[0];
-                        Speed = (byte) (Speed + ((Speed / 100D) * (GetBuff(CardType.Move, (byte) AdditionalTypes.Move.MoveSpeedIncreased)[0])));
-                        Speed = (byte) (Speed - ((Speed / 100D) * (GetBuff(CardType.Move, (byte) AdditionalTypes.Move.MoveSpeedDecreased)[0])));
+                        Speed += (byte) GetBuff(BCardType.Move, (byte) BCardSubTypes.Move.MovementSpeedIncreased)[0];
+                        Speed -= (byte) GetBuff(BCardType.Move, (byte) BCardSubTypes.Move.MovementSpeedDecreased)[0];
+                        Speed = (byte) (Speed + ((Speed / 100D) * (GetBuff(BCardType.Move, (byte) BCardSubTypes.Move.MoveSpeedIncreased)[0])));
+                        Speed = (byte) (Speed - ((Speed / 100D) * (GetBuff(BCardType.Move, (byte) BCardSubTypes.Move.MoveSpeedDecreased)[0])));
                     }
                 }
 
@@ -6434,7 +6489,7 @@ namespace OpenNos.GameObject
                             }
                         }
 
-                        if (HasBuff(CardType.Move, (byte) AdditionalTypes.Move.TempMaximized))
+                        if (HasBuff(BCardType.Move, (byte) BCardSubTypes.Move.TempMaximized))
                         {
                             Speed += VehicleItem.SpeedBoost;
                         }
@@ -6485,9 +6540,9 @@ namespace OpenNos.GameObject
 
         public void RemoveBuff(short cardId, bool removePermaBuff = false) => BattleEntity.RemoveBuff(cardId, removePermaBuff);
 
-        public void RemoveBuffByBCardTypeSubType(List<KeyValuePair<byte, byte>> bcardTypes)
+        public void RemoveBuffByBBCardTypeSubType(List<KeyValuePair<byte, byte>> bBCardTypes)
         {
-            bcardTypes.ForEach(bt => Buff.Where(b => b.Card.BCards.Any(s => s.Type.Equals((byte) bt.Key) && s.SubType.Equals((byte) (bt.Value)) && (s.CastType == 0 || b.Start.AddMilliseconds(b.Card.Delay * 100 + 1500) < DateTime.Now))).ToList().ForEach(a => RemoveBuff(a.Card.CardId)));
+            bBCardTypes.ForEach(bt => Buff.Where(b => b.Card.BCards.Any(s => s.Type.Equals((byte) bt.Key) && s.SubType.Equals((byte) (bt.Value)) && (s.CastType == 0 || b.Start.AddMilliseconds(b.Card.Delay * 100 + 1500) < DateTime.Now))).ToList().ForEach(a => RemoveBuff(a.Card.CardId)));
         }
 
         public void RemoveQuest(long questId, bool IsGivingUp = false)
@@ -6536,15 +6591,15 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(20, 1, 4, 5);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(34, 1, 4, 5);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(48, 1, 4, 5);
                             break;
                     }
@@ -6555,15 +6610,15 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(156, 1, 4, 5);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(158, 1, 4, 5);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(160, 1, 4, 5);
                             break;
                     }
@@ -6574,15 +6629,15 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(96, 1, 4, 5);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(109, 1, 4, 5);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(122, 1, 4, 5);
                             break;
                     }
@@ -6593,17 +6648,17 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(136, 1, 4, 5);
                             Session.Character.GiftAdd(164, 1, 4, 5);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(143, 1, 4, 5);
                             Session.Character.GiftAdd(169, 1, 4, 5);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(175, 1, 4, 5);
                             Session.Character.GiftAdd(150, 1, 4, 5);
                             break;
@@ -6615,17 +6670,17 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(24, 1, 4, 5);
                             Session.Character.GiftAdd(101, 1, 4, 5);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(113, 1, 4, 5);
                             Session.Character.GiftAdd(38, 1, 4, 5);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(52, 1, 4, 5);
                             Session.Character.GiftAdd(126, 1, 4, 5);
                             break;
@@ -6650,15 +6705,15 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(901, 1);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(903, 1);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(905, 1);
                             break;
                     }
@@ -6669,15 +6724,15 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(902, 1);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(904, 1);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(906, 1);
                             break;
                     }
@@ -6688,15 +6743,15 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(909, 1);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(911, 1);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(913, 1);
                             break;
                     }
@@ -6707,15 +6762,15 @@ namespace OpenNos.GameObject
                 {
                     switch (Session.Character.Class)
                     {
-                        case ClassType.Swordsman:
+                        case CharacterClassType.Swordsman:
                             Session.Character.GiftAdd(910, 1);
                             break;
 
-                        case ClassType.Archer:
+                        case CharacterClassType.Archer:
                             Session.Character.GiftAdd(912, 1);
                             break;
 
-                        case ClassType.Magician:
+                        case CharacterClassType.Magician:
                             Session.Character.GiftAdd(914, 1);
                             break;
                     }
@@ -7227,7 +7282,7 @@ namespace OpenNos.GameObject
                 {
                     try
                     {
-                        foreach (Buff buff in Buff.Where(s => s.StaticBuff).ToArray())
+                        foreach (Buff buff in Buff.Where(s => s.IsStaticBuff).ToArray())
                         {
                             if (buff.Card.CardId == 360 || buff.Card.CardId == 361) //GLOBAL FAMILY BUFFS
                                 continue;
@@ -7402,7 +7457,7 @@ namespace OpenNos.GameObject
 
             if (!Invisible)
             {
-                Buff?.GetAllItems().Where(b => b.Card?.BCards != null && b.Card.BCards.Any(bc => bc.Type == (byte) CardType.SpecialActions && bc.SubType == (byte) AdditionalTypes.SpecialActions.Hide)).ToList().ForEach(b => RemoveBuff(b.Card.CardId));
+                Buff?.GetAllItems().Where(b => b.Card?.BCards != null && b.Card.BCards.Any(bc => bc.Type == (byte) BCardType.SpecialActions && bc.SubType == (byte) BCardSubTypes.SpecialActions.Hide)).ToList().ForEach(b => RemoveBuff(b.Card.CardId));
             }
 
             if (MapInstance != null)
@@ -7665,7 +7720,7 @@ namespace OpenNos.GameObject
                     default:
                         return false;
 
-                    case ClassType.Adventurer:
+                    case CharacterClassType.Adventurer:
                         if (ski.Skill.Type == 1 && Inventory != null)
                         {
                             ItemInstance wearable = Inventory.LoadBySlotAndType((byte) EquipmentType.SecondaryWeapon,InventoryType.Wear);
@@ -7695,7 +7750,7 @@ namespace OpenNos.GameObject
 
                         return true;
 
-                    case ClassType.Swordsman:
+                    case CharacterClassType.Swordsman:
                         if (ski.Skill.Type == 1 && Inventory != null)
                         {
                             ItemInstance inv = Inventory.LoadBySlotAndType((byte) EquipmentType.SecondaryWeapon,InventoryType.Wear);
@@ -7725,7 +7780,7 @@ namespace OpenNos.GameObject
 
                         return true;
 
-                    case ClassType.Archer:
+                    case CharacterClassType.Archer:
                         if (ski.Skill.Type == 1 && Inventory != null)
                         {
                             ItemInstance inv = Inventory.LoadBySlotAndType((byte) EquipmentType.MainWeapon, InventoryType.Wear);
@@ -7755,7 +7810,7 @@ namespace OpenNos.GameObject
 
                         return true;
 
-                    case ClassType.Magician:
+                    case CharacterClassType.Magician:
                         if (ski.Skill.Type == 1 && Inventory != null)
                         {
                             ItemInstance inv = Inventory.LoadBySlotAndType((byte) EquipmentType.SecondaryWeapon,InventoryType.Wear);
@@ -7768,7 +7823,7 @@ namespace OpenNos.GameObject
 
                         return true;
 
-                    case ClassType.MartialArtist:
+                    case CharacterClassType.MartialArtist:
                         return true;
                 }
             }
@@ -7955,7 +8010,7 @@ namespace OpenNos.GameObject
         private void GenerateQuickListSp2Am(ref string[] pktQs)
         {
             var morph = Morph;
-            if (Class == ClassType.MartialArtist && Morph == 30 || Morph == 29)
+            if (Class == CharacterClassType.MartialArtist && Morph == 30 || Morph == 29)
             {
                 morph = 30;
             }
@@ -7979,7 +8034,7 @@ namespace OpenNos.GameObject
         private void GenerateQuickListSp3Am(ref string[] pktQs)
         {
             var morph = Morph;
-            if (Class == ClassType.MartialArtist && Morph == 30 || Morph == 29)
+            if (Class == CharacterClassType.MartialArtist && Morph == 30 || Morph == 29)
             {
                 morph = 30;
             }
@@ -8151,7 +8206,7 @@ namespace OpenNos.GameObject
                     specialist = Inventory.LoadBySlotAndType((byte) EquipmentType.Sp, InventoryType.Wear);
                 }
 
-                int xp = (int) (GetXP(monster, grp) * expDamageRate * (isMonsterOwner ? 1 : 0.8f) * (1 + (GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] / 100D)) * (1 + (GetBuff(CardType.MartialArts, (byte) AdditionalTypes.MartialArts.IncreaseBattleAndJobExperience)[0] /100)));
+                int xp = (int) (GetXP(monster, grp) * expDamageRate * (isMonsterOwner ? 1 : 0.8f) * (1 + (GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] / 100D)) * (1 + (GetBuff(BCardType.MartialArts, (byte) BCardSubTypes.MartialArts.IncreaseBattleAndJobExperience)[0] /100)));
 
                 if (Level < ServerManager.Instance.Configuration.MaxLevel)
                 {
@@ -8173,11 +8228,11 @@ namespace OpenNos.GameObject
                 {
                     if (specialist != null && UseSp && specialist.SpLevel < ServerManager.Instance.Configuration.MaxSPLevel && specialist.SpLevel > 19)
                     {
-                        JobLevelXp += (int) (GetJXP(monster, grp) * expDamageRate * (isMonsterOwner ? 1 : 0.8f) / 2D * (1 + (GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] /100D)) * (1 + (GetBuff(CardType.MartialArts, (byte) AdditionalTypes.MartialArts.IncreaseBattleAndJobExperience)[0] / 100)));
+                        JobLevelXp += (int) (GetJXP(monster, grp) * expDamageRate * (isMonsterOwner ? 1 : 0.8f) / 2D * (1 + (GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] /100D)) * (1 + (GetBuff(BCardType.MartialArts, (byte) BCardSubTypes.MartialArts.IncreaseBattleAndJobExperience)[0] / 100)));
                     }
                     else
                     {
-                        JobLevelXp += (int) (GetJXP(monster, grp) * expDamageRate * (isMonsterOwner ? 1 : 0.8f) * (1 + (GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] /100D)) * (1 + (GetBuff(CardType.MartialArts, (byte) AdditionalTypes.MartialArts.IncreaseBattleAndJobExperience)[0] / 100)));
+                        JobLevelXp += (int) (GetJXP(monster, grp) * expDamageRate * (isMonsterOwner ? 1 : 0.8f) * (1 + (GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] /100D)) * (1 + (GetBuff(BCardType.MartialArts, (byte) BCardSubTypes.MartialArts.IncreaseBattleAndJobExperience)[0] / 100)));
                     }
                 }
 
@@ -8185,12 +8240,12 @@ namespace OpenNos.GameObject
                 {
                     int multiplier = specialist.SpLevel < 10 ? 10 : specialist.SpLevel < 19 ? 5 : 1;
 
-                    specialist.XP += (int) (GetJXP(monster, grp) * expDamageRate * (multiplier + (GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] /100D + (GetBuff(CardType.Item, (byte) AdditionalTypes.Item.IncreaseSPXP)[0] /100D))));
+                    specialist.XP += (int) (GetJXP(monster, grp) * expDamageRate * (multiplier + (GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] /100D + (GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.IncreaseSPXP)[0] /100D))));
                 }
 
                 if (HeroLevel > 0 && HeroLevel < ServerManager.Instance.Configuration.MaxHeroLevel)
                 {
-                    HeroXp += (int) ((GetHXP(monster, grp) * expDamageRate / 50) * (isMonsterOwner ? 1 : 0.8f) * (1 + (GetBuff(CardType.Item, (byte) AdditionalTypes.Item.EXPIncreased)[0] / 100D) + (GetBuff(CardType.Dracula, (byte) AdditionalTypes.Dracula.ExpHeroIncrease)[0] /100D)));
+                    HeroXp += (int) ((GetHXP(monster, grp) * expDamageRate / 50) * (isMonsterOwner ? 1 : 0.8f) * (1 + (GetBuff(BCardType.Item, (byte) BCardSubTypes.Item.EXPIncreased)[0] / 100D) + (GetBuff(BCardType.Dracula, (byte) BCardSubTypes.Dracula.ExpHeroIncrease)[0] /100D)));
                 }
 
                 ItemInstance fairy = Inventory?.LoadBySlotAndType((byte) EquipmentType.Fairy, InventoryType.Wear);
@@ -8198,7 +8253,7 @@ namespace OpenNos.GameObject
                 if (fairy != null)
                 {
                     double experience = CharacterHelper.LoadFairyXPData(fairy.ElementRate + fairy.Item.ElementRate);
-                    var fairyXpBoost = GetBuff(CardType.FairyXPIncrease,(byte) AdditionalTypes.FairyXPIncrease.IncreaseFairyXPPoints)[0];
+                    var fairyXpBoost = GetBuff(BCardType.FairyXPIncrease,(byte) BCardSubTypes.FairyXPIncrease.IncreaseFairyXPPoints)[0];
 
                     if (fairy.ElementRate + fairy.Item.ElementRate < fairy.Item.MaxElementRate && Level <= monsterInfo.Level + 15 && Level >= monsterInfo.Level - 15)
                     {
@@ -8379,7 +8434,7 @@ namespace OpenNos.GameObject
         private int HealthHPLoad()
         {
             int naturalRecovery = 1;
-            int regen = GetBuff(CardType.Recovery, (byte) AdditionalTypes.Recovery.HPRecoveryIncreased)[0] + CellonOptions.Where(s => s.Type == CellonOptionType.HPRestore).Sum(s => s.Value);
+            int regen = GetBuff(BCardType.Recovery, (byte) BCardSubTypes.Recovery.HPRecoveryIncreased)[0] + CellonOptions.Where(s => s.Type == CellonOptionType.HPRestore).Sum(s => s.Value);
             if (Skills != null)
             {
                 naturalRecovery += Skills.Where(s => s.Skill.SkillType == 0 && s.Skill.CastId == 10).Sum(s => s.Skill.UpgradeSkill);
@@ -8397,7 +8452,7 @@ namespace OpenNos.GameObject
         private int HealthMPLoad()
         {
             int naturalRecovery = 1;
-            int regen = GetBuff(CardType.Recovery, (byte) AdditionalTypes.Recovery.MPRecoveryIncreased)[0] + CellonOptions.Where(s => s.Type == CellonOptionType.MPRestore).Sum(s => s.Value);
+            int regen = GetBuff(BCardType.Recovery, (byte) BCardSubTypes.Recovery.MPRecoveryIncreased)[0] + CellonOptions.Where(s => s.Type == CellonOptionType.MPRestore).Sum(s => s.Value);
             if (Skills != null)
             {
                 naturalRecovery += Skills.Where(s => s.Skill.SkillType == 0 && s.Skill.CastId == 10).Sum(s => s.Skill.UpgradeSkill);
@@ -8450,7 +8505,7 @@ namespace OpenNos.GameObject
             RemoveQuest(quest.QuestId);
         }
 
-        private double JobXPLoad() => Class == (byte) ClassType.Adventurer ? CharacterHelper.FirstJobXPData[JobLevel - 1] : CharacterHelper.SecondJobXPData[JobLevel - 1];
+        private double JobXPLoad() => Class == (byte) CharacterClassType.Adventurer ? CharacterHelper.FirstJobXPData[JobLevel - 1] : CharacterHelper.SecondJobXPData[JobLevel - 1];
 
         private double SpXpLoad()
         {
@@ -8510,12 +8565,12 @@ namespace OpenNos.GameObject
 
             // Now, I'll purge runes so I can get the highest one from both weapons
             // I'm retreiving only 105 and 106 cards, I have to look for other values by researching info --> Delynith
-            runes = PurgeBCardList(runes, CardType.A7Powers1, CardType.A7Powers2);
+            runes = PurgeBCardList(runes, BCardType.A7Powers1, BCardType.A7Powers2);
 
             return runes;
         }
 
-        public List<BCard> PurgeBCardList(List<BCard> list, params CardType[] cards)
+        public List<BCard> PurgeBCardList(List<BCard> list, params BCardType[] cards)
         {
             var listReturn = new List<BCard>();
             if (!list.Any()) return listReturn;
@@ -8523,7 +8578,7 @@ namespace OpenNos.GameObject
             foreach (var card in cards.ToList())
             {
                 // I'll get the runes from the list that matches each card I sent as parameter
-                var valueToAdd = list.Where(x => cards.Contains((CardType) x.Type) && x.Type == (byte) card).ToList();
+                var valueToAdd = list.Where(x => cards.Contains((BCardType) x.Type) && x.Type == (byte) card).ToList();
                 if (valueToAdd == null || !valueToAdd.Any()) continue;
 
                 // I'll group the runes by SubType and get max value from each Data variable

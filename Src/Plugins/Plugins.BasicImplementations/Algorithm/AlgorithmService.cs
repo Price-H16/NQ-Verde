@@ -1,5 +1,4 @@
 ﻿using ChickenAPI.Enums.Game.Character;
-using OpenNos.Domain;
 using OpenNos.GameObject._Algorithm;
 using Plugins.BasicImplementations.Algorithm.CharacterAlgorithms;
 using Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Close;

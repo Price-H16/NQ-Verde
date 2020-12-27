@@ -29,6 +29,7 @@ namespace OpenNos.GameObject
 
         public bool IsStaticBuff { get; }
         public bool IsPermaBuff { get; }
+        public bool StaticBuff { get; set; }
 
         public DateTime Start { get; set; }
 

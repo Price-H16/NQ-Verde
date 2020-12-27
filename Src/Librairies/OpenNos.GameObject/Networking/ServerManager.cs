@@ -403,23 +403,23 @@ namespace OpenNos.GameObject.Networking
             Instance.Broadcast(UserInterfaceHelper.GenerateMsg(message, 2));
         }
 
-        private void Act4Process()
+        public void Act4Process()
         {
             if (ChannelId != 51)
             {
                 return;
             }
 
-            MapInstance angelMapInstance = GetMapInstance(GetBaseMapInstanceIdByMapId(132));
-            MapInstance demonMapInstance = GetMapInstance(GetBaseMapInstanceIdByMapId(133));
+            var angelMapInstance = GetMapInstance(GetBaseMapInstanceIdByMapId(132));
+            var demonMapInstance = GetMapInstance(GetBaseMapInstanceIdByMapId(133));
 
             void SummonMukraju(MapInstance instance, byte faction)
             {
-                MapMonster monster = new MapMonster
+                var monster = new MapMonster
                 {
                     MonsterVNum = 556,
-                    MapY = (faction == 1 ? (short)92 : (short)95),
-                    MapX = (faction == 1 ? (short)114 : (short)20),
+                    MapY = faction == 1 ? (short)92 : (short)95,
+                    MapX = faction == 1 ? (short)114 : (short)20,
                     MapId = (short)(131 + faction),
                     IsMoving = true,
                     MapMonsterId = instance.GetNextMonsterId(),
@@ -430,28 +430,33 @@ namespace OpenNos.GameObject.Networking
                 instance.AddMonster(monster);
                 instance.Broadcast(monster.GenerateIn());
 
-                Observable.Timer(TimeSpan.FromSeconds(faction == 1 ? Act4AngelStat.TotalTime : Act4DemonStat.TotalTime)).Subscribe(s =>
-                {
-                    if (instance.Monsters.ToList().Any(m => m.MonsterVNum == monster.MonsterVNum))
+                Observable.Timer(TimeSpan.FromSeconds(faction == 1 ? Act4AngelStat.TotalTime : Act4DemonStat.TotalTime))
+                    .Subscribe(s =>
                     {
-                        if (faction == 1)
+                        if (instance.Monsters.ToList().Any(m => m.MonsterVNum == monster.MonsterVNum))
                         {
-                            Act4AngelStat.Mode = 0;
+                            if (faction == 1)
+                            {
+                                Act4AngelStat.Mode = 0;
+                            }
+                            else
+                            {
+                                Act4DemonStat.Mode = 0;
+                            }
+
+                            instance.DespawnMonster(monster.MonsterVNum);
+                            foreach (var sess in Sessions)
+                            {
+                                sess.SendPacket(sess.Character.GenerateFc());
+                            }
                         }
-                        else
-                        {
-                            Act4DemonStat.Mode = 0;
-                        }
-                        instance.DespawnMonster(monster.MonsterVNum);
-                        Parallel.ForEach(Sessions, sess => sess.SendPacket(sess.Character.GenerateFc()));
-                    }
-                });
+                    });
             }
 
             int CreateRaid(byte faction)
             {
-                MapInstanceType raidType = MapInstanceType.Act4Morcos;
-                int rng = RandomNumber(1, 5);
+                var raidType = MapInstanceType.Act4Morcos;
+                var rng = RandomNumber(1, 5);
                 switch (rng)
                 {
                     case 2:
@@ -466,7 +471,8 @@ namespace OpenNos.GameObject.Networking
                         raidType = MapInstanceType.Act4Berios;
                         break;
                 }
-                Event.Act4Raid.GenerateRaid(raidType, faction);
+
+                Act4Raid.GenerateRaid(raidType, faction);
                 return rng;
             }
 
@@ -476,7 +482,10 @@ namespace OpenNos.GameObject.Networking
                 Act4AngelStat.Percentage = 0;
                 Act4AngelStat.TotalTime = 300;
                 SummonMukraju(angelMapInstance, 1);
-                Parallel.ForEach(Sessions, sess => sess.SendPacket(sess.Character.GenerateFc()));
+                foreach (var sess in Sessions)
+                {
+                    sess.SendPacket(sess.Character.GenerateFc());
+                }
             }
 
             if (Act4AngelStat.Mode == 1 && !angelMapInstance.Monsters.Any(s => s.MonsterVNum == 556))
@@ -503,7 +512,10 @@ namespace OpenNos.GameObject.Networking
                         break;
                 }
 
-                Parallel.ForEach(Sessions, sess => sess.SendPacket(sess.Character.GenerateFc()));
+                foreach (var sess in Sessions)
+                {
+                    sess.SendPacket(sess.Character.GenerateFc());
+                }
             }
 
             if (Act4DemonStat.Percentage >= 10000)
@@ -512,7 +524,10 @@ namespace OpenNos.GameObject.Networking
                 Act4DemonStat.Percentage = 0;
                 Act4DemonStat.TotalTime = 300;
                 SummonMukraju(demonMapInstance, 2);
-                Parallel.ForEach(Sessions, sess => sess.SendPacket(sess.Character.GenerateFc()));
+                foreach (var sess in Sessions)
+                {
+                    sess.SendPacket(sess.Character.GenerateFc());
+                }
             }
 
             if (Act4DemonStat.Mode == 1 && !demonMapInstance.Monsters.Any(s => s.MonsterVNum == 556))
@@ -539,12 +554,19 @@ namespace OpenNos.GameObject.Networking
                         break;
                 }
 
-                Parallel.ForEach(Sessions, sess => sess.SendPacket(sess.Character.GenerateFc()));
+                foreach (var sess in Sessions)
+                {
+                    sess.SendPacket(sess.Character.GenerateFc());
+                }
             }
 
             if (DateTime.Now >= LastFCSent.AddMinutes(1))
             {
-                Parallel.ForEach(Sessions, sess => sess.SendPacket(sess.Character.GenerateFc()));
+                foreach (var sess in Sessions)
+                {
+                    sess.SendPacket(sess.Character.GenerateFc());
+                }
+
                 LastFCSent = DateTime.Now;
             }
         }

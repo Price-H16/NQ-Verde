@@ -2537,7 +2537,7 @@ namespace NosTale.Extension.Extension.Packet
                             $" {characterSkill.Skill.Effect} 0 0 1 1 0 0 0");
 
                         if (characterSkill.Skill.BCards.ToList().Any(s => 
-                        s.Type == (byte)CardType.FairyXPIncrease && s.SubType == ((byte)AdditionalTypes.FairyXPIncrease.TeleportToLocation / 10)))
+                        s.Type == (byte)BCardType.FairyXPIncrease && s.SubType == ((byte)BCardSubTypes.FairyXPIncrease.TeleportToLocation / 10)))
                         {
                             characterSkill.Skill.BCards.ToList().ForEach(s => s.ApplyBCards(Session.Character.BattleEntity, Session.Character.BattleEntity));
                             Session.Character.MapInstance.Broadcast($"tp 1 {Session.Character.CharacterId} {x} {y}");
