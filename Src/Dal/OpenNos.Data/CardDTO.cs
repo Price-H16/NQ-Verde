@@ -1,5 +1,5 @@
 ﻿using System;
-using OpenNos.Domain;
+using ChickenAPI.Enums.Game.Buffs;
 
 namespace OpenNos.Data
 {

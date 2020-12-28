@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;
@@ -76,7 +77,7 @@ namespace OpenNos.GameObject.Helpers
 
         public void DailyReward(ClientSession session)
         {
-            var isMartial = session.Character.Class.Equals(ClassType.MartialArtist);
+            var isMartial = session.Character.Class.Equals(CharacterClassType.MartialArtist);
             var count = DAOFactory.GeneralLogDAO.LoadByAccount(session.Account.AccountId).Count(s => s.LogData == (isMartial ? "DAILY_REWARD" : "DAILY_REWARD") && s.Timestamp.Day >= DateTime.Now.Day);
 
             if (count != 0)

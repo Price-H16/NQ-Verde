@@ -1,4 +1,5 @@
-﻿using OpenNos.Domain;
+﻿using ChickenAPI.Enums.Game.Character;
+using OpenNos.Domain;
 
 namespace OpenNos.GameObject._Algorithm
 {
@@ -8,33 +9,33 @@ namespace OpenNos.GameObject._Algorithm
 
         /// <summary>
         ///     This method will search through algorithm service and return the LevelXp stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        long GetLevelXp(ClassType type, byte level);
+        long GetLevelXp(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the JobLevelXp stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetJobLevelXp(ClassType type, byte level);
+        int GetJobLevelXp(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the HeroLevelXp stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetHeroLevelXp(ClassType type, byte level);
+        int GetHeroLevelXp(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the SpLevelXp stat based on <see cref="SpType" /> and
@@ -68,33 +69,33 @@ namespace OpenNos.GameObject._Algorithm
 
         /// <summary>
         ///     This method will search through algorithm service and return the Speed stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetSpeed(ClassType type, byte level);
+        int GetSpeed(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the Close Defence stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetDefenceClose(ClassType type, byte level);
+        int GetDefenceClose(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the Ranged Defence stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetDefenceRange(ClassType type, byte level);
+        int GetDefenceRange(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the Magic Defence stat
@@ -103,64 +104,64 @@ namespace OpenNos.GameObject._Algorithm
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetDefenceMagic(ClassType type, byte level);
+        int GetDefenceMagic(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the Dodge close stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetDodgeClose(ClassType type, byte level);
+        int GetDodgeClose(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the Dodge Ranged stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetDodgeRanged(ClassType type, byte level);
+        int GetDodgeRanged(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the Dodge Magic stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         ///     /!\/!\ Even if the base game logic tells magic attack does not miss, you can customise this :)
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetDodgeMagic(ClassType type, byte level);
+        int GetDodgeMagic(CharacterClassType type, byte level);
 
         /// <summary>
         ///     This method will search through algorithm service and return the minimum attack range stat based on
-        ///     <see cref="ClassType" /> and level
+        ///     <see cref="CharacterClassType" /> and level
         ///     /!\ Should return the highest value under level if level is out of range
         /// </summary>
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetMinimumAttackRange(ClassType type, byte level);
+        int GetMinimumAttackRange(CharacterClassType type, byte level);
 
-        int GetDistCritical(ClassType type, byte level);
+        int GetDistCritical(CharacterClassType type, byte level);
 
-        int GetHitCritical(ClassType type, byte level);
+        int GetHitCritical(CharacterClassType type, byte level);
 
-        int GetHitCriticalRate(ClassType type, byte level);
+        int GetHitCriticalRate(CharacterClassType type, byte level);
 
-        int GetHitRate(ClassType type, byte level);
+        int GetHitRate(CharacterClassType type, byte level);
 
-        int GetDistCriticalRate(ClassType type, byte level);
+        int GetDistCriticalRate(CharacterClassType type, byte level);
 
-        int GetMaxDistance(ClassType type, byte level);
+        int GetMaxDistance(CharacterClassType type, byte level);
 
-        int GetMaxHit(ClassType type, byte level);
+        int GetMaxHit(CharacterClassType type, byte level);
 
-        int GetMinHit(ClassType type, byte level);
+        int GetMinHit(CharacterClassType type, byte level);
 
         #endregion Stats
 
@@ -173,7 +174,7 @@ namespace OpenNos.GameObject._Algorithm
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetHpMax(ClassType type, byte level);
+        int GetHpMax(CharacterClassType type, byte level);
 
         /// <summary>
         ///     Returns the maximum of Hp of a character, based on class and level
@@ -182,7 +183,7 @@ namespace OpenNos.GameObject._Algorithm
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetMpMax(ClassType type, byte level);
+        int GetMpMax(CharacterClassType type, byte level);
 
         #region HpMpRegen
 
@@ -193,7 +194,7 @@ namespace OpenNos.GameObject._Algorithm
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetHpRegen(ClassType type, byte level);
+        int GetHpRegen(CharacterClassType type, byte level);
 
         /// <summary>
         ///     Returns the HpRegen when player is sitting, based on class and level
@@ -202,7 +203,7 @@ namespace OpenNos.GameObject._Algorithm
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetHpRegenSitting(ClassType type, byte level);
+        int GetHpRegenSitting(CharacterClassType type, byte level);
 
         /// <summary>
         ///     Returns the MpRegen when player is standing, based on class and level
@@ -211,7 +212,7 @@ namespace OpenNos.GameObject._Algorithm
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetMpRegen(ClassType type, byte level);
+        int GetMpRegen(CharacterClassType type, byte level);
 
         /// <summary>
         ///     Returns the HpRegen when player is sitting, based on class and level
@@ -220,7 +221,7 @@ namespace OpenNos.GameObject._Algorithm
         /// <param name="type"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        int GetMpRegenSitting(ClassType type, byte level);
+        int GetMpRegenSitting(CharacterClassType type, byte level);
 
         #endregion HpMpRegen
 

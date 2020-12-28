@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using ChickenAPI.Enums.Game.Buffs;
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -632,19 +634,11 @@ namespace OpenNos.GameObject.Event.ARENA
 
         private static void BuffTeam(List<ArenaTeamMember> team)
         {
-<<<<<<< HEAD
             //Buff y debuff de arena quitados, ya que no me parece justo
             if (team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Archer) <= 1 ||
                 team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Magician) <= 1 ||
                 team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Swordsman) <= 1 ||
                 team.Count(ch => ch.Session?.Character.Class == CharacterClassType.MartialArtist) <= 1)
-=======
-            if (team.Any(ch => ch.Session?.Character.Class == ClassType.Archer) &&
-                team.Any(ch => ch.Session?.Character.Class == ClassType.Magician) &&
-                team.Any(ch => ch.Session?.Character.Class == ClassType.Swordsman) &&
-                team.Any(ch => ch.Session?.Character.Class == ClassType.MartialArtist))
-                //buff team
->>>>>>> parent of d7ef289... Bcard Cleaning
             {
                 //buff team
                 team.ForEach(sess =>
@@ -663,18 +657,10 @@ namespace OpenNos.GameObject.Event.ARENA
                 });
             }
 
-<<<<<<< HEAD
             if (team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Archer) == 3 ||
                 team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Magician) == 3 ||
                 team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Swordsman) == 3 ||
                 team.Count(ch => ch.Session?.Character.Class == CharacterClassType.MartialArtist) == 3)
-=======
-            if (team.Count(ch => ch.Session?.Character.Class == ClassType.Archer) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == ClassType.Magician) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == ClassType.Swordsman) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == ClassType.MartialArtist) == 3)
-                //debuff team
->>>>>>> parent of d7ef289... Bcard Cleaning
             {
                 //debuff team
                 team.ForEach(sess =>

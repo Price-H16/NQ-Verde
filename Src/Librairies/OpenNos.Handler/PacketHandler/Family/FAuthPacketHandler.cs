@@ -31,9 +31,10 @@ namespace OpenNos.Handler.PacketHandler.Family
 
         public void ChangeAuthority(FAuthPacket fAuthPacket)
         {
-            if (Session.Character.Family == null ||
-                Session.Character.FamilyCharacter.Authority != FamilyAuthority.Head &&
-                Session.Character.FamilyCharacter.Authority != FamilyAuthority.Familydeputy) return;
+            if (Session.Character.Family == null || (Session.Character.FamilyCharacter.Authority != FamilyAuthority.Head && Session.Character.FamilyCharacter.Authority != FamilyAuthority.Familydeputy))
+            {
+                return;
+            }
 
             Session.Character.Family.InsertFamilyLog(FamilyLogType.RightChanged, Session.Character.Name,
                 authority: fAuthPacket.MemberType, righttype: fAuthPacket.AuthorityId + 1,
@@ -60,7 +61,7 @@ namespace OpenNos.Handler.PacketHandler.Family
                             break;
 
                         case 4:
-                            Session.Character.Family.ManagerAuthorityType = (FamilyAuthorityType) fAuthPacket.Value;
+                            Session.Character.Family.ManagerAuthorityType = (FamilyAuthorityType)fAuthPacket.Value;
                             break;
                     }
 
@@ -74,7 +75,7 @@ namespace OpenNos.Handler.PacketHandler.Family
                             break;
 
                         case 1:
-                            Session.Character.Family.MemberAuthorityType = (FamilyAuthorityType) fAuthPacket.Value;
+                            Session.Character.Family.MemberAuthorityType = (FamilyAuthorityType)fAuthPacket.Value;
                             break;
                     }
 

@@ -1,4 +1,4 @@
-﻿using OpenNos.Domain;
+﻿using ChickenAPI.Enums.Game.Character;
 
 namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms
 {
@@ -6,6 +6,6 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms
     {
         void Initialize();
 
-        int GetStat(ClassType type, byte level);
+        int GetStat(CharacterClassType type, byte level);
     }
 }

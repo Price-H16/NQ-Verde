@@ -27,6 +27,7 @@
         YERTIRANDBOSS,
         GRASSLINBOSS,
         TOURNAMENT,
-        METEORITEGAME
+        METEORITEGAME,
+        SHOPSHIP
     }
 }

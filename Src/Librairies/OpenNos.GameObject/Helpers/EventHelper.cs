@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using ChickenAPI.Enums.Game.BCard;
 using ChickenAPI.Plugins;
 using ChickenAPI.Plugins.Exceptions;
 using NosTale.Configuration;
@@ -805,8 +806,8 @@ namespace OpenNos.GameObject.Helpers
                                         {
                                             evt.MapInstance.Sessions.Where(s =>
                                                        s.Character != null &&
-                                                       s.Character.HasBuff(BCardType.CardType.FrozenDebuff,
-                                                               (byte)AdditionalTypes.FrozenDebuff.EternalIce))
+                                                       s.Character.HasBuff(BCardType.FrozenDebuff,
+                                                               (byte)BCardSubTypes.FrozenDebuff.EternalIce))
                                                .Select(s => s.Character).ToList().ForEach(c => { c.RemoveBuff(569); });
 
                                             var groupMembers = new ClientSession[@group.SessionCount];

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
+using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.GameObject.Networking;
 
 namespace OpenNos.GameObject.Event.GAMES
@@ -17,20 +18,6 @@ namespace OpenNos.GameObject.Event.GAMES
 
         public static void GenerateSheepGames()
         {
-
-            /*
-            Thread.Sleep(5 * 1000);
-            ServerManager.Instance.Broadcast(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("SHEEP_STARTED"), 1));
-            ServerManager.Instance.Broadcast("qnaml 4 #guri^514 ¿Quieres participar en el raid de las ovejas?");
-            ServerManager.Instance.EventInWaiting = true;
-            Thread.Sleep(30 * 1000);
-            ServerManager.Instance.Sessions.Where(s => s.Character?.IsWaitingForEvent == false).ToList().ForEach(s => s.SendPacket("esf 1"));
-            ServerManager.Instance.EventInWaiting = false;
-
-            IEnumerable<ClientSession> sessions = ServerManager.Instance.Sessions.Where(s => s.Character?.IsWaitingForEvent == true && s.Character.MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance);
-            List<Tuple<MapInstance, byte>> maps = new List<Tuple<MapInstance, byte>>();
-            MapInstance map = ServerManager.GenerateMapInstance(2009, MapInstanceType.EventSheepInstance, new InstanceBag());
-            */
             ServerManager.Instance.Broadcast(UserInterfaceHelper.GenerateMsg(string.Format(Language.Instance.GetMessageFromKey("SHEEP_STARTED"), 10), 0));
             ServerManager.Instance.Broadcast(UserInterfaceHelper.GenerateMsg(string.Format(Language.Instance.GetMessageFromKey("SHEEP_STARTED"), 10), 1));
             Thread.Sleep(10 * 1000);

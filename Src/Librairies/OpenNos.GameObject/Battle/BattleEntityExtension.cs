@@ -1,4 +1,5 @@
 ﻿using System;
+using ChickenAPI.Enums.Game.BCard;
 using OpenNos.Domain;
 using OpenNos.GameObject.Helpers;
 
@@ -12,10 +13,10 @@ namespace OpenNos.GameObject.Battle
             int reflectedDamage;
 
             data = isPrimary
-                ? target.GetBuff(BCardType.CardType.TauntSkill,
-                    (byte) AdditionalTypes.TauntSkill.ReflectMaximumDamageFrom)[0]
-                : target.GetBuff(BCardType.CardType.TauntSkill,
-                    (byte) AdditionalTypes.TauntSkill.ReflectsMaximumDamageFromNegated, addValue: 1)[0];
+                ? target.GetBuff(BCardType.TauntSkill,
+                    (byte) BCardSubTypes.TauntSkill.ReflectMaximumDamageFrom)[0]
+                : target.GetBuff(BCardType.TauntSkill,
+                    (byte) BCardSubTypes.TauntSkill.ReflectsMaximumDamageFromNegated, addValue: 1)[0];
 
             if (data < 0) return 0;
 

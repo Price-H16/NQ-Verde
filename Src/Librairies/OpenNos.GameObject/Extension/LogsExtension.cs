@@ -3,6 +3,7 @@ using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject.Networking;
 using System;
+using ChickenAPI.Enums;
 
 namespace OpenNos.GameObject.Extension
 {

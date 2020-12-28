@@ -23,17 +23,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using ChickenAPI.Enums;
+using ChickenAPI.Enums.Game.BCard;
+using ChickenAPI.Enums.Game.Buffs;
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.GameObject._Event;
 using OpenNos.GameObject.RainbowBattle;
 using OpenNos.GameObject.Extensions;
-<<<<<<< HEAD
 using CharacterOption = OpenNos.Domain.CharacterOption;
 using FactionType = OpenNos.Domain.FactionType;
 using GenderType = OpenNos.Domain.GenderType;
 using HairStyleType = OpenNos.Domain.HairStyleType;
 using System.Threading.Tasks;
-=======
->>>>>>> parent of d7ef289... Bcard Cleaning
 
 namespace OpenNos.GameObject
 {
@@ -153,6 +154,7 @@ namespace OpenNos.GameObject
             LastFactionChange = input.LastFactionChange;
             BattleTowerExp = input.BattleTowerExp;
             BattleTowerStage = input.BattleTowerStage;
+            ItemShopShip = input.ItemShopShip;
 
         }
 
@@ -1517,7 +1519,7 @@ namespace OpenNos.GameObject
             Session.Disconnect();
         }
 
-        public void ChangeClass(ClassType characterClass, bool fromCommand)
+        public void ChangeClass(CharacterClassType characterClass, bool fromCommand)
         {
             if (!fromCommand)
             {
@@ -1528,7 +1530,7 @@ namespace OpenNos.GameObject
             Session.SendPacket("npinfo 0");
             Session.SendPacket(UserInterfaceHelper.GeneratePClear());
 
-            if (characterClass == (byte) ClassType.Adventurer)
+            if (characterClass == (byte) CharacterClassType.Adventurer)
             {
                 HairStyle = (byte) HairStyle > 1 ? 0 : HairStyle;
                 if (JobLevel > 20)
@@ -3473,7 +3475,6 @@ namespace OpenNos.GameObject
             {
                 int amount = drop.Amount;
                 if (ServerManager.Instance.Configuration.EventGold > 1)
-<<<<<<< HEAD
                 {
                     amount *= ServerManager.Instance.Configuration.EventGold;
                 }
@@ -3487,66 +3488,30 @@ namespace OpenNos.GameObject
                             multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
 
                             Gold += (int)(drop.Amount * multiplier);
-=======
-                {
-                    amount *= ServerManager.Instance.Configuration.EventGold;
-                }
-                Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
-                {
-                    if (Session.HasCurrentMapInstance)
-                    {
-                        if (CharacterId == dropOwner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
-                        {
-                            double multiplier = 1 + (Session.Character.GetBuff(CardType.Item,(byte) AdditionalTypes.Item.IncreaseEarnedGold)[0] / 100D);
-                            multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte) ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
-
-                            Gold += (int) (drop.Amount * multiplier);
->>>>>>> parent of d7ef289... Bcard Cleaning
 
                             if (Gold > maxGold)
                             {
                                 Gold = maxGold;
-<<<<<<< HEAD
                                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
                             }
 
                             Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount}{(multiplier > 1 ? $" + {(int)(drop.Amount * multiplier) - drop.Amount}" : "")}", 12));
-=======
-                                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"),0));
-                            }
-
-                            Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount}{(multiplier > 1 ? $" + {(int) (drop.Amount * multiplier) - drop.Amount}" : "")}",12));
->>>>>>> parent of d7ef289... Bcard Cleaning
                             Session.SendPacket(GenerateGold());
                         }
                         else
                         {
-<<<<<<< HEAD
                             double multiplier = 1 + (Session.Character.GetBuff(BCardType.Item, (byte)BCardSubTypes.Item.IncreaseEarnedGold)[0] / 100D);
                             multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
 
                             Gold += (int)(drop.Amount * multiplier);
-=======
-                            double multiplier = 1 + (Session.Character.GetBuff(CardType.Item,(byte) AdditionalTypes.Item.IncreaseEarnedGold)[0] / 100D);
-                            multiplier +=(Session.Character.ShellEffectMain.FirstOrDefault(s =>s.Effect == (byte) ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
-
-                            Gold += (int) (drop.Amount * multiplier);
->>>>>>> parent of d7ef289... Bcard Cleaning
 
                             if (Gold > maxGold)
                             {
                                 Gold = maxGold;
-<<<<<<< HEAD
                                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"), 0));
                             }
 
                             Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount}{(multiplier > 1 ? $" + {(int)(drop.Amount * multiplier) - drop.Amount}" : "")}", 12));
-=======
-                                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("MAX_GOLD"),0));
-                            }
-
-                            Session.SendPacket(GenerateSay($"{Language.Instance.GetMessageFromKey("ITEM_ACQUIRED")}: {ServerManager.GetItem(drop.ItemVNum).Name} x {drop.Amount}{(multiplier > 1 ? $" + {(int) (drop.Amount * multiplier) - drop.Amount}" : "")}",12));
->>>>>>> parent of d7ef289... Bcard Cleaning
                             Session.SendPacket(GenerateGold());
                         }
                     }
@@ -3556,12 +3521,7 @@ namespace OpenNos.GameObject
 
             void _handleItemDrop(DropDTO drop, long? owner, short posX, short posY)
             {
-<<<<<<< HEAD
                 Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
-=======
-                int amount = drop.Amount;
-                if (ServerManager.Instance.Configuration.LockSystem)
->>>>>>> parent of d7ef289... Bcard Cleaning
                 {
                     if (Session.HasCurrentMapInstance)
                     {
@@ -3577,43 +3537,9 @@ namespace OpenNos.GameObject
 
                             }
                         }
-<<<<<<< HEAD
                         else
                         {
                             Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q => (q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
-=======
-                    });
-                }
-                if (ServerManager.Instance.Configuration.EventDrop > 1)
-                {
-                    amount *= ServerManager.Instance.Configuration.EventDrop;
-                }
-                else
-                {
-                    Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
-                    {
-                        if (CharacterId == owner &&
-                            StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
-                        {
-                            GiftAdd(drop.ItemVNum, (byte) drop.Amount);
-                        }
-
-                        //int[] items = { 1012, 2098, 2102, 2010, 2117, 2118, 2114, 2099, 2116, 2046, 2042, 2038, 2035 };
-                        //if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance || Session.Character.MapInstance.MapInstanceType == MapInstanceType.Act4Instance && items.Contains(drop.ItemVNum))
-                        //{
-                        //    GiftAdd(drop.ItemVNum, (byte)drop.Amount);
-                        //}
-
-                        //int[] items2 = { 1013, 2900, 1031, 1032, 1033, 1034, 2118, 1029 };
-                        //if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance && items.Contains(drop.ItemVNum))
-                        //{
-                        //    Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q => (q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
-                        //}
-
-                        else
-                        {
-                            Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q =>(q.Quest.QuestType == (int) QuestType.Collect4 || q.Quest.QuestType == (int) QuestType.Collect2 || (q.Quest?.QuestType == (int) QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short) MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
->>>>>>> parent of d7ef289... Bcard Cleaning
                         }
                     }
                 });
@@ -3634,20 +3560,12 @@ namespace OpenNos.GameObject
                     if (Killer.Mate != null && Killer.Mate.Owner != null && Killer.Mate.Owner is Character charaMate) charaMate.MobKillCounter++;
                 }
 
-<<<<<<< HEAD
                 if (monsterToAttack.GetBuff(BCardType.SpecialEffects, (byte)BCardSubTypes.SpecialEffects.DecreaseKillerHP) is int[] DecreaseKillerHp)
-=======
-                if (monsterToAttack.GetBuff(CardType.SpecialEffects, (byte) AdditionalTypes.SpecialEffects.DecreaseKillerHP) is int[] DecreaseKillerHp)
->>>>>>> parent of d7ef289... Bcard Cleaning
                 {
                     bool EffectResistance = false;
                     if (Killer.MapEntityId != CharacterId)
                     {
-<<<<<<< HEAD
                         if (Killer.HasBuff(BCardType.Buff, (byte)BCardSubTypes.Buff.EffectResistance))
-=======
-                        if (Killer.HasBuff(CardType.Buff, (byte) AdditionalTypes.Buff.EffectResistance))
->>>>>>> parent of d7ef289... Bcard Cleaning
                         {
                             if (ServerManager.RandomNumber() < 90)
                             {
@@ -3678,22 +3596,14 @@ namespace OpenNos.GameObject
                                         Session.SendPacket(Killer.Mate.GenerateStatInfo());
                                     }
 
-<<<<<<< HEAD
                                     Session.SendPacket(new EffectPacket { EffectType = Killer.UserType, CallerId = Killer.MapEntityId, EffectId = 6007 });
-=======
-                                    Session.SendPacket(new EffectPacket{EffectType = Killer.UserType, CallerId = Killer.MapEntityId, EffectId = 6007});
->>>>>>> parent of d7ef289... Bcard Cleaning
                                 }
                             }
                         }
                     }
                     else
                     {
-<<<<<<< HEAD
                         if (HasBuff(BCardType.Buff, (byte)BCardSubTypes.Buff.EffectResistance))
-=======
-                        if (HasBuff(CardType.Buff, (byte) AdditionalTypes.Buff.EffectResistance))
->>>>>>> parent of d7ef289... Bcard Cleaning
                         {
                             if (ServerManager.RandomNumber() < 90)
                             {
@@ -3740,11 +3650,7 @@ namespace OpenNos.GameObject
                 if (dropOwner != null)
                 {
                     group = ServerManager.Instance.Groups.Find(g =>
-<<<<<<< HEAD
                         g.IsMemberOfGroup((long)dropOwner) && g.GroupType == GroupType.Group);
-=======
-                        g.IsMemberOfGroup((long) dropOwner) && g.GroupType == GroupType.Group);
->>>>>>> parent of d7ef289... Bcard Cleaning
                 }
 
                 IncrementQuests(QuestType.Hunt, monsterToAttack.MonsterVNum);
@@ -3782,7 +3688,7 @@ namespace OpenNos.GameObject
                     ((MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance ||
                       MapInstance.MapInstanceType == MapInstanceType.LodInstance) || MapInstance.DropAllowed))
                 {
-                    short[] explodeMonsters = new short[] {1348, 1906};
+                    short[] explodeMonsters = new short[] { 1348, 1906 };
 
                     List<DropDTO> droplist = monsterToAttack.Monster.Drops.Where(s =>
                         (!explodeMonsters.Contains(monsterToAttack.MonsterVNum) &&
@@ -4680,7 +4586,7 @@ namespace OpenNos.GameObject
             return stash;
         }
 
-        public int GetTitleEffectValue(CardType type, byte subtype)
+        public int GetTitleEffectValue(BCardType type, byte subtype)
         {
             return EffectFromTitle?.Where(x => x.Type == (byte) type && x.SubType == subtype) ?.Sum(x => x.FirstData) ?? 0;
         }
@@ -5183,8 +5089,11 @@ namespace OpenNos.GameObject
             return $"ta_ps {groups.TrimEnd(' ')}";
         }
 
-        public string GenerateTit() => $"tit {Language.Instance.GetMessageFromKey(Class == (byte) ClassType.Adventurer ? nameof(ClassType.Adventurer).ToUpper() : Class == ClassType.Swordsman ? nameof(ClassType.Swordsman).ToUpper() : Class == ClassType.Archer ? nameof(ClassType.Archer).ToUpper() : nameof(ClassType.Magician).ToUpper())} {Name}";
-
+        public string GenerateTit()
+        {
+            return
+                $"tit {this.GetClassType()} {Name}";
+        }
         public string GenerateTitInfo()
         {
             long tit = 0;
@@ -5226,7 +5135,7 @@ namespace OpenNos.GameObject
             Act4Points += point;
         }
 
-        public int[] GetBuff(CardType type, byte subtype) => BattleEntity.GetBuff(type, subtype);
+        public int[] GetBuff(BCardType type, byte subtype) => BattleEntity.GetBuff(type, subtype);
 
         public int GetCP()
         {
@@ -5935,7 +5844,7 @@ namespace OpenNos.GameObject
 
         public bool HasBuff(short cardId) => BattleEntity.HasBuff(cardId);
 
-        public bool HasBuff(CardType type, byte subtype) => BattleEntity.HasBuff(type, subtype);
+        public bool HasBuff(BCardType type, byte subtype) => BattleEntity.HasBuff(type, subtype);
 
         public bool HaveBackpack() => StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.BackPack);
 

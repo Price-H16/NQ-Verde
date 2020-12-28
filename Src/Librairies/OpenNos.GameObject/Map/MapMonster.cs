@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
+using ChickenAPI.Enums.Game.BCard;
+using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject._Event;
 using OpenNos.GameObject.Battle;
 using OpenNos.GameObject.Event;
-using OpenNos.GameObject.Extension;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.PathFinder;
-using static OpenNos.Domain.BCardType;
 
 namespace OpenNos.GameObject
 {
@@ -82,8 +81,7 @@ namespace OpenNos.GameObject
 
         public ThreadSafeSortedList<short, IDisposable> BuffObservables => BattleEntity.BuffObservables;
 
-        public bool CanSeeHiddenThings =>
-            GetBuff(CardType.SpecialActions, (byte)AdditionalTypes.SpecialActions.SeeHiddenThings)[0] != 0 ? true : false;
+        public bool CanSeeHiddenThings => GetBuff(BCardType.SpecialActions, (byte)BCardSubTypes.SpecialActions.SeeHiddenThings)[0] != 0 ? true : false;
 
         public double CurrentHp { get; set; }
 
@@ -329,12 +327,12 @@ namespace OpenNos.GameObject
             return "";
         }
 
-        public int[] GetBuff(CardType type, byte subtype) => BattleEntity.GetBuff(type, subtype);
+        public int[] GetBuff(BCardType type, byte subtype) => BattleEntity.GetBuff(type, subtype);
 
 
         public MapCell GetPos() => BattleEntity.GetPos();
 
-        public bool HasBuff(CardType type, byte subtype) => BattleEntity.HasBuff(type, subtype);
+        public bool HasBuff(BCardType type, byte subtype) => BattleEntity.HasBuff(type, subtype);
 
         public int HpPercent() => BattleEntity.HpPercent();
 
@@ -483,7 +481,7 @@ namespace OpenNos.GameObject
                 AliveTimeMpThread.Start();
             }
 
-            if (BattleEntity.HasBuff(CardType.Count, (byte)AdditionalTypes.Count.Summon))
+            if (BattleEntity.HasBuff(BCardType.Count, (byte)BCardSubTypes.Count.Summon))
             {
                 var DisminMpPerSecThread = new Thread(() => DisminPercentMpPerSec(1));
                 if (MonsterVNum == 2013 || MonsterVNum == 2016)
@@ -540,20 +538,20 @@ namespace OpenNos.GameObject
         {
             Speed = Monster.Speed;
 
-            var fixSpeed = (byte)GetBuff(CardType.Move, (byte)AdditionalTypes.Move.SetMovement)[0];
+            var fixSpeed = (byte)GetBuff(BCardType.Move, (byte)BCardSubTypes.Move.SetMovement)[0];
             if (fixSpeed != 0)
             {
                 Speed = fixSpeed;
             }
             else
             {
-                Speed += (byte)GetBuff(CardType.Move, (byte)AdditionalTypes.Move.MovementSpeedIncreased)[0];
+                Speed += (byte)GetBuff(BCardType.Move, (byte)BCardSubTypes.Move.MovementSpeedIncreased)[0];
                 if (Speed == 59)
                 {
                     Speed = 1;
                 }
 
-                Speed = (byte)(Speed * (1 + GetBuff(CardType.Move, (byte)AdditionalTypes.Move.MoveSpeedIncreased)[0] /
+                Speed = (byte)(Speed * (1 + GetBuff(BCardType.Move, (byte)BCardSubTypes.Move.MoveSpeedIncreased)[0] /
                                          100D));
             }
         }
@@ -603,13 +601,7 @@ namespace OpenNos.GameObject
         {
             double walkWaitTime = (Target == null && RunToX == 0 && RunToY == 0 ? ServerManager.RandomNumber(400, 3200) : 0) + (Speed / 1.5f) * 100 - (DateTime.Now - LastMove).TotalMilliseconds;
             double skillWaitTime = 0 /*800 - (DateTime.Now - LastSkill).TotalMilliseconds*/;
-<<<<<<< HEAD
             if (Monster != null && !IsDisabled && !IsJumping && IsAlive && !HasBuff(BCardType.Move, (byte)BCardSubTypes.Move.MovementImpossible) && IsMoving && Monster.Speed > 0 && walkWaitTime <= 0 && skillWaitTime <= 0)
-=======
-            if (Monster != null && !IsDisabled && !IsJumping && IsAlive &&
-                !HasBuff(CardType.Move, (byte)AdditionalTypes.Move.MovementImpossible) && IsMoving &&
-                Monster.Speed > 0 && walkWaitTime <= 0 && skillWaitTime <= 0)
->>>>>>> parent of d7ef289... Bcard Cleaning
             {
                 LoadSpeed();
 
@@ -709,11 +701,11 @@ namespace OpenNos.GameObject
             if (IsAlive && hitRequest.Session.Character.Hp > 0 &&
                 (hitRequest.Mate == null || hitRequest.Mate.Hp > 0))
             {
-                double cooldownReduction = hitRequest.Session.Character.GetBuff(CardType.Morale,
-                    (byte)AdditionalTypes.Morale.SkillCooldownDecreased)[0];
+                double cooldownReduction = hitRequest.Session.Character.GetBuff(BCardType.Morale,
+                    (byte)BCardSubTypes.Morale.SkillCooldownDecreased)[0];
 
-                var increaseEnemyCooldownChance = hitRequest.Session.Character.GetBuff(CardType.DarkCloneSummon,
-                    (byte)AdditionalTypes.DarkCloneSummon.IncreaseEnemyCooldownChance);
+                var increaseEnemyCooldownChance = hitRequest.Session.Character.GetBuff(BCardType.DarkCloneSummon,
+                    (byte)BCardSubTypes.DarkCloneSummon.IncreaseEnemyCooldownChance);
 
                 if (ServerManager.RandomNumber() < increaseEnemyCooldownChance[0])
                 {
@@ -721,7 +713,7 @@ namespace OpenNos.GameObject
                 }
 
                 var hitmode = 0;
-                var isCaptureSkill = hitRequest.SkillBCards.Any(s => s.Type.Equals((byte)CardType.Capture));
+                var isCaptureSkill = hitRequest.SkillBCards.Any(s => s.Type.Equals((byte)BCardType.Capture));
 
                 // calculate damage
                 var onyxWings = false;
@@ -733,8 +725,8 @@ namespace OpenNos.GameObject
                     hitRequest.Skill, ref hitmode, ref onyxWings, ref zephyrWings);
 
                 if (Monster.BCards.Find(s =>
-                    s.Type == (byte)CardType.LightAndShadow &&
-                    s.SubType == (byte)AdditionalTypes.LightAndShadow.InflictDamageToMP) is BCard card)
+                    s.Type == (byte)BCardType.LightAndShadow &&
+                    s.SubType == (byte)BCardSubTypes.LightAndShadow.InflictDamageToMP) is BCard card)
                 {
                     var reduce = damage / 100 * card.FirstData;
                     if (CurrentMp < reduce)
@@ -752,8 +744,8 @@ namespace OpenNos.GameObject
 
                 if (damage >= CurrentHp &&
                     Monster.BCards.Any(s =>
-                        s.Type == (byte)CardType.NoDefeatAndNoDamage &&
-                        s.SubType == (byte)AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath && s.FirstData == 1))
+                        s.Type == (byte)BCardType.NoDefeatAndNoDamage &&
+                        s.SubType == (byte)BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath && s.FirstData == 1))
                 {
                     damage = (int)CurrentHp - 1;
                 }
@@ -826,7 +818,7 @@ namespace OpenNos.GameObject
 
                 attackerBattleEntity.BCards.Where(s => s.CastType == 1).ForEach(s =>
                 {
-                    if (s.Type != (byte)CardType.Buff)
+                    if (s.Type != (byte)BCardType.Buff)
                     {
                         s.ApplyBCards(BattleEntity, attackerBattleEntity);
                     }
@@ -838,7 +830,7 @@ namespace OpenNos.GameObject
                 }
 
                 hitRequest.SkillBCards.Where(s =>
-                                  !s.Type.Equals((byte)CardType.Buff) && !s.Type.Equals((byte)CardType.Capture) &&
+                                  !s.Type.Equals((byte)BCardType.Buff) && !s.Type.Equals((byte)BCardType.Capture) &&
                                   s.CardId == null).ToList()
                           .ForEach(s => s.ApplyBCards(BattleEntity, attackerBattleEntity));
 
@@ -855,7 +847,7 @@ namespace OpenNos.GameObject
                     //     
                     //     foreach (var item in attackerBattleEntity.BCards)
                     //     {
-                    //         if (item.Type == (byte)CardType.Buff)
+                    //         if (item.Type == (byte)BCardType.Buff)
                     //         {
                     //             var b = new Buff((short)item.SecondData, Monster.Level);
                     //             if (b.Card != null)
@@ -868,7 +860,7 @@ namespace OpenNos.GameObject
 
                     //attackerBattleEntity.BCards.Where(s => s.CastType == 1).ForEach(s =>
                     //{
-                    //    if (s.Type == (byte)CardType.Buff)
+                    //    if (s.Type == (byte)BCardType.Buff)
                     //    {
                     //        var b = new Buff((short)s.SecondData, Monster.Level);
                     //        if (b.Card != null)
@@ -890,7 +882,7 @@ namespace OpenNos.GameObject
 
                     foreach (var cardd in BattleEntity.BCards.Where(b => b.CastType == 2))
                     {
-                        if (cardd.Type != (byte)CardType.Buff)
+                        if (cardd.Type != (byte)BCardType.Buff)
                         {
                             continue;
                         }
@@ -916,7 +908,7 @@ namespace OpenNos.GameObject
 
                     BattleEntity.BCards.Where(s => s.CastType == 0).ForEach(s =>
                     {
-                        if (s.Type == (byte)CardType.Buff)
+                        if (s.Type == (byte)BCardType.Buff)
                         {
                             var b = new Buff((short)s.SecondData, BattleEntity.Level);
                             if (b.Card != null)
@@ -941,15 +933,15 @@ namespace OpenNos.GameObject
                     });
 
                     hitRequest.SkillBCards.Where(s =>
-                            s.Type.Equals((byte)CardType.Buff) &&
+                            s.Type.Equals((byte)BCardType.Buff) &&
                             new Buff((short)s.SecondData, hitRequest.Session.Character.Level).Card?.BuffType ==
                             BuffType.Bad).ToList()
                         .ForEach(s => s.ApplyBCards(BattleEntity, attackerBattleEntity));
 
-                    hitRequest.SkillBCards.Where(s => s.Type.Equals((byte)CardType.Capture)).ToList()
+                    hitRequest.SkillBCards.Where(s => s.Type.Equals((byte)BCardType.Capture)).ToList()
                         .ForEach(s => s.ApplyBCards(BattleEntity, attackerBattleEntity));
 
-                    hitRequest.SkillBCards.Where(s => s.Type.Equals((byte)CardType.SniperAttack)).ToList()
+                    hitRequest.SkillBCards.Where(s => s.Type.Equals((byte)BCardType.SniperAttack)).ToList()
                         .ForEach(s => s.ApplyBCards(BattleEntity, attackerBattleEntity));
 
                     if (attackerBattleEntity?.ShellWeaponEffects != null)
@@ -1246,17 +1238,17 @@ namespace OpenNos.GameObject
                     {
                         attackerBattleEntity.Character.RemoveBuffByBCardTypeSubType(new List<KeyValuePair<byte, byte>>
                         {
-                                new KeyValuePair<byte, byte>((byte) CardType.SpecialActions,
-                                        (byte) AdditionalTypes.SpecialActions.Hide)
+                                new KeyValuePair<byte, byte>((byte) BCardType.SpecialActions,
+                                        (byte) BCardSubTypes.SpecialActions.Hide)
                         });
                     }
 
-                    if (attackerBattleEntity.HasBuff(CardType.FalconSkill, (byte)AdditionalTypes.FalconSkill.Hide))
+                    if (attackerBattleEntity.HasBuff(BCardType.FalconSkill, (byte)BCardSubTypes.FalconSkill.Hide))
                     {
                         attackerBattleEntity.Character.RemoveBuffByBCardTypeSubType(new List<KeyValuePair<byte, byte>>
                         {
-                            new KeyValuePair<byte, byte>((byte) CardType.FalconSkill,
-                                (byte) AdditionalTypes.FalconSkill.Hide)
+                            new KeyValuePair<byte, byte>((byte) BCardType.FalconSkill,
+                                (byte) BCardSubTypes.FalconSkill.Hide)
                         });
                         attackerBattleEntity.AddBuff(new Buff(560, attackerBattleEntity.Level), attackerBattleEntity);
                     }
@@ -1267,15 +1259,11 @@ namespace OpenNos.GameObject
                     // generate the kill bonus
                     hitRequest.Session.Character.GenerateKillBonus(this, attackerBattleEntity);
 
-                    if (attackerBattleEntity.Character != null && hitRequest.SkillBCards.FirstOrDefault(s =>
-                            s.Type == (byte)CardType.TauntSkill &&
-                            s.SubType == (byte)AdditionalTypes.TauntSkill.EffectOnKill) is BCard EffectOnKill)
+                    if (attackerBattleEntity.Character != null && hitRequest.SkillBCards.FirstOrDefault(s => s.Type == (byte)BCardType.TauntSkill && s.SubType == (byte)BCardSubTypes.TauntSkill.EffectOnKill / 10) is BCard EffectOnKill)
                     {
                         if (ServerManager.RandomNumber() < EffectOnKill.FirstData)
                         {
-                            attackerBattleEntity.AddBuff(
-                                    new Buff((short)EffectOnKill.SecondData, attackerBattleEntity.Level),
-                                    attackerBattleEntity);
+                            attackerBattleEntity.AddBuff(new Buff((short)EffectOnKill.SecondData, attackerBattleEntity.Level), attackerBattleEntity);
                         }
                     }
                 }
@@ -1291,6 +1279,7 @@ namespace OpenNos.GameObject
                 MapInstance.Broadcast(GenerateBoss());
             }
         }
+
 
         public void RemoveBuff(short cardId)
         {
@@ -1322,13 +1311,7 @@ namespace OpenNos.GameObject
 
             MapInstance.InstanceBag.MonstersKilled++;
 
-<<<<<<< HEAD
             if (Owner != null && Monster.BCards.FirstOrDefault(s => s.CastType == 0 && s.Type == (byte)BCardType.SummonAndRecoverHP && s.SubType == (byte)BCardSubTypes.SummonAndRecoverHP.RestoreHP / 10) is BCard RestoreHP)
-=======
-            if (Owner != null && Monster.BCards.FirstOrDefault(s =>
-                    s.CastType == 0 && s.Type == (byte)CardType.SummonAndRecoverHP &&
-                    s.SubType == (byte)AdditionalTypes.SummonAndRecoverHP.RestoreHP) is BCard RestoreHP)
->>>>>>> parent of d7ef289... Bcard Cleaning
             {
                 double recoverHp = Owner.HpMax * RestoreHP.FirstData / 100;
                 if (Owner.Hp + recoverHp > Owner.HpMax)
@@ -1367,8 +1350,8 @@ namespace OpenNos.GameObject
         public bool SetDeathStatement()
         {
             if (Monster.BCards.Any(s =>
-                s.Type == (byte)CardType.NoDefeatAndNoDamage &&
-                s.SubType == (byte)AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath && s.FirstData == 1))
+                s.Type == (byte)BCardType.NoDefeatAndNoDamage &&
+                s.SubType == (byte)BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath && s.FirstData == 1))
             {
                 CurrentHp = MaxHp;
                 return false;
@@ -1501,8 +1484,8 @@ namespace OpenNos.GameObject
                 {
                     if (damage >= target.Hp &&
                         Monster.BCards.Any(s =>
-                            s.Type == (byte)CardType.NoDefeatAndNoDamage &&
-                            s.SubType == (byte)AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoKill &&
+                            s.Type == (byte)BCardType.NoDefeatAndNoDamage &&
+                            s.SubType == (byte)BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoKill &&
                             s.FirstData == 1))
                     {
                         damage = target.Hp - 1;
@@ -1510,8 +1493,8 @@ namespace OpenNos.GameObject
 
                     if (damage >= target.Hp &&
                         target.BCards.Any(s =>
-                                s.Type == (byte)CardType.NoDefeatAndNoDamage &&
-                                s.SubType == (byte)AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath &&
+                                s.Type == (byte)BCardType.NoDefeatAndNoDamage &&
+                                s.SubType == (byte)BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath &&
                                 s.FirstData == 1))
                     {
                         damage = target.Hp - 1;
@@ -1615,7 +1598,7 @@ namespace OpenNos.GameObject
                         // Maybe must be out (hitmode != 4 && hitmode != 2) condition
                         bCards.Where(s => s.CastType == 1 || s.SkillVNum != null).ToList().ForEach(s =>
                         {
-                            if (s.Type != (byte)CardType.Buff)
+                            if (s.Type != (byte)BCardType.Buff)
                             {
                                 s.ApplyBCards(target, BattleEntity);
                             }
@@ -1623,7 +1606,7 @@ namespace OpenNos.GameObject
 
                         bCards.Where(s => s.CastType == 1 || s.SkillVNum != null).ToList().ForEach(s =>
                         {
-                            if (s.Type == (byte)CardType.Buff)
+                            if (s.Type == (byte)BCardType.Buff)
                             {
                                 var b = new Buff((short)s.SecondData, Monster.Level);
                                 if (b.Card != null)
@@ -1645,7 +1628,7 @@ namespace OpenNos.GameObject
 
                         target.BCards.Where(s => s.CastType == 1).ForEach(s =>
                         {
-                            if (s.Type == (byte)CardType.Buff)
+                            if (s.Type == (byte)BCardType.Buff)
                             {
                                 var b = new Buff((short)s.SecondData, target.Level);
                                 if (b.Card != null)
@@ -1667,7 +1650,7 @@ namespace OpenNos.GameObject
 
                         foreach (var card in target.BCards.Where(b => b.CastType == 2))
                         {
-                            if (card.Type != (byte)CardType.Buff)
+                            if (card.Type != (byte)BCardType.Buff)
                             {
                                 continue;
                             }
@@ -1693,7 +1676,7 @@ namespace OpenNos.GameObject
 
                         target.BCards.Where(s => s.CastType == 0).ForEach(s =>
                         {
-                            if (s.Type == (byte)CardType.Buff)
+                            if (s.Type == (byte)BCardType.Buff)
                             {
                                 var b = new Buff((short)s.SecondData, BattleEntity.Level);
                                 if (b.Card != null)
@@ -1721,8 +1704,8 @@ namespace OpenNos.GameObject
                         {
                             target.Character?.RemoveBuffByBCardTypeSubType(new List<KeyValuePair<byte, byte>>
                             {
-                                new KeyValuePair<byte, byte>((byte) CardType.SpecialActions,
-                                    (byte) AdditionalTypes.SpecialActions.Hide)
+                                new KeyValuePair<byte, byte>((byte) BCardType.SpecialActions,
+                                    (byte) BCardSubTypes.SpecialActions.Hide)
                             });
                             target.RemoveBuff(36);
                             target.RemoveBuff(548);
@@ -1782,7 +1765,6 @@ namespace OpenNos.GameObject
                             target.MapNpc.SetDeathStatement();
                             target.MapNpc.RunDeathEvent();
                         }
-
                         RemoveTarget();
                     }
                 }
@@ -1842,7 +1824,7 @@ namespace OpenNos.GameObject
                 {
                     if (!BattleEntity.CanAttackEntity(characterInRange.BattleEntity))
                     {
-                        npcMonsterSkill.Skill.BCards.Where(s => s.Type == (byte)CardType.Buff).ToList().ForEach(s =>
+                        npcMonsterSkill.Skill.BCards.Where(s => s.Type == (byte)BCardType.Buff).ToList().ForEach(s =>
                        {
                            if (new Buff((short)s.SecondData, Monster.Level) is Buff b)
                            {
@@ -1877,8 +1859,8 @@ namespace OpenNos.GameObject
                                     ref onyxWings, ref zephyrWings, attackGreaterDistance);
                             if (dmg >= characterInRange.Hp &&
                                 Monster.BCards.Any(s =>
-                                        s.Type == (byte)CardType.NoDefeatAndNoDamage &&
-                                        s.SubType == (byte)AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoKill &&
+                                        s.Type == (byte)BCardType.NoDefeatAndNoDamage &&
+                                        s.SubType == (byte)BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoKill &&
                                         s.FirstData == 1))
                             {
                                 dmg = characterInRange.Hp - 1;
@@ -1895,8 +1877,8 @@ namespace OpenNos.GameObject
                             {
                                 bCards.Where(s => s.CastType == 1 || s.SkillVNum != null).ToList().ForEach(s =>
                                 {
-                                    if (s.Type != (byte)CardType.Buff && s.Type != (byte)CardType.Summons &&
-                                        s.Type != (byte)CardType.SummonSkill)
+                                    if (s.Type != (byte)BCardType.Buff && s.Type != (byte)BCardType.Summons &&
+                                        s.Type != (byte)BCardType.SummonSkill)
                                     {
                                         s.ApplyBCards(characterInRange.BattleEntity, BattleEntity);
                                     }
@@ -1904,7 +1886,7 @@ namespace OpenNos.GameObject
 
                                 bCards.Where(s => s.CastType == 1 || s.SkillVNum != null).ToList().ForEach(s =>
                                 {
-                                    if (s.Type == (byte)CardType.Buff)
+                                    if (s.Type == (byte)BCardType.Buff)
                                     {
                                         var b = new Buff((short)s.SecondData, Monster.Level);
                                         if (b.Card != null)
@@ -1926,7 +1908,7 @@ namespace OpenNos.GameObject
 
                                 foreach (var card in characterInRange.BattleEntity.BCards.Where(b => b.CastType == 2))
                                 {
-                                    if (card.Type != (byte)CardType.Buff)
+                                    if (card.Type != (byte)BCardType.Buff)
                                     {
                                         continue;
                                     }
@@ -1953,7 +1935,7 @@ namespace OpenNos.GameObject
 
                                 characterInRange.BattleEntity.BCards.Where(s => s.CastType == 0).ForEach(s =>
                                 {
-                                    if (s.Type == (byte)CardType.Buff)
+                                    if (s.Type == (byte)BCardType.Buff)
                                     {
                                         var b = new Buff((short)s.SecondData, BattleEntity.Level);
                                         if (b.Card != null)
@@ -2025,8 +2007,8 @@ namespace OpenNos.GameObject
                             {
                                 characterInRange.RemoveBuffByBCardTypeSubType(new List<KeyValuePair<byte, byte>>
                                 {
-                                        new KeyValuePair<byte, byte>((byte) CardType.SpecialActions,
-                                                (byte) AdditionalTypes.SpecialActions.Hide)
+                                        new KeyValuePair<byte, byte>((byte) BCardType.SpecialActions,
+                                                (byte) BCardSubTypes.SpecialActions.Hide)
                                 });
                                 characterInRange.RemoveBuff(36);
                                 characterInRange.RemoveBuff(548);
@@ -2069,7 +2051,7 @@ namespace OpenNos.GameObject
                 {
                     if (!BattleEntity.CanAttackEntity(mateInRange.BattleEntity))
                     {
-                        npcMonsterSkill.Skill.BCards.Where(s => s.Type == (byte)CardType.Buff).ToList().ForEach(s =>
+                        npcMonsterSkill.Skill.BCards.Where(s => s.Type == (byte)BCardType.Buff).ToList().ForEach(s =>
                        {
                            if (new Buff((short)s.SecondData, Monster.Level) is Buff b)
                            {
@@ -2098,7 +2080,7 @@ namespace OpenNos.GameObject
                 {
                     if (!BattleEntity.CanAttackEntity(monsterInRange.BattleEntity))
                     {
-                        npcMonsterSkill.Skill.BCards.Where(s => s.Type == (byte)CardType.Buff).ToList().ForEach(s =>
+                        npcMonsterSkill.Skill.BCards.Where(s => s.Type == (byte)BCardType.Buff).ToList().ForEach(s =>
                        {
                            if (new Buff((short)s.SecondData, Monster.Level) is Buff b)
                            {
@@ -2122,8 +2104,8 @@ namespace OpenNos.GameObject
                                     ref zephyrWings, attackGreaterDistance);
                             if (dmg >= monsterInRange.CurrentHp &&
                                 Monster.BCards.Any(s =>
-                                        s.Type == (byte)CardType.NoDefeatAndNoDamage &&
-                                        s.SubType == (byte)AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoKill &&
+                                        s.Type == (byte)BCardType.NoDefeatAndNoDamage &&
+                                        s.SubType == (byte)BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoKill &&
                                         s.FirstData == 1))
                             {
                                 dmg = (int)monsterInRange.CurrentHp - 1;
@@ -2131,8 +2113,8 @@ namespace OpenNos.GameObject
 
                             if (dmg >= monsterInRange.CurrentHp &&
                                 monsterInRange.Monster.BCards.Any(s =>
-                                        s.Type == (byte)CardType.NoDefeatAndNoDamage &&
-                                        s.SubType == (byte)AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath &&
+                                        s.Type == (byte)BCardType.NoDefeatAndNoDamage &&
+                                        s.SubType == (byte)BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath &&
                                         s.FirstData == 1))
                             {
                                 dmg = (int)monsterInRange.CurrentHp - 1;
@@ -2161,8 +2143,8 @@ namespace OpenNos.GameObject
                             {
                                 bCards.Where(s => s.CastType == 1 || s.SkillVNum != null).ToList().ForEach(s =>
                                 {
-                                    if (s.Type != (byte)CardType.Buff && s.Type != (byte)CardType.Summons &&
-                                        s.Type != (byte)CardType.SummonSkill)
+                                    if (s.Type != (byte)BCardType.Buff && s.Type != (byte)BCardType.Summons &&
+                                        s.Type != (byte)BCardType.SummonSkill)
                                     {
                                         s.ApplyBCards(monsterInRange.BattleEntity, BattleEntity);
                                     }
@@ -2176,7 +2158,7 @@ namespace OpenNos.GameObject
 
                                 bCards.Where(s => s.CastType == 1 || s.SkillVNum != null).ToList().ForEach(s =>
                                 {
-                                    if (s.Type == (byte)CardType.Buff)
+                                    if (s.Type == (byte)BCardType.Buff)
                                     {
                                         var b = new Buff((short)s.SecondData, Monster.Level);
                                         if (b.Card != null)
@@ -2198,7 +2180,7 @@ namespace OpenNos.GameObject
 
                                 foreach (var card in monsterInRange.BattleEntity.BCards.Where(b => b.CastType == 2))
                                 {
-                                    if (card.Type != (byte)CardType.Buff)
+                                    if (card.Type != (byte)BCardType.Buff)
                                     {
                                         continue;
                                     }
@@ -2224,7 +2206,7 @@ namespace OpenNos.GameObject
 
                                 monsterInRange.BattleEntity.BCards.Where(s => s.CastType == 0).ForEach(s =>
                                 {
-                                    if (s.Type == (byte)CardType.Buff)
+                                    if (s.Type == (byte)BCardType.Buff)
                                     {
                                         var b = new Buff((short)s.SecondData, BattleEntity.Level);
                                         if (b.Card != null)
@@ -2328,7 +2310,7 @@ namespace OpenNos.GameObject
                 {
                     if (!BattleEntity.CanAttackEntity(npcInRange.BattleEntity))
                     {
-                        npcMonsterSkill.Skill.BCards.Where(s => s.Type == (byte)CardType.Buff).ToList().ForEach(s =>
+                        npcMonsterSkill.Skill.BCards.Where(s => s.Type == (byte)BCardType.Buff).ToList().ForEach(s =>
                        {
                            if (new Buff((short)s.SecondData, Monster.Level) is Buff b)
                            {
@@ -2351,8 +2333,8 @@ namespace OpenNos.GameObject
                                     ref zephyrWings, attackGreaterDistance);
                             if (dmg >= npcInRange.CurrentHp &&
                                 Monster.BCards.Any(s =>
-                                        s.Type == (byte)CardType.NoDefeatAndNoDamage &&
-                                        s.SubType == (byte)AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoKill &&
+                                        s.Type == (byte)BCardType.NoDefeatAndNoDamage &&
+                                        s.SubType == (byte)BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoKill &&
                                         s.FirstData == 1))
                             {
                                 dmg = (int)npcInRange.CurrentHp - 1;
@@ -2367,8 +2349,8 @@ namespace OpenNos.GameObject
                             {
                                 bCards.Where(s => s.CastType == 1 || s.SkillVNum != null).ToList().ForEach(s =>
                                 {
-                                    if (s.Type != (byte)CardType.Buff && s.Type != (byte)CardType.Summons &&
-                                        s.Type != (byte)CardType.SummonSkill)
+                                    if (s.Type != (byte)BCardType.Buff && s.Type != (byte)BCardType.Summons &&
+                                        s.Type != (byte)BCardType.SummonSkill)
                                     {
                                         s.ApplyBCards(npcInRange.BattleEntity, BattleEntity);
                                     }
@@ -2382,7 +2364,7 @@ namespace OpenNos.GameObject
 
                                 bCards.Where(s => s.CastType == 1 || s.SkillVNum != null).ToList().ForEach(s =>
                                 {
-                                    if (s.Type == (byte)CardType.Buff)
+                                    if (s.Type == (byte)BCardType.Buff)
                                     {
                                         var b = new Buff((short)s.SecondData, Monster.Level);
                                         if (b.Card != null)
@@ -2404,7 +2386,7 @@ namespace OpenNos.GameObject
 
                                 foreach (var card in npcInRange.BattleEntity.BCards.Where(b => b.CastType == 2))
                                 {
-                                    if (card.Type != (byte)CardType.Buff)
+                                    if (card.Type != (byte)BCardType.Buff)
                                     {
                                         continue;
                                     }
@@ -2430,7 +2412,7 @@ namespace OpenNos.GameObject
 
                                 npcInRange.BattleEntity.BCards.Where(s => s.CastType == 0).ForEach(s =>
                                 {
-                                    if (s.Type == (byte)CardType.Buff)
+                                    if (s.Type == (byte)BCardType.Buff)
                                     {
                                         var b = new Buff((short)s.SecondData, BattleEntity.Level);
                                         if (b.Card != null)
@@ -2656,7 +2638,7 @@ namespace OpenNos.GameObject
                 CurrentMp -= MaxMp * PercentPerSecond / 100;
                 if (CurrentMp <= 0)
                 {
-                    if (BattleEntity.GetBuff(CardType.Count, (byte)AdditionalTypes.Count.Summon) is int[] CountSummon)
+                    if (BattleEntity.GetBuff(BCardType.Count, (byte)BCardSubTypes.Count.Summon) is int[] CountSummon)
                     {
                         MapInstance.SummonMonster(new MonsterToSummon((short)CountSummon[1],
                                 new MapCell { X = MapX, Y = MapY }, null, true));
@@ -2679,7 +2661,7 @@ namespace OpenNos.GameObject
         /// <param name="target">The TargetSession to follow</param>
         private void FollowTarget(BattleEntity target)
         {
-            if (IsMoving && !HasBuff(CardType.Move, (byte)AdditionalTypes.Move.MovementImpossible))
+            if (IsMoving && !HasBuff(BCardType.Move, (byte)BCardSubTypes.Move.MovementImpossible))
             {
                 if (Map.GetDistance(new MapCell
                 {
@@ -2895,7 +2877,7 @@ namespace OpenNos.GameObject
                         return;
                     }
 
-                    if (HasBuff(CardType.SpecialActions, (byte)AdditionalTypes.SpecialActions.RunAway))
+                    if (HasBuff(BCardType.SpecialActions, (byte)BCardSubTypes.SpecialActions.RunAway))
                     {
                         RunAway();
                         return;
@@ -3060,7 +3042,7 @@ namespace OpenNos.GameObject
             MoveTest();
 
             /*
-            if (Monster != null && IsAlive && !HasBuff(CardType.Move, (byte)AdditionalTypes.Move.MovementImpossible) && IsMoving && Monster.Speed > 0)
+            if (Monster != null && IsAlive && !HasBuff(BCardType.Move, (byte)BCardSubTypes.Move.MovementImpossible) && IsMoving && Monster.Speed > 0)
             {
                 if (!Path.Any() && (DateTime.Now - LastMove).TotalMilliseconds > _movetime && Target == null) // Basic Move
                 {
@@ -3192,7 +3174,7 @@ namespace OpenNos.GameObject
         /// <param name="npcMonsterSkill"></param>
         private void TargetHit(BattleEntity target, NpcMonsterSkill npcMonsterSkill)
         {
-            if (Monster != null && !HasBuff(CardType.SpecialAttack, (byte)AdditionalTypes.SpecialAttack.NoAttack))
+            if (Monster != null && !HasBuff(BCardType.SpecialAttack, (byte)BCardSubTypes.SpecialAttack.NoAttack))
             {
                 var castTime = 0;
                 if (npcMonsterSkill != null)
@@ -3345,8 +3327,8 @@ namespace OpenNos.GameObject
 
                     if (target.Character != null)
                     {
-                        if (ServerManager.RandomNumber() < target.Character.GetBuff(CardType.DarkCloneSummon,
-                                (byte)AdditionalTypes.DarkCloneSummon.ConvertDamageToHPChance)[0])
+                        if (ServerManager.RandomNumber() < target.Character.GetBuff(BCardType.DarkCloneSummon,
+                                (byte)BCardSubTypes.DarkCloneSummon.ConvertDamageToHPChance)[0])
                         {
                             var amount = damage;
 
@@ -3365,8 +3347,8 @@ namespace OpenNos.GameObject
                         }
                     }
 
-                    var manaShield = target.GetBuff(CardType.LightAndShadow,
-                        (byte)AdditionalTypes.LightAndShadow.InflictDamageToMP);
+                    var manaShield = target.GetBuff(BCardType.LightAndShadow,
+                        (byte)BCardSubTypes.LightAndShadow.InflictDamageToMP);
                     if (manaShield[0] != 0 && hitmode != 4)
                     {
                         var reduce = damage / 100 * manaShield[0];

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using ChickenAPI.Enums.Game.BCard;
 using NosTale.Extension.Extension.Packet;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
@@ -80,8 +81,8 @@ namespace OpenNos.Handler.PacketHandler.Battle
                         var target = ServerManager.Instance.GetSessionByCharacterId(useSkillPacket.MapMonsterId)?.Character;
 
                         if (target != null && target.CharacterId != Session.Character.CharacterId)
-                            if (target.HasBuff(BCardType.CardType.FrozenDebuff,
-                                (byte)AdditionalTypes.FrozenDebuff.EternalIce))
+                            if (target.HasBuff(BCardType.FrozenDebuff,
+                                (byte)BCardSubTypes.FrozenDebuff.EternalIce))
                             {
                                 Session.SendPacket(StaticPacketHelper.Cancel(2));
                                 Session.SendPacket($"delay 2000 5 #guri^502^1^{target.CharacterId}");
@@ -100,21 +101,21 @@ namespace OpenNos.Handler.PacketHandler.Battle
                 return;
             }
 
-            if (Session.Character.HasBuff(BCardType.CardType.HealingBurningAndCasting,
-                    (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseHPWhenCasting) &&
+            if (Session.Character.HasBuff(BCardType.HealingBurningAndCasting,
+                    (byte) BCardSubTypes.HealingBurningAndCasting.DecreaseHPWhenCasting) &&
                 useSkillPacket.CastId != 0)
             {
-                var debuff = Session.Character.GetBuff(BCardType.CardType.HealingBurningAndCasting,
-                    (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseHPWhenCasting);
+                var debuff = Session.Character.GetBuff(BCardType.HealingBurningAndCasting,
+                    (byte) BCardSubTypes.HealingBurningAndCasting.DecreaseHPWhenCasting);
 
                 Session.Character.Hp -= debuff[0];
                 Session.CurrentMapInstance.Broadcast(Session.Character.GenerateDm(debuff[0]));
             }
 
-            if (Session.Character.HasBuff(BCardType.CardType.Casting, (byte)AdditionalTypes.Casting.CastingSkillFailed) && useSkillPacket.CastId != 0)
+            if (Session.Character.HasBuff(BCardType.Casting, (byte)BCardSubTypes.Casting.CastingSkillFailed) && useSkillPacket.CastId != 0)
             {
-                var probs = Session.Character.GetBuff(BCardType.CardType.Casting,
-                    (byte) AdditionalTypes.Casting.CastingSkillFailed);
+                var probs = Session.Character.GetBuff(BCardType.Casting,
+                    (byte) BCardSubTypes.Casting.CastingSkillFailed);
 
                 var probsFailing = 100 - probs[0];
 
@@ -160,8 +161,8 @@ namespace OpenNos.Handler.PacketHandler.Battle
                     if (ski != null)
                     {
                         if (ski.GetSkillBCards().ToList().Any(s =>
-                            s.Type.Equals((byte) BCardType.CardType.MeditationSkill)
-                            && s.SubType.Equals((byte) AdditionalTypes.MeditationSkill.Sacrifice)))
+                            s.Type.Equals((byte) BCardType.MeditationSkill)
+                            && s.SubType.Equals((byte) BCardSubTypes.MeditationSkill.Sacrifice)))
                         {
                             if (Session.Character.MapInstance.BattleEntities.ToList().FirstOrDefault(s =>
                                     s.UserType == useSkillPacket.UserType &&

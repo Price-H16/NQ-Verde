@@ -1,4 +1,5 @@
-﻿using OpenNos.Domain;
+﻿using ChickenAPI.Enums.Game.Character;
+using OpenNos.Domain;
 
 namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Damage
 {
@@ -9,18 +10,18 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Damage
 
         public void Initialize()
         {
-            _minDist = new int[(int) ClassType.Unknown, MAX_LEVEL];
+            _minDist = new int[(int) CharacterClassType.Unknown, MAX_LEVEL];
 
             for (var i = 0; i < MAX_LEVEL; i++)
             {
-                _minDist[(int) ClassType.Adventurer, i] = i + 9; // approx
-                _minDist[(int) ClassType.Swordsman, i] = i + 12; // approx
-                _minDist[(int) ClassType.Magician, i] = 14 + i; // approx
-                _minDist[(int) ClassType.Archer, i] = 2 * i; // approx
-                _minDist[(int) ClassType.MartialArtist, i] = 2 * i; // approx
+                _minDist[(int) CharacterClassType.Adventurer, i] = i + 9; // approx
+                _minDist[(int) CharacterClassType.Swordsman, i] = i + 12; // approx
+                _minDist[(int) CharacterClassType.Magician, i] = 14 + i; // approx
+                _minDist[(int) CharacterClassType.Archer, i] = 2 * i; // approx
+                _minDist[(int) CharacterClassType.MartialArtist, i] = 2 * i; // approx
             }
         }
 
-        public int GetStat(ClassType type, byte level) => _minDist[(int) type, level - 1 > 0 ? level - 1 : 0];
+        public int GetStat(CharacterClassType type, byte level) => _minDist[(int) type, level - 1 > 0 ? level - 1 : 0];
     }
 }

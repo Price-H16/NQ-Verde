@@ -318,6 +318,7 @@
     <Compile Include="Packets\ServerPackets\EffectPacket.cs" />
     <Compile Include="Packets\ServerPackets\EqPacket.cs" />
     <Compile Include="Packets\ServerPackets\EquipPacket.cs" />
+    <Compile Include="Packets\ServerPackets\FdPacket.cs" />
     <Compile Include="Packets\ServerPackets\GboxPacket.cs" />
     <Compile Include="Packets\ServerPackets\GetPacket.cs" />
     <Compile Include="Packets\ServerPackets\HeroPacket.cs" />
@@ -343,6 +344,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ChickenApi\ChickenAPI.Enums\ChickenAPI.Enums.csproj">
+      <Project>{355f04a9-be90-45ce-a695-089c5f9c2b92}</Project>
+      <Name>ChickenAPI.Enums</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenNos.Core\OpenNos.Core.csproj">
       <Project>{C93A0A40-0551-4732-B594-171B87679AC1}</Project>
       <Name>OpenNos.Core</Name>

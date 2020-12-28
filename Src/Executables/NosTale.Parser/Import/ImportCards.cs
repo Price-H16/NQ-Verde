@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;

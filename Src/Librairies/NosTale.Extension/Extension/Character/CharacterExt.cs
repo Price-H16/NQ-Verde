@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;
@@ -8,6 +9,10 @@ using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using CharacterState = OpenNos.Domain.CharacterState;
+using GenderType = OpenNos.Domain.GenderType;
+using HairColorType = OpenNos.Domain.HairColorType;
+using HairStyleType = OpenNos.Domain.HairStyleType;
 
 namespace NosTale.Extension.GameExtension.Character
 {
@@ -80,7 +85,7 @@ namespace NosTale.Extension.GameExtension.Character
         {
             var newCharacter = new CharacterDTO
             {
-                Class = isMartial ? ClassType.MartialArtist : ClassType.Adventurer,
+                Class = isMartial ? CharacterClassType.MartialArtist : CharacterClassType.Adventurer,
                 Mp = isMartial ? 3156 : 69,
                 Hp = isMartial ? 9401 : 515,
                 Level = (byte) (isMartial ? 80 : 1),

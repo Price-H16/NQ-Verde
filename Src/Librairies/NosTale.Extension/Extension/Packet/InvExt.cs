@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;

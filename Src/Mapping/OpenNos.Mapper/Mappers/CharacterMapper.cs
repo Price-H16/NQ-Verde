@@ -1,6 +1,8 @@
+using ChickenAPI.Enums.Game.Character;
 using OpenNos.DAL.EF;
 using OpenNos.Data;
-using OpenNos.Domain;
+using CharacterState = OpenNos.Domain.CharacterState;
+using FactionType = OpenNos.Domain.FactionType;
 
 namespace OpenNos.Mapper.Mappers
 {
@@ -88,6 +90,7 @@ namespace OpenNos.Mapper.Mappers
             output.BattleTowerExp = input.BattleTowerExp;
             output.BattleTowerStage = input.BattleTowerStage;
             output.GoldBank = input.GoldBank;
+            output.ItemShopShip = input.ItemShopShip;
 
 
 
@@ -106,7 +109,7 @@ namespace OpenNos.Mapper.Mappers
             output.Biography = input.Biography;
             output.BuffBlocked = input.BuffBlocked;
             output.CharacterId = input.CharacterId;
-            output.Class = (ClassType) input.Class;
+            output.Class = (CharacterClassType) input.Class;
             output.Compliment = input.Compliment;
             output.Dignity = input.Dignity;
             output.EmoticonsBlocked = input.EmoticonsBlocked;
@@ -173,6 +176,7 @@ namespace OpenNos.Mapper.Mappers
             output.BattleTowerExp = input.BattleTowerExp;
             output.BattleTowerStage = input.BattleTowerStage;
             output.GoldBank = input.GoldBank;
+            output.ItemShopShip = input.ItemShopShip;
 
 
 

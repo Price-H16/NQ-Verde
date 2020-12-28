@@ -1,4 +1,5 @@
-﻿using OpenNos.Domain;
+﻿using ChickenAPI.Enums.Game.Character;
+using OpenNos.Domain;
 
 namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Magical
 {
@@ -9,6 +10,6 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Magical
             // no dodge possible without shells effects
         }
 
-        public int GetStat(ClassType type, byte level) => 0;
+        public int GetStat(CharacterClassType type, byte level) => 0;
     }
 }
