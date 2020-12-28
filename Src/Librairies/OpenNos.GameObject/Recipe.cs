@@ -13,10 +13,6 @@ namespace OpenNos.GameObject
 
         #region Instantiation
 
-        public Recipe()
-        {
-        }
-
         public Recipe(RecipeDTO input)
         {
             Amount = input.Amount;

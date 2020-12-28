@@ -288,7 +288,7 @@ namespace OpenNos.World
             LogHelper.Instance.InsertAllLogs();
             CommunicationServiceClient.Instance.UnregisterWorldServer(ServerManager.Instance.WorldId);
             ServerManager.Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 5));
-            ServerManager.Instance.SaveAll(true);
+            ServerManager.Instance.SaveAll();
             ServerManager.Instance.DisconnectAll();
             Thread.Sleep(5000);
             Console.ReadLine();
@@ -304,7 +304,7 @@ namespace OpenNos.World
             Logger.Debug("Server crashed! Rebooting gracefully...");
             CommunicationServiceClient.Instance.UnregisterWorldServer(ServerManager.Instance.WorldId);
             ServerManager.Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 5));
-            ServerManager.Instance.SaveAll(true);
+            ServerManager.Instance.SaveAll();
             ServerManager.Instance.DisconnectAll();
             var a = DependencyContainer.Instance.GetInstance<JsonGameConfiguration>().Server;
             Process.Start("OpenNos.World.exe", $"--nomsg --port {(ServerManager.Instance.ChannelId == 51 ? $"{a.Act4Port}" : $"{_port}")}");

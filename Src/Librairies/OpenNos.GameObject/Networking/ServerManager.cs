@@ -31,6 +31,7 @@ using FactionType = OpenNos.Domain.FactionType;
 using GenderType = OpenNos.Domain.GenderType;
 using HairColorType = OpenNos.Domain.HairColorType;
 using HairStyleType = OpenNos.Domain.HairStyleType;
+using System.Reflection;
 
 namespace OpenNos.GameObject.Networking
 {
@@ -612,6 +613,31 @@ namespace OpenNos.GameObject.Networking
             ThreadSafeGroupList[group.GroupId] = group;
         }
 
+        public T GetProperty<T>(string charName, string property)
+        {
+            ClientSession session =
+                Sessions.FirstOrDefault(s => s.Character?.Name.Equals(charName) == true);
+            if (session == null)
+            {
+                return default;
+            }
+
+            return (T)session.Character.GetType().GetProperties().Single(pi => pi.Name == property)
+                .GetValue(session.Character, null);
+        }
+
+        public T GetProperty<T>(long charId, string property)
+        {
+            ClientSession session = GetSessionByCharacterId(charId);
+            if (session == null)
+            {
+                return default;
+            }
+
+            return (T)session.Character.GetType().GetProperties().Single(pi => pi.Name == property)
+                .GetValue(session.Character, null);
+        }
+
         public IEnumerable<ClientSession> FindSameIpAddresses(List<ClientSession> sessions)
         {
             return sessions.Where(session => sessions.Count(s => s.ParsedAddress == session.ParsedAddress) > 3);
@@ -990,7 +1016,7 @@ namespace OpenNos.GameObject.Networking
             }
 
             InShutdown = true;
-            Instance.SaveAll(true);
+            Instance.SaveAll();
 
             Instance.DisconnectAll();
             CommunicationServiceClient.Instance.UnregisterWorldServer(WorldId);
@@ -2214,7 +2240,7 @@ namespace OpenNos.GameObject.Networking
                 Cards.Add(tmp);
             }
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"[Load] {Cards.Count} Cards has been loaded");
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("CARDS_LOADED"), Cards.Count));
         }
 
         public void LoadDropMonster()
@@ -2457,7 +2483,7 @@ namespace OpenNos.GameObject.Networking
 
             FlowerQuestId = Quests.Find(q => q.QuestType == (byte)QuestType.FlowerQuest)?.QuestId;
 
-            Console.WriteLine($"[Load] {Quests.Count} Quest has been loaded");
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("QUESTS_LOADED"), Quests.Count));
         }
 
         public void LoadRecipes()
@@ -2478,7 +2504,7 @@ namespace OpenNos.GameObject.Networking
                 _recipes[recipeGrouping.RecipeId] = recipe;
             }
 
-            Console.WriteLine($"[Load] {_recipes.Count} Recipes has been loaded");
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("RECIPES_LOADED"), _recipes.Count));
         }
 
         public void LoadRecipesList()
@@ -2488,7 +2514,7 @@ namespace OpenNos.GameObject.Networking
             {
                 _recipeLists[recipeListGrouping.RecipeListId] = recipeListGrouping;
             }
-            Console.WriteLine($"[Load] {_recipeLists.Count} Recipe Lists has been loaded");
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("RECIPELISTS_LOADED"), _recipeLists.Count));
         }
 
         public void LoadScriptedInstances()
@@ -2598,6 +2624,7 @@ namespace OpenNos.GameObject.Networking
 
                 Skills.Add(skillObj);
             }
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SKILLS_LOADED"), Skills.Count));
         }
 
         public void LoadTeleporter()
@@ -2607,7 +2634,7 @@ namespace OpenNos.GameObject.Networking
             {
                 _teleporters[teleporterGrouping.Key] = teleporterGrouping.Select(t => t).ToList();
             }
-            Console.WriteLine($"[Load] {_teleporters.Sum(i => i.Value.Count)} Teleporters has been loaded");
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("TELEPORTERS_LOADED"),_teleporters.Sum(i => i.Value.Count)));
         }
 
         public bool MapNpcHasRecipe(int mapNpcId)
@@ -2727,21 +2754,36 @@ namespace OpenNos.GameObject.Networking
             }
         }
 
-        public void SaveAll(bool onShutDown)
+        public void SaveAll()
         {
-            try
+            if (!Sessions.Any())
             {
-                CommunicationServiceClient.Instance.CleanupOutdatedSession();
-                foreach (ClientSession sess in Sessions)
-                {
-                    sess.Character?.Save();
-                }
-                DAOFactory.BazaarItemDAO.RemoveOutDated();
+                return;
             }
-            finally
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            foreach (ClientSession session in Sessions.Where(s => s?.HasCurrentMapInstance == true && s.HasSelectedCharacter && s.Character != null))
             {
-                Logger.LogEvent("SAVING COMPLETED!", null);
+                session.Character.Save();
             }
+
+            stopWatch.Stop();
+
+
+            TimeSpan ts = stopWatch.Elapsed;
+            string elapsedTime = $"{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
+            Logger.Info("[SaveAll] SaveAll need " + elapsedTime + " to Save " + Sessions.Count() + " Players");
+        }
+        public void SetProperty(long charId, string property, object value)
+        {
+            ClientSession session = GetSessionByCharacterId(charId);
+            if (session == null)
+            {
+                return;
+            }
+
+            PropertyInfo propertyinfo = session.Character.GetType().GetProperty(property);
+            propertyinfo?.SetValue(session.Character, value, null);
         }
 
         public async Task ShutdownTaskAsync(int Time = 5)
@@ -2794,7 +2836,7 @@ namespace OpenNos.GameObject.Networking
             {
                 sess.Character?.Dispose();
             }
-            Instance.SaveAll(true);
+            Instance.SaveAll();
             CommunicationServiceClient.Instance.UnregisterWorldServer(WorldId);
             if (IsReboot)
             {
@@ -3127,35 +3169,27 @@ namespace OpenNos.GameObject.Networking
         {
             ThreadSafeGroupList = new ThreadSafeSortedList<long, Group>();
 
-            Observable.Interval(TimeSpan.FromMinutes(10)).Subscribe(x => SaveAllProcess());
-            Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(x => Act4Process());
-            Observable.Interval(TimeSpan.FromSeconds(2)).Subscribe(x => GroupProcess());
-            Observable.Interval(TimeSpan.FromMinutes(1)).Subscribe(x => Act4FlowerProcess());
-
+            Observable.Interval(TimeSpan.FromMinutes(5)).Subscribe(x => { SaveAll(); });
+            Observable.Interval(TimeSpan.FromSeconds(5)).Subscribe(x => { Act4Process(); });
+            Observable.Interval(TimeSpan.FromSeconds(2)).Subscribe(x => { GroupProcess(); });
+            Observable.Interval(TimeSpan.FromMinutes(1)).Subscribe(x => { Act4FlowerProcess(); });
             //Observable.Interval(TimeSpan.FromHours(3)).Subscribe(x => BotProcess()); activate it later
-            Observable.Interval(TimeSpan.FromSeconds(5)).Subscribe(x => MaintenanceProcess());
+            Observable.Interval(TimeSpan.FromSeconds(5)).Subscribe(x => { MaintenanceProcess(); });
+            Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(x => { RemoveItemProcess(); });
+            Observable.Interval(TimeSpan.FromSeconds(30)).Subscribe(x => { Act4StatProcess(); });
 
-            Observable.Interval(TimeSpan.FromMinutes(30)).Subscribe(x => Act4StatProcess());
 
-            EventHelper.Instance.RunEvent(new EventContainer(
-                GetMapInstance(GetBaseMapInstanceIdByMapId(98)), EventActionType.NPCSEFFECTCHANGESTATE,
-                true));
-            foreach (var schedule in Schedules)
+            EventHelper.Instance.RunEvent(new EventContainer(GetMapInstance(GetBaseMapInstanceIdByMapId(98)), EventActionType.NPCSEFFECTCHANGESTATE, true));
+
+            foreach (Schedule schedule in Schedules)
             {
-                Observable.Timer(
+                Observable
+                    .Timer(
                         TimeSpan.FromSeconds(EventHelper.GetMilisecondsBeforeTime(schedule.Time).TotalSeconds),
-                        TimeSpan.FromDays(1)).Subscribe(e =>
-                {
-                    if (schedule.DayOfWeek == "" || schedule.DayOfWeek == DateTime.Now.DayOfWeek.ToString())
-                    {
-                        EventHelper.GenerateEvent(schedule.Event, schedule.LvlBracket);
-                    }
-                });
+                        TimeSpan.FromDays(1)).Subscribe(e => { EventHelper.GenerateEvent(schedule.Event); });
             }
 
             EventHelper.GenerateEvent(EventType.ACT4SHIP);
-
-            Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(x => RemoveItemProcess());
             Observable.Interval(TimeSpan.FromMilliseconds(400)).Subscribe(x =>
             {
                 foreach (var map in _mapinstances)
@@ -3195,6 +3229,18 @@ namespace OpenNos.GameObject.Networking
             }
 
             Act7Ship = GenerateMapInstance(2629, MapInstanceType.Act7Ship, new InstanceBag());
+        }
+
+        private void RemoveItemProcess()
+        {
+            try
+            {
+                Parallel.ForEach(Sessions.Where(c => c.IsConnected), session => session.Character?.RefreshValidity());
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
         }
 
         private void LoadBannedCharacters()
@@ -3858,36 +3904,6 @@ namespace OpenNos.GameObject.Networking
                         DAOFactory.StaticBonusDAO.LoadByCharacterId(characterId).ToList();
             }
         }
-
-        private void RemoveItemProcess()
-        {
-            try
-            {
-                foreach (var session in Sessions.Where(c => c.IsConnected))
-                {
-                    session.Character?.RefreshValidity();
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-            }
-        }
-
-        // Server
-        private void SaveAllProcess()
-        {
-            try
-            {
-                Logger.Info(Language.Instance.GetMessageFromKey("SAVING_ALL"));
-                SaveAll(false);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-            }
-        }
-
         #endregion
     }
 }

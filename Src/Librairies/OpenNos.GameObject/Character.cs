@@ -2467,6 +2467,8 @@ namespace OpenNos.GameObject
                 WalkDisposable?.Dispose();
                 SealDisposable?.Dispose();
                 MarryRequestCharacters?.Clear();
+                Session.Character?.Life?.Dispose();
+
 
                 Mates.Where(s => s.IsTeamMember).ToList().ForEach(s =>
                 {
