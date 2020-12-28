@@ -1105,7 +1105,7 @@ namespace NosTale.Extension.Extension.Packet
                         cooldownReduction -= increaseEnemyCooldownChance[1];
                     }
 
-                    var mpCost = ski.MpCost();
+                    short mpCost = ski.MpCost();
                     short hpCost = 0;
 
                     mpCost = (short)(mpCost * ((100 - Session.Character.CellonOptions.Where(s => s.Type == CellonOptionType.MPUsage).Sum(s => s.Value)) / 100D));
@@ -1114,14 +1114,13 @@ namespace NosTale.Extension.Extension.Packet
                     {
                         if (HPDecreasedByConsumingMP < 0)
                         {
-                            var amountDecreased = ski.MpCost() * HPDecreasedByConsumingMP / 100;
+                            int amountDecreased = -(ski.MpCost() * HPDecreasedByConsumingMP / 100);
                             hpCost = (short)amountDecreased;
                             mpCost -= (short)amountDecreased;
                         }
                     }
 
-                    if (Session.Character.Mp >= mpCost && Session.Character.Hp > hpCost &&
-                        Session.HasCurrentMapInstance)
+                    if (Session.Character.Mp >= mpCost && Session.Character.Hp > hpCost && Session.HasCurrentMapInstance)
                     {
                         if (!Session.Character.HasGodMode)
                         {
@@ -2477,7 +2476,7 @@ namespace NosTale.Extension.Extension.Packet
 
             if (characterSkill.CanBeUsed())
             {
-                var mpCost = characterSkill.MpCost();
+                short mpCost = characterSkill.MpCost();
                 short hpCost = 0;
 
                 mpCost = (short)(mpCost * ((100 - Session.Character.CellonOptions.Where(s => s.Type == CellonOptionType.MPUsage).Sum(s => s.Value)) / 100D));
@@ -2486,7 +2485,7 @@ namespace NosTale.Extension.Extension.Packet
                 {
                     if (HPDecreasedByConsumingMP < 0)
                     {
-                        var amountDecreased = characterSkill.MpCost() * HPDecreasedByConsumingMP / 100;
+                        int amountDecreased = -(characterSkill.MpCost() * HPDecreasedByConsumingMP / 100);
                         hpCost = (short)amountDecreased;
                         mpCost -= (short)amountDecreased;
                     }

@@ -3480,7 +3480,7 @@ namespace OpenNos.GameObject
                 {
                     if (Session.HasCurrentMapInstance)
                     {
-                        if (CharacterId == dropOwner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
+                        if (CharacterId == dropOwner)
                         {
                             double multiplier = 1 + (Session.Character.GetBuff(BCardType.Item, (byte)BCardSubTypes.Item.IncreaseEarnedGold)[0] / 100D);
                             multiplier += (Session.Character.ShellEffectMain.FirstOrDefault(s => s.Effect == (byte)ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;
@@ -3519,68 +3519,29 @@ namespace OpenNos.GameObject
 
             void _handleItemDrop(DropDTO drop, long? owner, short posX, short posY)
             {
-                int amount = drop.Amount;
-                if (ServerManager.Instance.Configuration.LockSystem)
+                Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
                 {
-                    Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
+                    if (Session.HasCurrentMapInstance)
                     {
-                        if (Session.HasCurrentMapInstance)
+                        if (CharacterId == owner)
                         {
-                            if (CharacterId == owner && StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
+                            if (Quests.Any(q => (q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)) || drop.ItemVNum == 1086 || drop.ItemVNum == 1114)
                             {
-                                if (!Session.Character.VerifiedLock)
-                                {
-                                    Session.SendPacket(GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_THIS_ACTION_CHARACTER_IS_LOCKED"), 10));
-                                    return;
-                                }
-                                GiftAdd(drop.ItemVNum, (byte)drop.Amount);
+                                Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q => (q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
                             }
                             else
                             {
-                                if (!Session.Character.VerifiedLock)
-                                {
-                                    Session.SendPacket(GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_THIS_ACTION_CHARACTER_IS_LOCKED"), 10));
-                                    return;
-                                }
                                 GiftAdd(drop.ItemVNum, (byte)drop.Amount);
+
                             }
                         }
-                    });
-                }
-                if (ServerManager.Instance.Configuration.EventDrop > 1)
-                {
-                    amount *= ServerManager.Instance.Configuration.EventDrop;
-                }
-                else
-                {
-                    Observable.Timer(TimeSpan.FromMilliseconds(500)).Subscribe(o =>
-                    {
-                        if (CharacterId == owner &&
-                            StaticBonusList.Any(s => s.StaticBonusType == StaticBonusType.AutoLoot))
-                        {
-                            GiftAdd(drop.ItemVNum, (byte)drop.Amount);
-                        }
-
-                        //int[] items = { 1012, 2098, 2102, 2010, 2117, 2118, 2114, 2099, 2116, 2046, 2042, 2038, 2035 };
-                        //if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance || Session.Character.MapInstance.MapInstanceType == MapInstanceType.Act4Instance && items.Contains(drop.ItemVNum))
-                        //{
-                        //    GiftAdd(drop.ItemVNum, (byte)drop.Amount);
-                        //}
-
-                        //int[] items2 = { 1013, 2900, 1031, 1032, 1033, 1034, 2118, 1029 };
-                        //if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance && items.Contains(drop.ItemVNum))
-                        //{
-                        //    Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q => (q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
-                        //}
-
                         else
                         {
                             Session.CurrentMapInstance.DropItemByMonster(owner, drop, monsterToAttack.MapX, monsterToAttack.MapY, Quests.Any(q => (q.Quest.QuestType == (int)QuestType.Collect4 || q.Quest.QuestType == (int)QuestType.Collect2 || (q.Quest?.QuestType == (int)QuestType.Collect1 && MapInstance.Map.MapTypes.Any(s => s.MapTypeId != (short)MapTypeEnum.Act4))) && q.Quest.QuestObjectives.Any(qst => qst.Data == drop.ItemVNum)));
                         }
-                    });
-                }
+                    }
+                });
             }
-
             lock (_syncObj)
             {
                 if (monsterToAttack == null || monsterToAttack.IsAlive)
@@ -4113,17 +4074,14 @@ namespace OpenNos.GameObject
             ItemInstance specialist = null;
             if (Inventory != null)
             {
-                specialist = Inventory.LoadBySlotAndType((byte) EquipmentType.Sp, InventoryType.Wear);
+                specialist = Inventory.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear);
             }
-
-            return
-                $"lev {Level} {(int) (Level < 100 ? LevelXp : LevelXp / 100)} {(!UseSp || specialist == null ? JobLevel : specialist.SpLevel)} {(!UseSp || specialist == null ? JobLevelXp : specialist.XP)} {(int) (Level < 100 ? XpLoad() : XpLoad() / 100)} {(!UseSp || specialist == null ? JobXPLoad() : SpXpLoad())} {Reputation} {GetCP()} {(int) (HeroLevel < 100 ? HeroXp : HeroXp / 100)} {HeroLevel} {(int) (HeroLevel < 100 ? HeroXPLoad() : HeroXPLoad() / 100)} 0";
+            return $"lev {Level} {(int)(Level < 100 ? LevelXp : LevelXp / 100)} {(!UseSp || specialist == null ? JobLevel : specialist.SpLevel)} {(!UseSp || specialist == null ? JobLevelXp : specialist.XP)} {(int)(Level < 100 ? XpLoad() : XpLoad() / 100)} {(!UseSp || specialist == null ? JobXPLoad() : SpXpLoad())} {Reputation} {GetCP()} {(int)(HeroLevel < 100 ? HeroXp : HeroXp / 100)} {HeroLevel} {(int)(HeroLevel < 100 ? HeroXPLoad() : HeroXPLoad() / 100)} 0";
         }
 
         public string GenerateLevelUp()
         {
-            Logger.LogUserEvent("LEVELUP", Session.GenerateIdentity(),
-                $"Level: {Level} JobLevel: {JobLevel} SPLevel: {Inventory.LoadBySlotAndType((byte) EquipmentType.Sp, InventoryType.Wear)?.SpLevel} HeroLevel: {HeroLevel} MapId: {Session.CurrentMapInstance?.Map.MapId} MapX: {PositionX} MapY: {PositionY}");
+            Logger.LogUserEvent("LEVELUP", Session.GenerateIdentity(), $"Level: {Level} JobLevel: {JobLevel} SPLevel: {Inventory.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear)?.SpLevel} HeroLevel: {HeroLevel}  MapId: {Session.CurrentMapInstance?.Map.MapId} MapX: {PositionX} MapY: {PositionY}");
             return $"levelup {CharacterId}";
         }
 
@@ -7080,6 +7038,7 @@ namespace OpenNos.GameObject
 
         public void Save()
         {
+            DateTime before = DateTime.UtcNow;
             Logger.LogUserEvent("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "START");
             try
             {
@@ -7107,14 +7066,7 @@ namespace OpenNos.GameObject
                         IEnumerable<MinilandObjectDTO> currentlySavedMinilandObjectEntries = DAOFactory.MinilandObjectDAO.LoadByCharacterId(CharacterId).ToList();
                         foreach (MinilandObjectDTO mobjToDelete in currentlySavedMinilandObjectEntries.Except(MinilandObjects))
                         {
-                            try
-                            {
-                                DAOFactory.MinilandObjectDAO.DeleteById(mobjToDelete.MinilandObjectId);
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                            }
+                            DAOFactory.MinilandObjectDAO.DeleteById(mobjToDelete.MinilandObjectId);
                         }
 
                         DAOFactory.ItemInstanceDAO.DeleteGuidList(currentlySavedInventoryIds.Except(inventories.Select(i => i.Id)));
@@ -7148,236 +7100,136 @@ namespace OpenNos.GameObject
 
                 if (Skills != null)
                 {
-                    try
+                    IEnumerable<Guid> currentlySavedCharacterSkills = DAOFactory.CharacterSkillDAO.LoadKeysByCharacterId(CharacterId).ToList();
+
+                    foreach (Guid characterSkillToDeleteId in currentlySavedCharacterSkills.Except(Skills.Select(s => s.Id)))
                     {
-                        IEnumerable<Guid> currentlySavedCharacterSkills = DAOFactory.CharacterSkillDAO.LoadKeysByCharacterId(CharacterId).ToList();
-
-                        foreach (Guid characterSkillToDeleteId in currentlySavedCharacterSkills.Except(Skills.Select(s => s.Id)))
-                        {
-                            DAOFactory.CharacterSkillDAO.Delete(characterSkillToDeleteId);
-                        }
-
-                        foreach (CharacterSkill characterSkill in Skills.GetAllItems())
-                        {
-                            DAOFactory.CharacterSkillDAO.InsertOrUpdate(characterSkill);
-                        }
+                        DAOFactory.CharacterSkillDAO.Delete(characterSkillToDeleteId);
                     }
-                    catch (Exception ex)
+
+                    foreach (CharacterSkill characterSkill in Skills.GetAllItems())
                     {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
+                        DAOFactory.CharacterSkillDAO.InsertOrUpdate(characterSkill);
                     }
                 }
 
                 if (Title != null)
                 {
-                    try
+                    IEnumerable<long> currentlySavedTitles = DAOFactory.CharacterTitleDAO.LoadByCharacterId(CharacterId).Select(s => s.CharacterTitleId);
+
+                    foreach (long TitleToDeleteId in currentlySavedTitles.Except(Title.Select(s => s.CharacterTitleId)))
                     {
-                        IEnumerable<long> currentlySavedTitles = DAOFactory.CharacterTitleDAO.LoadByCharacterId(CharacterId).Select(s => s.CharacterTitleId);
-
-                        foreach (long TitleToDeleteId in currentlySavedTitles.Except(Title.Select(s => s.CharacterTitleId)))
-                        {
-                            DAOFactory.CharacterTitleDAO.Delete(TitleToDeleteId);
-                        }
-
-                        foreach (var tit in Title)
-                        {
-                            CharacterTitleDTO titsave = tit;
-                            DAOFactory.CharacterTitleDAO.InsertOrUpdate(ref titsave);
-                        }
+                        DAOFactory.CharacterTitleDAO.Delete(TitleToDeleteId);
                     }
-                    catch (Exception ex)
+
+                    foreach (var tit in Title)
                     {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
+                        CharacterTitleDTO titsave = tit;
+                        DAOFactory.CharacterTitleDAO.InsertOrUpdate(ref titsave);
                     }
                 }
 
                 if (CharacterVisitedMaps != null)
                 {
-                    try
-                    {
-                        DAOFactory.CharacterVisitedMapsDAO.InsertOrUpdateFromList(CharacterVisitedMaps, CharacterId);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                    }
+                    DAOFactory.CharacterVisitedMapsDAO.InsertOrUpdateFromList(CharacterVisitedMaps, CharacterId);
                 }
 
                 IEnumerable<long> currentlySavedMates = DAOFactory.MateDAO.LoadByCharacterId(CharacterId).Select(s => s.MateId);
 
                 foreach (long matesToDeleteId in currentlySavedMates.Except(Mates.Select(s => s.MateId)))
                 {
-                    try
-                    {
-                        DAOFactory.MateDAO.Delete(matesToDeleteId);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                    }
+                    DAOFactory.MateDAO.Delete(matesToDeleteId);
                 }
 
                 foreach (Mate mate in Mates)
                 {
-                    try
-                    {
-                        MateDTO matesave = mate;
-                        DAOFactory.MateDAO.InsertOrUpdate(ref matesave);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                    }
+                    MateDTO matesave = mate;
+                    DAOFactory.MateDAO.InsertOrUpdate(ref matesave);
                 }
 
                 IEnumerable<QuicklistEntryDTO> quickListEntriesToInsertOrUpdate = QuicklistEntries.ToList();
 
-                try
+                IEnumerable<Guid> currentlySavedQuicklistEntries = DAOFactory.QuicklistEntryDAO.LoadKeysByCharacterId(CharacterId).ToList();
+                foreach (Guid quicklistEntryToDelete in currentlySavedQuicklistEntries.Except(QuicklistEntries.Select(s => s.Id)))
                 {
-                    IEnumerable<Guid> currentlySavedQuicklistEntries =
-                        DAOFactory.QuicklistEntryDAO.LoadKeysByCharacterId(CharacterId).ToList();
-                    foreach (Guid quicklistEntryToDelete in currentlySavedQuicklistEntries.Except(
-                        QuicklistEntries.Select(s => s.Id)))
-                    {
-                        DAOFactory.QuicklistEntryDAO.Delete(quicklistEntryToDelete);
-                    }
-
-                    foreach (QuicklistEntryDTO quicklistEntry in quickListEntriesToInsertOrUpdate)
-                    {
-                        DAOFactory.QuicklistEntryDAO.InsertOrUpdate(quicklistEntry);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
+                    DAOFactory.QuicklistEntryDAO.Delete(quicklistEntryToDelete);
                 }
 
-                foreach (MinilandObjectDTO mobjEntry in (IEnumerable<MinilandObjectDTO>) MinilandObjects.ToList())
+                foreach (QuicklistEntryDTO quicklistEntry in quickListEntriesToInsertOrUpdate)
                 {
-                    try
-                    {
-                        MinilandObjectDTO mobj = mobjEntry;
-                        DAOFactory.MinilandObjectDAO.InsertOrUpdate(ref mobj);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                    }
+                    DAOFactory.QuicklistEntryDAO.InsertOrUpdate(quicklistEntry);
+                }
+
+                foreach (MinilandObjectDTO mobjEntry in (IEnumerable<MinilandObjectDTO>)MinilandObjects.ToList())
+                {
+                    MinilandObjectDTO mobj = mobjEntry;
+                    DAOFactory.MinilandObjectDAO.InsertOrUpdate(ref mobj);
                 }
 
                 IEnumerable<short> currentlySavedBuff = DAOFactory.StaticBuffDAO.LoadByTypeCharacterId(CharacterId);
                 foreach (short bonusToDelete in currentlySavedBuff.Except(Buff.Select(s => s.Card.CardId)))
                 {
-                    try
-                    {
-                        DAOFactory.StaticBuffDAO.Delete(bonusToDelete, CharacterId);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                    }
+                    DAOFactory.StaticBuffDAO.Delete(bonusToDelete, CharacterId);
                 }
 
                 if (_isStaticBuffListInitial)
                 {
-                    try
+                    foreach (Buff buff in Buff.Where(s => s.StaticBuff).ToArray())
                     {
-                        foreach (Buff buff in Buff.Where(s => s.IsStaticBuff).ToArray())
+                        if (buff.Card.CardId == 360 || buff.Card.CardId == 361) //GLOBAL FAMILY BUFFS
+                            continue;
+                        StaticBuffDTO bf = new StaticBuffDTO
                         {
-                            if (buff.Card.CardId == 360 || buff.Card.CardId == 361) //GLOBAL FAMILY BUFFS
-                                continue;
-                            StaticBuffDTO bf = new StaticBuffDTO
-                            {
-                                CharacterId = CharacterId,
-                                RemainingTime = (int)(buff.RemainingTime - (DateTime.Now - buff.Start).TotalSeconds),
-                                CardId = buff.Card.CardId
-                            };
-                            DAOFactory.StaticBuffDAO.InsertOrUpdate(ref bf);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
+                            CharacterId = CharacterId,
+                            RemainingTime = (int)(buff.RemainingTime - (DateTime.Now - buff.Start).TotalSeconds),
+                            CardId = buff.Card.CardId
+                        };
+                        DAOFactory.StaticBuffDAO.InsertOrUpdate(ref bf);
                     }
                 }
 
                 //Quest
                 foreach (CharacterQuestDTO q in DAOFactory.CharacterQuestDAO.LoadByCharacterId(CharacterId).ToList())
                 {
-                    try
-                    {
-                        DAOFactory.CharacterQuestDAO.Delete(CharacterId, q.QuestId);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                    }
+                    DAOFactory.CharacterQuestDAO.Delete(CharacterId, q.QuestId);
                 }
 
                 foreach (CharacterQuest qst in Quests.ToList())
                 {
-                    try
+                    CharacterQuestDTO qstDTO = new CharacterQuestDTO
                     {
-                        CharacterQuestDTO qstDTO = new CharacterQuestDTO
-                        {
-                            CharacterId = qst.CharacterId,
-                            QuestId = qst.QuestId,
-                            FirstObjective = qst.FirstObjective,
-                            SecondObjective = qst.SecondObjective,
-                            ThirdObjective = qst.ThirdObjective,
-                            FourthObjective = qst.FourthObjective,
-                            FifthObjective = qst.FifthObjective,
-                            IsMainQuest = qst.IsMainQuest
-                        };
-                        DAOFactory.CharacterQuestDAO.InsertOrUpdate(qstDTO);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                    }
+                        CharacterId = qst.CharacterId,
+                        QuestId = qst.QuestId,
+                        FirstObjective = qst.FirstObjective,
+                        SecondObjective = qst.SecondObjective,
+                        ThirdObjective = qst.ThirdObjective,
+                        FourthObjective = qst.FourthObjective,
+                        FifthObjective = qst.FifthObjective,
+                        IsMainQuest = qst.IsMainQuest
+                    };
+                    DAOFactory.CharacterQuestDAO.InsertOrUpdate(qstDTO);
                 }
 
                 foreach (StaticBonusDTO bonus in StaticBonusList.ToArray())
                 {
-                    try
-                    {
-                        StaticBonusDTO bonus2 = bonus;
-                        DAOFactory.StaticBonusDAO.InsertOrUpdate(ref bonus2);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
-                    }
+                    StaticBonusDTO bonus2 = bonus;
+                    DAOFactory.StaticBonusDAO.InsertOrUpdate(ref bonus2);
                 }
 
                 foreach (GeneralLogDTO general in GeneralLogs.GetAllItems())
                 {
-                    try
+                    if (!DAOFactory.GeneralLogDAO.IdAlreadySet(general.LogId))
                     {
-                        if (!DAOFactory.GeneralLogDAO.IdAlreadySet(general.LogId))
-                        {
-                            DAOFactory.GeneralLogDAO.Insert(general);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
+                        DAOFactory.GeneralLogDAO.Insert(general);
                     }
                 }
 
                 foreach (RespawnDTO Resp in Respawns)
                 {
-                    try
+                    RespawnDTO res = Resp;
+                    if (Resp.MapId != 0 && Resp.X != 0 && Resp.Y != 0)
                     {
-                        RespawnDTO res = Resp;
-                        if (Resp.MapId != 0 && Resp.X != 0 && Resp.Y != 0)
-                        {
-                            DAOFactory.RespawnDAO.InsertOrUpdate(ref res);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogUserEventError("CHARACTER_DB_SAVE", Session.GenerateIdentity(), "ERROR", ex);
+                        DAOFactory.RespawnDAO.InsertOrUpdate(ref res);
                     }
                 }
 
@@ -7881,28 +7733,27 @@ namespace OpenNos.GameObject
             double t = HeroXPLoad();
             while (HeroXp >= t)
             {
-                HeroXp -= (long) t;
+                HeroXp -= (long)t;
                 HeroLevel++;
-                //RewardsHelper.Instance.GetHeroRewards(Session);
                 t = HeroXPLoad();
                 if (HeroLevel >= ServerManager.Instance.Configuration.MaxHeroLevel)
                 {
                     HeroLevel = ServerManager.Instance.Configuration.MaxHeroLevel;
                     HeroXp = 0;
                 }
+                Hp = (int)HPLoad();
+                Mp = (int)MPLoad();
 
-                Hp = (int) HPLoad();
-                Mp = (int) MPLoad();
+                if (HeroLevel % 10 == 0 && Family != null && FamilyCharacter != null)
+                {
+                    Family.InsertFamilyLog(FamilyLogType.HeroLevelUp, characterName: Session.Character.Name, level: HeroLevel);
+
+                }
                 Session.SendPacket(GenerateStat());
                 Session.SendPacket(GenerateLevelUp());
-                Session.Character.Save();
-                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("HERO_LEVELUP"),0));
-                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 8),PositionX, PositionY);
-                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 198),PositionX, PositionY);
-                if (Family != null)
-                {
-                    Family.InsertFamilyLog(FamilyLogType.HeroLevelUp, Name, level: HeroLevel);
-                }
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("HERO_LEVELUP"), 0));
+                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 8), PositionX, PositionY);
+                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 198), PositionX, PositionY);
             }
         }
 
@@ -7911,9 +7762,8 @@ namespace OpenNos.GameObject
             var t = JobXPLoad();
             while (JobLevelXp >= t)
             {
-                JobLevelXp -= (long) t;
+                JobLevelXp -= (long)t;
                 JobLevel++;
-                //RewardsHelper.Instance.GetJobRewards(Session);
                 t = JobXPLoad();
                 if (JobLevel >= 20 && Class == 0)
                 {
@@ -7926,16 +7776,15 @@ namespace OpenNos.GameObject
                     JobLevelXp = 0;
                 }
 
-                Hp = (int) HPLoad();
-                Mp = (int) MPLoad();
+                Hp = (int)HPLoad();
+                Mp = (int)MPLoad();
                 Session.SendPacket(GenerateStat());
                 Session.SendPacket(GenerateLevelUp());
-                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("JOB_LEVELUP"),0));
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("JOB_LEVELUP"), 0));
                 LearnAdventurerSkills();
                 Session.SendPackets(GenerateQuicklist());
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(8), PositionX, PositionY);
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(198), PositionX, PositionY);
-                Session.Character.Save();
             }
         }
 
@@ -8001,7 +7850,6 @@ namespace OpenNos.GameObject
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(6), PositionX, PositionY);
                 Session.CurrentMapInstance?.Broadcast(GenerateEff(198), PositionX, PositionY);
                 ServerManager.Instance.UpdateGroup(CharacterId);
-                Session.Character.Save();
 
                 //LevelRewards(Level);
             }
@@ -8066,7 +7914,7 @@ namespace OpenNos.GameObject
             double t = SpXpLoad();
             while (UseSp && specialist.XP >= t)
             {
-                specialist.XP -= (long) t;
+                specialist.XP -= (long)t;
                 specialist.SpLevel++;
                 t = SpXpLoad();
                 Session.SendPacket(GenerateStat());
@@ -8076,15 +7924,14 @@ namespace OpenNos.GameObject
                     specialist.SpLevel = ServerManager.Instance.Configuration.MaxSPLevel;
                     specialist.XP = 0;
                 }
-
                 LearnSPSkill();
                 SkillsSp.ForEach(s => s.LastUse = DateTime.Now.AddDays(-1));
                 Session.SendPacket(GenerateSki());
                 Session.SendPackets(GenerateQuicklist());
 
                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("SP_LEVELUP"), 0));
-                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 8),PositionX, PositionY);
-                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 198),PositionX, PositionY);
+                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 8), PositionX, PositionY);
+                Session.CurrentMapInstance?.Broadcast(StaticPacketHelper.GenerateEff(UserType.Player, CharacterId, 198), PositionX, PositionY);
             }
         }
 

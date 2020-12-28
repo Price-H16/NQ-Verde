@@ -1352,16 +1352,13 @@ namespace OpenNos.GameObject
 
             MapInstance.InstanceBag.MonstersKilled++;
 
-            if (Owner != null && Monster.BCards.FirstOrDefault(s =>
-                    s.CastType == 0 && s.Type == (byte)BCardType.SummonAndRecoverHP &&
-                    s.SubType == (byte)BCardSubTypes.SummonAndRecoverHP.RestoreHP) is BCard RestoreHP)
+            if (Owner != null && Monster.BCards.FirstOrDefault(s => s.CastType == 0 && s.Type == (byte)BCardType.SummonAndRecoverHP && s.SubType == (byte)BCardSubTypes.SummonAndRecoverHP.RestoreHP / 10) is BCard RestoreHP)
             {
                 double recoverHp = Owner.HpMax * RestoreHP.FirstData / 100;
                 if (Owner.Hp + recoverHp > Owner.HpMax)
                 {
                     recoverHp = Owner.HpMax - Owner.Hp;
                 }
-
                 Owner.Hp += (int)recoverHp;
                 MapInstance.Broadcast(Owner.GenerateRc((int)recoverHp));
             }

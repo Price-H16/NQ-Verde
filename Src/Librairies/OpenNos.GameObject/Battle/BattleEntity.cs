@@ -1531,26 +1531,47 @@ namespace OpenNos.GameObject.Battle
                     return;
                 }
 
-                if (MapMonster != null && (MapMonster.IsBoss || ServerManager.Instance.BossVNums.Contains(MapMonster.MonsterVNum)))
+                if (MapMonster != null &&
+                    (MapMonster.IsBoss || ServerManager.Instance.BossVNums.Contains(MapMonster.MonsterVNum)))
                 {
-                    if (!forced && (indicator.Card.BuffType == BuffType.Bad &&
-                       (indicator.Card.BCards.Any(b => b.Type == (byte)BCardType.SpecialAttack && b.SubType == (byte)BCardSubTypes.SpecialAttack.NoAttack / 10)
-                     || indicator.Card.BCards.Any(b => b.Type == (byte)BCardType.Move && b.SubType == (byte)BCardSubTypes.Move.MovementImpossible / 10)
-                     || indicator.Card.BCards.Any(b => b.Type == (byte)BCardType.Move && b.SubType == (byte)BCardSubTypes.Move.SetMovement / 10)
-                     || indicator.Card.BCards.Any(b => b.Type == (byte)BCardType.Move && b.SubType == (byte)BCardSubTypes.Move.SetMovementNegated / 10)
-                     || indicator.Card.BCards.Any(b => b.Type == (byte)BCardType.Move && b.SubType == (byte)BCardSubTypes.Move.MovementSpeedDecreased / 10)
-                     || indicator.Card.BCards.Any(b => b.Type == (byte)BCardType.Move && b.SubType == (byte)BCardSubTypes.Move.MoveSpeedDecreased / 10))))
+                    if (!forced && indicator.Card.BuffType == BuffType.Bad &&
+                        (indicator.Card.BCards.Any(b =>
+                                 b.Type == (byte)BCardType.SpecialAttack &&
+                                 b.SubType == (byte)BCardSubTypes.SpecialAttack.NoAttack)
+                      || indicator.Card.BCards.Any(b =>
+                                 b.Type == (byte)BCardType.Move &&
+                                 b.SubType == (byte)BCardSubTypes.Move.MovementImpossible)
+                      || indicator.Card.BCards.Any(b =>
+                                 b.Type == (byte)BCardType.Move && b.SubType == (byte)BCardSubTypes.Move.SetMovement)
+                      || indicator.Card.BCards.Any(b =>
+                                 b.Type == (byte)BCardType.Move &&
+                                 b.SubType == (byte)BCardSubTypes.Move.MovementSpeedDecreased)
+                      || indicator.Card.BCards.Any(b =>
+                                 b.Type == (byte)BCardType.Move &&
+                                 b.SubType == (byte)BCardSubTypes.Move.MoveSpeedDecreased)))
                     {
                         return;
                     }
                 }
 
                 if (indicator.Card.BCards.Any(newbuff => Buffs.GetAllItems().Any(b => b.Card.BCards.Any(buff =>
-                    buff.CardId != newbuff.CardId
-                 && ((buff.Type == 33 && buff.SubType == 5 && (newbuff.Type == 33 || newbuff.Type == 58)) || (newbuff.Type == 33 && newbuff.SubType == 5 && (buff.Type == 33 || buff.Type == 58))
-                 || (buff.Type == 33 && (buff.SubType == 1 || buff.SubType == 3) && (newbuff.Type == 58 && (newbuff.SubType == 1))) || (buff.Type == 33 && (buff.SubType == 2 || buff.SubType == 4) && (newbuff.Type == 58 && (newbuff.SubType == 3)))
-                 || (newbuff.Type == 33 && (newbuff.SubType == 1 || newbuff.SubType == 3) && (buff.Type == 58 && (buff.SubType == 1))) || (newbuff.Type == 33 && (newbuff.SubType == 2 || newbuff.SubType == 4) && (buff.Type == 58 && (buff.SubType == 3)))
-                 || (buff.Type == 33 && newbuff.Type == 33 && buff.SubType == newbuff.SubType) || (buff.Type == 58 && newbuff.Type == 58 && buff.SubType == newbuff.SubType))))))
+                                                                                                buff.CardId != newbuff.CardId
+                                                                                             && (buff.Type == (byte)BCardType.MaxHPMP && buff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumHPMPIncreased &&
+                                                                                                        (newbuff.Type == (byte)BCardType.MaxHPMP || newbuff.Type == (byte)BCardType.BearSpirit)
+                                                                                                        || newbuff.Type == (byte)BCardType.MaxHPMP && newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumHPMPIncreased &&
+                                                                                                            (buff.Type == (byte)BCardType.MaxHPMP || buff.Type == (byte)BCardType.BearSpirit)
+                                                                                                        || buff.Type == (byte)BCardType.MaxHPMP &&
+                                                                                                             (buff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumHPIncreased || buff.SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumHP) &&
+                                                                                                           (newbuff.Type == (byte)BCardType.BearSpirit && newbuff.SubType == (byte)BCardSubTypes.BearSpirit.IncreaseMaximumHP) ||
+                                                                                                           buff.Type == (byte)BCardType.MaxHPMP &&
+                                                                                                           (buff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumMPIncreased || buff.SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumMP) &&
+                                                                                                           newbuff.Type == (byte)BCardType.BearSpirit && newbuff.SubType == (byte)BCardSubTypes.BearSpirit.IncreaseMaximumMP
+                                                                                                           || newbuff.Type == (byte)BCardType.MaxHPMP &&
+                                                                                                           (newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumHPIncreased || newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumHP) &&
+                                                                                                           buff.Type == (byte)BCardType.BearSpirit && buff.SubType == (byte)BCardSubTypes.BearSpirit.IncreaseMaximumHP ||
+                                                                                                           newbuff.Type == (byte)BCardType.MaxHPMP && (newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumMPIncreased || newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumMP) &&
+                                                                                                           buff.Type == (byte)BCardType.BearSpirit && buff.SubType == (byte)BCardSubTypes.BearSpirit.IncreaseMaximumMP || buff.Type == (byte)BCardType.MaxHPMP && newbuff.Type == (byte)BCardType.MaxHPMP &&
+                                                                                                           buff.SubType == newbuff.SubType || buff.Type == (byte)BCardType.BearSpirit && newbuff.Type == (byte)BCardType.BearSpirit && buff.SubType == newbuff.SubType)))))
                 {
                     return;
                 }
@@ -2389,20 +2410,18 @@ namespace OpenNos.GameObject.Battle
         {
             if (CellonOptions != null)
             {
-                amount = (short)(amount * ((100 - CellonOptions.Where(s => s.Type == CellonOptionType.MPUsage)
-                                                                .Sum(s => s.Value)) / 100D));
+                amount = (short)(amount * ((100 - CellonOptions.Where(s => s.Type == CellonOptionType.MPUsage).Sum(s => s.Value)) / 100D));
             }
 
             if (GetBuff(BCardType.HealingBurningAndCasting, (byte)BCardSubTypes.HealingBurningAndCasting.HPDecreasedByConsumingMP)[0] is int HPDecreasedByConsumingMP)
             {
                 if (HPDecreasedByConsumingMP < 0)
                 {
-                    var amountDecreased = amount * HPDecreasedByConsumingMP / 100;
+                    int amountDecreased = -(amount * HPDecreasedByConsumingMP / 100);
                     GetDamage(amountDecreased, this, true);
                     amount -= amountDecreased;
                 }
             }
-
             if (Character != null)
             {
                 if (Character.BattleEntity.AdditionalMp > amount)
@@ -2424,7 +2443,6 @@ namespace OpenNos.GameObject.Battle
             {
                 Mp = 0;
             }
-
             Character?.Session.SendPacket(Character.GenerateStat());
         }
 

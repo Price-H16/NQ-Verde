@@ -40,6 +40,10 @@ namespace OpenNos.GameObject
             {
                 switch (map.MapId)
                 {
+                    case 150: // LOD
+                        MinLevel = 55;
+                        break;
+
                     case 154: // Caligor's Realm
                         MinLevel = 80;
                         break;

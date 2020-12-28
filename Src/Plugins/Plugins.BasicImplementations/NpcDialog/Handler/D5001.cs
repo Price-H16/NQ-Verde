@@ -47,7 +47,6 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                    Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_MONEY"), 10));
                    return;
                }
-               Session.Character.Save();
                Session.Character.Gold -= 3000;
                Session.SendPacket(Session.Character.GenerateGold());
                var pos = map.Map.GetRandomPosition();
