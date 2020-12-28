@@ -288,38 +288,26 @@ namespace OpenNos.World
             LogHelper.Instance.InsertAllLogs();
             CommunicationServiceClient.Instance.UnregisterWorldServer(ServerManager.Instance.WorldId);
             ServerManager.Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 5));
-            foreach (ClientSession sess in ServerManager.Instance.Sessions)
-            {
-                sess.Character?.Dispose();
-            }
-            ServerManager.Instance.SaveAll();
+            ServerManager.Instance.SaveAll(true);
             ServerManager.Instance.DisconnectAll();
             Thread.Sleep(5000);
+            Console.ReadLine();
             return false;
         }
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            if (e == null)
-            {
-                return;
-            }
             // test
             LogHelper.Instance.InsertAllLogs();
             ServerManager.Instance.InShutdown = true;
-            Logger.Error((Exception) e.ExceptionObject);
+            Logger.Error((Exception)e.ExceptionObject);
             Logger.Debug("Server crashed! Rebooting gracefully...");
             CommunicationServiceClient.Instance.UnregisterWorldServer(ServerManager.Instance.WorldId);
             ServerManager.Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 5));
-            ServerManager.Instance.SaveAll();
-            foreach (ClientSession sess in ServerManager.Instance.Sessions)
-            {
-                sess.Character?.Dispose();
-            }
+            ServerManager.Instance.SaveAll(true);
             ServerManager.Instance.DisconnectAll();
             var a = DependencyContainer.Instance.GetInstance<JsonGameConfiguration>().Server;
-
-            Process.Start("OpenNos.World.exe",$"--nomsg --port {(ServerManager.Instance.ChannelId == 51 ? $"{a.Act4Port}" : $"{_port}")}");
+            Process.Start("OpenNos.World.exe", $"--nomsg --port {(ServerManager.Instance.ChannelId == 51 ? $"{a.Act4Port}" : $"{_port}")}");
             Environment.Exit(1);
         }
 

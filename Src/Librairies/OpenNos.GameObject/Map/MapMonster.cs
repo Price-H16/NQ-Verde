@@ -599,56 +599,39 @@ namespace OpenNos.GameObject
 
         public void MoveTest()
         {
-            var walkWaitTime =
-                (Target == null && RunToX == 0 && RunToY == 0 ? ServerManager.RandomNumber(400, 3200) : 0) +
-                Speed / 1.5f * 100 - (DateTime.Now - LastMove).TotalMilliseconds;
+            double walkWaitTime = (Target == null && RunToX == 0 && RunToY == 0 ? ServerManager.RandomNumber(400, 3200) : 0) + (Speed / 1.5f) * 100 - (DateTime.Now - LastMove).TotalMilliseconds;
             double skillWaitTime = 0 /*800 - (DateTime.Now - LastSkill).TotalMilliseconds*/;
-            if (Monster != null && !IsDisabled && !IsJumping && IsAlive &&
-                !HasBuff(BCardType.Move, (byte)BCardSubTypes.Move.MovementImpossible) && IsMoving &&
-                Monster.Speed > 0 && walkWaitTime <= 0 && skillWaitTime <= 0)
+            if (Monster != null && !IsDisabled && !IsJumping && IsAlive && !HasBuff(BCardType.Move, (byte)BCardSubTypes.Move.MovementImpossible) && IsMoving && Monster.Speed > 0 && walkWaitTime <= 0 && skillWaitTime <= 0)
             {
                 LoadSpeed();
 
                 LastMove = DateTime.Now;
 
-                var moveToPosition = new MapCell { X = FirstX, Y = FirstY };
+                MapCell moveToPosition = new MapCell { X = FirstX, Y = FirstY };
 
                 if (RunToX != 0 || RunToY != 0)
                 {
                     moveToPosition = new MapCell { X = RunToX, Y = RunToY };
                 }
-
                 if (Target != null && (MonsterVNum != 2305 || RunToX == 0 && RunToY == 0))
                 {
                     moveToPosition = new MapCell { X = Target.PositionX, Y = Target.PositionY };
                 }
 
-                var nextStep = Map.GetNextStep(new MapCell { X = MapX, Y = MapY },
-                    new MapCell
-                    {
-                        X = (short)ServerManager.RandomNumber(moveToPosition.X - 3, moveToPosition.X + 3),
-                        Y = (short)ServerManager.RandomNumber(moveToPosition.Y - 3, moveToPosition.Y + 3)
-                    }, Speed / 2.5f);
+                MapCell nextStep = Map.GetNextStep(new MapCell { X = MapX, Y = MapY }, new MapCell { X = (short)ServerManager.RandomNumber(moveToPosition.X - 3, moveToPosition.X + 3), Y = (short)ServerManager.RandomNumber(moveToPosition.Y - 3, moveToPosition.Y + 3) }, (Speed / 2.5f));
 
                 short tries = 0;
                 short maxTries = 15;
 
                 while (MapInstance.Map.isBlockedZone(MapX, MapY, nextStep.X, nextStep.Y) && tries < maxTries)
                 {
-                    nextStep = Map.GetNextStep(new MapCell { X = MapX, Y = MapY },
-                        new MapCell
-                        {
-                            X = (short)ServerManager.RandomNumber(moveToPosition.X - 3, moveToPosition.X + 3),
-                            Y = (short)ServerManager.RandomNumber(moveToPosition.Y - 3, moveToPosition.Y + 3)
-                        }, Speed / 2.5f);
+                    nextStep = Map.GetNextStep(new MapCell { X = MapX, Y = MapY }, new MapCell { X = (short)ServerManager.RandomNumber(moveToPosition.X - 3, moveToPosition.X + 3), Y = (short)ServerManager.RandomNumber(moveToPosition.Y - 3, moveToPosition.Y + 3) }, (Speed / 2.5f));
                     tries++;
                 }
 
                 if (tries < maxTries)
                 {
-                    MapInstance.Broadcast(new BroadcastPacket(null,
-                        $"mv 3 {MapMonsterId} {nextStep.X} {nextStep.Y} {Math.Round(Speed * 1.5f)}", ReceiverType.All,
-                        xCoordinate: MapX, yCoordinate: MapY));
+                    MapInstance.Broadcast(new BroadcastPacket(null, $"mv 3 {MapMonsterId} {nextStep.X} {nextStep.Y} {Math.Round(Speed * 1.5f)}", ReceiverType.All, xCoordinate: MapX, yCoordinate: MapY));
                     Observable.Timer(TimeSpan.FromMilliseconds(Math.Round(Speed * 1.5f) * 10)).Subscribe(s =>
                     {
                         MapX = nextStep.X;
@@ -657,8 +640,8 @@ namespace OpenNos.GameObject
                 }
                 else
                 {
-                    //Generate Coords
-                    var notwalkable = false;
+                    //Generate Coords 
+                    bool notwalkable = false;
                     short gen_x, gen_y;
                     tries = 0;
                     do
@@ -666,26 +649,11 @@ namespace OpenNos.GameObject
                         gen_x = MapX;
                         gen_y = MapY;
 
-                        var x_min = ServerManager.RandomNumber(0, 10);
-                        var y_min = ServerManager.RandomNumber(0, 10);
+                        int x_min = ServerManager.RandomNumber(0, 10);
+                        int y_min = ServerManager.RandomNumber(0, 10);
 
-                        if (x_min > 6)
-                        {
-                            gen_x -= 3;
-                        }
-                        else if (x_min < 4)
-                        {
-                            gen_x += 3;
-                        }
-
-                        if (y_min > 6)
-                        {
-                            gen_y -= 3;
-                        }
-                        else if (y_min < 4)
-                        {
-                            gen_y += 3;
-                        }
+                        if (x_min > 6) { gen_x -= 3; } else if (x_min < 4) { gen_x += 3; }
+                        if (y_min > 6) { gen_y -= 3; } else if (y_min < 4) { gen_y += 3; }
 
                         notwalkable = MapInstance.Map.isBlockedZone(MapX, MapY, gen_x, gen_y);
 
@@ -693,20 +661,16 @@ namespace OpenNos.GameObject
                         {
                             notwalkable = true;
                         }
-
                         if (MapX == gen_x && MapY == gen_y)
                         {
                             notwalkable = true;
                         }
-
                         tries++;
                     } while (notwalkable && tries < maxTries);
 
                     if (!notwalkable)
                     {
-                        MapInstance.Broadcast(new BroadcastPacket(null,
-                            $"mv 3 {MapMonsterId} {gen_x} {gen_y} {Math.Round(Speed * 1.3f)}", ReceiverType.All,
-                            xCoordinate: MapX, yCoordinate: MapY));
+                        MapInstance.Broadcast(new BroadcastPacket(null, $"mv 3 {MapMonsterId} {gen_x} {gen_y} {Math.Round(Speed * 1.3f)}", ReceiverType.All, xCoordinate: MapX, yCoordinate: MapY));
                         Observable.Timer(TimeSpan.FromMilliseconds(Math.Round(Speed * 1.3f) * 10)).Subscribe(s =>
                         {
                             MapX = gen_x;
@@ -721,17 +685,12 @@ namespace OpenNos.GameObject
                     RunToY = 0;
                 }
 
-                if (Map.GetDistance(new MapCell { X = MapX, Y = MapY },
-                        new MapCell { X = moveToPosition.X, Y = moveToPosition.Y }) > _maxDistance &&
-                    LastSkill.AddMilliseconds(_timeAgroLoss) <= DateTime.Now
-                    || MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance &&
-                    LastSkill.AddMilliseconds(20000) <= DateTime.Now &&
-                    LastMonsterAggro.AddMilliseconds(20000) <= DateTime.Now)
+                if ((Map.GetDistance(new MapCell { X = MapX, Y = MapY }, new MapCell { X = moveToPosition.X, Y = moveToPosition.Y }) > _maxDistance && LastSkill.AddMilliseconds(_timeAgroLoss) <= DateTime.Now)
+                    || (MapInstance.MapInstanceType == MapInstanceType.BaseMapInstance && LastSkill.AddMilliseconds(20000) <= DateTime.Now && LastMonsterAggro.AddMilliseconds(20000) <= DateTime.Now))
                 {
                     RemoveTarget();
                 }
             }
-
             HostilityTarget();
         }
 

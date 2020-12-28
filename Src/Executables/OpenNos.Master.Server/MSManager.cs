@@ -66,6 +66,7 @@ namespace OpenNos.Master.Server
                 Act4IP = a.Server.IPAddress,
                 Act4Port = a.Server.Act4Port,
                 LockSystem = a.Server.LockSystem,
+                BCardsInArenaTalent = a.Server.BCardsInArenaTalent,
 
                 #endregion
 

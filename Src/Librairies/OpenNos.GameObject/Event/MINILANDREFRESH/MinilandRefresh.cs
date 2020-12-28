@@ -14,7 +14,7 @@ namespace OpenNos.GameObject.Event
 
         public static void GenerateMinilandEvent()
         {
-            ServerManager.Instance.SaveAll();
+            ServerManager.Instance.SaveAll(false);
             foreach (var chara in DAOFactory.CharacterDAO.LoadAll())
             {
                 var gen = DAOFactory.GeneralLogDAO.LoadByAccount(null).LastOrDefault(s =>

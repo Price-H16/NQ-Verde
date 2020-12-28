@@ -42,6 +42,8 @@
 
         public int WorldPort { get; set; }
 
+        public bool BCardsInArenaTalent { get; set; }
+
         public bool LockSystem { get; set; }
 
         #endregion

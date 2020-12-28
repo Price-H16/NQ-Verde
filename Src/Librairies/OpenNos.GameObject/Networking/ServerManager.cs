@@ -990,7 +990,7 @@ namespace OpenNos.GameObject.Networking
             }
 
             InShutdown = true;
-            Instance.SaveAll();
+            Instance.SaveAll(true);
 
             Instance.DisconnectAll();
             CommunicationServiceClient.Instance.UnregisterWorldServer(WorldId);
@@ -2727,7 +2727,7 @@ namespace OpenNos.GameObject.Networking
             }
         }
 
-        public void SaveAll()
+        public void SaveAll(bool onShutDown)
         {
             try
             {
@@ -2794,7 +2794,7 @@ namespace OpenNos.GameObject.Networking
             {
                 sess.Character?.Dispose();
             }
-            Instance.SaveAll();
+            Instance.SaveAll(true);
             CommunicationServiceClient.Instance.UnregisterWorldServer(WorldId);
             if (IsReboot)
             {
@@ -2890,7 +2890,6 @@ namespace OpenNos.GameObject.Networking
         {
             Instance.ShutdownStop = true;
             Instance.TaskShutdown = null;
-            Instance.SaveAll();
         }
 
         internal List<NpcMonsterSkill> GetNpcMonsterSkillsByMonsterVNum(short npcMonsterVNum) => _monsterSkills.ContainsKey(npcMonsterVNum)
@@ -3128,7 +3127,7 @@ namespace OpenNos.GameObject.Networking
         {
             ThreadSafeGroupList = new ThreadSafeSortedList<long, Group>();
 
-            Observable.Interval(TimeSpan.FromMinutes(5)).Subscribe(x => SaveAllProcess());
+            Observable.Interval(TimeSpan.FromMinutes(10)).Subscribe(x => SaveAllProcess());
             Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(x => Act4Process());
             Observable.Interval(TimeSpan.FromSeconds(2)).Subscribe(x => GroupProcess());
             Observable.Interval(TimeSpan.FromMinutes(1)).Subscribe(x => Act4FlowerProcess());
@@ -3881,7 +3880,7 @@ namespace OpenNos.GameObject.Networking
             try
             {
                 Logger.Info(Language.Instance.GetMessageFromKey("SAVING_ALL"));
-                SaveAll();
+                SaveAll(false);
             }
             catch (Exception e)
             {

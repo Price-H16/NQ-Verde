@@ -29,7 +29,8 @@ namespace NosTale.Configuration
             SceneOnCreate = false,
             UseOldCrypto = false,
             WorldInformation = true,
-            LockSystem = true
+            LockSystem = true,
+            BCardsInArenaTalent = true
         };
 
         public RateConfiguration Rate { get; set; } = new RateConfiguration

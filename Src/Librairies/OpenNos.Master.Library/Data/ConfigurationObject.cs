@@ -23,6 +23,8 @@ namespace OpenNos.Master.Library.Data
 
         public bool ValentineEvent { get; set; }
 
+        public bool BCardsInArenaTalent { get; set; }
+
         public bool LunarNewYearEvent { get; set; }
 
         public bool EasterEvent { get; set; }
