@@ -1,9 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using ChickenAPI.Enums.Game.Character;
-using GenderType = OpenNos.Domain.GenderType;
-using HairColorType = OpenNos.Domain.HairColorType;
-using HairStyleType = OpenNos.Domain.HairStyleType;
+using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF
 {
@@ -43,7 +40,7 @@ namespace OpenNos.DAL.EF
 
         public virtual Character Sender { get; set; }
 
-        public CharacterClassType SenderClass { get; set; }
+        public ClassType SenderClass { get; set; }
 
         public GenderType SenderGender { get; set; }
 

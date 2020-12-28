@@ -198,81 +198,69 @@ namespace OpenNos.Handler.PacketHandler.Npc
                             Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("ALREADY_HAVE_MAX_AMOUNT"), 0));
                             return;
                         }
-                            break;
-                    }
+                        break;
+                }
 
-                    Item item = ServerManager.GetItem(recipe.ItemVNum);
-                    if (item == null)
+                Item item = ServerManager.GetItem(recipe.ItemVNum);
+                if (item == null)
+                {
+                    return;
+                }
+
+                sbyte rare = 0;
+                if (item.EquipmentSlot == EquipmentType.Armor
+                    || item.EquipmentSlot == EquipmentType.MainWeapon
+                    || item.EquipmentSlot == EquipmentType.SecondaryWeapon)
+                {
+                    byte ra = (byte)ServerManager.RandomNumber();
+
+                    for (int i = 0; i < ItemHelper.BuyCraftRareRate.Length; i++)
                     {
-                        return;
-                    }
-
-                    sbyte rare = 0;
-                    if (item.EquipmentSlot == EquipmentType.Armor
-                        || item.EquipmentSlot == EquipmentType.MainWeapon
-                        || item.EquipmentSlot == EquipmentType.SecondaryWeapon)
-                    {
-                        byte ra = (byte)ServerManager.RandomNumber();
-
-                        for (int i = 0; i < ItemHelper.BuyCraftRareRate.Length; i++)
+                        if (ra <= ItemHelper.BuyCraftRareRate[i])
                         {
-                            if (ra <= ItemHelper.BuyCraftRareRate[i])
-                            {
-                                rare = (sbyte)i;
-                            }
+                            rare = (sbyte)i;
+                        }
+                    }
+                }
+
+                ItemInstance inv = Session.Character.Inventory.AddNewToInventory(recipe.ItemVNum, recipe.Amount, Rare: rare)
+                    .FirstOrDefault();
+                if (inv != null)
+                {
+                    if (inv.Item.EquipmentSlot == EquipmentType.Armor
+                        || inv.Item.EquipmentSlot == EquipmentType.MainWeapon
+                        || inv.Item.EquipmentSlot == EquipmentType.SecondaryWeapon)
+                    {
+                        inv.SetRarityPoint();
+                        if (inv.Item.IsHeroic)
+                        {
+                            inv.GenerateHeroicShell(RarifyProtection.None, true);
+                            inv.BoundCharacterId = Session.Character.CharacterId;
                         }
                     }
 
-                    ItemInstance inv = Session.Character.Inventory.AddNewToInventory(recipe.ItemVNum, recipe.Amount, Rare: rare)
-                        .FirstOrDefault();
-                    if (inv != null)
+                    foreach (RecipeItemDTO ite in recipe.Items)
                     {
-                        if (inv.Item.EquipmentSlot == EquipmentType.Armor
-                            || inv.Item.EquipmentSlot == EquipmentType.MainWeapon
-                            || inv.Item.EquipmentSlot == EquipmentType.SecondaryWeapon)
-                        {
-                            inv.SetRarityPoint();
-                            if (inv.Item.IsHeroic)
-                            {
-                                inv.GenerateHeroicShell(RarifyProtection.None, true);
-                                inv.BoundCharacterId = Session.Character.CharacterId;
-                            }
-                        }
-
-                        foreach (RecipeItemDTO ite in recipe.Items)
-                        {
-                            Session.Character.Inventory.RemoveItemAmount(ite.ItemVNum, ite.Amount);
-                        }
-
-                    if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.ShopShip)
-                    {
-                        if (Session.Character.ItemShopShip == 10)
-                        {
-                            Session.SendPacket(Session.Character.GenerateSay($"You buy/craft 10/10 items, cant buy more!", 10));
-                            return;
-                        }
-
-                        Session.SendPacket(Session.Character.GenerateSay($"You crafted {Session.Character.ItemShopShip}/10 items, cant buy more!", 10));
-                        Session.Character.ItemShopShip += 1;
-                    }
+                        Session.Character.Inventory.RemoveItemAmount(ite.ItemVNum, ite.Amount);
+                    }                  
 
                     // pdti {WindowType} {inv.ItemVNum} {recipe.Amount} {Unknown} {inv.Upgrade} {inv.Rare}
                     Session.SendPacket($"pdti 11 {inv.ItemVNum} {recipe.Amount} 29 {inv.Upgrade} {inv.Rare}");
-                        Session.SendPacket(UserInterfaceHelper.GenerateGuri(19, 1, Session.Character.CharacterId, 1324));
-                        Session.SendPacket(UserInterfaceHelper.GenerateMsg(
-                            string.Format(Language.Instance.GetMessageFromKey("CRAFTED_OBJECT"), inv.Item.Name,
-                                recipe.Amount), 0));
-                        Session.Character.IncrementQuests(QuestType.Product, inv.ItemVNum, recipe.Amount);
-                    }
-                    else
-                    {
-                        Session.SendPacket("shop_end 0");
-                        Session.SendPacket(
-                            UserInterfaceHelper.GenerateMsg(
-                                Language.Instance.GetMessageFromKey("NOT_ENOUGH_PLACE"), 0));
-                    }
+                    Session.SendPacket(UserInterfaceHelper.GenerateGuri(19, 1, Session.Character.CharacterId, 1324));
+                    Session.SendPacket(UserInterfaceHelper.GenerateMsg(
+                        string.Format(Language.Instance.GetMessageFromKey("CRAFTED_OBJECT"), inv.Item.Name,
+                            recipe.Amount), 0));
+                    Session.Character.IncrementQuests(QuestType.Product, inv.ItemVNum, recipe.Amount);
+                }
+                else
+                {
+                    Session.SendPacket("shop_end 0");
+                    Session.SendPacket(
+                        UserInterfaceHelper.GenerateMsg(
+                            Language.Instance.GetMessageFromKey("NOT_ENOUGH_PLACE"), 0));
                 }
             }
+        }
 
         #endregion
     }

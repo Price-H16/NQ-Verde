@@ -96,139 +96,6 @@
           <e p="AssemblyInfo.cs" t="Include" />
         </e>
       </e>
-      <e p="Src\ChickenApi\ChickenAPI.Enums" t="IncludeRecursive">
-        <e p="AuthenticationState.cs" t="Include" />
-        <e p="AuthorityType.cs" t="Include" />
-        <e p="AuthResponse.cs" t="Include" />
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="ChickenAPI.Enums.csproj" t="IncludeRecursive" />
-        <e p="Game" t="Include">
-          <e p="BCard" t="Include">
-            <e p="BCard_Additional.cs" t="Include" />
-            <e p="BCardRelationType.cs" t="Include" />
-            <e p="BCardType.cs" t="Include" />
-          </e>
-          <e p="Buffs" t="Include">
-            <e p="BuffType.cs" t="Include" />
-          </e>
-          <e p="Character" t="Include">
-            <e p="ChannelColor.cs" t="Include" />
-            <e p="CharacterClassType.cs" t="Include" />
-            <e p="CharacterDignity.cs" t="Include" />
-            <e p="CharacterNameAppearance.cs" t="Include" />
-            <e p="CharacterOption.cs" t="Include" />
-            <e p="CharacterRep.cs" t="Include" />
-            <e p="CharacterState.cs" t="Include" />
-            <e p="FactionType.cs" t="Include" />
-            <e p="GenderType.cs" t="Include" />
-            <e p="HairColorType.cs" t="Include" />
-            <e p="HairStyleType.cs" t="Include" />
-            <e p="MinilandState.cs" t="Include" />
-            <e p="ReputationIconType.cs" t="Include" />
-          </e>
-          <e p="Drop" t="Include">
-            <e p="DropType.cs" t="Include" />
-          </e>
-          <e p="Effects" t="Include">
-            <e p="EmojiType.cs" t="Include" />
-          </e>
-          <e p="Entity" t="Include">
-            <e p="DirectionType.cs" t="Include" />
-            <e p="ElementType.cs" t="Include" />
-            <e p="EntityType.cs" t="Include" />
-            <e p="MateType.cs" t="Include" />
-            <e p="MonsterType.cs" t="Include" />
-            <e p="NpcMonsterRaceType.cs" t="Include" />
-            <e p="ReqInfoType.cs" t="Include" />
-            <e p="VisualType.cs" t="Include" />
-          </e>
-          <e p="Families" t="Include">
-            <e p="FamilyAuthority.cs" t="Include" />
-            <e p="FamilyAuthorityType.cs" t="Include" />
-            <e p="FamilyLogType.cs" t="Include" />
-            <e p="FamilyMemberRank.cs" t="Include" />
-          </e>
-          <e p="Groups" t="Include">
-            <e p="GroupDropType.cs" t="Include" />
-          </e>
-          <e p="Items" t="Include">
-            <e p="ArmorOptionType.cs" t="Include" />
-            <e p="EInfoPacketType.cs" t="Include" />
-            <e p="EquipmentOptionType.cs" t="Include" />
-            <e p="EquipmentType.cs" t="Include" />
-            <e p="InventoryType.cs" t="Include" />
-            <e p="ItemClassType.cs" t="Include" />
-            <e p="ItemType.cs" t="Include" />
-            <e p="ItemWearType.cs" t="Include" />
-            <e p="JewelOptionType.cs" t="Include" />
-            <e p="Upgrade" t="Include">
-              <e p="FixedUpModeType.cs" t="Include" />
-              <e p="RarifyModeType.cs" t="Include" />
-              <e p="RarifyProtectionType.cs" t="Include" />
-              <e p="UpgradeModeType.cs" t="Include" />
-              <e p="UpgradeProtectionType.cs" t="Include" />
-              <e p="UpgradeTypeEvent.cs" t="Include" />
-            </e>
-            <e p="WeaponOptionLevelType.cs" t="Include" />
-            <e p="WeaponOptionType.cs" t="Include" />
-          </e>
-          <e p="Maps" t="Include">
-            <e p="MapLayerType.cs" t="Include" />
-          </e>
-          <e p="Mates" t="Include">
-            <e p="SpPartnerRank.cs" t="Include" />
-          </e>
-          <e p="NosBazaar" t="Include">
-            <e p="NosBazaarCategoryType.cs" t="Include" />
-            <e p="NosBazaarOrderType.cs" t="Include" />
-          </e>
-          <e p="PlayerSessionState.cs" t="Include" />
-          <e p="Portals" t="Include">
-            <e p="PortalType.cs" t="Include" />
-          </e>
-          <e p="Quicklist" t="Include">
-            <e p="QuicklistItemSlotType.cs" t="Include" />
-            <e p="QuicklistSkillSlotType.cs" t="Include" />
-          </e>
-          <e p="Relations" t="Include">
-            <e p="CharacterRelationType.cs" t="Include" />
-            <e p="RelationInvitationProcess.cs" t="Include" />
-          </e>
-          <e p="Skill" t="Include">
-            <e p="SkillTargetType.cs" t="Include" />
-          </e>
-          <e p="Visibility" t="Include">
-            <e p="VisibilityType.cs" t="Include" />
-          </e>
-        </e>
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netstandard2.0" t="Include">
-              <e p="ChickenAPI.Enums.AssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
-        <e p="Packets" t="Include">
-          <e p="CancelPacketType.cs" t="Include" />
-          <e p="DelayPacketType.cs" t="Include" />
-          <e p="EffectType.cs" t="Include" />
-          <e p="FInsPacketType.cs" t="Include" />
-          <e p="GuriPacketType.cs" t="Include" />
-          <e p="MsgPacketType.cs" t="Include" />
-          <e p="MShopPacketType.cs" t="Include" />
-          <e p="OutPacketType.cs" t="Include" />
-          <e p="PJoinPacketType.cs" t="Include" />
-          <e p="PslPacketType.cs" t="Include" />
-          <e p="RlPacketType.cs" t="Include" />
-          <e p="SayColorType.cs" t="Include" />
-          <e p="ShopEndPacketType.cs" t="Include" />
-          <e p="SlPacketType.cs" t="Include" />
-          <e p="SMemoPacketType.cs" t="Include" />
-          <e p="SuPacketHitMode.cs" t="Include" />
-          <e p="UpgradePacketType.cs" t="Include" />
-        </e>
-        <e p="RegionType.cs" t="Include" />
-      </e>
       <e p="Src\ChickenApi\ChickenApi.Events" t="IncludeRecursive">
         <e p="AsyncTypedSenderEventHandler.cs" t="Include" />
         <e p="BasicEventPipelineAsync.cs" t="Include" />
@@ -302,6 +169,7 @@
         <e p="FamilyCharacterDAO.cs" t="Include" />
         <e p="FamilyDAO.cs" t="Include" />
         <e p="FamilyLogDAO.cs" t="Include" />
+        <e p="FamilyQuestsDAO.cs" t="Include" />
         <e p="FamilySkillMissionDAO.cs" t="Include" />
         <e p="GeneralLogDAO.cs" t="Include" />
         <e p="Generic" t="Include">
@@ -310,6 +178,7 @@
         <e p="ItemDAO.cs" t="Include" />
         <e p="ItemInstanceDAO.cs" t="Include" />
         <e p="Logs" t="Include">
+          <e p="ChatLogDAO.cs" t="Include" />
           <e p="LogsCommandsDAO.cs" t="Include" />
         </e>
         <e p="MailDAO.cs" t="Include" />
@@ -380,6 +249,7 @@
         <e p="Family.cs" t="Include" />
         <e p="FamilyCharacter.cs" t="Include" />
         <e p="FamilyLog.cs" t="Include" />
+        <e p="FamilyQuests.cs" t="Include" />
         <e p="FamilySkillMission.cs" t="Include" />
         <e p="GeneralLog.cs" t="Include" />
         <e p="Helpers" t="Include">
@@ -388,6 +258,7 @@
         <e p="Item.cs" t="Include" />
         <e p="ItemInstance.cs" t="Include" />
         <e p="Logs" t="Include">
+          <e p="ChatLog.cs" t="Include" />
           <e p="LogsCommands.cs" t="Include" />
         </e>
         <e p="Mail.cs" t="Include" />
@@ -465,6 +336,18 @@
           <e p="202009022254495_FixCharacterOptions.cs" t="Include" />
           <e p="202009022254495_FixCharacterOptions.designer.cs" t="Include" />
           <e p="202009022254495_FixCharacterOptions.resx" t="Include" />
+          <e p="202010060635576_Update1.cs" t="Include" />
+          <e p="202010060635576_Update1.designer.cs" t="Include" />
+          <e p="202010060635576_Update1.resx" t="Include" />
+          <e p="202010060646017_Update2.cs" t="Include" />
+          <e p="202010060646017_Update2.designer.cs" t="Include" />
+          <e p="202010060646017_Update2.resx" t="Include" />
+          <e p="202010190911250_FamilyQuests.cs" t="Include" />
+          <e p="202010190911250_FamilyQuests.designer.cs" t="Include" />
+          <e p="202010190911250_FamilyQuests.resx" t="Include" />
+          <e p="202010191043301_DiscordBot.cs" t="Include" />
+          <e p="202010191043301_DiscordBot.designer.cs" t="Include" />
+          <e p="202010191043301_DiscordBot.resx" t="Include" />
           <e p="202010211031067_LockCoe.cs" t="Include" />
           <e p="202010211031067_LockCoe.designer.cs" t="Include" />
           <e p="202010211031067_LockCoe.resx" t="Include" />
@@ -495,9 +378,12 @@
           <e p="202012030053456_Tono21.cs" t="Include" />
           <e p="202012030053456_Tono21.designer.cs" t="Include" />
           <e p="202012030053456_Tono21.resx" t="Include" />
-          <e p="202012212157445_11.cs" t="Include" />
-          <e p="202012212157445_11.designer.cs" t="Include" />
-          <e p="202012212157445_11.resx" t="Include" />
+          <e p="202012190114206_Chat.cs" t="Include" />
+          <e p="202012190114206_Chat.designer.cs" t="Include" />
+          <e p="202012190114206_Chat.resx" t="Include" />
+          <e p="202012211734211_run.cs" t="Include" />
+          <e p="202012211734211_run.designer.cs" t="Include" />
+          <e p="202012211734211_run.resx" t="Include" />
           <e p="Configuration.cs" t="Include" />
         </e>
         <e p="MinigameLog.cs" t="Include" />
@@ -557,6 +443,7 @@
         <e p="IFamilyCharacterDAO.cs" t="Include" />
         <e p="IFamilyDAO.cs" t="Include" />
         <e p="IFamilyLogDAO.cs" t="Include" />
+        <e p="IFamilyQuestsDAO.cs" t="Include" />
         <e p="IFamilySkillMissionDAO.cs" t="Include" />
         <e p="IGeneralLogDAO.cs" t="Include" />
         <e p="IItemDAO.cs" t="Include" />
@@ -599,6 +486,7 @@
         <e p="IStaticBuffDAO.cs" t="Include" />
         <e p="ITeleporterDAO.cs" t="Include" />
         <e p="Logs" t="Include">
+          <e p="IChatLogDAO.cs" t="Include" />
           <e p="ILogsCommandsDAO.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive" />
@@ -638,6 +526,7 @@
         <e p="FamilyCharacterDTO.cs" t="Include" />
         <e p="FamilyDTO.cs" t="Include" />
         <e p="FamilyLogDTO.cs" t="Include" />
+        <e p="FamilyQuestsDTO.cs" t="Include" />
         <e p="FamilySkillMissionDTO.cs" t="Include" />
         <e p="GeneralLogDTO.cs" t="Include" />
         <e p="Interfaces" t="Include">
@@ -646,6 +535,7 @@
         <e p="ItemDTO.cs" t="Include" />
         <e p="ItemInstanceDTO.cs" t="Include" />
         <e p="Logs" t="Include">
+          <e p="ChatLogDTO.cs" t="Include" />
           <e p="LogsCommandsDTO.cs" t="Include" />
         </e>
         <e p="MailDTO.cs" t="Include" />
@@ -866,6 +756,7 @@
           <e p="Packet" t="Include">
             <e p="BattleExt.cs" t="Include" />
             <e p="InvExt.cs" t="Include" />
+            <e p="LoginExt.cs" t="Include" />
             <e p="MateExt.cs" t="Include" />
             <e p="MinilandExt.cs" t="Include" />
             <e p="ShopExt.cs" t="Include" />
@@ -1174,7 +1065,6 @@
             <e p="EffectPacket.cs" t="Include" />
             <e p="EqPacket.cs" t="Include" />
             <e p="EquipPacket.cs" t="Include" />
-            <e p="FdPacket.cs" t="Include" />
             <e p="GboxPacket.cs" t="Include" />
             <e p="GetPacket.cs" t="Include" />
             <e p="HeroPacket.cs" t="Include" />
@@ -1367,15 +1257,19 @@
         <e p="ArenaTeamType.cs" t="Include" />
         <e p="AscrPacketType.cs" t="Include" />
         <e p="AttackType.cs" t="Include" />
+        <e p="AuthorityType.cs" t="Include" />
         <e p="BankActionType.cs" t="Include" />
         <e p="BazaarListType.cs" t="Include" />
         <e p="BazaarType.cs" t="Include" />
+        <e p="BCardType.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="BuffType.cs" t="Include" />
         <e p="BuyShopType.cs" t="Include" />
         <e p="CellonOptionType.cs" t="Include" />
         <e p="CharacterOption.cs" t="Include" />
         <e p="CharacterRelationType.cs" t="Include" />
         <e p="CharacterState.cs" t="Include" />
+        <e p="ClassType.cs" t="Include" />
         <e p="DialogType.cs" t="Include" />
         <e p="EntityType.cs" t="Include" />
         <e p="EquipmentType.cs" t="Include" />
@@ -1494,6 +1388,7 @@
           <e p="BattleEntity.cs" t="Include" />
           <e p="BattleEntityExtension.cs" t="Include" />
           <e p="HitRequest.cs" t="Include" />
+          <e p="IBattleEntity.cs" t="Include" />
           <e p="MTListHitTarget.cs" t="Include" />
         </e>
         <e p="BazaarItemLink.cs" t="Include" />
@@ -1549,9 +1444,6 @@
             <e p="RAINBOWBATTLE.cs" t="Include" />
           </e>
           <e p="Schedule.cs" t="Include" />
-          <e p="SHOPSHIP" t="Include">
-            <e p="ShopShip.cs" t="Include" />
-          </e>
           <e p="TALENTARENA (Unused)" t="Include">
             <e p="TalentArena.cs" t="Include" />
             <e p="TalentArenaBattle.cs" t="Include" />
@@ -1698,6 +1590,7 @@
         </e>
         <e p="Shop.cs" t="Include" />
         <e p="Skill.cs" t="Include" />
+        <e p="ToSummon.cs" t="Include" />
         <e p="UseSkillOnDamage.cs" t="Include" />
       </e>
       <e p="Src\Librairies\OpenNos.Handler" t="IncludeRecursive">
@@ -2178,6 +2071,7 @@
           <e p="FamilyCharacterMapper.cs" t="Include" />
           <e p="FamilyLogMapper.cs" t="Include" />
           <e p="FamilyMapper.cs" t="Include" />
+          <e p="FamilyQuestsMapper.cs" t="Include" />
           <e p="FamilySkillMissionMapper.cs" t="Include" />
           <e p="GeneralLogMapper.cs" t="Include" />
           <e p="ItemInstanceMapper.cs" t="Include" />

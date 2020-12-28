@@ -1,5 +1,9 @@
 ﻿using System;
-using ChickenAPI.Enums.Game.BCard;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static OpenNos.Domain.BCardType;
 
 namespace OpenNos.DAL.EF
 {
@@ -9,7 +13,7 @@ namespace OpenNos.DAL.EF
 
         public Guid EquipmentSerialId { get; set; }
 
-        public BCardType Type { get; set; }
+        public CardType Type { get; set; }
 
         public byte SubType { get; set; }
 

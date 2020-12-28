@@ -75,17 +75,14 @@ namespace OpenNos.Handler.PacketHandler.Family
                             break;
                         case 9602:
                             if (ServerManager.Instance.ChannelId != 51) return;
-                            if (Session.Character.Family.FamilyFaction != (byte)FactionType.Angel) return;
-                            if (ServerManager.Instance.Act4AngelStat.Mode != 0) return;
-                            if (ServerManager.Instance.Act4DemonStat.Mode != 0) return;
-                            ServerManager.Instance.Act4AngelStat.Percentage += 2000;
+
+                            //Add filling glaceron bar
+
                             break;
                         case 9603:
                             if (ServerManager.Instance.ChannelId != 51) return;
-                            if (Session.Character.Family.FamilyFaction != (byte)FactionType.Demon) return;
-                            if (ServerManager.Instance.Act4AngelStat.Mode != 0) return;
-                            if (ServerManager.Instance.Act4DemonStat.Mode != 0) return;
-                            ServerManager.Instance.Act4DemonStat.Percentage += 2000;
+                            //Add filling glaceron bar
+
                             break;
 
                         default:

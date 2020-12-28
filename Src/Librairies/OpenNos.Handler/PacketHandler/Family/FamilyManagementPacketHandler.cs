@@ -2,7 +2,6 @@
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.DAL;
-using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject.Helpers;
@@ -42,18 +41,19 @@ namespace OpenNos.Handler.PacketHandler.Family
                 return;
             }
 
-            long targetId = familyManagementPacket.TargetId;
+            var targetId = familyManagementPacket.TargetId;
             if (DAOFactory.FamilyCharacterDAO.LoadByCharacterId(targetId)?.FamilyId
                 != Session.Character.FamilyCharacter.FamilyId)
             {
                 return;
             }
 
-            FamilyCharacterDTO famChar = DAOFactory.FamilyCharacterDAO.LoadByCharacterId(targetId);
+            var famChar = DAOFactory.FamilyCharacterDAO.LoadByCharacterId(targetId);
             if (famChar.Authority == familyManagementPacket.FamilyAuthorityType)
             {
                 return;
             }
+
             switch (familyManagementPacket.FamilyAuthorityType)
             {
                 case FamilyAuthority.Head:
@@ -81,7 +81,7 @@ namespace OpenNos.Handler.PacketHandler.Family
                         DAOFactory.ItemInstanceDAO.InsertOrUpdate(s);
                     });
                     Session.Character.FamilyCharacter.Authority = FamilyAuthority.Familydeputy;
-                    FamilyCharacterDTO chara2 = Session.Character.FamilyCharacter;
+                    var chara2 = Session.Character.FamilyCharacter;
                     DAOFactory.FamilyCharacterDAO.InsertOrUpdate(ref chara2);
                     Session.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("DONE")));
                     break;
@@ -161,8 +161,9 @@ namespace OpenNos.Handler.PacketHandler.Family
                     DAOFactory.FamilyCharacterDAO.InsertOrUpdate(ref famChar);
                     break;
             }
-            CharacterDTO character = DAOFactory.CharacterDAO.LoadById(targetId);
-            ClientSession targetSession = ServerManager.Instance.GetSessionByCharacterId(targetId);
+
+            var character = DAOFactory.CharacterDAO.LoadById(targetId);
+            var targetSession = ServerManager.Instance.GetSessionByCharacterId(targetId);
 
             Session.Character.Family.InsertFamilyLog(FamilyLogType.AuthorityChanged, Session.Character.Name,
                 character.Name, authority: familyManagementPacket.FamilyAuthorityType);

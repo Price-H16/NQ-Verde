@@ -30,7 +30,6 @@
         TowerInstanceType,
         FafnirBossInstance,
         YertirandBossInstance,
-        GrasslinBossInstance,
-        ShopShip
+        GrasslinBossInstance
     }
 }

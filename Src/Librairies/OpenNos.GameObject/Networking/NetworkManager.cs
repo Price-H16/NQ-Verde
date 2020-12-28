@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChickenAPI.Enums;
 using OpenNos.Core;
 using OpenNos.Core.Networking.Communication.Scs.Communication.EndPoints.Tcp;
 using OpenNos.Core.Networking.Communication.Scs.Server;
@@ -64,17 +63,14 @@ namespace OpenNos.GameObject
             _server.ClientConnected -= OnServerClientDisconnected;
             _server.ClientDisconnected -= OnServerClientConnected;
         }
-        
-        private string GetFailPacket(AuthResponse response) => $"failc {(byte)response}";
 
-        
         protected override ClientSession IntializeNewSession(INetworkClient client)
         {
             if (!CheckGeneralLog(client))
             {
                 Logger.Warn(string.Format(Language.Instance.GetMessageFromKey("FORCED_DISCONNECT"), client.ClientId));
                 client.Initialize(_fallbackEncryptor);
-                client.SendPacket(GetFailPacket(AuthResponse.CantConnect));
+                client.SendPacket($"failc {LoginFailType.CantConnect}");
                 client.Disconnect();
                 return null;
             }

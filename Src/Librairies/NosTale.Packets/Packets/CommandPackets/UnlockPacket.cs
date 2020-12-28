@@ -1,5 +1,4 @@
-﻿using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 
 namespace OpenNos.GameObject.CommandPackets

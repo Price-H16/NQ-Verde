@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ChickenAPI.Enums.Game.BCard;
 using OpenNos.DAL;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -166,8 +165,8 @@ namespace OpenNos.GameObject
 
             var rune =
                 $"{RuneAmount} {(IsBreaked ? "1" : "0")} {RuneEffects.Count()} " +
-                $"{RuneEffects.Where(x => x.Type != BCardType.A7Powers1 && x.Type != BCardType.A7Powers2).Aggregate("", (result, effect) => result += $"{(byte)effect.Type}.{(byte)effect.SubType}.{effect.FirstData * 4}.{effect.SecondData * 4}.{effect.ThirdData} ")} " +
-                $"{RuneEffects.Where(x => x.Type == BCardType.A7Powers1 || x.Type == BCardType.A7Powers2).Aggregate("", (result, effect) => result += $"{(byte)effect.Type}.{(byte)effect.SubType}.{effect.FirstData * 4}.{effect.SecondData * 4}.{effect.ThirdData} ")}";
+                $"{RuneEffects.Where(x => x.Type != BCardType.CardType.A7Powers1 && x.Type != BCardType.CardType.A7Powers2).Aggregate("", (result, effect) => result += $"{(byte)effect.Type}.{(byte)effect.SubType}.{effect.FirstData * 4}.{effect.SecondData * 4}.{effect.ThirdData} ")} " +
+                $"{RuneEffects.Where(x => x.Type == BCardType.CardType.A7Powers1 || x.Type == BCardType.CardType.A7Powers2).Aggregate("", (result, effect) => result += $"{(byte)effect.Type}.{(byte)effect.SubType}.{effect.FirstData * 4}.{effect.SecondData * 4}.{effect.ThirdData} ")}";
             switch (itemType)
             {
                 case ItemType.Weapon:
@@ -449,20 +448,20 @@ namespace OpenNos.GameObject
 
                 slElementShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLElement) +
                                  GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) +
-                                 session.Character.GetTitleEffectValue(BCardType.IncreaseSlPoint,
-                                     (byte) BCardSubTypes.IncreaseSlPoint.IncreaseEllement);
+                                 session.Character.GetTitleEffectValue(BCardType.CardType.IncreaseSlPoint,
+                                     (byte) AdditionalTypes.IncreaseSlPoint.IncreaseEllement);
                 slHpShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLHP) +
                             GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) +
-                            session.Character.GetTitleEffectValue(BCardType.IncreaseSlPoint,
-                                (byte) BCardSubTypes.IncreaseSlPoint.IncreaseHPMP);
+                            session.Character.GetTitleEffectValue(BCardType.CardType.IncreaseSlPoint,
+                                (byte) AdditionalTypes.IncreaseSlPoint.IncreaseHPMP);
                 slDefenceShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLDefence) +
                                  GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) +
-                                 session.Character.GetTitleEffectValue(BCardType.IncreaseSlPoint,
-                                     (byte) BCardSubTypes.IncreaseSlPoint.IncreaseDefence);
+                                 session.Character.GetTitleEffectValue(BCardType.CardType.IncreaseSlPoint,
+                                     (byte) AdditionalTypes.IncreaseSlPoint.IncreaseDefence);
                 slHitShell = GetShellWeaponEffectValue(ShellWeaponEffectType.SLDamage) +
                              GetShellWeaponEffectValue(ShellWeaponEffectType.SLGlobal) +
-                             session.Character.GetTitleEffectValue(BCardType.IncreaseSlPoint,
-                                 (byte) BCardSubTypes.IncreaseSlPoint.IncreaseDamage);
+                             session.Character.GetTitleEffectValue(BCardType.CardType.IncreaseSlPoint,
+                                 (byte) AdditionalTypes.IncreaseSlPoint.IncreaseDamage);
             }
 
             var slElement = CharacterHelper.SlPoint(SlElement, 2);

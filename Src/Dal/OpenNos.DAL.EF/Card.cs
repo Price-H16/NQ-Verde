@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF

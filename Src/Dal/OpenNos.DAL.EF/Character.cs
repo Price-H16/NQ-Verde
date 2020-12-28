@@ -48,8 +48,6 @@ namespace OpenNos.DAL.EF
         public long RBBLose { get; set; }
 
         public int ArenaWinner { get; set; }
-        
-        public int ItemShopShip { get; set; }
 
         public virtual ICollection<BazaarItem> BazaarItem { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using ChickenAPI.Enums.Game.Character;
+﻿using OpenNos.Domain;
 
 namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Distance
 {
@@ -9,19 +9,19 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Distance
 
         public void Initialize()
         {
-            _stats = new int[(int) CharacterClassType.Unknown, MAX_LEVEL];
+            _stats = new int[(int) ClassType.Unknown, MAX_LEVEL];
 
 
             for (var i = 0; i < MAX_LEVEL; i++)
             {
-                _stats[(int) CharacterClassType.Adventurer, i] = i + 9; // approx
-                _stats[(int) CharacterClassType.Swordsman, i] = i + 12; // approx
-                _stats[(int) CharacterClassType.Magician, i] = i + 14; // approx
-                _stats[(int) CharacterClassType.Archer, i] = i + 2; // approx
-                _stats[(int) CharacterClassType.MartialArtist, i] = i + 12; // approx
+                _stats[(int) ClassType.Adventurer, i] = i + 9; // approx
+                _stats[(int) ClassType.Swordsman, i] = i + 12; // approx
+                _stats[(int) ClassType.Magician, i] = i + 14; // approx
+                _stats[(int) ClassType.Archer, i] = i + 2; // approx
+                _stats[(int) ClassType.MartialArtist, i] = i + 12; // approx
             }
         }
 
-        public int GetStat(CharacterClassType type, byte level) => _stats[(int) type, level - 1 > 0 ? level - 1 : 0];
+        public int GetStat(ClassType type, byte level) => _stats[(int) type, level - 1 > 0 ? level - 1 : 0];
     }
 }

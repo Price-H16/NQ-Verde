@@ -7,7 +7,6 @@ using OpenNos.Master.Library.Client;
 using System;
 using System.Configuration;
 using System.Linq;
-using ChickenAPI.Enums;
 using NosTale.Packets.Packets.ClientPackets;
 using NosTale.Configuration.Utilities;
 using NosTale.Configuration;
@@ -23,7 +22,6 @@ namespace OpenNos.Handler.PacketHandler.Basic
         #endregion
 
         #region Instantiation
-        private string GetFailPacket(AuthResponse response) => $"failc {(byte)response}";
 
         public NoS0575PacketHandler(ClientSession session) => _session = session;
 
@@ -39,7 +37,7 @@ namespace OpenNos.Handler.PacketHandler.Basic
             if (channelpacket == null || !channelpacket.Contains(':'))
             {
                 Logger.Debug("Could not retrieve Worldserver groups. Please make sure they've already been registered.");
-                _session.SendPacket(GetFailPacket(AuthResponse.Maintenance));
+                _session.SendPacket($"failc {(byte)LoginFailType.Maintenance}");
             }
 
             return channelpacket;
@@ -71,7 +69,7 @@ namespace OpenNos.Handler.PacketHandler.Basic
             AccountDTO loadedAccount = DAOFactory.AccountDAO.LoadByName(user.Name);
             if (loadedAccount != null && loadedAccount.Name != user.Name)
             {
-                _session.SendPacket(GetFailPacket(AuthResponse.WrongCaps));
+                _session.SendPacket($"failc {(byte)LoginFailType.WrongCaps}");
                 return;
             }
             if (loadedAccount?.Password.ToUpper().Equals(user.Password) == true)
@@ -81,7 +79,7 @@ namespace OpenNos.Handler.PacketHandler.Basic
 
                 if (DAOFactory.PenaltyLogDAO.LoadByIp(ipAddress).Count() > 0)
                 {
-                    _session.SendPacket(GetFailPacket(AuthResponse.CantConnect));
+                    _session.SendPacket($"failc {(byte)LoginFailType.CantConnect}");
                     return;
                 }
 
@@ -93,7 +91,7 @@ namespace OpenNos.Handler.PacketHandler.Basic
                         .FirstOrDefault(s => s.DateEnd > DateTime.Now && s.Penalty == PenaltyType.Banned);
                     if (penalty != null)
                     {
-                        _session.SendPacket(GetFailPacket(AuthResponse.Banned));
+                        _session.SendPacket($"failc {(byte)LoginFailType.Banned}");
                     }
                     else
                     {
@@ -102,7 +100,7 @@ namespace OpenNos.Handler.PacketHandler.Basic
 
                             case AuthorityType.Banned:
                                 {
-                                    _session.SendPacket(GetFailPacket(AuthResponse.Banned));
+                                    _session.SendPacket($"failc {(byte)LoginFailType.Banned}");
                                 }
                                 break;
 
@@ -115,7 +113,7 @@ namespace OpenNos.Handler.PacketHandler.Basic
                                         MaintenanceLogDTO maintenanceLog = DAOFactory.MaintenanceLogDAO.LoadFirst();
                                         if (maintenanceLog != null && maintenanceLog.DateStart < DateTime.Now)
                                         {
-                                            _session.SendPacket(GetFailPacket(AuthResponse.Maintenance));
+                                            _session.SendPacket($"failc {(byte)LoginFailType.Maintenance}");
                                             return;
                                         }
                                     }
@@ -162,12 +160,12 @@ namespace OpenNos.Handler.PacketHandler.Basic
                 }
                 else
                 {
-                    _session.SendPacket(GetFailPacket(AuthResponse.AlreadyConnected));
+                    _session.SendPacket($"failc {(byte)LoginFailType.AlreadyConnected}");
                 }
             }
             else
             {
-                _session.SendPacket(GetFailPacket(AuthResponse.AccountOrPasswordWrong));
+                _session.SendPacket($"failc {(byte)LoginFailType.AccountOrPasswordWrong}");
             }
         }
 

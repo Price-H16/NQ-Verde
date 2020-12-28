@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using ChickenAPI.Enums.Game.BCard;
 using NosTale.Configuration;
 using NosTale.Configuration.Configuration.Item;
 using NosTale.Configuration.Utilities;
@@ -8,6 +7,7 @@ using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using static OpenNos.Domain.BCardType;
 
 namespace OpenNos.GameObject.Extension.Inventory
 {
@@ -279,7 +279,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                 {
                     RuneEffectId = runeBuff.RuneEffectId,
                     SubType = (byte) getBuff.SubType,
-                    Type = (BCardType) getBuff.Type,
+                    Type = (CardType) getBuff.Type,
                     FirstData = runeBuff.FirstData,
                     SecondData = getBuff.ValueByLevel[runeBuff.ThirdData - 1],
                     ThirdData = runeBuff.ThirdData,
@@ -289,7 +289,7 @@ namespace OpenNos.GameObject.Extension.Inventory
             }
             else
             {
-                if (equipment.RuneEffects.Where(x => x.Type == BCardType.A7Powers1 || x.Type == BCardType.A7Powers2)
+                if (equipment.RuneEffects.Where(x => x.Type == CardType.A7Powers1 || x.Type == CardType.A7Powers2)
                     .Count() >= 2)
                 {
                     equipment.ApplyRuneBuff(session, message);
@@ -299,7 +299,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                 runeBuff = new RuneEffectDTO
                 {
                     SubType = (byte) getBuff.SubType,
-                    Type = (BCardType) getBuff.Type,
+                    Type = (CardType) getBuff.Type,
                     FirstData = 1,
                     SecondData = getBuff.ValueByLevel[0],
                     ThirdData = 1,
@@ -310,7 +310,9 @@ namespace OpenNos.GameObject.Extension.Inventory
             equipment.RuneEffects.Add(runeBuff);
             DAOFactory.RuneEffectDAO.InsertOrUpdate(runeBuff);
 
-            session.SendPacket($"ru_suc 0 {runeBuff.Type}.{(byte) runeBuff.SubType}.{runeBuff.FirstData * 4}.{runeBuff.SecondData * 4}.{runeBuff.ThirdData} " + message);
+            session.SendPacket(
+                $"ru_suc 0 {runeBuff.Type}.{(byte) runeBuff.SubType}.{runeBuff.FirstData * 4}.{runeBuff.SecondData * 4}.{runeBuff.ThirdData} " +
+                message);
         }
 
         private static void ApplyRuneEffect(this ItemInstance equipment, ClientSession session, string message)
@@ -406,7 +408,7 @@ namespace OpenNos.GameObject.Extension.Inventory
 
             var runeEffect = DAOFactory.RuneEffectDAO.LoadByEquipmentSerialId(equipment.EquipmentSerialId).Where(
                 s => s.SubType == getTypeAndSubtype.SubType &&
-                     s.Type == (BCardType) getTypeAndSubtype.Type).FirstOrDefault();
+                     s.Type == (CardType) getTypeAndSubtype.Type).FirstOrDefault();
 
             if (runeEffect != null)
             {
@@ -423,7 +425,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                 {
                     RuneEffectId = runeEffect.RuneEffectId,
                     SubType = (byte) getTypeAndSubtype.SubType,
-                    Type = (BCardType) getTypeAndSubtype.Type,
+                    Type = (CardType) getTypeAndSubtype.Type,
                     FirstData = getTypeAndSubtype.ValueByLevel[runeEffect.ThirdData - 1],
                     SecondData = 0,
                     ThirdData = runeEffect.ThirdData,
@@ -432,7 +434,7 @@ namespace OpenNos.GameObject.Extension.Inventory
             }
             else
             {
-                if (equipment.RuneEffects.Where(x => x.Type != BCardType.A7Powers1 && x.Type == BCardType.A7Powers2)
+                if (equipment.RuneEffects.Where(x => x.Type != CardType.A7Powers1 && x.Type == CardType.A7Powers2)
                     .Count() >= 7)
                 {
                     equipment.ApplyRuneEffect(session, message);
@@ -442,7 +444,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                 runeEffect = new RuneEffectDTO
                 {
                     SubType = (byte) getTypeAndSubtype.SubType,
-                    Type = (BCardType) getTypeAndSubtype.Type,
+                    Type = (CardType) getTypeAndSubtype.Type,
                     FirstData = getTypeAndSubtype.ValueByLevel[0],
                     SecondData = 0,
                     ThirdData = 1,

@@ -172,10 +172,6 @@
       <Project>{a6d06310-4228-4afa-894d-69283976e810}</Project>
       <Name>ChickenAPI.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ChickenApi\ChickenAPI.Enums\ChickenAPI.Enums.csproj">
-      <Project>{355f04a9-be90-45ce-a695-089c5f9c2b92}</Project>
-      <Name>ChickenAPI.Enums</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NosTale.Configuration\NosTale.Configuration.csproj">
       <Project>{011EE023-E1B8-4645-BBE9-94AC35B55390}</Project>
       <Name>NosTale.Configuration</Name>

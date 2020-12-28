@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using ChickenAPI.Enums;
 using NosTale.Packets.Packets.CommandPackets;
 using OpenNos.Core;
 using OpenNos.Domain;
@@ -59,7 +58,7 @@ namespace OpenNos.Handler.PacketHandler.Command
                 else
                 {
                     Session.SendPacket(Session.Character.GenerateSay( "Sadly, there are no online team member right now. Please ask for help on our Discord Server at:",10));
-                    Session.SendPacket(Session.Character.GenerateSay("https://discord.gg/qAKvr5Cb", 10));
+                    Session.SendPacket(Session.Character.GenerateSay("https://discord.gg/8XjdyCm", 10));
                 }
             }
             else

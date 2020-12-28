@@ -22,6 +22,7 @@ using System.Reactive.Linq;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 using ChickenAPI.Enums;
 using ChickenAPI.Enums.Game.BCard;
 using ChickenAPI.Enums.Game.Buffs;
@@ -32,6 +33,8 @@ using GenderType = OpenNos.Domain.GenderType;
 using HairColorType = OpenNos.Domain.HairColorType;
 using HairStyleType = OpenNos.Domain.HairStyleType;
 using System.Reflection;
+=======
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
 namespace OpenNos.GameObject.Networking
 {
@@ -137,6 +140,8 @@ namespace OpenNos.GameObject.Networking
         public List<CharacterRelationDTO> CharacterRelations { get; set; }
 
         public ThreadSafeSortedList<long, ClientSession> CharacterScreenSessions { get; set; }
+
+        //public ThreadSafeGenericList<ChatLogDTO> ChatLogs { get; set; }
 
         public ThreadSafeGenericList<LogCommandsDTO> CommandsLogs { get; set; }
 
@@ -285,11 +290,11 @@ namespace OpenNos.GameObject.Networking
             return Skills.Find(m => m.SkillVNum.Equals(skillVNum));
         }
 
-        //Function to get a random number 
         public static int RandomNumber(int min = 0, int max = 100)
         {
             lock (syncLock)
-            { // synchronize
+            {
+                // synchronize
                 return random.Next(min, max);
             }
         }
@@ -1469,8 +1474,8 @@ namespace OpenNos.GameObject.Networking
                                                        s.Account.Authority)));
                             }
 
-                            if (session.Character.GetBuff(BCardType.SpecialEffects,
-                                                (byte)BCardSubTypes.SpecialEffects.ShadowAppears) is int[]
+                            if (session.Character.GetBuff(BCardType.CardType.SpecialEffects,
+                                                (byte)AdditionalTypes.SpecialEffects.ShadowAppears) is int[]
                                         EffectData && EffectData[0] != 0 &&
                                 EffectData[1] != 0)
                             {
@@ -1487,8 +1492,8 @@ namespace OpenNos.GameObject.Networking
                                            m.PositionY = session.Character.PositionY;
                                        }
 
-                                       if (m.GetBuff(BCardType.SpecialEffects,
-                                                           (byte)BCardSubTypes.SpecialEffects.ShadowAppears) is int[]
+                                       if (m.GetBuff(BCardType.CardType.SpecialEffects,
+                                                           (byte)AdditionalTypes.SpecialEffects.ShadowAppears) is int[]
                                                    MateEffectData && MateEffectData[0] != 0 &&
                                            MateEffectData[1] != 0)
                                        {
@@ -1552,7 +1557,7 @@ namespace OpenNos.GameObject.Networking
 
                     }
 
-                    if (session.CurrentMapInstance?.Map.MapTypes.All(s => s.MapTypeId != (short)MapTypeEnum.Act52) == true && session.Character.Buff.Any(s => s.Card.CardId == 339)) //Act5.2 debuff
+                    /*if (session.CurrentMapInstance?.Map.MapTypes.All(s => s.MapTypeId != (short)MapTypeEnum.Act52) == true && session.Character.Buff.Any(s => s.Card.CardId == 339)) //Act5.2 debuff
 
                     {
                         session.Character.RemoveBuff(339);
@@ -1566,7 +1571,7 @@ namespace OpenNos.GameObject.Networking
                             CharacterId = session.Character.CharacterId,
                             RemainingTime = -1
                         },  true);
-                    }
+                    }*/
 
                     session.SendPacket(session.Character.GenerateMinimapPosition());
                     session.CurrentMapInstance.OnCharacterDiscoveringMapEvents.ForEach(e =>
@@ -2061,7 +2066,7 @@ namespace OpenNos.GameObject.Networking
                     IsSenderCopy = false,
                     Title = "RankingReward",
                     AttachmentVNum = vnum,
-                    SenderClass = CharacterClassType.Adventurer,
+                    SenderClass = ClassType.Adventurer,
                     SenderGender = GenderType.Male,
                     SenderHairColor = HairColorType.Black,
                     SenderHairStyle = HairStyleType.NoHair,
@@ -2207,7 +2212,6 @@ namespace OpenNos.GameObject.Networking
                 }
                 BazaarList.Add(item);
             });
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"[Load] Bazaar Itemlist: {BazaarList.Count} - successfully loaded");
         }
 
@@ -2215,8 +2219,8 @@ namespace OpenNos.GameObject.Networking
         {
             var box = DAOFactory.BoxItemDAO.LoadAll();
             BoxItems = box;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"[Load] {BoxItems.Count} Box Items has been loaded");
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("BOX_ITEMS_LOADED"),
+                BoxItems.Count));
         }
 
         private void LoadCards()
@@ -2239,7 +2243,11 @@ namespace OpenNos.GameObject.Networking
 
                 Cards.Add(tmp);
             }
+<<<<<<< HEAD
             Console.ForegroundColor = ConsoleColor.Green;
+=======
+
+>>>>>>> parent of d7ef289... Bcard Cleaning
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("CARDS_LOADED"), Cards.Count));
         }
 
@@ -2258,8 +2266,9 @@ namespace OpenNos.GameObject.Networking
                     _generalDrops = monsterDropGrouping.ToList();
                 }
             }
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"[Load] {_monsterDrops.Sum(i => i.Value.Count)} Drops has been loaded");
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("DROPS_LOADED"),
+                _monsterDrops.Sum(i => i.Value.Count)));
         }
 
         public void LoadEvent()
@@ -2365,8 +2374,7 @@ namespace OpenNos.GameObject.Networking
             }
 
             Items.AddRange(item.Values);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"[Load] {Items.Count} Items has been loaded");
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("ITEMS_LOADED"), Items.Count));
         }
 
         private static void LoadMapsAndContent()
@@ -2433,8 +2441,9 @@ namespace OpenNos.GameObject.Networking
                     i++;
                 }
 
-                Console.WriteLine($"[Load] {i} Maps has been loaded");
-                Console.WriteLine($"[Load] {monstercount} Monsters has been loaded");
+                Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MAPS_LOADED"), i));
+                Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MAPMONSTERS_LOADED"),
+                    monstercount));
             }
             catch (Exception e)
             {
@@ -2450,7 +2459,9 @@ namespace OpenNos.GameObject.Networking
             {
                 _mapNpcs[mapNpcGrouping.Key] = mapNpcGrouping.Select(t => t as MapNpc).ToList();
             }
-            Console.WriteLine($"[Load] {_mapNpcs.Sum(i => i.Value.Count)} Map-NPCs has been loaded");
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MAPNPCS_LOADED"),
+                _mapNpcs.Sum(i => i.Value.Count)));
         }
 
         public void LoadMonsterSkill()
@@ -2465,7 +2476,9 @@ namespace OpenNos.GameObject.Networking
                 _monsterSkills[monsterSkillGrouping.Key] =
                         monsterSkillGrouping.Select(n => new NpcMonsterSkill(n)).ToList();
             }
-            Console.WriteLine($"[Load] {_monsterSkills.Sum(i => i.Value.Count)} Monsterskills has been loaded");
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MONSTERSKILLS_LOADED"),
+                _monsterSkills.Sum(i => i.Value.Count)));
         }
 
         private void LoadQuest()
@@ -2504,7 +2517,12 @@ namespace OpenNos.GameObject.Networking
                 _recipes[recipeGrouping.RecipeId] = recipe;
             }
 
+<<<<<<< HEAD
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("RECIPES_LOADED"), _recipes.Count));
+=======
+            Logger.Info(
+                string.Format(Language.Instance.GetMessageFromKey("RECIPES_LOADED"), _recipes.Count));
+>>>>>>> parent of d7ef289... Bcard Cleaning
         }
 
         public void LoadRecipesList()
@@ -2514,7 +2532,13 @@ namespace OpenNos.GameObject.Networking
             {
                 _recipeLists[recipeListGrouping.RecipeListId] = recipeListGrouping;
             }
+<<<<<<< HEAD
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("RECIPELISTS_LOADED"), _recipeLists.Count));
+=======
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("RECIPELISTS_LOADED"),
+                _recipeLists.Count));
+>>>>>>> parent of d7ef289... Bcard Cleaning
         }
 
         public void LoadScriptedInstances()
@@ -2580,7 +2604,7 @@ namespace OpenNos.GameObject.Networking
                 shop.Initialize();
             }
 
-            Console.WriteLine($"[Load] {_shops.Count} Shops has been loaded");
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SHOPS_LOADED"), _shops.Count));
         }
 
         private void LoadShopItems()
@@ -2590,7 +2614,9 @@ namespace OpenNos.GameObject.Networking
             {
                 _shopItems[shopItemGrouping.Key] = shopItemGrouping.ToList();
             }
-            Console.WriteLine($"[Load] {_shopItems.Sum(i => i.Value.Count)} Shop-Items has been loaded");
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SHOPITEMS_LOADED"),
+                _shopItems.Sum(i => i.Value.Count)));
         }
 
         public void LoadShopSkills()
@@ -2600,6 +2626,9 @@ namespace OpenNos.GameObject.Networking
             {
                 _shopSkills[shopSkillGrouping.Key] = shopSkillGrouping.ToList();
             }
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SHOPSKILLS_LOADED"),
+                _shopSkills.Sum(i => i.Value.Count)));
         }
 
         private static void LoadSkills()
@@ -2624,6 +2653,10 @@ namespace OpenNos.GameObject.Networking
 
                 Skills.Add(skillObj);
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of d7ef289... Bcard Cleaning
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SKILLS_LOADED"), Skills.Count));
         }
 
@@ -2634,7 +2667,13 @@ namespace OpenNos.GameObject.Networking
             {
                 _teleporters[teleporterGrouping.Key] = teleporterGrouping.Select(t => t).ToList();
             }
+<<<<<<< HEAD
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("TELEPORTERS_LOADED"),_teleporters.Sum(i => i.Value.Count)));
+=======
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("TELEPORTERS_LOADED"),
+                _teleporters.Sum(i => i.Value.Count)));
+>>>>>>> parent of d7ef289... Bcard Cleaning
         }
 
         public bool MapNpcHasRecipe(int mapNpcId)
@@ -2791,7 +2830,7 @@ namespace OpenNos.GameObject.Networking
             Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_MIN"), Time));
             if (Time > 1)
             {
-                for (int i = 0; i < 60 * (Time - 1); i++)
+                for (var i = 0; i < 60 * (Time - 1); i++)
                 {
                     await Task.Delay(1000).ConfigureAwait(false);
                     if (Instance.ShutdownStop)
@@ -2800,9 +2839,11 @@ namespace OpenNos.GameObject.Networking
                         return;
                     }
                 }
+
                 Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_MIN"), 1));
             }
-            for (int i = 0; i < 30; i++)
+
+            for (var i = 0; i < 30; i++)
             {
                 await Task.Delay(1000).ConfigureAwait(false);
                 if (Instance.ShutdownStop)
@@ -2811,8 +2852,9 @@ namespace OpenNos.GameObject.Networking
                     return;
                 }
             }
+
             Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 30));
-            for (int i = 0; i < 30; i++)
+            for (var i = 0; i < 30; i++)
             {
                 await Task.Delay(1000).ConfigureAwait(false);
                 if (Instance.ShutdownStop)
@@ -2821,8 +2863,9 @@ namespace OpenNos.GameObject.Networking
                     return;
                 }
             }
+
             Shout(string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 10));
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 await Task.Delay(1000).ConfigureAwait(false);
                 if (Instance.ShutdownStop)
@@ -2832,11 +2875,8 @@ namespace OpenNos.GameObject.Networking
                 }
             }
             InShutdown = true;
-            foreach (ClientSession sess in Sessions)
-            {
-                sess.Character?.Dispose();
-            }
             Instance.SaveAll();
+            Instance.DisconnectAll();
             CommunicationServiceClient.Instance.UnregisterWorldServer(WorldId);
             if (IsReboot)
             {
@@ -2848,8 +2888,11 @@ namespace OpenNos.GameObject.Networking
                 {
                     await Task.Delay((ChannelId - 1) * 2000).ConfigureAwait(false);
                 }
-                Process.Start("OpenNos.World.exe", $"--nomsg{( ChannelId == 51 ? $" --port {Configuration.Act4Port}" : "")}");
+
+                Process.Start("OpenNos.World.exe",
+                    $"--nomsg{(ChannelId == 51 ? $" --port {Configuration.Act4Port}" : "")}");
             }
+
             Environment.Exit(0);
         }
 
@@ -3383,33 +3426,40 @@ namespace OpenNos.GameObject.Networking
         private void LoadFamilies()
         {
             FamilyList = new ThreadSafeSortedList<long, Family>();
-            Parallel.ForEach(DAOFactory.FamilyDAO.LoadAll(), familyDto =>
+            foreach (var familyDto in DAOFactory.FamilyDAO.LoadAll())
             {
-                Family family = new Family(familyDto)
+                var family = new Family(familyDto)
                 {
                     FamilyCharacters = new List<FamilyCharacter>()
                 };
-                foreach (FamilyCharacterDTO famchar in DAOFactory.FamilyCharacterDAO.LoadByFamilyId(family.FamilyId).ToList())
+                foreach (var famchar in DAOFactory.FamilyCharacterDAO.LoadByFamilyId(family.FamilyId)
+                    .ToList())
                 {
                     family.FamilyCharacters.Add(new FamilyCharacter(famchar));
                 }
+
                 foreach (FamilySkillMissionDTO famskill in DAOFactory.FamilySkillMissionDAO.LoadByFamilyId(family.FamilyId).ToList())
                 {
                     family.FamilySkillMissions.Add(new FamilySkillMission(famskill));
                 }
-                FamilyCharacter familyCharacter = family.FamilyCharacters.Find(s => s.Authority == FamilyAuthority.Head);
+
+                var familyCharacter =
+                    family.FamilyCharacters.Find(s => s.Authority == FamilyAuthority.Head);
                 if (familyCharacter != null)
                 {
                     family.Warehouse = new Inventory(new Character(familyCharacter.Character));
-                    foreach (ItemInstanceDTO inventory in DAOFactory.ItemInstanceDAO.LoadByCharacterId(familyCharacter.CharacterId).Where(s => s.Type == InventoryType.FamilyWareHouse).ToList())
+                    foreach (var inventory in DAOFactory.ItemInstanceDAO
+                        .LoadByCharacterId(familyCharacter.CharacterId)
+                        .Where(s => s.Type == InventoryType.FamilyWareHouse).ToList())
                     {
                         inventory.CharacterId = familyCharacter.CharacterId;
                         family.Warehouse[inventory.Id] = new ItemInstance(inventory);
                     }
                 }
+
                 family.FamilyLogs = DAOFactory.FamilyLogDAO.LoadByFamilyId(family.FamilyId).ToList();
                 FamilyList[family.FamilyId] = family;
-            });
+            }
         }
 
         private void LoadFamilyArena()
@@ -3478,7 +3528,7 @@ namespace OpenNos.GameObject.Networking
             loadSpecialistGemMap(934); // SP 2
             loadSpecialistGemMap(948); // SP 3
             loadSpecialistGemMap(954); // SP 4
-            Console.WriteLine($"[Load] The Mysterious Soulgems has been loaded");
+
             loadSpecialistGemMap(958); // idk
         }
 
@@ -3508,22 +3558,26 @@ namespace OpenNos.GameObject.Networking
 
         private void MaintenanceProcess()
         {
-            List<ClientSession> sessions = Sessions.Where(c => c.IsConnected).ToList();
-            MaintenanceLogDTO maintenanceLog = DAOFactory.MaintenanceLogDAO.LoadFirst();
+            var maintenanceLog = DAOFactory.MaintenanceLogDAO.LoadFirst();
             if (maintenanceLog != null)
             {
+                var sessions = Sessions.Where(c => c.IsConnected).ToList();
                 if (maintenanceLog.DateStart <= DateTime.Now)
                 {
-                    Logger.LogUserEvent("MAINTENANCE_STATE", "Caller: ServerManager", $"[Maintenance]{Language.Instance.GetMessageFromKey("MAINTENANCE_PLANNED")}");
-                    sessions.Where(s => s.Account.Authority < AuthorityType.Administrator).ToList().ForEach(session => session.Disconnect());
+                    Logger.LogUserEvent("MAINTENANCE_STATE", "Caller: ServerManager",
+                        $"[Maintenance]{Language.Instance.GetMessageFromKey("MAINTENANCE_PLANNED")}");
+                    sessions.Where(s => s.Account.Authority < AuthorityType.Supporter).ToList()
+                        .ForEach(session => session.Disconnect());
                 }
-                else if (LastMaintenanceAdvert.AddMinutes(1) <= DateTime.Now && maintenanceLog.DateStart <= DateTime.Now.AddMinutes(5))
+                else if (LastMaintenanceAdvert.AddMinutes(1) <= DateTime.Now &&
+                         maintenanceLog.DateStart <= DateTime.Now.AddMinutes(5))
                 {
-                    int min = (maintenanceLog.DateStart - DateTime.Now).Minutes;
+                    var min = (maintenanceLog.DateStart - DateTime.Now).Minutes;
                     if (min != 0)
                     {
                         Shout($"Maintenance will begin in {min} minutes");
                     }
+
                     LastMaintenanceAdvert = DateTime.Now;
                 }
             }
@@ -3787,30 +3841,35 @@ namespace OpenNos.GameObject.Networking
                         targetSession?.SendPacket(message.Message);
                         break;
 
-                          case MessageType.FamilyChat:
-                              if (message.DestinationCharacterId.HasValue && message.SourceWorldId != WorldId)
-                              {
-                                  Parallel.ForEach(Instance.Sessions, session =>
-                                  {
-                                      if (session.HasSelectedCharacter && session.Character.Family != null && session.Character.Family.FamilyId == message.DestinationCharacterId)
-                                      {
-                                          session.SendPacket($"say 1 0 6 <{Language.Instance.GetMessageFromKey("CHANNEL")}: {CommunicationServiceClient.Instance.GetChannelIdByWorldId(message.SourceWorldId)}>{message.Message}");
-                                      }
-                                  });
-                              }
-                              break;
+                    case MessageType.FamilyChat:
+                        if (message.DestinationCharacterId.HasValue && message.SourceWorldId != WorldId)
+                        {
+                            foreach (var session in Instance.Sessions)
+                            {
+                                if (session.HasSelectedCharacter && session.Character.Family != null &&
+                                    session.Character.Family.FamilyId == message.DestinationCharacterId)
+                                {
+                                    session.SendPacket(
+                                            $"say 1 0 6 <{Language.Instance.GetMessageFromKey("CHANNEL")}: {CommunicationServiceClient.Instance.GetChannelIdByWorldId(message.SourceWorldId)}>{message.Message}");
+                                }
+                            }
+                        }
+
+                        break;
 
                     case MessageType.Family:
                         if (message.DestinationCharacterId.HasValue)
                         {
-                            Parallel.ForEach(Instance.Sessions, session =>
+                            foreach (var session in Instance.Sessions)
                             {
-                                if (session.HasSelectedCharacter && session.Character.Family != null && session.Character.Family.FamilyId == message.DestinationCharacterId)
+                                if (session.HasSelectedCharacter && session.Character.Family != null &&
+                                    session.Character.Family.FamilyId == message.DestinationCharacterId)
                                 {
                                     session.SendPacket(message.Message);
                                 }
-                            });
+                            }
                         }
+
                         break;
 
                     case MessageType.Other:
@@ -3818,7 +3877,11 @@ namespace OpenNos.GameObject.Networking
                         break;
 
                     case MessageType.Broadcast:
-                        Parallel.ForEach(Instance.Sessions, session => session.SendPacket(message.Message));
+                        foreach (var session in Instance.Sessions)
+                        {
+                            session.SendPacket(message.Message);
+                        }
+
                         break;
                 }
             }
@@ -3878,17 +3941,20 @@ namespace OpenNos.GameObject.Networking
         {
             if (sender != null)
             {
-                Tuple<long?, long?> kickedSession = (Tuple<long?, long?>)sender;
-                if(!kickedSession.Item1.HasValue && !kickedSession.Item2.HasValue)
+                var kickedSession = (Tuple<long?, long?>)sender;
+                if (!kickedSession.Item1.HasValue && !kickedSession.Item2.HasValue)
                 {
                     return;
                 }
-                long? accId = kickedSession.Item1;
-                long? sessId = kickedSession.Item2;
 
-                ClientSession targetSession = CharacterScreenSessions.FirstOrDefault(s => s.SessionId == sessId || s.Account.AccountId == accId);
+                var accId = kickedSession.Item1;
+                var sessId = kickedSession.Item2;
+
+                var targetSession = CharacterScreenSessions.FirstOrDefault(s =>
+                    s.SessionId == sessId || s.Account.AccountId == accId);
                 targetSession?.Disconnect();
-                targetSession = Sessions.FirstOrDefault(s => s.SessionId == sessId || s.Account.AccountId == accId);
+                targetSession = Sessions.FirstOrDefault(s =>
+                    s.SessionId == sessId || s.Account.AccountId == accId);
                 targetSession?.Disconnect();
             }
         }

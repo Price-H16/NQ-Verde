@@ -1,5 +1,4 @@
-﻿using ChickenAPI.Enums;
-using NosTale.Packets.Packets.ClientPackets;
+﻿using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;

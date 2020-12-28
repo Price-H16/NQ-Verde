@@ -77,6 +77,7 @@
     <Compile Include="ArenaMember.cs" />
     <Compile Include="ArenaTeamMember.cs" />
     <Compile Include="Battle\BattleEntityExtension.cs" />
+    <Compile Include="Battle\IBattleEntity.cs" />
     <Compile Include="Buff\BCard.cs" />
     <Compile Include="Buff\Buff.cs" />
     <Compile Include="Buff\Card.cs" />
@@ -96,7 +97,6 @@
     <Compile Include="Event\ICEBREAKER\IceBreaker.cs" />
     <Compile Include="Event\PARTY TIMESPACE\PartyTimespace.cs" />
     <Compile Include="Event\RAINBOWBATTLE\RAINBOWBATTLE.cs" />
-    <Compile Include="Event\SHOPSHIP\ShopShip.cs" />
     <Compile Include="Event\TALENTARENA %28Unused%29\TalentArena.cs" />
     <Compile Include="Event\TALENTARENA %28Unused%29\TalentArenaBattle.cs" />
     <Compile Include="Event\WORLDBOSS\GrasslinBoss.cs" />
@@ -226,6 +226,7 @@
     <Compile Include="Family.cs" />
     <Compile Include="Skill.cs" />
     <Compile Include="CharacterSkill.cs" />
+    <Compile Include="ToSummon.cs" />
     <Compile Include="UseSkillOnDamage.cs" />
     <Compile Include="_Algorithm\IAlgorithmService.cs" />
     <Compile Include="_Algorithm\IDamageAlgorithm.cs" />
@@ -249,10 +250,6 @@
     <ProjectReference Include="..\..\ChickenApi\ChickenAPI.Core\ChickenAPI.Core.csproj">
       <Project>{A6D06310-4228-4AFA-894D-69283976E810}</Project>
       <Name>ChickenAPI.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ChickenApi\ChickenAPI.Enums\ChickenAPI.Enums.csproj">
-      <Project>{355f04a9-be90-45ce-a695-089c5f9c2b92}</Project>
-      <Name>ChickenAPI.Enums</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ChickenApi\ChickenApi.Events\ChickenApi.Events.csproj">
       <Project>{decb5668-600c-49f1-a5c8-cde5a12c9f5a}</Project>

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Media.Media3D;
-using ChickenAPI.Enums.Game.BCard;
-using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -128,9 +126,9 @@ namespace OpenNos.GameObject
             session.BCardDisposables[skill?.SkillVNum == 1098 ? skill.SkillVNum * 1000 : BCardId] = Observable
                 .Timer(TimeSpan.FromMilliseconds(delayTime)).Subscribe(o =>
                 {
-                    switch ((BCardType)Type)
+                    switch ((BCardType.CardType)Type)
                     {
-                        case BCardType.Buff:
+                        case BCardType.CardType.Buff:
                             {
                                 var cardId = (short)(SecondData + partnerBuffLevel);
 
@@ -149,8 +147,8 @@ namespace OpenNos.GameObject
                                 var Chance = firstData == 0 ? ThirdData : firstData;
                                 var CardsToProtect = new List<short>();
                                 if (buff.Card.BuffType == BuffType.Bad &&
-                                    session.GetBuff(BCardType.DebuffResistance,
-                                            (byte)BCardSubTypes.DebuffResistance.NeverBadEffectChance) is int[]
+                                    session.GetBuff(BCardType.CardType.DebuffResistance,
+                                            (byte)AdditionalTypes.DebuffResistance.NeverBadEffectChance) is int[]
                                         NeverBadEffectChance)
                                 {
                                     // I divide in NeverBadEffectChance[3] since we have to avoid the Level debuffs being added
@@ -161,8 +159,8 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
-                                if (session.GetBuff(BCardType.DebuffResistance,
-                                        (byte)BCardSubTypes.DebuffResistance.NeverBadGeneralEffectChance) is int[]
+                                if (session.GetBuff(BCardType.CardType.DebuffResistance,
+                                        (byte)AdditionalTypes.DebuffResistance.NeverBadGeneralEffectChance) is int[]
                                     NeverBadGeneralEffectChance)
                                 {
                                     if (ServerManager.RandomNumber() < NeverBadGeneralEffectChance[1]
@@ -173,9 +171,13 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
+<<<<<<< HEAD
                                 if (session.GetBuff(BCardType.Buff,
                                         (byte)BCardSubTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect &&
                                     (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
+=======
+                                if (session.GetBuff(BCardType.CardType.Buff, (byte) AdditionalTypes.Buff.PreventingBadEffect) is int[] PreventingBadEffect && (PreventingBadEffect[1] > 0 || PreventingBadEffect[2] > 0))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     var Prob = 100 - PreventingBadEffect[1] * 10;
                                     var ProtectType = PreventingBadEffect[0];
@@ -229,10 +231,19 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
+<<<<<<< HEAD
                                 if (buff.Card.BuffType == BuffType.Bad &&
                                     session.GetBuff(BCardType.SpecialisationBuffResistance,
                                         (byte)BCardSubTypes.SpecialisationBuffResistance.ResistanceToEffect,
                                         buff.Card.CardId) is int[] ResistanceToEffect)
+=======
+                            if (buff.Card.BuffType == BuffType.Bad &&
+                                session.GetBuff(BCardType.CardType.SpecialisationBuffResistance,
+                                    (byte) AdditionalTypes.SpecialisationBuffResistance.ResistanceToEffect,
+                                    buff.Card.CardId) is int[] ResistanceToEffect)
+                            {
+                                if (ServerManager.RandomNumber() < ResistanceToEffect[0])
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     if (ServerManager.RandomNumber() < ResistanceToEffect[0])
                                     {
@@ -245,10 +256,17 @@ namespace OpenNos.GameObject
                                     return;
                                 }
 
+<<<<<<< HEAD
                                 if (SubType == (byte)BCardSubTypes.Buff.ChanceCausing)
+=======
+                            if (SubType == (byte) AdditionalTypes.Buff.ChanceCausing)
+                            {
+                                if (Chance > 0 && ServerManager.RandomNumber() < Chance)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     if (Chance > 0 && ServerManager.RandomNumber() < Chance)
                                     {
+<<<<<<< HEAD
                                         if (SkillVNum != null && (buff.Card.CardId == 570 || buff.Card.CardId == 56))
                                         {
                                             sender.AddBuff(buff, sender, x: x, y: y, forced: true);
@@ -256,6 +274,13 @@ namespace OpenNos.GameObject
                                         else if (buff.Card?.BuffType == BuffType.Bad
                                                  && session.HasBuff(BCardType.TauntSkill,
                                                      (byte)BCardSubTypes.TauntSkill.ReflectBadEffect)
+=======
+                                        sender.AddBuff(buff, sender, x: x, y: y, forced: true);
+                                    }
+                                    else if (buff.Card?.BuffType == BuffType.Bad
+                                             && session.HasBuff(BCardType.CardType.TauntSkill,
+                                                 (byte) AdditionalTypes.TauntSkill.ReflectBadEffect)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                         //&& ServerManager.RandomNumber() < FirstData
                                         )
                                         {
@@ -274,7 +299,13 @@ namespace OpenNos.GameObject
                             }
                             break;
 
+<<<<<<< HEAD
                         case BCardType.Move:
+=======
+                        case BCardType.CardType.Move:
+                        {
+                            if (session.Character != null)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character != null)
                                 {
@@ -285,7 +316,7 @@ namespace OpenNos.GameObject
                             }
                             break;
 
-                        case BCardType.Summons:
+                        case BCardType.CardType.Summons:
                             if (sender.MapMonster?.MonsterVNum == 154)
                             {
                                 return;
@@ -327,7 +358,11 @@ namespace OpenNos.GameObject
                             {
                                 switch (SubType)
                                 {
+<<<<<<< HEAD
                                     case (byte)BCardSubTypes.Summons.Summons:
+=======
+                                    case (byte) AdditionalTypes.Summons.Summons:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                         if (CardId == null && SkillVNum == null)
                                         {
                                             if (sender.MapMonster != null)
@@ -378,7 +413,11 @@ namespace OpenNos.GameObject
 
                                         break;
 
+<<<<<<< HEAD
                                     case (byte)BCardSubTypes.Summons.SummonTrainingDummy: //Check
+=======
+                                    case (byte) AdditionalTypes.Summons.SummonTrainingDummy: //Check
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                         summonParameters = new List<MonsterToSummon>();
                                         for (var i = 0; i < amountToSpawn; i++)
                                         {
@@ -404,14 +443,19 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.SpecialAttack:
+                        case BCardType.CardType.SpecialAttack:
                             break;
 
-                        case BCardType.SpecialDefence:
+                        case BCardType.CardType.SpecialDefence:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.AttackPower:
                             if (SubType == (byte)BCardSubTypes.AttackPower.AllAttacksIncreased)
+=======
+                        case BCardType.CardType.AttackPower:
+                            if (SubType == (byte) AdditionalTypes.AttackPower.AllAttacksIncreased)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character != null && sender.Character != null &&
                                     session.Character == sender.Character)
@@ -428,7 +472,11 @@ namespace OpenNos.GameObject
                                 }
                             }
 
+<<<<<<< HEAD
                             if (SubType == (byte)BCardSubTypes.AttackPower.MeleeAttacksIncreased)
+=======
+                            if (SubType == (byte) AdditionalTypes.AttackPower.MeleeAttacksIncreased)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character != null && sender.Character != null &&
                                     session.Character == sender.Character)
@@ -445,7 +493,11 @@ namespace OpenNos.GameObject
                                 }
                             }
 
+<<<<<<< HEAD
                             if (SubType == (byte)BCardSubTypes.AttackPower.RangedAttacksIncreased)
+=======
+                            if (SubType == (byte) AdditionalTypes.AttackPower.RangedAttacksIncreased)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character != null && sender.Character != null &&
                                     session.Character == sender.Character)
@@ -462,7 +514,11 @@ namespace OpenNos.GameObject
                                 }
                             }
 
+<<<<<<< HEAD
                             if (SubType == (byte)BCardSubTypes.AttackPower.MagicalAttacksIncreased)
+=======
+                            if (SubType == (byte) AdditionalTypes.AttackPower.MagicalAttacksIncreased)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character != null && sender.Character != null &&
                                     session.Character == sender.Character)
@@ -481,45 +537,46 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.Target:
+                        case BCardType.CardType.Target:
                             break;
 
-                        case BCardType.Critical:
+                        case BCardType.CardType.Critical:
                             break;
 
-                        case BCardType.SpecialCritical:
+                        case BCardType.CardType.SpecialCritical:
                             break;
 
-                        case BCardType.Element:
+                        case BCardType.CardType.Element:
                             break;
 
-                        case BCardType.IncreaseDamage:
+                        case BCardType.CardType.IncreaseDamage:
                             break;
 
-                        case BCardType.Defence:
+                        case BCardType.CardType.Defence:
                             break;
 
-                        case BCardType.DodgeAndDefencePercent:
+                        case BCardType.CardType.DodgeAndDefencePercent:
                             break;
 
-                        case BCardType.Block:
+                        case BCardType.CardType.Block:
                             break;
 
-                        case BCardType.Absorption:
+                        case BCardType.CardType.Absorption:
                             break;
 
-                        case BCardType.ElementResistance:
+                        case BCardType.CardType.ElementResistance:
                             break;
 
-                        case BCardType.EnemyElementResistance:
+                        case BCardType.CardType.EnemyElementResistance:
                             break;
 
-                        case BCardType.Damage:
+                        case BCardType.CardType.Damage:
                             break;
 
-                        case BCardType.GuarantedDodgeRangedAttack:
+                        case BCardType.CardType.GuarantedDodgeRangedAttack:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.Morale:
                             if (SubType == (byte)BCardSubTypes.Morale.MoraleIncreased / 10)
                             {
@@ -528,13 +585,21 @@ namespace OpenNos.GameObject
 
                                 }
                             }
+=======
+                        case BCardType.CardType.Morale:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             break;
 
-                        case BCardType.Casting:
+                        case BCardType.CardType.Casting:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.Reflection:
                             if (SubType == (byte)BCardSubTypes.Reflection.EnemyMPDecreased / 10)
+=======
+                        case BCardType.CardType.Reflection:
+                            if (SubType == (byte) AdditionalTypes.Reflection.EnemyMPDecreased)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (ServerManager.RandomNumber() < -firstData)
                                 {
@@ -558,8 +623,13 @@ namespace OpenNos.GameObject
                             }
                             break;
 
+<<<<<<< HEAD
                         case BCardType.DrainAndSteal:
                             if (SubType == (byte)BCardSubTypes.DrainAndSteal.ConvertEnemyHPToMP / 10)
+=======
+                        case BCardType.CardType.DrainAndSteal:
+                            if (SubType == (byte) AdditionalTypes.DrainAndSteal.ConvertEnemyHPToMP)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 int bonus = 0;
                                 if (firstData < 0)
@@ -589,7 +659,11 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType == (byte)BCardSubTypes.DrainAndSteal.LeechEnemyHP / 10)
+=======
+                            else if (SubType == (byte) AdditionalTypes.DrainAndSteal.LeechEnemyHP)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 // FirstData = -1 SecondData = 0 SkillVNum = 400 (Tumble) IsLevelScaled = 1
 
@@ -625,7 +699,11 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType == (byte)BCardSubTypes.DrainAndSteal.LeechEnemyMP / 10)
+=======
+                            else if (SubType == (byte) AdditionalTypes.DrainAndSteal.LeechEnemyMP)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 // FirstData = -100 SecondData = 3 CardId = 228 (MAna Drain) ThirdData = 1
 
@@ -662,7 +740,22 @@ namespace OpenNos.GameObject
                             }
                             break;
 
+<<<<<<< HEAD
                         case BCardType.HealingBurningAndCasting:
+=======
+                        case BCardType.CardType.HealingBurningAndCasting:
+                        {
+                            /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
+                             {
+                                 return;
+                             }*/
+
+                            // WTF ? Why Cryless ?
+
+                            var amount = 0;
+
+                            void HealingBurningAndCastingAction()
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.HasBuff(BCardType.RecoveryAndDamagePercent, 01))
                                 {
@@ -671,11 +764,15 @@ namespace OpenNos.GameObject
 
                                 void HealingBurningAndCastingAction()
                                 {
+<<<<<<< HEAD
                                     if (session.Hp < 1
                                         || session.MapInstance == null)
                                     {
                                         return;
                                     }
+=======
+                                    case (byte) AdditionalTypes.HealingBurningAndCasting.RestoreHP:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     int amount = 0;
 
@@ -733,9 +830,13 @@ namespace OpenNos.GameObject
                                                 amount = session.Hp - 1;
                                             }
 
+<<<<<<< HEAD
                                             if (amount > 0)
                                             {
                                                 amount = session.GetDamage(amount, sender, true, true);
+=======
+                                    case (byte) AdditionalTypes.HealingBurningAndCasting.RestoreMP:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                                 session.MapInstance.Broadcast(session.GenerateDm(amount));
                                             }
@@ -757,10 +858,14 @@ namespace OpenNos.GameObject
                                                 amount = firstData;
                                             }
 
+<<<<<<< HEAD
                                             if (session.Mp + amount > session.MpMax)
                                             {
                                                 amount = session.MpMax - session.Mp;
                                             }
+=======
+                                    case (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseHP:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                             session.Mp += amount;
                                         }
@@ -777,10 +882,14 @@ namespace OpenNos.GameObject
 
                                             amount *= -1;
 
+<<<<<<< HEAD
                                             if (session.Mp - amount < 1)
                                             {
                                                 amount = session.Mp - 1;
                                             }
+=======
+                                    case (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseMP:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                             session.DecreaseMp(amount);
                                         }
@@ -814,8 +923,13 @@ namespace OpenNos.GameObject
                             }
                             break;
 
+<<<<<<< HEAD
                         case BCardType.HPMP:
                             if (SubType == (byte)BCardSubTypes.HPMP.DecreaseRemainingMP)
+=======
+                        case BCardType.CardType.HPMP:
+                            if (SubType == (byte) AdditionalTypes.HPMP.DecreaseRemainingMP)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 var bonus = (int)(session.Mp * firstData / 100D);
                                 var change = false;
@@ -862,7 +976,11 @@ namespace OpenNos.GameObject
                                     {
                                         switch (SubType)
                                         {
+<<<<<<< HEAD
                                             case (byte)BCardSubTypes.HPMP.HPRestored:
+=======
+                                            case (byte) AdditionalTypes.HPMP.HPRestored:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                                 if (session.Hp + bonus <= session.HPLoad())
                                                 {
@@ -885,7 +1003,11 @@ namespace OpenNos.GameObject
 
                                                 break;
 
+<<<<<<< HEAD
                                             case (byte)BCardSubTypes.HPMP.HPReduced:
+=======
+                                            case (byte) AdditionalTypes.HPMP.HPReduced:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                                 if (session.Hp - bonus > 1)
                                                 {
@@ -911,7 +1033,11 @@ namespace OpenNos.GameObject
 
                                                 break;
 
+<<<<<<< HEAD
                                             case (byte)BCardSubTypes.HPMP.MPRestored:
+=======
+                                            case (byte) AdditionalTypes.HPMP.MPRestored:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                                 if (session.Mp + bonus <= session.MPLoad())
                                                 {
                                                     session.Mp += bonus;
@@ -932,7 +1058,11 @@ namespace OpenNos.GameObject
 
                                                 break;
 
+<<<<<<< HEAD
                                             case (byte)BCardSubTypes.HPMP.MPReduced:
+=======
+                                            case (byte) AdditionalTypes.HPMP.MPReduced:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                                 if (session.Mp - bonus > 1)
                                                 {
                                                     session.Mp -= bonus;
@@ -984,11 +1114,15 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.SpecialisationBuffResistance:
+                        case BCardType.CardType.SpecialisationBuffResistance:
 
                             if (session == null) return; // had to do this, still i don't know the cause
 
+<<<<<<< HEAD
                             if (SubType.Equals((byte)BCardSubTypes.SpecialisationBuffResistance.RemoveBadEffects))
+=======
+                            if (SubType.Equals((byte) AdditionalTypes.SpecialisationBuffResistance.RemoveBadEffects))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 // bad
                                 if (ServerManager.RandomNumber() < FirstData && sender.BCardDisposables[BCardId] == null
@@ -1085,7 +1219,11 @@ namespace OpenNos.GameObject
                                 }
                             }
 
+<<<<<<< HEAD
                             if (SubType.Equals((byte)BCardSubTypes.SpecialisationBuffResistance.RemoveGoodEffects))
+=======
+                            if (SubType.Equals((byte) AdditionalTypes.SpecialisationBuffResistance.RemoveGoodEffects))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (ServerManager.RandomNumber() < FirstData)
                                 {
@@ -1095,15 +1233,20 @@ namespace OpenNos.GameObject
 
                             break;
 
+<<<<<<< HEAD
                         case BCardType.SpecialEffects:
                             if (SubType.Equals((byte)BCardSubTypes.SpecialEffects.ShadowAppears))
+=======
+                        case BCardType.CardType.SpecialEffects:
+                            if (SubType.Equals((byte) AdditionalTypes.SpecialEffects.ShadowAppears))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 session.MapInstance.Broadcast($"guri 0 {(short)session.UserType} {session.MapEntityId} {firstData} {SecondData}");
                             }
 
                             break;
 
-                        case BCardType.Capture:
+                        case BCardType.CardType.Capture:
                             if (sender.Character?.Session is ClientSession senderSession)
                             {
                                 if (session.MapMonster is MapMonster mapMonster)
@@ -1215,11 +1358,16 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.SpecialDamageAndExplosions:
+                        case BCardType.CardType.SpecialDamageAndExplosions:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.SpecialEffects2:
                             if (SubType.Equals((byte)BCardSubTypes.SpecialEffects2.TeleportInRadius))
+=======
+                        case BCardType.CardType.SpecialEffects2:
+                            if (SubType.Equals((byte) AdditionalTypes.SpecialEffects2.TeleportInRadius))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character != null && session.MapEntityId == sender.MapEntityId)
                                 {
@@ -1229,15 +1377,28 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.CalculatingLevel:
+                        case BCardType.CardType.CalculatingLevel:
                             break;
 
-                        case BCardType.Recovery:
+                        case BCardType.CardType.Recovery:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.MaxHPMP: // test
                             {
                                 if (session.Character != null)
+=======
+                        case BCardType.CardType.MaxHPMP: // test
+                        {
+                            if (session.Character != null)
+                            {
+                                if (SubType == (byte) AdditionalTypes.MaxHPMP.IncreasesMaximumHP)
+                                {
+                                    session.Character.HPLoad();
+                                    session.Character.Session?.SendPacket(session.Character.GenerateStat());
+                                }
+                                else if (SubType == (byte) AdditionalTypes.MaxHPMP.IncreasesMaximumMP)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     if (SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumHP)
                                     {
@@ -1253,20 +1414,33 @@ namespace OpenNos.GameObject
                             }
                             break;
 
-                        case BCardType.MultAttack:
+                        case BCardType.CardType.MultAttack:
                             break;
 
-                        case BCardType.MultDefence:
+                        case BCardType.CardType.MultDefence:
                             break;
 
-                        case BCardType.TimeCircleSkills:
+                        case BCardType.CardType.TimeCircleSkills:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.RecoveryAndDamagePercent:
                             if (session.HasBuff(BCardType.RecoveryAndDamagePercent, 01))
                             {
                                 return;
                             }
+=======
+                        case BCardType.CardType.RecoveryAndDamagePercent:
+                        {
+                            /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
+                             {
+                                 return;
+                             }*/
+
+                            var bonus = 0;
+                            var change = false;
+
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             void RecoveryAndDamagePercentAction()
                             {
                                 if (session.Hp > 0)
@@ -1276,6 +1450,7 @@ namespace OpenNos.GameObject
                                     if (SubType == (byte)BCardSubTypes.RecoveryAndDamagePercent.HPRecovered / 10
                                      || SubType == (byte)BCardSubTypes.RecoveryAndDamagePercent.HPReduced / 10)
                                     {
+<<<<<<< HEAD
                                         if (IsLevelDivided)
                                         {
                                             bonus = (int)((senderLevel / firstData) * (session.HPLoad() / 100));
@@ -1286,6 +1461,21 @@ namespace OpenNos.GameObject
                                         }
                                         if (bonus > 0)
                                         {
+=======
+                                        bonus = (int) (senderLevel / firstData * (session.HPLoad() / 100));
+                                    }
+                                    else
+                                    {
+                                        bonus = (int) (firstData * (session.HPLoad() / 100));
+                                    }
+                                    
+                                    switch (SubType)
+                                    {
+                                        case (byte) AdditionalTypes.RecoveryAndDamagePercent.HPRecovered:
+
+                                            if (session.Hp >= session.HPLoad()) return;
+                                            
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                             if (session.Hp + bonus < session.HPLoad())
                                             {
                                                 session.Hp += bonus;
@@ -1305,16 +1495,24 @@ namespace OpenNos.GameObject
                                                 session.MapInstance?.Broadcast(session.GenerateRc(bonus));
                                                 session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
                                             }
+<<<<<<< HEAD
                                         }
                                         if (bonus <= 0)
                                         {
                                             bonus *= -1;
+=======
+
+                                            break;
+
+                                        case (byte) AdditionalTypes.RecoveryAndDamagePercent.HPReduced:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                             bonus = session.GetDamage(bonus, sender, true, true);
                                             if (bonus > 0)
                                             {
                                                 session.MapInstance?.Broadcast(session.GenerateDm(bonus));
                                                 session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
                                             }
+<<<<<<< HEAD
                                         }
                                     }
                                     if (SubType == (byte)BCardSubTypes.RecoveryAndDamagePercent.MPRecovered / 10
@@ -1330,6 +1528,12 @@ namespace OpenNos.GameObject
                                         }
                                         if (bonus > 0)
                                         {
+=======
+
+                                            break;
+
+                                        case (byte) AdditionalTypes.RecoveryAndDamagePercent.MPRecovered:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                             if (session.Mp + bonus < session.MPLoad())
                                             {
                                                 session.Mp += bonus;
@@ -1348,10 +1552,17 @@ namespace OpenNos.GameObject
                                             {
                                                 session.Character?.Session?.SendPacket(session.Character?.GenerateStat());
                                             }
+<<<<<<< HEAD
                                         }
                                         if (bonus <= 0)
                                         {
                                             bonus *= -1;
+=======
+
+                                            break;
+
+                                        case (byte) AdditionalTypes.RecoveryAndDamagePercent.MPReduced:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                             if (session.Mp - bonus > 1)
                                             {
                                                 session.DecreaseMp(bonus);
@@ -1396,21 +1607,30 @@ namespace OpenNos.GameObject
                             }
                             break;
 
-                        case BCardType.Count:
+                        case BCardType.CardType.Count:
                             break;
 
-                        case BCardType.NoDefeatAndNoDamage:
+                        case BCardType.CardType.NoDefeatAndNoDamage:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.SpecialActions:
                             if (SubType.Equals((byte)BCardSubTypes.SpecialActions.PushBack))
+=======
+                        case BCardType.CardType.SpecialActions:
+                            if (SubType.Equals((byte) AdditionalTypes.SpecialActions.PushBack))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
                                 {
                                     PushBackSession(firstData, session, sender);
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.SpecialActions.Hide))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.SpecialActions.Hide))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character is Character charact)
                                 {
@@ -1428,7 +1648,11 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.SpecialActions.FocusEnemies))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.SpecialActions.FocusEnemies))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
                                 {
@@ -1454,7 +1678,11 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.SpecialActions.RunAway))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.SpecialActions.RunAway))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.MapMonster != null && session.MapMonster.IsMoving &&
                                     !session.MapMonster.IsBoss &&
@@ -1497,32 +1725,42 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.Mode:
+                        case BCardType.CardType.Mode:
                             break;
 
-                        case BCardType.NoCharacteristicValue:
+                        case BCardType.CardType.NoCharacteristicValue:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.LightAndShadow:
                             if (SubType == (byte)BCardSubTypes.LightAndShadow.RemoveBadEffects / 10)
+=======
+                        case BCardType.CardType.LightAndShadow:
+                            if (SubType == (byte) AdditionalTypes.LightAndShadow.RemoveBadEffects)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 session.Buffs.Where(b => b.Card.BuffType == BuffType.Bad && b.Card.Level <= firstData).ForEach(s => session.RemoveBuff(s.Card.CardId));
                             }
 
                             break;
 
-                        case BCardType.Item:
+                        case BCardType.CardType.Item:
                             break;
 
-                        case BCardType.Dracula:
+                        case BCardType.CardType.Dracula:
                             break;
 
-                        case BCardType.DebuffResistance:
+                        case BCardType.CardType.DebuffResistance:
                             break;
 
 
+<<<<<<< HEAD
                         case BCardType.SpecialBehaviour:
                             if (SubType == (byte)BCardSubTypes.SpecialBehaviour.TeleportRandom)
+=======
+                        case BCardType.CardType.SpecialBehaviour:
+                            if (SubType == (byte) AdditionalTypes.SpecialBehaviour.TeleportRandom)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (sender.Character != null)
                                 {
@@ -1551,7 +1789,11 @@ namespace OpenNos.GameObject
                                     sender.MapInstance.Broadcast(sender.GenerateTp());
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType == (byte)BCardSubTypes.SpecialBehaviour.InflictOnTeam)
+=======
+                            else if (SubType == (byte) AdditionalTypes.SpecialBehaviour.InflictOnTeam)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (CardId != null && CardId.Value == SecondData) // Checked on official server
                                 {
@@ -1597,10 +1839,10 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.Quest:
+                        case BCardType.CardType.Quest:
                             break;
 
-                        case BCardType.SecondSPCard:
+                        case BCardType.CardType.SecondSPCard:
                             var summonParameters2 = new List<MonsterToSummon>();
                             if (session.Character != null)
                             {
@@ -1637,7 +1879,15 @@ namespace OpenNos.GameObject
                                 {
                                     switch (SubType)
                                     {
+<<<<<<< HEAD
                                         case (byte)BCardSubTypes.SecondSPCard.PlantBomb:
+=======
+                                        case (byte) AdditionalTypes.SecondSPCard.PlantBomb:
+                                        {
+                                            if (session.MapInstance.Monsters.Any(s =>
+                                                s.Owner != null && s.Owner.MapEntityId == session.MapEntityId &&
+                                                s.MonsterVNum == SecondData))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                             {
                                                 if (session.MapInstance.Monsters.Any(s =>
                                                     s.Owner != null && s.Owner.MapEntityId == session.MapEntityId &&
@@ -1696,6 +1946,17 @@ namespace OpenNos.GameObject
                                                 EventHelper.Instance.RunEvent(new EventContainer(session.MapInstance,
                                                     EventActionType.SPAWNMONSTERS, summonParameters2));
                                             }
+<<<<<<< HEAD
+=======
+                                        }
+                                            break;
+
+                                        case (byte) AdditionalTypes.SecondSPCard.PlantSelfDestructionBomb:
+                                        {
+                                            EventHelper.Instance.RunEvent(new EventContainer(session.MapInstance,
+                                                EventActionType.SPAWNMONSTERS, summonParameters2));
+                                        }
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                             break;
                                     }
                                 }
@@ -1705,11 +1966,16 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.SPCardUpgrade:
+                        case BCardType.CardType.SPCardUpgrade:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.HugeSnowman:
                             if (SubType == (byte)BCardSubTypes.HugeSnowman.SnowStorm / 10)
+=======
+                        case BCardType.CardType.HugeSnowman:
+                            if (SubType == (byte) AdditionalTypes.HugeSnowman.SnowStorm)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (sender.CanAttackEntity(session))
                                 {
@@ -1731,7 +1997,7 @@ namespace OpenNos.GameObject
                             }
                             break;
 
-                        case BCardType.Drain:
+                        case BCardType.CardType.Drain:
 
                             /* if (session.HasBuff(BCardType.RecoveryAndDamagePercent, 01))
                              {
@@ -1741,7 +2007,11 @@ namespace OpenNos.GameObject
                             {
                                 if (session.Hp > 0 && sender.Hp > 0)
                                 {
+<<<<<<< HEAD
                                     if (SubType == (byte)BCardSubTypes.Drain.TransferEnemyHP)
+=======
+                                    if (SubType == (byte) AdditionalTypes.Drain.TransferEnemyHP)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                     {
                                         var bonus = 0;
                                         var senderChange = false;
@@ -1806,17 +2076,22 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.BossMonstersSkill:
+                        case BCardType.CardType.BossMonstersSkill:
                             break;
 
-                        case BCardType.LordHatus:
+                        case BCardType.CardType.LordHatus:
                             break;
 
-                        case BCardType.LordCalvinas:
+                        case BCardType.CardType.LordCalvinas:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.SESpecialist:
                             if (SubType.Equals((byte)BCardSubTypes.SESpecialist.LowerHPStrongerEffect))
+=======
+                        case BCardType.CardType.SESpecialist:
+                            if (SubType.Equals((byte) AdditionalTypes.SESpecialist.LowerHPStrongerEffect))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 var hpPercentage = session.Hp / session.HPLoad() * 100;
                                 if (hpPercentage < 35)
@@ -1835,12 +2110,13 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.FourthGlacernonFamilyRaid:
+                        case BCardType.CardType.FourthGlacernonFamilyRaid:
                             break;
 
-                        case BCardType.SummonedMonsterAttack:
+                        case BCardType.CardType.SummonedMonsterAttack:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.BearSpirit:
                             {
                                 if (session.Character is Character character)
@@ -1866,11 +2142,27 @@ namespace OpenNos.GameObject
                                 var amount = 0;
 
                                 if (SubType.Equals((byte)BCardSubTypes.SummonSkill.Summon12))
+=======
+                        case BCardType.CardType.BearSpirit:
+                            break;
+
+                        case BCardType.CardType.SummonSkill:
+                            if (SubType.Equals((byte) AdditionalTypes.SummonSkill.Summon12) ||
+                                SubType.Equals((byte) AdditionalTypes.SummonSkill.Summon10))
+                            {
+                                var amount = 0;
+
+                                if (SubType.Equals((byte) AdditionalTypes.SummonSkill.Summon12))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     amount = 12;
                                 }
 
+<<<<<<< HEAD
                                 if (SubType.Equals((byte)BCardSubTypes.SummonSkill.Summon10))
+=======
+                                if (SubType.Equals((byte) AdditionalTypes.SummonSkill.Summon10))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     amount = 10;
                                 }
@@ -1918,19 +2210,23 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.InflictSkill:
+                        case BCardType.CardType.InflictSkill:
                             break;
 
-                        case BCardType.HideBarrelSkill:
+                        case BCardType.CardType.HideBarrelSkill:
                             break;
 
-                        case BCardType.FocusEnemyAttentionSkill:
+                        case BCardType.CardType.FocusEnemyAttentionSkill:
                             break;
 
-                        case BCardType.TauntSkill:
+                        case BCardType.CardType.TauntSkill:
                             switch (SubType)
                             {
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.TauntSkill.TauntWhenKnockdown:
+=======
+                                case (byte) AdditionalTypes.TauntSkill.TauntWhenKnockdown:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                     if (session.Buffs.Any(s => s.Card.CardId == 500) &&
                                         ServerManager.RandomNumber() < FirstData)
                                     {
@@ -1939,7 +2235,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.TauntSkill.TauntWhenNormal:
+=======
+                                case (byte) AdditionalTypes.TauntSkill.TauntWhenNormal:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                     if (!session.Buffs.Any(s => s.Card.CardId == 500) &&
                                         ServerManager.RandomNumber() < FirstData)
                                     {
@@ -1951,14 +2251,19 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.FireCannoneerRangeBuff:
+                        case BCardType.CardType.FireCannoneerRangeBuff:
                             break;
 
-                        case BCardType.VulcanoElementBuff:
+                        case BCardType.CardType.VulcanoElementBuff:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.DamageConvertingSkill:
                             if (SubType.Equals((byte)BCardSubTypes.DamageConvertingSkill.TransferInflictedDamage))
+=======
+                        case BCardType.CardType.DamageConvertingSkill:
+                            if (SubType.Equals((byte) AdditionalTypes.DamageConvertingSkill.TransferInflictedDamage))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (sender.Character != null)
                                 {
@@ -2009,9 +2314,21 @@ namespace OpenNos.GameObject
 
                             break;
 
+<<<<<<< HEAD
                         case BCardType.MeditationSkill:
                             {
                                 if (sender.Character is Character character)
+=======
+                        case BCardType.CardType.MeditationSkill:
+                        {
+                            if (sender.Character is Character character)
+                            {
+                                if (SubType.Equals((byte) AdditionalTypes.MeditationSkill.Sacrifice))
+                                {
+                                    session.AddBuff(new Buff((short) SecondData, senderLevel), sender);
+                                }
+                                else if (character.LastSkillComboUse < DateTime.Now)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     if (SubType.Equals((byte)BCardSubTypes.MeditationSkill.Sacrifice))
                                     {
@@ -2021,7 +2338,13 @@ namespace OpenNos.GameObject
                                     {
                                         ItemInstance sp = null;
 
+<<<<<<< HEAD
                                         if (character.Inventory != null)
+=======
+                                        if (SkillVNum.HasValue
+                                            && SubType.Equals((byte) AdditionalTypes.MeditationSkill.CausingChance)
+                                            && ServerManager.RandomNumber() < firstData)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                         {
                                             sp = character.Inventory.LoadBySlotAndType((byte)EquipmentType.Sp,
                                                 InventoryType.Wear);
@@ -2106,6 +2429,7 @@ namespace OpenNos.GameObject
                                             {
                                                 lock (character.MeditationDictionary)
                                                 {
+<<<<<<< HEAD
                                                     switch (SubType)
                                                     {
                                                         case (byte)BCardSubTypes.MeditationSkill.ShortMeditation:
@@ -2123,6 +2447,22 @@ namespace OpenNos.GameObject
                                                                 DateTime.Now.AddSeconds(12);
                                                             break;
                                                     }
+=======
+                                                    case (byte) AdditionalTypes.MeditationSkill.ShortMeditation:
+                                                        character.MeditationDictionary[newSkillVNum] =
+                                                            DateTime.Now.AddSeconds(4);
+                                                        break;
+
+                                                    case (byte) AdditionalTypes.MeditationSkill.RegularMeditation:
+                                                        character.MeditationDictionary[newSkillVNum] =
+                                                            DateTime.Now.AddSeconds(8);
+                                                        break;
+
+                                                    case (byte) AdditionalTypes.MeditationSkill.LongMeditation:
+                                                        character.MeditationDictionary[newSkillVNum] =
+                                                            DateTime.Now.AddSeconds(12);
+                                                        break;
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                                 }
                                             }
                                         }
@@ -2131,9 +2471,15 @@ namespace OpenNos.GameObject
                             }
                             break;
 
+<<<<<<< HEAD
                         case BCardType.FalconSkill:
                             if (SubType.Equals((byte)BCardSubTypes.FalconSkill.Hide) ||
                                 SubType.Equals((byte)BCardSubTypes.FalconSkill.Ambush))
+=======
+                        case BCardType.CardType.FalconSkill:
+                            if (SubType.Equals((byte) AdditionalTypes.FalconSkill.Hide) ||
+                                SubType.Equals((byte) AdditionalTypes.FalconSkill.Ambush))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character is Character chara)
                                 {
@@ -2158,7 +2504,11 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.FalconSkill.CausingChanceLocation))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.FalconSkill.CausingChanceLocation))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character is Character chara)
                                 {
@@ -2211,7 +2561,11 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.FalconSkill.FalconFollowing))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.FalconSkill.FalconFollowing))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (sender.Character != null)
                                 {
@@ -2245,14 +2599,19 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.AbsorptionAndPowerSkill:
+                        case BCardType.CardType.AbsorptionAndPowerSkill:
                             break;
 
-                        case BCardType.LeonaPassiveSkill:
+                        case BCardType.CardType.LeonaPassiveSkill:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.FearSkill:
                             if (SubType.Equals((byte)BCardSubTypes.FearSkill.TimesUsed))
+=======
+                        case BCardType.CardType.FearSkill:
+                            if (SubType.Equals((byte) AdditionalTypes.FearSkill.TimesUsed))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (sender.Character != null)
                                 {
@@ -2263,21 +2622,33 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.FearSkill.AttackRangedIncreased))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.FearSkill.AttackRangedIncreased))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character != null)
                                 {
                                     session.Character.Session.SendPacket($"bf_d {FirstData} 1");
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.FearSkill.MoveAgainstWill))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.FearSkill.MoveAgainstWill))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (session.Character != null)
                                 {
                                     session.Character.Session.SendPacket($"rv_m {session.MapEntityId} 1 1");
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.FearSkill.ProduceWhenAmbushe))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.FearSkill.ProduceWhenAmbushe))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (sender == session && (x != 0 || y != 0) && SecondData > 0)
                                 {
@@ -2290,13 +2661,17 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.SniperAttack:
+                        case BCardType.CardType.SniperAttack:
                             if (session == sender)
                             {
                                 return;
                             }
 
+<<<<<<< HEAD
                             if (SubType.Equals((byte)BCardSubTypes.SniperAttack.ChanceCausing))
+=======
+                            if (SubType.Equals((byte) AdditionalTypes.SniperAttack.ChanceCausing))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (ServerManager.RandomNumber() < firstData)
                                 {
@@ -2312,12 +2687,21 @@ namespace OpenNos.GameObject
                                     }
                                 }
                             }
+<<<<<<< HEAD
                             else if (SubType.Equals((byte)BCardSubTypes.SniperAttack.ProduceChance))
                             {
                                 if (sender.Buffs.Any(s => s.Card.BCards.Any(b =>
                                     b.Type == (byte)BCardType.FalconSkill &&
                                     (b.SubType == (byte)BCardSubTypes.FalconSkill.Hide ||
                                      b.SubType == (byte)BCardSubTypes.FalconSkill.Ambush))))
+=======
+                            else if (SubType.Equals((byte) AdditionalTypes.SniperAttack.ProduceChance))
+                            {
+                                if (sender.Buffs.Any(s => s.Card.BCards.Any(b =>
+                                    b.Type == (byte) BCardType.CardType.FalconSkill &&
+                                    (b.SubType == (byte) AdditionalTypes.FalconSkill.Hide ||
+                                     b.SubType == (byte) AdditionalTypes.FalconSkill.Ambush))))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
@@ -2337,9 +2721,9 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.FrozenDebuff:
+                        case BCardType.CardType.FrozenDebuff:
                             //{
-                            //    if (SubType == (byte)BCardSubTypes.FrozenDebuff.GlacerusSkill)
+                            //    if (SubType == (byte)AdditionalTypes.FrozenDebuff.GlacerusSkill)
                             //    {
                             //        var mapInstance = sender.MapInstance;
 
@@ -2379,8 +2763,13 @@ namespace OpenNos.GameObject
                             //                    // Freeze
 
                             //                    if (character.Hp < 1
+<<<<<<< HEAD
                             //                        || character.HasBuff(BCardType.FrozenDebuff,
                             //                            (byte)BCardSubTypes.FrozenDebuff.EternalIce))
+=======
+                            //                        || character.HasBuff(BCardType.CardType.FrozenDebuff,
+                            //                            (byte)AdditionalTypes.FrozenDebuff.EternalIce))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             //                    {
                             //                        continue;
                             //                    }
@@ -2395,8 +2784,13 @@ namespace OpenNos.GameObject
 
                             //                        if (!mapInstance.Sessions.Any(s => s.Character != null
                             //                                                           && !s.Character.HasBuff(
+<<<<<<< HEAD
                             //                                                               BCardType.FrozenDebuff,
                             //                                                               (byte)BCardSubTypes
+=======
+                            //                                                               BCardType.CardType.FrozenDebuff,
+                            //                                                               (byte)AdditionalTypes
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             //                                                                   .FrozenDebuff.EternalIce)))
                             //                        {
                             //                            EventHelper.Instance.RunEvent(new EventContainer(mapInstance,
@@ -2415,10 +2809,14 @@ namespace OpenNos.GameObject
                             //}
                             break;
 
-                        case BCardType.JumpBackPush:
+                        case BCardType.CardType.JumpBackPush:
                             if (!ServerManager.RandomProbabilityCheck(session.ResistForcedMovement))
                             {
+<<<<<<< HEAD
                                 if (SubType.Equals((byte)BCardSubTypes.JumpBackPush.JumpBackChance))
+=======
+                                if (SubType.Equals((byte) AdditionalTypes.JumpBackPush.JumpBackChance))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
@@ -2426,7 +2824,11 @@ namespace OpenNos.GameObject
                                     }
                                 }
 
+<<<<<<< HEAD
                                 if (SubType.Equals((byte)BCardSubTypes.JumpBackPush.PushBackChance))
+=======
+                                if (SubType.Equals((byte) AdditionalTypes.JumpBackPush.PushBackChance))
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     if (ServerManager.RandomNumber() < firstData)
                                     {
@@ -2437,10 +2839,10 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.FairyXPIncrease:
+                        case BCardType.CardType.FairyXPIncrease:
                             break;
 
-                        case BCardType.SummonAndRecoverHP:
+                        case BCardType.CardType.SummonAndRecoverHP:
                             var summonParameters3 = new List<MonsterToSummon>();
                             if (ServerManager.RandomNumber() <= Math.Abs(ThirdData) || ThirdData == 0 || ThirdData < 0)
                             {
@@ -2494,13 +2896,19 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.TeamArenaBuff:
+                        case BCardType.CardType.TeamArenaBuff:
                             break;
 
-                        case BCardType.ArenaCamera:
+                        case BCardType.CardType.ArenaCamera:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.DarkCloneSummon:
+=======
+                        case BCardType.CardType.DarkCloneSummon:
+                        {
+                            if (SubType == (byte) AdditionalTypes.DarkCloneSummon.SummonDarkCloneChance)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (SubType == (byte)BCardSubTypes.DarkCloneSummon.SummonDarkCloneChance)
                                 {
@@ -2534,9 +2942,24 @@ namespace OpenNos.GameObject
                             }
                             break;
 
+<<<<<<< HEAD
                         case BCardType.AbsorbedSpirit:
                             {
                                 var hasSpiritAbsorption = session.HasBuff(596);
+=======
+                        case BCardType.CardType.AbsorbedSpirit:
+                        {
+                            var hasSpiritAbsorption = session.HasBuff(596);
+
+                            switch (SubType)
+                            {
+                                case (byte) AdditionalTypes.AbsorbedSpirit.ApplyEffectIfPresent:
+                                    if (hasSpiritAbsorption)
+                                    {
+                                        session.AddBuff(new Buff((short) SecondData, session.Level), session);
+                                        session.RemoveBuff(596);
+                                    }
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                 switch (SubType)
                                 {
@@ -2547,7 +2970,15 @@ namespace OpenNos.GameObject
                                             session.RemoveBuff(596);
                                         }
 
+<<<<<<< HEAD
                                         break;
+=======
+                                case (byte) AdditionalTypes.AbsorbedSpirit.ApplyEffectIfNotPresent:
+                                    if (!hasSpiritAbsorption && !session.HasBuff(599))
+                                    {
+                                        session.AddBuff(new Buff((short) SecondData, session.Level), session);
+                                    }
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     case (byte)BCardSubTypes.AbsorbedSpirit.ApplyEffectIfNotPresent:
                                         if (!hasSpiritAbsorption && !session.HasBuff(599))
@@ -2560,10 +2991,16 @@ namespace OpenNos.GameObject
                             }
                             break;
 
-                        case BCardType.AngerSkill:
+                        case BCardType.CardType.AngerSkill:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.MeteoriteTeleport:
+=======
+                        case BCardType.CardType.MeteoriteTeleport:
+                        {
+                            if (SubType == (byte) AdditionalTypes.MeteoriteTeleport.SummonInVisualRange)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 if (SubType == (byte)BCardSubTypes.MeteoriteTeleport.SummonInVisualRange)
                                 {
@@ -2573,11 +3010,21 @@ namespace OpenNos.GameObject
                                     {
                                         var monstersToSummon = new List<MonsterToSummon>();
 
+<<<<<<< HEAD
                                         for (var i = 0; i < 73; i++)
                                         {
                                             monstersToSummon.Add(new MonsterToSummon(2328, new MapCell { X = 0, Y = 0 }, null,
                                                 false, hasDelay: (short)ServerManager.RandomNumber(0, 5)));
                                         }
+=======
+                                    EventHelper.Instance.RunEvent(new EventContainer(mapInstance,
+                                        EventActionType.SPAWNMONSTERS, monstersToSummon));
+                                }
+                            }
+                            else if (SubType == (byte) AdditionalTypes.MeteoriteTeleport.TransformTarget)
+                            {
+                                int[] morphVNums = {1000099, 1000156};
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                         EventHelper.Instance.RunEvent(new EventContainer(mapInstance,
                                             EventActionType.SPAWNMONSTERS, monstersToSummon));
@@ -2604,10 +3051,25 @@ namespace OpenNos.GameObject
                                                 session.AddBuff(new Buff(478, sender.Level, true), sender);
                                                 break;
 
+<<<<<<< HEAD
                                             case 1000156: // Bushtail
                                                 session.AddBuff(new Buff(477, sender.Level, true), sender);
                                                 break;
                                         }
+=======
+                                    session.Character.MapInstance.Broadcast(session.Character.GenerateCMode());
+                                }
+                            }
+                            else if (SubType == (byte) AdditionalTypes.MeteoriteTeleport.TeleportForward)
+                            {
+                                session.TeleportTo(
+                                    session.MapInstance.Map.GetRandomPositionByDistance(session.PositionX,
+                                        session.PositionY, (short) FirstData));
+                            }
+                            else if (SubType == (byte) AdditionalTypes.MeteoriteTeleport.CauseMeteoriteFall)
+                            {
+                                var mapInstance = session?.MapInstance;
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                         session.Character.MapInstance.Broadcast(session.Character.GenerateCMode());
                                     }
@@ -2656,8 +3118,17 @@ namespace OpenNos.GameObject
                                         }
                                     }
                                 }
+<<<<<<< HEAD
                                 else if (SubType == (byte)BCardSubTypes.MeteoriteTeleport
                                     .TeleportYouAndGroupToSavedLocation)
+=======
+                            }
+                            else if (SubType == (byte) AdditionalTypes.MeteoriteTeleport
+                                .TeleportYouAndGroupToSavedLocation)
+                            {
+                                if (session.Character is Character character &&
+                                    character.CharacterId == sender?.Character?.CharacterId)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     if (session.Character is Character character &&
                                         character.CharacterId == sender?.Character?.CharacterId)
@@ -2732,19 +3203,23 @@ namespace OpenNos.GameObject
                             }
                             break;
 
-                        case BCardType.StealBuff:
+                        case BCardType.CardType.StealBuff:
                             break;
 
-                        case BCardType.Unknown:
+                        case BCardType.CardType.Unknown:
                             break;
 
-                        case BCardType.EffectSummon:
+                        case BCardType.CardType.EffectSummon:
                             break;
 
-                        case BCardType.MartialArts:
+                        case BCardType.CardType.MartialArts:
                             switch (SubType)
                             {
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.MartialArts.TransformationInverted:
+=======
+                                case (byte) AdditionalTypes.MartialArts.TransformationInverted:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                     if (session.Character is Character reversedMorph)
                                     {
                                         reversedMorph.Morph = 29;
@@ -2757,7 +3232,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.MartialArts.Transformation:
+=======
+                                case (byte) AdditionalTypes.MartialArts.Transformation:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                     if (!CardId.HasValue)
                                     {
                                         break;
@@ -2794,19 +3273,37 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.LotusSkills:
+                        case BCardType.CardType.LotusSkills:
                             break;
 
+<<<<<<< HEAD
                         case BCardType.WolfMaster:
+=======
+                        case BCardType.CardType.WolfMaster:
+                        {
+                            var user = sender.Character ?? session.Character;
+
+                            if (user == null)
+>>>>>>> parent of d7ef289... Bcard Cleaning
                             {
                                 var user = sender.Character ?? session.Character;
 
+<<<<<<< HEAD
                                 if (user == null)
+=======
+                            switch (SubType)
+                            {
+                                case (byte) AdditionalTypes.WolfMaster.AddUltimatePoints:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     break;
                                 }
 
+<<<<<<< HEAD
                                 switch (SubType)
+=======
+                                case (byte) AdditionalTypes.WolfMaster.CanExecuteUltimateSkills:
+>>>>>>> parent of d7ef289... Bcard Cleaning
                                 {
                                     case (byte)BCardSubTypes.WolfMaster.AddUltimatePoints:
                                         {
@@ -2826,19 +3323,23 @@ namespace OpenNos.GameObject
                             }
                             break;
 
-                        case BCardType.Idk:
+                        case BCardType.CardType.Idk:
                             break;
 
-                        case BCardType.IncreaseDamageVsChar:
+                        case BCardType.CardType.IncreaseDamageVsChar:
                             break;
 
-                        case BCardType.ApplyBuffs:
+                        case BCardType.CardType.ApplyBuffs:
                             break;
 
-                        case BCardType.A7Powers1:
+                        case BCardType.CardType.A7Powers1:
                             switch (SubType)
                             {
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers1.DamageApocalypsePower:
+=======
+                                case (byte) AdditionalTypes.A7Powers1.DamageApocalypsePower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2854,7 +3355,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers1.ReflectionPower:
+=======
+                                case (byte) AdditionalTypes.A7Powers1.ReflectionPower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2865,7 +3370,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers1.DamageWolfPower:
+=======
+                                case (byte) AdditionalTypes.A7Powers1.DamageWolfPower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2881,7 +3390,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers1.EnemyKnockedBack:
+=======
+                                case (byte) AdditionalTypes.A7Powers1.EnemyKnockedBack:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2894,7 +3407,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers1.DamageExplosionPower:
+=======
+                                case (byte) AdditionalTypes.A7Powers1.DamageExplosionPower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2913,10 +3430,14 @@ namespace OpenNos.GameObject
 
                             break;
 
-                        case BCardType.A7Powers2:
+                        case BCardType.CardType.A7Powers2:
                             switch (SubType)
                             {
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers2.ReceiveAgilityPower:
+=======
+                                case (byte) AdditionalTypes.A7Powers2.ReceiveAgilityPower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2927,7 +3448,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers2.DamageLightingPower:
+=======
+                                case (byte) AdditionalTypes.A7Powers2.DamageLightingPower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2943,7 +3468,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers2.TriggerCursePower:
+=======
+                                case (byte) AdditionalTypes.A7Powers2.TriggerCursePower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2954,7 +3483,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers2.DamageBearPower:
+=======
+                                case (byte) AdditionalTypes.A7Powers2.DamageBearPower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 
@@ -2970,7 +3503,11 @@ namespace OpenNos.GameObject
 
                                     break;
 
+<<<<<<< HEAD
                                 case (byte)BCardSubTypes.A7Powers2.ReceiveFrostPower:
+=======
+                                case (byte) AdditionalTypes.A7Powers2.ReceiveFrostPower:
+>>>>>>> parent of d7ef289... Bcard Cleaning
 
                                     if (sender == null) return;
 

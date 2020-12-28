@@ -1,5 +1,4 @@
 ﻿using System;
-using ChickenAPI.Enums;
 using OpenNos.Domain;
 
 namespace OpenNos.Core

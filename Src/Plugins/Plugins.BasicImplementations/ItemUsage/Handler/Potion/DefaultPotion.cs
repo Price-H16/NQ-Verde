@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using ChickenAPI.Enums.Game.BCard;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._ItemUsage;
@@ -83,8 +82,8 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Produce
                     {
                         hasPotionBeenUsed = true;
 
-                        var buffRc = session.Character.GetBuff(BCardType.LeonaPassiveSkill,
-                                         (byte) BCardSubTypes.LeonaPassiveSkill.IncreaseRecoveryItems)[0] / 100D;
+                        var buffRc = session.Character.GetBuff(BCardType.CardType.LeonaPassiveSkill,
+                                         (byte) AdditionalTypes.LeonaPassiveSkill.IncreaseRecoveryItems)[0] / 100D;
 
                         var hpAmount = e.Item.Item.Hp + (int) (e.Item.Item.Hp * buffRc);
                         var mpAmount = e.Item.Item.Mp + (int) (e.Item.Item.Mp * buffRc);
@@ -100,8 +99,8 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Produce
                         }
 
                         var convertRecoveryToDamage = ServerManager.RandomNumber() <
-                                                      session.Character.GetBuff(BCardType.DarkCloneSummon,
-                                                              (byte) BCardSubTypes.DarkCloneSummon
+                                                      session.Character.GetBuff(BCardType.CardType.DarkCloneSummon,
+                                                              (byte) AdditionalTypes.DarkCloneSummon
                                                                                     .ConvertRecoveryToDamage)[0];
 
                         if (convertRecoveryToDamage)

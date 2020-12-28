@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ChickenAPI.Enums.Game.BCard;
 using OpenNos.Domain;
 
 namespace OpenNos.GameObject.Helpers
@@ -32,14 +31,14 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.AttackPower,
-                                SubType = (byte) BCardSubTypes.AttackPower.MeleeAttacksIncreased
+                                Type = (byte) BCardType.CardType.AttackPower,
+                                SubType = (byte) AdditionalTypes.AttackPower.MeleeAttacksIncreased
                             });
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.Defence,
-                                SubType = (byte) BCardSubTypes.Defence.MeleeIncreased
+                                Type = (byte) BCardType.CardType.Defence,
+                                SubType = (byte) AdditionalTypes.Defence.MeleeIncreased
                             });
                             break;
 
@@ -47,20 +46,20 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.Target,
-                                SubType = (byte) BCardSubTypes.Target.AllHitRateIncreased
+                                Type = (byte) BCardType.CardType.Target,
+                                SubType = (byte) AdditionalTypes.Target.AllHitRateIncreased
                             });
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.DodgeAndDefencePercent,
-                                SubType = (byte) BCardSubTypes.DodgeAndDefencePercent.DodgeIncreased
+                                Type = (byte) BCardType.CardType.DodgeAndDefencePercent,
+                                SubType = (byte) AdditionalTypes.DodgeAndDefencePercent.DodgeIncreased
                             });
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.Defence,
-                                SubType = (byte) BCardSubTypes.Defence.RangedIncreased
+                                Type = (byte) BCardType.CardType.Defence,
+                                SubType = (byte) AdditionalTypes.Defence.RangedIncreased
                             });
                             break;
 
@@ -68,14 +67,14 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.AttackPower,
-                                SubType = (byte) BCardSubTypes.AttackPower.MagicalAttacksIncreased
+                                Type = (byte) BCardType.CardType.AttackPower,
+                                SubType = (byte) AdditionalTypes.AttackPower.MagicalAttacksIncreased
                             });
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.Defence,
-                                SubType = (byte) BCardSubTypes.Defence.MagicalIncreased
+                                Type = (byte) BCardType.CardType.Defence,
+                                SubType = (byte) AdditionalTypes.Defence.MagicalIncreased
                             });
                             break;
 
@@ -83,8 +82,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.MaxHPMP,
-                                SubType = (byte) BCardSubTypes.MaxHPMP.MaximumHPIncreased
+                                Type = (byte) BCardType.CardType.MaxHPMP,
+                                SubType = (byte) AdditionalTypes.MaxHPMP.MaximumHPIncreased
                             });
                             break;
 
@@ -92,8 +91,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.MaxHPMP,
-                                SubType = (byte) BCardSubTypes.MaxHPMP.MaximumMPIncreased
+                                Type = (byte) BCardType.CardType.MaxHPMP,
+                                SubType = (byte) AdditionalTypes.MaxHPMP.MaximumMPIncreased
                             });
                             break;
 
@@ -101,8 +100,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.AttackPower,
-                                SubType = (byte) BCardSubTypes.AttackPower.AllAttacksIncreased
+                                Type = (byte) BCardType.CardType.AttackPower,
+                                SubType = (byte) AdditionalTypes.AttackPower.AllAttacksIncreased
                             });
                             break;
 
@@ -110,8 +109,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.Defence,
-                                SubType = (byte) BCardSubTypes.Defence.AllIncreased
+                                Type = (byte) BCardType.CardType.Defence,
+                                SubType = (byte) AdditionalTypes.Defence.AllIncreased
                             });
                             break;
 
@@ -119,8 +118,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.Recovery,
-                                SubType = (byte) BCardSubTypes.Recovery.HPRecoveryIncreased
+                                Type = (byte) BCardType.CardType.Recovery,
+                                SubType = (byte) AdditionalTypes.Recovery.HPRecoveryIncreased
                             });
                             break;
 
@@ -128,8 +127,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeSkill,
-                                Type = (byte) BCardType.Recovery,
-                                SubType = (byte) BCardSubTypes.Recovery.MPRecoveryIncreased
+                                Type = (byte) BCardType.CardType.Recovery,
+                                SubType = (byte) AdditionalTypes.Recovery.MPRecoveryIncreased
                             });
                             break;
 
@@ -137,8 +136,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.SpecialisationBuffResistance,
-                                SubType = (byte) BCardSubTypes.SpecialisationBuffResistance.IncreaseDamageInPVP
+                                Type = (byte) BCardType.CardType.SpecialisationBuffResistance,
+                                SubType = (byte) AdditionalTypes.SpecialisationBuffResistance.IncreaseDamageInPVP
                             });
                             break;
 
@@ -146,8 +145,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = -skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.SpecialisationBuffResistance,
-                                SubType = (byte) BCardSubTypes.SpecialisationBuffResistance.DecreaseDamageInPVP
+                                Type = (byte) BCardType.CardType.SpecialisationBuffResistance,
+                                SubType = (byte) AdditionalTypes.SpecialisationBuffResistance.DecreaseDamageInPVP
                             });
                             break;
 
@@ -155,14 +154,14 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.AttackPower,
-                                SubType = (byte) BCardSubTypes.AttackPower.MeleeAttacksIncreased
+                                Type = (byte) BCardType.CardType.AttackPower,
+                                SubType = (byte) AdditionalTypes.AttackPower.MeleeAttacksIncreased
                             });
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.Defence,
-                                SubType = (byte) BCardSubTypes.Defence.MeleeIncreased
+                                Type = (byte) BCardType.CardType.Defence,
+                                SubType = (byte) AdditionalTypes.Defence.MeleeIncreased
                             });
                             break;
 
@@ -170,20 +169,20 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.Target,
-                                SubType = (byte) BCardSubTypes.Target.AllHitRateIncreased
+                                Type = (byte) BCardType.CardType.Target,
+                                SubType = (byte) AdditionalTypes.Target.AllHitRateIncreased
                             });
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.DodgeAndDefencePercent,
-                                SubType = (byte) BCardSubTypes.DodgeAndDefencePercent.DodgeIncreased
+                                Type = (byte) BCardType.CardType.DodgeAndDefencePercent,
+                                SubType = (byte) AdditionalTypes.DodgeAndDefencePercent.DodgeIncreased
                             });
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.Defence,
-                                SubType = (byte) BCardSubTypes.Defence.RangedIncreased
+                                Type = (byte) BCardType.CardType.Defence,
+                                SubType = (byte) AdditionalTypes.Defence.RangedIncreased
                             });
                             break;
 
@@ -191,14 +190,14 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.AttackPower,
-                                SubType = (byte) BCardSubTypes.AttackPower.MagicalAttacksIncreased
+                                Type = (byte) BCardType.CardType.AttackPower,
+                                SubType = (byte) AdditionalTypes.AttackPower.MagicalAttacksIncreased
                             });
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.Defence,
-                                SubType = (byte) BCardSubTypes.Defence.MagicalIncreased
+                                Type = (byte) BCardType.CardType.Defence,
+                                SubType = (byte) AdditionalTypes.Defence.MagicalIncreased
                             });
                             break;
 
@@ -206,8 +205,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.MaxHPMP,
-                                SubType = (byte) BCardSubTypes.MaxHPMP.MaximumHPIncreased
+                                Type = (byte) BCardType.CardType.MaxHPMP,
+                                SubType = (byte) AdditionalTypes.MaxHPMP.MaximumHPIncreased
                             });
                             break;
 
@@ -215,8 +214,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.MaxHPMP,
-                                SubType = (byte) BCardSubTypes.MaxHPMP.MaximumMPIncreased
+                                Type = (byte) BCardType.CardType.MaxHPMP,
+                                SubType = (byte) AdditionalTypes.MaxHPMP.MaximumMPIncreased
                             });
                             break;
 
@@ -224,8 +223,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.Defence,
-                                SubType = (byte) BCardSubTypes.Defence.AllIncreased
+                                Type = (byte) BCardType.CardType.Defence,
+                                SubType = (byte) AdditionalTypes.Defence.AllIncreased
                             });
                             break;
 
@@ -233,8 +232,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.AttackPower,
-                                SubType = (byte) BCardSubTypes.AttackPower.AllAttacksIncreased
+                                Type = (byte) BCardType.CardType.AttackPower,
+                                SubType = (byte) AdditionalTypes.AttackPower.AllAttacksIncreased
                             });
                             break;
 
@@ -242,8 +241,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.ElementResistance,
-                                SubType = (byte) BCardSubTypes.ElementResistance.AllIncreased
+                                Type = (byte) BCardType.CardType.ElementResistance,
+                                SubType = (byte) AdditionalTypes.ElementResistance.AllIncreased
                             });
                             break;
 
@@ -251,8 +250,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.Item,
-                                SubType = (byte) BCardSubTypes.Item.EXPIncreased
+                                Type = (byte) BCardType.CardType.Item,
+                                SubType = (byte) AdditionalTypes.Item.EXPIncreased
                             });
                             break;
 
@@ -260,8 +259,8 @@ namespace OpenNos.GameObject.Helpers
                             bcards.Add(new BCard
                             {
                                 FirstData = skill.Skill.UpgradeType,
-                                Type = (byte) BCardType.Item,
-                                SubType = (byte) BCardSubTypes.Item.IncreaseEarnedGold
+                                Type = (byte) BCardType.CardType.Item,
+                                SubType = (byte) AdditionalTypes.Item.IncreaseEarnedGold
                             });
                             break;
                     }

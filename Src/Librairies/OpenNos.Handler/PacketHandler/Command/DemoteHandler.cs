@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using ChickenAPI.Enums;
 using NosTale.Packets.Packets.CommandPackets;
 using OpenNos.Core;
 using OpenNos.DAL;

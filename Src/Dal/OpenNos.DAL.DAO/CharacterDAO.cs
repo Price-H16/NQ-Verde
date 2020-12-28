@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChickenAPI.Enums;
 using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;

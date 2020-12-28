@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChickenAPI.Enums;
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject.Helpers;
@@ -324,7 +323,9 @@ namespace OpenNos.GameObject
                                         {
                                             session.SendPacket(sentPacket.Packet);
                                         }
-                                        else if (session.Account.Authority >= AuthorityType.DSGM /*|| session.Account.Authority == AuthorityType.Moderator*/)
+                                        else if (session.Account.Authority >=
+                                                 AuthorityType
+                                                         .DSGM /*|| session.Account.Authority == AuthorityType.Moderator*/)
                                         {
                                             var vals = sentPacket.Packet.Split(' ');
                                             if (vals[0] == "say" && vals[3] == "13")

@@ -1,10 +1,10 @@
-﻿using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 
 namespace NosTale.Packets.Packets.CommandPackets
 {
-    [PacketHeader("$Teleport", "$tp", PassNonParseablePacket = true, Authorities = new[] {AuthorityType.TGM})]
+    [PacketHeader("$Teleport", "$tp", PassNonParseablePacket = true,
+        Authorities = new[] {AuthorityType.TGM})]
     public class TeleportPacket : PacketDefinition
     {
         #region Methods

@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ChickenAPI.Enums.Game.BCard;
-using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
@@ -16,6 +14,7 @@ using OpenNos.GameObject.Extension;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.GameObject.RainbowBattle;
+using static OpenNos.Domain.BCardType;
 
 namespace NosTale.Extension.Extension.Packet
 {
@@ -32,13 +31,13 @@ namespace NosTale.Extension.Extension.Packet
                     target.Character.Rest();
                 }
 
-                double cooldownReduction = Session.Character.GetBuff(BCardType.Morale,
-                                                   (byte)BCardSubTypes.Morale.SkillCooldownDecreased)[0] +
-                                           Session.Character.GetBuff(BCardType.Casting,
-                                                   (byte)BCardSubTypes.Casting.EffectDurationIncreased)[0];
+                double cooldownReduction = Session.Character.GetBuff(BCardType.CardType.Morale,
+                                                   (byte)AdditionalTypes.Morale.SkillCooldownDecreased)[0] +
+                                           Session.Character.GetBuff(BCardType.CardType.Casting,
+                                                   (byte)AdditionalTypes.Casting.EffectDurationIncreased)[0];
 
-                var increaseEnemyCooldownChance = Session.Character.GetBuff(BCardType.DarkCloneSummon,
-                    (byte)BCardSubTypes.DarkCloneSummon.IncreaseEnemyCooldownChance);
+                var increaseEnemyCooldownChance = Session.Character.GetBuff(BCardType.CardType.DarkCloneSummon,
+                    (byte)AdditionalTypes.DarkCloneSummon.IncreaseEnemyCooldownChance);
 
                 if (ServerManager.RandomNumber() < increaseEnemyCooldownChance[0])
                 {
@@ -65,8 +64,8 @@ namespace NosTale.Extension.Extension.Packet
                     hitmode = 4;
                 }
 
-                if (ServerManager.RandomNumber() < target.Character.GetBuff(BCardType.DarkCloneSummon,
-                        (byte)BCardSubTypes.DarkCloneSummon.ConvertDamageToHPChance)[0])
+                if (ServerManager.RandomNumber() < target.Character.GetBuff(BCardType.CardType.DarkCloneSummon,
+                        (byte)AdditionalTypes.DarkCloneSummon.ConvertDamageToHPChance)[0])
                 {
                     var amount = damage / 2;
 
@@ -88,28 +87,28 @@ namespace NosTale.Extension.Extension.Packet
                 {
                     Session.Character.RemoveBuffByBCardTypeSubType(new List<KeyValuePair<byte, byte>>
                     {
-                        new KeyValuePair<byte, byte>((byte) BCardType.SpecialActions,
-                            (byte) BCardSubTypes.SpecialActions.Hide)
+                        new KeyValuePair<byte, byte>((byte) BCardType.CardType.SpecialActions,
+                            (byte) AdditionalTypes.SpecialActions.Hide)
                     });
                     target.Character.RemoveBuffByBCardTypeSubType(new List<KeyValuePair<byte, byte>>
                     {
-                        new KeyValuePair<byte, byte>((byte) BCardType.SpecialActions,
-                            (byte) BCardSubTypes.SpecialActions.Hide)
+                        new KeyValuePair<byte, byte>((byte) BCardType.CardType.SpecialActions,
+                            (byte) AdditionalTypes.SpecialActions.Hide)
                     });
                     target.Character.RemoveBuff(36);
                     target.Character.RemoveBuff(548);
                 }
 
                 if (Session.Character.Buff.FirstOrDefault(s => s.Card.BCards.Any(b =>
-                    b.Type == (byte)BCardType.FalconSkill &&
-                    b.SubType.Equals((byte)BCardSubTypes.FalconSkill.Hide))) is Buff FalconHideBuff)
+                    b.Type == (byte)BCardType.CardType.FalconSkill &&
+                    b.SubType.Equals((byte)AdditionalTypes.FalconSkill.Hide))) is Buff FalconHideBuff)
                 {
                     Session.Character.RemoveBuff(FalconHideBuff.Card.CardId);
                     Session.Character.AddBuff(new Buff(560, Session.Character.Level), Session.Character.BattleEntity);
                 }
 
-                var manaShield = target.Character.GetBuff(BCardType.LightAndShadow,
-                    (byte)BCardSubTypes.LightAndShadow.InflictDamageToMP);
+                var manaShield = target.Character.GetBuff(BCardType.CardType.LightAndShadow,
+                    (byte)AdditionalTypes.LightAndShadow.InflictDamageToMP);
                 if (manaShield[0] != 0 && hitmode != 4)
                 {
                     var reduce = damage / 100 * manaShield[0];
@@ -167,7 +166,7 @@ namespace NosTale.Extension.Extension.Packet
                         target.Character.CharacterId, -1, 0, -1, 4211, -1, -1, true, 92, damage1 / 2, 0, 1));
                 }
 
-                if (target.Character.GetBuff(BCardType.TauntSkill, (byte)BCardSubTypes.TauntSkill.ReflectsMaximumDamageFromNegated)[0] > 0)
+                if (target.Character.GetBuff(BCardType.CardType.TauntSkill, (byte)AdditionalTypes.TauntSkill.ReflectsMaximumDamageFromNegated)[0] > 0)
                 {
                     hitRequest.Session.Character.GetDamage(damage / 2, new BattleEntity(target.Character, null), true);
                     hitRequest.Session.SendPacket($"bf 1 {hitRequest.Session.Character.CharacterId} 0.0.0 {hitRequest.Session.Character.Level}");
@@ -224,8 +223,8 @@ namespace NosTale.Extension.Extension.Packet
                     }
 
                     if (hitRequest.Session.Character != null && hitRequest.SkillBCards.FirstOrDefault(s =>
-                                                                                   s.Type == (byte)BCardType.TauntSkill &&
-                                                                                   s.SubType == (byte)BCardSubTypes.TauntSkill.EffectOnKill) is BCard EffectOnKill)
+                                                                                   s.Type == (byte)BCardType.CardType.TauntSkill &&
+                                                                                   s.SubType == (byte)AdditionalTypes.TauntSkill.EffectOnKill) is BCard EffectOnKill)
                     {
                         if (ServerManager.RandomNumber() < EffectOnKill.FirstData)
                         {
@@ -527,22 +526,22 @@ namespace NosTale.Extension.Extension.Packet
 
                 battleEntity.BCards.Where(s => s.CastType == 1).ForEach(s =>
                 {
-                    if (s.Type != (byte)BCardType.Buff)
+                    if (s.Type != (byte)BCardType.CardType.Buff)
                     {
                         s.ApplyBCards(target.Character.BattleEntity, Session.Character.BattleEntity);
                     }
                 });
 
                 hitRequest.SkillBCards.Where(s =>
-                        !s.Type.Equals((byte)BCardType.Buff) &&
-                        !s.Type.Equals((byte)BCardType.Capture) && s.CardId == null).ToList()
+                        !s.Type.Equals((byte)BCardType.CardType.Buff) &&
+                        !s.Type.Equals((byte)BCardType.CardType.Capture) && s.CardId == null).ToList()
                     .ForEach(s => s.ApplyBCards(target.Character.BattleEntity, Session.Character.BattleEntity));
 
                 if (hitmode != 4 && hitmode != 2)
                 {
                     battleEntity.BCards.Where(s => s.CastType == 1).ForEach(s =>
                     {
-                        if (s.Type == (byte)BCardType.Buff)
+                        if (s.Type == (byte)BCardType.CardType.Buff)
                         {
                             var b = new Buff((short)s.SecondData, battleEntity.Level);
                             if (b.Card != null)
@@ -564,7 +563,7 @@ namespace NosTale.Extension.Extension.Packet
 
                     foreach (var card in battleEntityDefense.BCards.Where(b => b.CastType == 2))
                     {
-                        if (card.Type != (byte)BCardType.Buff)
+                        if (card.Type != (byte)BCardType.CardType.Buff)
                         {
                             continue;
                         }
@@ -590,7 +589,7 @@ namespace NosTale.Extension.Extension.Packet
 
                     battleEntityDefense.BCards.Where(s => s.CastType == 1).ForEach(s =>
                     {
-                        if (s.Type == (byte)BCardType.Buff)
+                        if (s.Type == (byte)CardType.Buff)
                         {
                             var b = new Buff((short)s.SecondData, battleEntityDefense.Level);
                             if (b.Card != null)
@@ -612,7 +611,7 @@ namespace NosTale.Extension.Extension.Packet
 
                     battleEntityDefense.BCards.Where(s => s.CastType == 0).ForEach(s =>
                     {
-                        if (s.Type == (byte)BCardType.Buff)
+                        if (s.Type == (byte)BCardType.CardType.Buff)
                         {
                             var b = new Buff((short)s.SecondData, battleEntityDefense.Level);
                             if (b.Card != null)
@@ -633,12 +632,12 @@ namespace NosTale.Extension.Extension.Packet
                     });
 
                     hitRequest.SkillBCards.Where(s =>
-                            s.Type.Equals((byte)BCardType.Buff) &&
+                            s.Type.Equals((byte)BCardType.CardType.Buff) &&
                             new Buff((short)s.SecondData, Session.Character.Level).Card?.BuffType == BuffType.Bad)
                         .ToList()
                         .ForEach(s => s.ApplyBCards(target.Character.BattleEntity, Session.Character.BattleEntity));
 
-                    hitRequest.SkillBCards.Where(s => s.Type.Equals((byte)BCardType.SniperAttack)).ToList()
+                    hitRequest.SkillBCards.Where(s => s.Type.Equals((byte)BCardType.CardType.SniperAttack)).ToList()
                         .ForEach(s => s.ApplyBCards(target.Character.BattleEntity, Session.Character.BattleEntity));
 
                     #region Useless. But ?
@@ -1039,13 +1038,13 @@ namespace NosTale.Extension.Extension.Packet
                     }
 
                     foreach (var bc in ski.GetSkillBCards().ToList().Where(s =>
-                        s.Type.Equals((byte)BCardType.MeditationSkill)
-                        && (!s.SubType.Equals((byte)BCardSubTypes.MeditationSkill.CausingChance) ||
+                        s.Type.Equals((byte)BCardType.CardType.MeditationSkill)
+                        && (!s.SubType.Equals((byte)AdditionalTypes.MeditationSkill.CausingChance) ||
                             SkillHelper.IsCausingChance(ski.SkillVNum))))
                     {
                         shouldCancel = false;
 
-                        if (bc.SubType.Equals((byte)BCardSubTypes.MeditationSkill.Sacrifice))
+                        if (bc.SubType.Equals((byte)AdditionalTypes.MeditationSkill.Sacrifice))
                         {
                             isSacrificeSkill = true;
                             if (targetEntity == Session.Character.BattleEntity || targetEntity.MapMonster != null ||
@@ -1063,8 +1062,8 @@ namespace NosTale.Extension.Extension.Packet
                     }
 
                     if (ski.Skill.SkillVNum == 1098 && ski.GetSkillBCards().FirstOrDefault(s =>
-                                s.Type.Equals((byte)BCardType.SpecialisationBuffResistance) &&
-                                s.SubType.Equals((byte)BCardSubTypes.SpecialisationBuffResistance.RemoveBadEffects))
+                                s.Type.Equals((byte)BCardType.CardType.SpecialisationBuffResistance) &&
+                                s.SubType.Equals((byte)AdditionalTypes.SpecialisationBuffResistance.RemoveBadEffects))
                             is
                             BCard RemoveBadEffectsBcard)
                     {
@@ -1092,13 +1091,13 @@ namespace NosTale.Extension.Extension.Packet
                         }
                     }
 
-                    double cooldownReduction = Session.Character.GetBuff(BCardType.Morale,
-                                                       (byte)BCardSubTypes.Morale.SkillCooldownDecreased)[0] +
-                                               Session.Character.GetBuff(BCardType.Casting,
-                                                       (byte)BCardSubTypes.Casting.EffectDurationIncreased)[0];
+                    double cooldownReduction = Session.Character.GetBuff(BCardType.CardType.Morale,
+                                                       (byte)AdditionalTypes.Morale.SkillCooldownDecreased)[0] +
+                                               Session.Character.GetBuff(BCardType.CardType.Casting,
+                                                       (byte)AdditionalTypes.Casting.EffectDurationIncreased)[0];
 
-                    var increaseEnemyCooldownChance = Session.Character.GetBuff(BCardType.DarkCloneSummon,
-                        (byte)BCardSubTypes.DarkCloneSummon.IncreaseEnemyCooldownChance);
+                    var increaseEnemyCooldownChance = Session.Character.GetBuff(BCardType.CardType.DarkCloneSummon,
+                        (byte)AdditionalTypes.DarkCloneSummon.IncreaseEnemyCooldownChance);
 
                     if (ServerManager.RandomNumber() < increaseEnemyCooldownChance[0])
                     {
@@ -1108,9 +1107,13 @@ namespace NosTale.Extension.Extension.Packet
                     short mpCost = ski.MpCost();
                     short hpCost = 0;
 
-                    mpCost = (short)(mpCost * ((100 - Session.Character.CellonOptions.Where(s => s.Type == CellonOptionType.MPUsage).Sum(s => s.Value)) / 100D));
+                    mpCost = (short)(mpCost * ((100 - Session.Character.CellonOptions
+                                                     .Where(s => s.Type == CellonOptionType.MPUsage)
+                                                     .Sum(s => s.Value)) / 100D));
 
-                    if (Session.Character.GetBuff(BCardType.HealingBurningAndCasting, (byte)BCardSubTypes.HealingBurningAndCasting.HPDecreasedByConsumingMP)[0] is int HPDecreasedByConsumingMP)
+                    if (Session.Character.GetBuff(BCardType.CardType.HealingBurningAndCasting,
+                            (byte)AdditionalTypes.HealingBurningAndCasting.HPDecreasedByConsumingMP)[0] is int
+                        HPDecreasedByConsumingMP)
                     {
                         if (HPDecreasedByConsumingMP < 0)
                         {
@@ -1168,8 +1171,8 @@ namespace NosTale.Extension.Extension.Packet
 
                             var skillEffect = skillinfo?.Skill.Effect ?? ski.Skill.Effect;
 
-                            if (Session.Character.BattleEntity.HasBuff(BCardType.FireCannoneerRangeBuff,
-                                    (byte)BCardSubTypes.FireCannoneerRangeBuff.AOEIncreased) &&
+                            if (Session.Character.BattleEntity.HasBuff(BCardType.CardType.FireCannoneerRangeBuff,
+                                    (byte)AdditionalTypes.FireCannoneerRangeBuff.AOEIncreased) &&
                                 ski.Skill.Effect == 4569)
                             {
                                 skillEffect = 4572;
@@ -1180,11 +1183,11 @@ namespace NosTale.Extension.Extension.Packet
                             if (targetRange != 0)
                             {
                                 ski.GetSkillBCards().Where(s =>
-                                           s.Type.Equals((byte)BCardType.Buff) &&
+                                           s.Type.Equals((byte)BCardType.CardType.Buff) &&
                                            new Buff((short)s.SecondData, Session.Character.Level).Card?.BuffType ==
                                            BuffType.Good
-                                        || s.Type.Equals((byte)BCardType.SpecialEffects2) &&
-                                           s.SubType.Equals((byte)BCardSubTypes.SpecialEffects2.TeleportInRadius))
+                                        || s.Type.Equals((byte)BCardType.CardType.SpecialEffects2) &&
+                                           s.SubType.Equals((byte)AdditionalTypes.SpecialEffects2.TeleportInRadius))
                                    .ToList()
                                    .ForEach(s => s.ApplyBCards(Session.Character.BattleEntity,
                                            Session.Character.BattleEntity, partnerBuffLevel: ski.TattooLevel));
@@ -1287,7 +1290,7 @@ namespace NosTale.Extension.Extension.Packet
                             }
 
                             ski.GetSkillBCards().ToList()
-                               .Where(s => !s.Type.Equals((byte)BCardType.MeditationSkill)).ToList()
+                               .Where(s => !s.Type.Equals((byte)BCardType.CardType.MeditationSkill)).ToList()
                                .ForEach(s => s.ApplyBCards(targetEntity, Session.Character.BattleEntity,
                                        partnerBuffLevel: ski.TattooLevel));
 
@@ -1341,8 +1344,8 @@ namespace NosTale.Extension.Extension.Packet
                                     case 4:
                                         if (Session.Character.Buff.FirstOrDefault(s =>
                                                         s.Card.BCards.Any(b =>
-                                                                b.Type == (byte)BCardType.FalconSkill &&
-                                                                b.SubType.Equals((byte)BCardSubTypes.FalconSkill.Hide))) is Buff
+                                                                b.Type == (byte)BCardType.CardType.FalconSkill &&
+                                                                b.SubType.Equals((byte)AdditionalTypes.FalconSkill.Hide))) is Buff
                                                 FalconHideBuff)
                                         {
                                             Session.Character.RemoveBuff(FalconHideBuff.Card.CardId);
@@ -1378,10 +1381,10 @@ namespace NosTale.Extension.Extension.Packet
                                                          ?.ArenaTeamType))
                                                 {
                                                     foreach (var s in ski.Skill.BCards.Where(s =>
-                                                                                 !s.Type.Equals((byte)BCardType.MeditationSkill))
+                                                                                 !s.Type.Equals((byte)BCardType.CardType.MeditationSkill))
                                                                          .ToList())
                                                     {
-                                                        if (s.Type != (short)BCardType.Buff)
+                                                        if (s.Type != (short)BCardType.CardType.Buff)
                                                         {
                                                             s.ApplyBCards(target.Character.BattleEntity,
                                                                     Session.Character.BattleEntity);
@@ -1501,7 +1504,7 @@ namespace NosTale.Extension.Extension.Packet
                                                     }
 
                                                     ski.GetSkillBCards().ToList().Where(s =>
-                                                               !s.Type.Equals((byte)BCardType.MeditationSkill))
+                                                               !s.Type.Equals((byte)BCardType.CardType.MeditationSkill))
                                                        .ToList().ForEach(s =>
                                                                s.ApplyBCards(target.BattleEntity,
                                                                        Session.Character.BattleEntity,
@@ -1557,7 +1560,7 @@ namespace NosTale.Extension.Extension.Packet
                                                     }
 
                                                     ski.GetSkillBCards().ToList().Where(s =>
-                                                               !s.Type.Equals((byte)BCardType.MeditationSkill))
+                                                               !s.Type.Equals((byte)BCardType.CardType.MeditationSkill))
                                                        .ToList().ForEach(s =>
                                                                s.ApplyBCards(target.BattleEntity,
                                                                        Session.Character.BattleEntity,
@@ -1607,7 +1610,7 @@ namespace NosTale.Extension.Extension.Packet
                                                     }
 
                                                     ski.GetSkillBCards().ToList().Where(s =>
-                                                               !s.Type.Equals((byte)BCardType.MeditationSkill))
+                                                               !s.Type.Equals((byte)BCardType.CardType.MeditationSkill))
                                                        .ToList().ForEach(s =>
                                                                s.ApplyBCards(target.BattleEntity,
                                                                        Session.Character.BattleEntity,
@@ -1632,7 +1635,7 @@ namespace NosTale.Extension.Extension.Packet
                             }
 
                             ski.GetSkillBCards().ToList()
-                               .Where(s => !s.Type.Equals((byte)BCardType.MeditationSkill)).ToList()
+                               .Where(s => !s.Type.Equals((byte)BCardType.CardType.MeditationSkill)).ToList()
                                .ForEach(s => s.ApplyBCards(Session.Character.BattleEntity,
                                        Session.Character.BattleEntity, partnerBuffLevel: ski.TattooLevel));
                         }
@@ -2360,7 +2363,7 @@ namespace NosTale.Extension.Extension.Packet
                             }
 
                             ski.GetSkillBCards().Where(s =>
-                                       s.Type.Equals((byte)BCardType.Buff) &&
+                                       s.Type.Equals((byte)BCardType.CardType.Buff) &&
                                        new Buff((short)s.SecondData, Session.Character.Level).Card?.BuffType ==
                                        BuffType.Good).ToList()
                                .ForEach(s => s.ApplyBCards(Session.Character.BattleEntity,
@@ -2421,7 +2424,7 @@ namespace NosTale.Extension.Extension.Packet
                             });
 
                         // This will reset skill's cooldown if you have fairy wings
-                        var fairyWings = Session.Character.GetBuff(BCardType.EffectSummon, (byte)BCardSubTypes.EffectSummon.LastSkillReset);
+                        var fairyWings = Session.Character.GetBuff(BCardType.CardType.EffectSummon, (byte)AdditionalTypes.EffectSummon.LastSkillReset);
                         var random = ServerManager.RandomNumber();
                         if (fairyWings[0] > random)
                         {
@@ -2438,7 +2441,8 @@ namespace NosTale.Extension.Extension.Packet
                     else
                     {
                         Session.SendPacket(StaticPacketHelper.Cancel(2, targetId));
-                        Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_MP"), 10));
+                        Session.SendPacket(
+                            Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_MP"), 10));
                     }
                 }
 
@@ -2479,9 +2483,13 @@ namespace NosTale.Extension.Extension.Packet
                 short mpCost = characterSkill.MpCost();
                 short hpCost = 0;
 
-                mpCost = (short)(mpCost * ((100 - Session.Character.CellonOptions.Where(s => s.Type == CellonOptionType.MPUsage).Sum(s => s.Value)) / 100D));
+                mpCost = (short)(mpCost * ((100 - Session.Character.CellonOptions
+                                                 .Where(s => s.Type == CellonOptionType.MPUsage).Sum(s => s.Value)) /
+                                            100D));
 
-                if (Session.Character.GetBuff(BCardType.HealingBurningAndCasting, (byte)BCardSubTypes.HealingBurningAndCasting.HPDecreasedByConsumingMP)[0] is int HPDecreasedByConsumingMP)
+                if (Session.Character.GetBuff(BCardType.CardType.HealingBurningAndCasting,
+                        (byte)AdditionalTypes.HealingBurningAndCasting.HPDecreasedByConsumingMP)[0] is int
+                    HPDecreasedByConsumingMP)
                 {
                     if (HPDecreasedByConsumingMP < 0)
                     {
@@ -2496,13 +2504,13 @@ namespace NosTale.Extension.Extension.Packet
                     Session.Character.LastSkillUse = DateTime.Now;
 
                     double cooldownReduction =
-                        Session.Character.GetBuff(BCardType.Morale,
-                            (byte)BCardSubTypes.Morale.SkillCooldownDecreased)[0] +
-                        Session.Character.GetBuff(BCardType.Casting,
-                            (byte)BCardSubTypes.Casting.EffectDurationIncreased)[0];
+                        Session.Character.GetBuff(BCardType.CardType.Morale,
+                            (byte)AdditionalTypes.Morale.SkillCooldownDecreased)[0] +
+                        Session.Character.GetBuff(BCardType.CardType.Casting,
+                            (byte)AdditionalTypes.Casting.EffectDurationIncreased)[0];
 
-                    var increaseEnemyCooldownChance = Session.Character.GetBuff(BCardType.DarkCloneSummon,
-                        (byte)BCardSubTypes.DarkCloneSummon.IncreaseEnemyCooldownChance);
+                    var increaseEnemyCooldownChance = Session.Character.GetBuff(BCardType.CardType.DarkCloneSummon,
+                        (byte)AdditionalTypes.DarkCloneSummon.IncreaseEnemyCooldownChance);
 
                     if (ServerManager.RandomNumber() < increaseEnemyCooldownChance[0])
                     {
@@ -2546,8 +2554,8 @@ namespace NosTale.Extension.Extension.Packet
 
                         var Range = characterSkill.TargetRange();
                         if (characterSkill.GetSkillBCards().Any(s =>
-                            s.Type == (byte)BCardType.FalconSkill &&
-                            s.SubType == (byte)BCardSubTypes.FalconSkill.FalconFocusLowestHP))
+                            s.Type == (byte)BCardType.CardType.FalconSkill &&
+                            s.SubType == (byte)AdditionalTypes.FalconSkill.FalconFocusLowestHP))
                         {
                             if (Session.CurrentMapInstance.BattleEntities.Where(s => s.IsInRange(x, y, Range)
                                                                                      && Session.Character.BattleEntity
@@ -2605,13 +2613,13 @@ namespace NosTale.Extension.Extension.Packet
                         }
 
                         characterSkill.GetSkillBCards().ToList().Where(s =>
-                                s.Type.Equals((byte)BCardType.Buff) &&
+                                s.Type.Equals((byte)BCardType.CardType.Buff) &&
                                 new Buff((short)s.SecondData, Session.Character.Level).Card.BuffType.Equals(
                                     BuffType.Good)
-                                || s.Type.Equals((byte)BCardType.FalconSkill) &&
-                                s.SubType.Equals((byte)BCardSubTypes.FalconSkill.CausingChanceLocation)
-                                || s.Type.Equals((byte)BCardType.FearSkill) &&
-                                s.SubType.Equals((byte)BCardSubTypes.FearSkill.ProduceWhenAmbushe)).ToList()
+                                || s.Type.Equals((byte)BCardType.CardType.FalconSkill) &&
+                                s.SubType.Equals((byte)AdditionalTypes.FalconSkill.CausingChanceLocation)
+                                || s.Type.Equals((byte)BCardType.CardType.FearSkill) &&
+                                s.SubType.Equals((byte)AdditionalTypes.FearSkill.ProduceWhenAmbushe)).ToList()
                             .ForEach(s => s.ApplyBCards(Session.Character.BattleEntity, Session.Character.BattleEntity,
                                 x, y, characterSkill.TattooLevel));
 

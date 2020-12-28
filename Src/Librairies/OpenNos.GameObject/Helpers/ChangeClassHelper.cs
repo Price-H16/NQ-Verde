@@ -1,5 +1,4 @@
 ﻿using System;
-using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.Domain;
 
@@ -39,7 +38,7 @@ namespace OpenNos.GameObject.Helpers
                 case 1:
                 case 2:
                 case 3:
-                    if (session.Character.IsVehicled && session.Character.Class == CharacterClassType.MartialArtist)
+                    if (session.Character.IsVehicled && session.Character.Class == ClassType.MartialArtist)
                     {
                         session.SendPacket(session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_PERMITTED"), 10));
                         return;
@@ -51,7 +50,7 @@ namespace OpenNos.GameObject.Helpers
                         return;
                     }
 
-                    session.Character.ChangeClass((CharacterClassType) inv.Item.EffectValue, true);
+                    session.Character.ChangeClass((ClassType) inv.Item.EffectValue, true);
                     break;
 
                 case 4:
@@ -61,7 +60,7 @@ namespace OpenNos.GameObject.Helpers
                         return;
                     }
 
-                    session.Character.ChangeClass((CharacterClassType) inv.Item.EffectValue, true);
+                    session.Character.ChangeClass((ClassType) inv.Item.EffectValue, true);
                     break;
 
                 default:

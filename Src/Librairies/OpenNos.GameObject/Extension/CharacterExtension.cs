@@ -1,5 +1,4 @@
 ﻿using System;
-using ChickenAPI.Enums.Game.Character;
 using OpenNos.Domain;
 
 namespace OpenNos.GameObject.Extension
@@ -24,19 +23,19 @@ namespace OpenNos.GameObject.Extension
         public static void GetBuffFromSet(this Character e)
         {
             // (MainWeapon, SecondaryWeapon, Armor, Card) Vnum
-            var set = e.Class == CharacterClassType.Archer ? new Tuple<long, long, long, short>(4966, 4963, 4954, 45) :
-                e.Class == CharacterClassType.Magician ? new Tuple<long, long, long, short>(4965, 4962, 4953, 45) :
-                e.Class == CharacterClassType.Swordsman ? new Tuple<long, long, long, short>(4964, 4961, 4952, 45) :
-                e.Class == CharacterClassType.MartialArtist ? new Tuple<long, long, long, short>(4736, 4767, 4754, 45) :
+            var set = e.Class == ClassType.Archer ? new Tuple<long, long, long, short>(4966, 4963, 4954, 45) :
+                e.Class == ClassType.Magician ? new Tuple<long, long, long, short>(4965, 4962, 4953, 45) :
+                e.Class == ClassType.Swordsman ? new Tuple<long, long, long, short>(4964, 4961, 4952, 45) :
+                e.Class == ClassType.MartialArtist ? new Tuple<long, long, long, short>(4736, 4767, 4754, 45) :
                 //e.Class == ClassType.Adventurer ? new Tuple<long, long, long, short>(566, 3636, 1313, 1) :
                 new Tuple<long, long, long, short>(566, 3636, 1313, 1);
 
             e.GetBuffFromSet(set);
 
-            set = e.Class == CharacterClassType.Archer ? new Tuple<long, long, long, short>(4960, 4957, 4951, 46) :
-                e.Class == CharacterClassType.Magician ? new Tuple<long, long, long, short>(4959, 4956, 4950, 46) :
-                e.Class == CharacterClassType.Swordsman ? new Tuple<long, long, long, short>(4958, 4955, 4949, 46) :
-                e.Class == CharacterClassType.MartialArtist ? new Tuple<long, long, long, short>(4736, 4767, 4754, 46) :
+            set = e.Class == ClassType.Archer ? new Tuple<long, long, long, short>(4960, 4957, 4951, 46) :
+                e.Class == ClassType.Magician ? new Tuple<long, long, long, short>(4959, 4956, 4950, 46) :
+                e.Class == ClassType.Swordsman ? new Tuple<long, long, long, short>(4958, 4955, 4949, 46) :
+                e.Class == ClassType.MartialArtist ? new Tuple<long, long, long, short>(4736, 4767, 4754, 46) :
                 //e.Class == ClassType.Adventurer ? new Tuple<long, long, long, short>(566, 3636, 1313, 1) :
                 new Tuple<long, long, long, short>(566, 3636, 1313, 1);
 
@@ -110,11 +109,11 @@ namespace OpenNos.GameObject.Extension
         {
             var thisClass = e.Class;
 
-            return thisClass == CharacterClassType.Adventurer ? "35" :
-                thisClass == CharacterClassType.Swordsman ? "36" :
-                thisClass == CharacterClassType.Archer ? "37" :
-                thisClass == CharacterClassType.Magician ? "38" :
-                thisClass == CharacterClassType.MartialArtist ? "39" : "0";
+            return thisClass == ClassType.Adventurer ? "35" :
+                thisClass == ClassType.Swordsman ? "36" :
+                thisClass == ClassType.Archer ? "37" :
+                thisClass == ClassType.Magician ? "38" :
+                thisClass == ClassType.MartialArtist ? "39" : "0";
 
 
         }

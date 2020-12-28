@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChickenAPI.Enums.Game.Character;
 using NosTale.Extension.Extension.Packet;
 using NosTale.Packets.Packets.ServerPackets;
 using OpenNos.Core;
@@ -179,19 +178,19 @@ namespace OpenNos.Handler.PacketHandler.Npc
                                     {
                                         switch (Session.Character.Class)
                                         {
-                                            case CharacterClassType.Adventurer:
+                                            case ClassType.Adventurer:
                                                 skillMiniumLevel = skillinfo.MinimumAdventurerLevel;
                                                 break;
 
-                                            case CharacterClassType.Swordsman:
+                                            case ClassType.Swordsman:
                                                 skillMiniumLevel = skillinfo.MinimumSwordmanLevel;
                                                 break;
 
-                                            case CharacterClassType.Archer:
+                                            case ClassType.Archer:
                                                 skillMiniumLevel = skillinfo.MinimumArcherLevel;
                                                 break;
 
-                                            case CharacterClassType.Magician:
+                                            case ClassType.Magician:
                                                 if (skillinfo.MinimumMagicianLevel > 0)
                                                 {
                                                     skillMiniumLevel = skillinfo.MinimumMagicianLevel;
@@ -396,23 +395,6 @@ namespace OpenNos.Handler.PacketHandler.Npc
                                     {
                                         Session.SendPacket(Session.Character.GenerateSay($"This item is Price: 0! Please contact some Admin", 10));
                                         return;
-                                    }
-                                    if (Session.Character.MapInstance.MapInstanceType == MapInstanceType.ShopShip)
-                                    {
-                                        if (Session.Character.ItemShopShip == 10)
-                                        {
-                                            Session.SendPacket(Session.Character.GenerateSay($"You buy 10/10 items, cant buy more!", 10));
-                                            return;
-                                        }
-
-                                        if ((Session.Character.ItemShopShip + amount) > 10)
-                                        {
-                                            Session.SendPacket(Session.Character.GenerateSay($"Remember, you can buy only 10 items", 10));
-                                            return;
-                                        }
-
-                                        Session.SendPacket(Session.Character.GenerateSay($"You buy {Session.Character.ItemShopShip}/10 items, cant buy more!", 10));
-                                        Session.Character.ItemShopShip += amount;
                                     }
                                     Session.SendPacket(UserInterfaceHelper.GenerateShopMemo(1,
                                         string.Format(Language.Instance.GetMessageFromKey("BUY_ITEM_VALID"),

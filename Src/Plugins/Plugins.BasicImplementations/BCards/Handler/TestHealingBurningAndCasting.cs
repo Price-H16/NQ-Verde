@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using ChickenAPI.Enums.Game.BCard;
+using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._BCards;
 using OpenNos.GameObject.Battle;
@@ -10,7 +10,7 @@ namespace Plugins.BasicImplementations.BCards.Handler
 {
     public class TestHealingBurningAndCasting : IBCardEffectAsyncHandler
     {
-        public BCardType HandledType { get; } = BCardType.HealingBurningAndCasting;
+        public BCardType.CardType HandledType { get; } = BCardType.CardType.HealingBurningAndCasting;
 
         public async Task ExecuteAsync(BattleEntity target, BattleEntity sender, BCard bcard)
         {
@@ -41,7 +41,7 @@ namespace Plugins.BasicImplementations.BCards.Handler
 
                 switch (bcard.SubType)
                 {
-                    case (byte) BCardSubTypes.HealingBurningAndCasting.RestoreHP:
+                    case (byte) AdditionalTypes.HealingBurningAndCasting.RestoreHP:
 
                         if (session.Hp + amount > session.HpMax)
                         {
@@ -50,8 +50,8 @@ namespace Plugins.BasicImplementations.BCards.Handler
 
                         if (amount > 0)
                         {
-                            if (session.HasBuff(BCardType.DarkCloneSummon,
-                                (byte) BCardSubTypes.DarkCloneSummon.ConvertRecoveryToDamage))
+                            if (session.HasBuff(BCardType.CardType.DarkCloneSummon,
+                                (byte) AdditionalTypes.DarkCloneSummon.ConvertRecoveryToDamage))
                             {
                                 amount = session.GetDamage(amount, sender, true, true);
 
@@ -67,7 +67,7 @@ namespace Plugins.BasicImplementations.BCards.Handler
 
                         break;
 
-                    case (byte) BCardSubTypes.HealingBurningAndCasting.RestoreMP:
+                    case (byte) AdditionalTypes.HealingBurningAndCasting.RestoreMP:
 
                         if (session.Mp + amount > session.MpMax)
                         {
@@ -78,14 +78,14 @@ namespace Plugins.BasicImplementations.BCards.Handler
 
                         break;
 
-                    case (byte) BCardSubTypes.HealingBurningAndCasting.DecreaseHP:
+                    case (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseHP:
 
                         session.Hp = session.Hp - amount <= 0 ? 1 : session.Hp - amount;
                         session.MapInstance?.Broadcast(session.GenerateDm(amount));
 
                         break;
 
-                    case (byte) BCardSubTypes.HealingBurningAndCasting.DecreaseMP:
+                    case (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseMP:
 
                         session.Mp = session.Mp - amount <= 0 ? 1 : session.Mp - amount;
 

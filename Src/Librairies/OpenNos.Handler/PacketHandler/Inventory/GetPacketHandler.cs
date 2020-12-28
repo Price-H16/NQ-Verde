@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using ChickenAPI.Enums.Game.BCard;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.Domain;
@@ -232,8 +231,8 @@ namespace OpenNos.Handler.PacketHandler.Inventory
                                 // handle gold drop
                                 var maxGold = ServerManager.Instance.Configuration.MaxGold;
 
-                                var multiplier = 1 + Session.Character.GetBuff(BCardType.Item,
-                                                     (byte) BCardSubTypes.Item.IncreaseEarnedGold)[0] / 100D;
+                                var multiplier = 1 + Session.Character.GetBuff(BCardType.CardType.Item,
+                                                     (byte) AdditionalTypes.Item.IncreaseEarnedGold)[0] / 100D;
                                 multiplier +=
                                     (Session.Character.ShellEffectMain.FirstOrDefault(s =>
                                          s.Effect == (byte) ShellWeaponEffectType.GainMoreGold)?.Value ?? 0) / 100D;

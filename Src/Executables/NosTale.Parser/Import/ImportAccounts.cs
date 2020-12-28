@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ChickenAPI.Enums;
 using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;
+using OpenNos.Domain;
 
 namespace NosTale.Parser.Import
 {

@@ -298,10 +298,6 @@
       <Project>{A6D06310-4228-4AFA-894D-69283976E810}</Project>
       <Name>ChickenAPI.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ChickenApi\ChickenAPI.Enums\ChickenAPI.Enums.csproj">
-      <Project>{355f04a9-be90-45ce-a695-089c5f9c2b92}</Project>
-      <Name>ChickenAPI.Enums</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ChickenApi\ChickenApi.Events\ChickenApi.Events.csproj">
       <Project>{decb5668-600c-49f1-a5c8-cde5a12c9f5a}</Project>
       <Name>ChickenApi.Events</Name>

@@ -10,8 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using ChickenAPI.Enums.Game.BCard;
-using ChickenAPI.Enums.Game.Buffs;
+using static OpenNos.Domain.BCardType;
 
 namespace OpenNos.Handler.PacketHandler.Mate
 {
@@ -221,7 +220,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
             #region Can NOT attack
 
             if (((skill.TargetType != 1 || !battleEntityDefender.Equals(battleEntityAttacker)) && !battleEntityAttacker.CanAttackEntity(battleEntityDefender))
-                || battleEntityAttacker.HasBuff(BCardType.SpecialAttack, (byte)BCardSubTypes.SpecialAttack.NoAttack))
+                || battleEntityAttacker.HasBuff(CardType.SpecialAttack, (byte)AdditionalTypes.SpecialAttack.NoAttack))
             {
                 return;
             }
@@ -309,7 +308,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
 
                     if (battleEntityDefender.Character is Character target)
                     {
-                        int[] convertDamageToHpChance = target.GetBuff(BCardType.DarkCloneSummon, (byte)BCardSubTypes.DarkCloneSummon.ConvertDamageToHPChance);
+                        int[] convertDamageToHpChance = target.GetBuff(CardType.DarkCloneSummon, (byte)AdditionalTypes.DarkCloneSummon.ConvertDamageToHPChance);
 
                         if (ServerManager.RandomNumber() < convertDamageToHpChance[0])
                         {
@@ -335,7 +334,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
 
                     if (damage > 0)
                     {
-                        int[] inflictDamageToMp = battleEntityDefender.GetBuff(BCardType.LightAndShadow, (byte)BCardSubTypes.LightAndShadow.InflictDamageToMP);
+                        int[] inflictDamageToMp = battleEntityDefender.GetBuff(CardType.LightAndShadow, (byte)AdditionalTypes.LightAndShadow.InflictDamageToMP);
 
                         if (inflictDamageToMp[0] != 0)
                         {
@@ -427,7 +426,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
 
                     bcards.ForEach(bcard =>
                     {
-                        if (bcard.Type == Convert.ToByte(BCardType.Buff) && new Buff(Convert.ToInt16(bcard.SecondData), battleEntityAttacker.Level).Card?.BuffType != BuffType.Bad)
+                        if (bcard.Type == Convert.ToByte(CardType.Buff) && new Buff(Convert.ToInt16(bcard.SecondData), battleEntityAttacker.Level).Card?.BuffType != BuffType.Bad)
                         {
                             if (!isRecursiveCall)
                             {
@@ -447,7 +446,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
                     {
                         battleEntityDefender.BCards?.ToList().ForEach(bcard =>
                         {
-                            if (bcard.Type == Convert.ToByte(BCardType.Buff))
+                            if (bcard.Type == Convert.ToByte(CardType.Buff))
                             {
                                 if (new Buff(Convert.ToInt16(bcard.SecondData), battleEntityDefender.Level).Card?.BuffType != BuffType.Bad)
                                 {
@@ -472,7 +471,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
                     {
                         bcards.ForEach(bcard =>
                         {
-                            if (bcard.Type == Convert.ToByte(BCardType.Buff) && new Buff(Convert.ToInt16(bcard.SecondData), battleEntityAttacker.Level).Card?.BuffType != BuffType.Bad)
+                            if (bcard.Type == Convert.ToByte(CardType.Buff) && new Buff(Convert.ToInt16(bcard.SecondData), battleEntityAttacker.Level).Card?.BuffType != BuffType.Bad)
                             {
                                 bcard.ApplyBCards(battleEntityAttacker, battleEntityAttacker);
                             }
