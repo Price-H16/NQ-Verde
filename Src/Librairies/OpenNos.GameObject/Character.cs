@@ -761,6 +761,7 @@ namespace OpenNos.GameObject
                 $"{ServerManager.Instance.Configuration.EventRuneUp} " +
                 $"{ServerManager.Instance.Configuration.EventTattoUp}";
         }
+        public string GenerateGb(byte type) => $"gb {type} {Session.Account.BankMoney / 1000} {Gold} 0 0";
 
         public static string GenerateAct() => "act 6";
         public string GenerateAscr(AscrPacketType e)
@@ -1483,7 +1484,7 @@ namespace OpenNos.GameObject
                 return false;
             }
 
-            StaticBonusDTO medal = Session.Character.StaticBonusList.Find(s =>  s.StaticBonusType == StaticBonusType.BazaarMedalGold || s.StaticBonusType == StaticBonusType.BazaarMedalSilver);
+            StaticBonusDTO medal = Session.Character.StaticBonusList.Find(s => s.StaticBonusType == StaticBonusType.BazaarMedalGold || s.StaticBonusType == StaticBonusType.BazaarMedalSilver);
             if (medal == null)
             {
                 // Check if there is NosBazaar in Map
@@ -4367,14 +4368,13 @@ namespace OpenNos.GameObject
                     {
                         minutesLeft = (long)(bz.BazaarItem.DateStart.AddHours(bz.BazaarItem.Duration).AddDays(isNosbazar ? 30 : 7) - DateTime.Now).TotalMinutes;
                     }
+
                     string info = "";
                     if (bz.Item.Item.Type == InventoryType.Equipment)
                     {
-                        // Dup shell
-                        //bz.Item.ShellEffects.Clear();
-                        //bz.Item.ShellEffects.AddRange(DAOFactory.ShellEffectDAO.LoadByEquipmentSerialId(bz.Item.EquipmentSerialId));
                         info = bz.Item?.GenerateEInfo().Replace(' ', '^').Replace("e_info^", "");
                     }
+
                     if (packet.Filter == 0 || packet.Filter == Status)
                     {
                         list += $"{bz.BazaarItem.BazaarItemId}|{bz.BazaarItem.SellerId}|{bz.Item.ItemVNum}|{soldedAmount}|{amount}|{(package ? 1 : 0)}|{price}|{Status}|{minutesLeft}|{(isNosbazar ? 1 : 0)}|0|{bz.Item.Rare}|{bz.Item.Upgrade}|0|0|{info} ";

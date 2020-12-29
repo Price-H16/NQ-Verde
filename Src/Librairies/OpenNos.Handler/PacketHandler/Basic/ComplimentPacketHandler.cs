@@ -29,55 +29,66 @@ namespace OpenNos.Handler.PacketHandler.Basic
 
         public void Compliment(ComplimentPacket complimentPacket)
         {
-            if (complimentPacket == null)
+            if (complimentPacket != null)
             {
-                return;
-            }
+                if (Session.Character.CharacterId == complimentPacket.CharacterId) return;
 
-            long complimentedCharacterId = complimentPacket.CharacterId;
-            if (Session.Character.Level >= 30)
-            {
-                GeneralLogDTO dto = Session.Character.GeneralLogs.LastOrDefault(s => s.LogData == "World" && s.LogType == "Connection");
-                GeneralLogDTO lastcompliment = Session.Character.GeneralLogs.LastOrDefault(s => s.LogData == "World" && s.LogType == "Compliment");
-                if (dto != null && dto.Timestamp.AddMinutes(60) <= DateTime.Now)
+                var sess = ServerManager.Instance.GetSessionByCharacterId(complimentPacket.CharacterId);
+                if (sess != null)
                 {
-                    if (lastcompliment == null || lastcompliment.Timestamp.AddDays(1) <= DateTime.Now.Date)
+                    if (Session.Character.Level >= 30)
                     {
-                        short? compliment = ServerManager.Instance.GetProperty<short?>(complimentedCharacterId, nameof(Character.Compliment));
-                        compliment++;
-                        ServerManager.Instance.SetProperty(complimentedCharacterId, nameof(Character.Compliment), compliment);
-                        Session.SendPacket(Session.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("COMPLIMENT_GIVEN"), ServerManager.Instance.GetProperty<string>(complimentedCharacterId, nameof(Character.Name))), 12));
-                        Session.Character.GeneralLogs.Add(new GeneralLogDTO
+                        var dto =
+                            Session.Character.GeneralLogs.LastOrDefault(s =>
+                                s.LogData == "World" && s.LogType == "Connection");
+                        var lastcompliment =
+                            Session.Character.GeneralLogs.LastOrDefault(s =>
+                                s.LogData == "World" && s.LogType == nameof(Compliment));
+                        if (dto?.Timestamp.AddMinutes(60) <= DateTime.Now)
                         {
-                            AccountId = Session.Account.AccountId,
-                            CharacterId = Session.Character.CharacterId,
-                            IpAddress = Session.IpAddress,
-                            LogData = "World",
-                            LogType = "Compliment",
-                            Timestamp = DateTime.Now
-                        });
+                            if (lastcompliment == null || lastcompliment.Timestamp.AddDays(1) <= DateTime.Now)
+                            {
+                                sess.Character.Compliment++;
+                                Session.SendPacket(Session.Character.GenerateSay(
+                                    string.Format(Language.Instance.GetMessageFromKey("COMPLIMENT_GIVEN"),
+                                        sess.Character.Name), 12));
+                                Session.Character.GeneralLogs.Add(new GeneralLogDTO
+                                {
+                                    AccountId = Session.Account.AccountId,
+                                    CharacterId = Session.Character.CharacterId,
+                                    IpAddress = Session.IpAddress,
+                                    LogData = "World",
+                                    LogType = nameof(Compliment),
+                                    Timestamp = DateTime.Now
+                                });
 
-                        Session.CurrentMapInstance?.Broadcast(Session,
-                            Session.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("COMPLIMENT_RECEIVED"), Session.Character.Name), 12), ReceiverType.OnlySomeone,
-                            characterId: complimentedCharacterId);
+                                Session.CurrentMapInstance?.Broadcast(Session,
+                                    Session.Character.GenerateSay(
+                                        string.Format(Language.Instance.GetMessageFromKey("COMPLIMENT_RECEIVED"),
+                                            Session.Character.Name), 12), ReceiverType.OnlySomeone,
+                                    characterId: complimentPacket.CharacterId);
+                            }
+                            else
+                            {
+                                Session.SendPacket(
+                                    Session.Character.GenerateSay(
+                                        Language.Instance.GetMessageFromKey("COMPLIMENT_COOLDOWN"), 11));
+                            }
+                        }
+                        else if (dto != null)
+                        {
+                            Session.SendPacket(Session.Character.GenerateSay(
+                                string.Format(Language.Instance.GetMessageFromKey("COMPLIMENT_LOGIN_COOLDOWN"),
+                                    (dto.Timestamp.AddMinutes(60) - DateTime.Now).Minutes), 11));
+                        }
                     }
                     else
                     {
-                        Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("COMPLIMENT_COOLDOWN"), 11));
+                        Session.SendPacket(
+                            Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("COMPLIMENT_NOT_MINLVL"),
+                                11));
                     }
                 }
-                else
-                {
-                    if (dto != null)
-                    {
-                        Session.SendPacket(Session.Character.GenerateSay(
-                            string.Format(Language.Instance.GetMessageFromKey("COMPLIMENT_LOGIN_COOLDOWN"), (dto.Timestamp.AddMinutes(60) - DateTime.Now).Minutes), 11));
-                    }
-                }
-            }
-            else
-            {
-                Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("COMPLIMENT_NOT_MINLVL"), 11));
             }
         }
 

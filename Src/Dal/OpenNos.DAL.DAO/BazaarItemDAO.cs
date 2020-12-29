@@ -20,9 +20,9 @@ namespace OpenNos.DAL.DAO
         {
             try
             {
-                using (OpenNosContext context = DataAccessHelper.CreateContext())
+                using (var context = DataAccessHelper.CreateContext())
                 {
-                    BazaarItem BazaarItem = context.BazaarItem.FirstOrDefault(c => c.BazaarItemId.Equals(bazaarItemId));
+                    var BazaarItem = context.BazaarItem.FirstOrDefault(c => c.BazaarItemId.Equals(bazaarItemId));
 
                     if (BazaarItem != null)
                     {
@@ -35,7 +35,8 @@ namespace OpenNos.DAL.DAO
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format(Language.Instance.GetMessageFromKey("DELETE_ERROR"), bazaarItemId, e.Message), e);
+                Logger.Error(
+                    string.Format(Language.Instance.GetMessageFromKey("DELETE_ERROR"), bazaarItemId, e.Message), e);
                 return DeleteResult.Error;
             }
         }
@@ -44,10 +45,10 @@ namespace OpenNos.DAL.DAO
         {
             try
             {
-                using (OpenNosContext context = DataAccessHelper.CreateContext())
+                using (var context = DataAccessHelper.CreateContext())
                 {
-                    long bazaarItemId = bazaarItem.BazaarItemId;
-                    BazaarItem entity = context.BazaarItem.FirstOrDefault(c => c.BazaarItemId.Equals(bazaarItemId));
+                    var bazaarItemId = bazaarItem.BazaarItemId;
+                    var entity = context.BazaarItem.FirstOrDefault(c => c.BazaarItemId.Equals(bazaarItemId));
 
                     if (entity == null)
                     {
@@ -68,15 +69,16 @@ namespace OpenNos.DAL.DAO
 
         public IEnumerable<BazaarItemDTO> LoadAll()
         {
-            using (OpenNosContext context = DataAccessHelper.CreateContext())
+            using (var context = DataAccessHelper.CreateContext())
             {
-                List<BazaarItemDTO> result = new List<BazaarItemDTO>();
-                foreach (BazaarItem bazaarItem in context.BazaarItem)
+                var result = new List<BazaarItemDTO>();
+                foreach (var bazaarItem in context.BazaarItem)
                 {
-                    BazaarItemDTO dto = new BazaarItemDTO();
+                    var dto = new BazaarItemDTO();
                     BazaarItemMapper.ToBazaarItemDTO(bazaarItem, dto);
                     result.Add(dto);
                 }
+
                 return result;
             }
         }
@@ -85,10 +87,11 @@ namespace OpenNos.DAL.DAO
         {
             try
             {
-                using (OpenNosContext context = DataAccessHelper.CreateContext())
+                using (var context = DataAccessHelper.CreateContext())
                 {
-                    BazaarItemDTO dto = new BazaarItemDTO();
-                    if (BazaarItemMapper.ToBazaarItemDTO(context.BazaarItem.FirstOrDefault(i => i.BazaarItemId.Equals(bazaarItemId)), dto))
+                    var dto = new BazaarItemDTO();
+                    if (BazaarItemMapper.ToBazaarItemDTO(
+                        context.BazaarItem.FirstOrDefault(i => i.BazaarItemId.Equals(bazaarItemId)), dto))
                     {
                         return dto;
                     }
@@ -107,12 +110,15 @@ namespace OpenNos.DAL.DAO
         {
             try
             {
-                using (OpenNosContext context = DataAccessHelper.CreateContext())
+                using (var context = DataAccessHelper.CreateContext())
                 {
-                    foreach (BazaarItem entity in context.BazaarItem.Where(e => DbFunctions.AddDays(DbFunctions.AddHours(e.DateStart, e.Duration), e.MedalUsed ? 30 : 7) < DateTime.Now))
+                    foreach (var entity in context.BazaarItem.Where(e =>
+                        DbFunctions.AddDays(DbFunctions.AddHours(e.DateStart, e.Duration), e.MedalUsed ? 30 : 7) <
+                        DateTime.Now))
                     {
                         context.BazaarItem.Remove(entity);
                     }
+
                     context.SaveChanges();
                 }
             }
@@ -124,7 +130,7 @@ namespace OpenNos.DAL.DAO
 
         private static BazaarItemDTO insert(BazaarItemDTO bazaarItem, OpenNosContext context)
         {
-            BazaarItem entity = new BazaarItem();
+            var entity = new BazaarItem();
             BazaarItemMapper.ToBazaarItem(bazaarItem, entity);
             context.BazaarItem.Add(entity);
             context.SaveChanges();
@@ -143,6 +149,7 @@ namespace OpenNos.DAL.DAO
                 BazaarItemMapper.ToBazaarItem(bazaarItem, entity);
                 context.SaveChanges();
             }
+
             if (BazaarItemMapper.ToBazaarItemDTO(entity, bazaarItem))
             {
                 return bazaarItem;

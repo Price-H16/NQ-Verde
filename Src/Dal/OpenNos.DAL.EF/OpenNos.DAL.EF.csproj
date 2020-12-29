@@ -225,6 +225,10 @@
     <Compile Include="Migrations\202012272102028_RR.designer.cs">
       <DependentUpon>202012272102028_RR.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012290156096_LastF.cs" />
+    <Compile Include="Migrations\202012290156096_LastF.designer.cs">
+      <DependentUpon>202012290156096_LastF.cs</DependentUpon>
+    </Compile>
     <Compile Include="PartnerSkill.cs" />
     <Compile Include="Quest.cs" />
     <Compile Include="QuestLog.cs" />
@@ -410,6 +414,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012272102028_RR.resx">
       <DependentUpon>202012272102028_RR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012290156096_LastF.resx">
+      <DependentUpon>202012290156096_LastF.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

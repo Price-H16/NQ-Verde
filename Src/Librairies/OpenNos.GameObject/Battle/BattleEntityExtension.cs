@@ -13,9 +13,9 @@ namespace OpenNos.GameObject.Battle
 
             data = isPrimary
                 ? target.GetBuff(BCardType.CardType.TauntSkill,
-                    (byte) AdditionalTypes.TauntSkill.ReflectMaximumDamageFrom)[0]
+                    (byte)AdditionalTypes.TauntSkill.ReflectMaximumDamageFrom)[0]
                 : target.GetBuff(BCardType.CardType.TauntSkill,
-                    (byte) AdditionalTypes.TauntSkill.ReflectsMaximumDamageFromNegated, addValue: 1)[0];
+                    (byte)AdditionalTypes.TauntSkill.ReflectsMaximumDamageFromNegated, addValue: 1)[0];
 
             if (data < 0) return 0;
 
