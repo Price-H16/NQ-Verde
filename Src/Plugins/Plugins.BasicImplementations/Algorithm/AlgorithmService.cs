@@ -1,4 +1,4 @@
-﻿using ChickenAPI.Enums.Game.Character;
+﻿using OpenNos.Domain;
 using OpenNos.GameObject._Algorithm;
 using Plugins.BasicImplementations.Algorithm.CharacterAlgorithms;
 using Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Close;
@@ -114,27 +114,27 @@ namespace Plugins.BasicImplementations.Algorithm
             _mpRegenSitting.Initialize();
         }
 
-        public int GetDistCritical(CharacterClassType type, byte level) => _criticalDist.GetStat(type, level);
+        public int GetDistCritical(ClassType type, byte level) => _criticalDist.GetStat(type, level);
 
-        public int GetDistCriticalRate(CharacterClassType type, byte level) => _criticalDistRate.GetStat(type, level);
+        public int GetDistCriticalRate(ClassType type, byte level) => _criticalDistRate.GetStat(type, level);
 
-        public int GetHitCritical(CharacterClassType type, byte level) => _criticalHit.GetStat(type, level);
+        public int GetHitCritical(ClassType type, byte level) => _criticalHit.GetStat(type, level);
 
-        public int GetHitCriticalRate(CharacterClassType type, byte level) => _criticalHitRate.GetStat(type, level);
+        public int GetHitCriticalRate(ClassType type, byte level) => _criticalHitRate.GetStat(type, level);
 
-        public int GetHitRate(CharacterClassType type, byte level) => _hitRate.GetStat(type, level);
+        public int GetHitRate(ClassType type, byte level) => _hitRate.GetStat(type, level);
 
-        public int GetMaxDistance(CharacterClassType type, byte level) => _maxDist.GetStat(type, level);
+        public int GetMaxDistance(ClassType type, byte level) => _maxDist.GetStat(type, level);
 
-        public int GetMaxHit(CharacterClassType type, byte level) => _maxHit.GetStat(type, level);
+        public int GetMaxHit(ClassType type, byte level) => _maxHit.GetStat(type, level);
 
-        public int GetMinHit(CharacterClassType type, byte level) => _minHit.GetStat(type, level);
+        public int GetMinHit(ClassType type, byte level) => _minHit.GetStat(type, level);
 
-        public long GetLevelXp(CharacterClassType type, byte level) => _levelBasedAlgorithm.Data[level - 1 > 0 ? level - 1 : 0];
+        public long GetLevelXp(ClassType type, byte level) => _levelBasedAlgorithm.Data[level - 1 > 0 ? level - 1 : 0];
 
-        public int GetJobLevelXp(CharacterClassType type, byte level) => (int) (type == CharacterClassType.Adventurer ? _jobLevelBasedAlgorithm.FirstJobXpData[level - 1 > 0 ? level - 1 >= _jobLevelBasedAlgorithm.FirstJobXpData.Length ? _jobLevelBasedAlgorithm.FirstJobXpData.Length - 1 : level - 1 : 0] : _jobLevelBasedAlgorithm.Data[level - 1 > 0 ? level - 1 >= _jobLevelBasedAlgorithm.Data.Length? _jobLevelBasedAlgorithm.Data.Length - 1 : level - 1 : 0]);
+        public int GetJobLevelXp(ClassType type, byte level) => (int) (type == ClassType.Adventurer ? _jobLevelBasedAlgorithm.FirstJobXpData[level - 1 > 0 ? level - 1 >= _jobLevelBasedAlgorithm.FirstJobXpData.Length ? _jobLevelBasedAlgorithm.FirstJobXpData.Length - 1 : level - 1 : 0] : _jobLevelBasedAlgorithm.Data[level - 1 > 0 ? level - 1 >= _jobLevelBasedAlgorithm.Data.Length? _jobLevelBasedAlgorithm.Data.Length - 1 : level - 1 : 0]);
 
-        public int GetHeroLevelXp(CharacterClassType type, byte level) => (int) _heroLevelBasedAlgorithm.Data[level - 1 > 0 ? level - 1 : 0];
+        public int GetHeroLevelXp(ClassType type, byte level) => (int) _heroLevelBasedAlgorithm.Data[level - 1 > 0 ? level - 1 : 0];
 
         public int GetSpLevelXp(byte level) => (int) _spLevelBasedAlgorithm.Data[level - 1];
 
@@ -142,36 +142,36 @@ namespace Plugins.BasicImplementations.Algorithm
 
         public int GetFamilyLevelXp(byte level) => (int) _familyLevelBasedAlgorithm.Data[level > _familyLevelBasedAlgorithm.Data.Length ? _familyLevelBasedAlgorithm.Data.Length - 1 : level - 1];
 
-        public int GetSpeed(CharacterClassType type, byte level) => _speedAlgorithm.GetStat(type, level);
+        public int GetSpeed(ClassType type, byte level) => _speedAlgorithm.GetStat(type, level);
 
-        public int GetDefenceClose(CharacterClassType type, byte level) => _closeDefenceAlgorithm.GetStat(type, level);
+        public int GetDefenceClose(ClassType type, byte level) => _closeDefenceAlgorithm.GetStat(type, level);
 
-        public int GetDefenceRange(CharacterClassType type, byte level) => _rangedDefenceAlgorithm.GetStat(type, level);
+        public int GetDefenceRange(ClassType type, byte level) => _rangedDefenceAlgorithm.GetStat(type, level);
 
-        public int GetDefenceMagic(CharacterClassType type, byte level) => _magicDefenceAlgorithm.GetStat(type, level);
+        public int GetDefenceMagic(ClassType type, byte level) => _magicDefenceAlgorithm.GetStat(type, level);
 
-        public int GetDodgeClose(CharacterClassType type, byte level) => _closeDodgeAlgorithm.GetStat(type, level);
+        public int GetDodgeClose(ClassType type, byte level) => _closeDodgeAlgorithm.GetStat(type, level);
 
-        public int GetDodgeRanged(CharacterClassType type, byte level) => _rangedDodgeAlgorithm.GetStat(type, level);
+        public int GetDodgeRanged(ClassType type, byte level) => _rangedDodgeAlgorithm.GetStat(type, level);
 
-        public int GetDodgeMagic(CharacterClassType type, byte level) => _magicDodgeAlgorithm.GetStat(type, level);
+        public int GetDodgeMagic(ClassType type, byte level) => _magicDodgeAlgorithm.GetStat(type, level);
 
-        public int GetMinimumAttackRange(CharacterClassType type, byte level) => _minDist.GetStat(type, level);
+        public int GetMinimumAttackRange(ClassType type, byte level) => _minDist.GetStat(type, level);
 
-        public int GetHpMax(CharacterClassType type, byte level) => _hpMax.GetStat(type, level);
+        public int GetHpMax(ClassType type, byte level) => _hpMax.GetStat(type, level);
 
-        public int GetMpMax(CharacterClassType type, byte level) => _mpMax.GetStat(type, level);
+        public int GetMpMax(ClassType type, byte level) => _mpMax.GetStat(type, level);
 
-        public int GetHpRegen(CharacterClassType type, byte level) => _hpRegen.GetStat(type, level);
+        public int GetHpRegen(ClassType type, byte level) => _hpRegen.GetStat(type, level);
 
-        public int GetHpRegenSitting(CharacterClassType type, byte level) => _hpRegenSitting.GetStat(type, level);
+        public int GetHpRegenSitting(ClassType type, byte level) => _hpRegenSitting.GetStat(type, level);
 
-        public int GetMpRegen(CharacterClassType type, byte level)
+        public int GetMpRegen(ClassType type, byte level)
         {
             return _mpRegen.GetStat(type, level);
         }
 
-        public int GetMpRegenSitting(CharacterClassType type, byte level)
+        public int GetMpRegenSitting(ClassType type, byte level)
         {
             return _mpRegenSitting.GetStat(type, level);
         }

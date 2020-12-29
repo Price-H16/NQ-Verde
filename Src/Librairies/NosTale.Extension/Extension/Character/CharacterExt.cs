@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;
@@ -85,7 +84,7 @@ namespace NosTale.Extension.GameExtension.Character
         {
             var newCharacter = new CharacterDTO
             {
-                Class = isMartial ? CharacterClassType.MartialArtist : CharacterClassType.Adventurer,
+                Class = isMartial ? ClassType.MartialArtist : ClassType.Adventurer,
                 Mp = isMartial ? 3156 : 69,
                 Hp = isMartial ? 9401 : 515,
                 Level = (byte) (isMartial ? 80 : 1),

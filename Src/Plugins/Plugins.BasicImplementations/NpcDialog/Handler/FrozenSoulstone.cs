@@ -1,13 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Helpers;
-using OpenNos.GameObject.Networking;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
@@ -23,18 +21,18 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 return;
             }
 
-            if (Session.Character.Class == CharacterClassType.Swordsman && Session.Character.Inventory.CountItem(4494) >= 1)
+            if (Session.Character.Class == ClassType.Swordsman && Session.Character.Inventory.CountItem(4494) >= 1)
             {
                 Session.Character.Inventory.RemoveItemAmount(4494, 1);
 
             }
 
-            else if (Session.Character.Class == CharacterClassType.Archer && Session.Character.Inventory.CountItem(4495) >= 1)
+            else if (Session.Character.Class == ClassType.Archer && Session.Character.Inventory.CountItem(4495) >= 1)
             {
                 Session.Character.Inventory.RemoveItemAmount(4495, 1);
             }
 
-            else if (Session.Character.Class == CharacterClassType.Magician && Session.Character.Inventory.CountItem(4496) >= 1)
+            else if (Session.Character.Class == ClassType.Magician && Session.Character.Inventory.CountItem(4496) >= 1)
             {
                 Session.Character.Inventory.RemoveItemAmount(4496, 1);
             }

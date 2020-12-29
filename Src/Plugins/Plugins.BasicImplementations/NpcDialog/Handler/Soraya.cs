@@ -5,7 +5,6 @@ using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Helpers;
 using System.Threading.Tasks;
-using ChickenAPI.Enums.Game.Character;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
@@ -18,7 +17,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
             var npc = packet.Npc;
             if (npc != null)
             {
-                if (Session.Character.Level >= 80 && Session.Character.Class == CharacterClassType.MartialArtist) //  Bizarre Energy MA quest
+                if (Session.Character.Level >= 80 && Session.Character.Class == ClassType.MartialArtist) //  Bizarre Energy MA quest
                 {
                     Session.Character.AddQuest(6332, false);
                 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
-using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;
@@ -452,7 +451,7 @@ namespace OpenNos.GameObject
                         }
                         else if (Effect == 11 || Effect == 15)
                         {
-                            if (session.Character.Class == (byte)CharacterClassType.Adventurer && EffectValue > 1)
+                            if (session.Character.Class == (byte)ClassType.Adventurer && EffectValue > 1)
                             {
                                 session.SendPacket(UserInterfaceHelper.GenerateMsg(
                                     Language.Instance.GetMessageFromKey("ADVENTURERS_CANT_USE"), 10));
@@ -474,7 +473,7 @@ namespace OpenNos.GameObject
                         }
                         else
                         {
-                            if (session.Character.Class == (byte)CharacterClassType.Adventurer && EffectValue > 1)
+                            if (session.Character.Class == (byte)ClassType.Adventurer && EffectValue > 1)
                             {
                                 session.SendPacket(UserInterfaceHelper.GenerateMsg(
                                     Language.Instance.GetMessageFromKey("ADVENTURERS_CANT_USE"), 10));

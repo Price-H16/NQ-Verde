@@ -1,5 +1,5 @@
-﻿using System;
-using ChickenAPI.Enums.Game.Character;
+﻿using OpenNos.Domain;
+using System;
 using GenderType = OpenNos.Domain.GenderType;
 using HairColorType = OpenNos.Domain.HairColorType;
 using HairStyleType = OpenNos.Domain.HairStyleType;
@@ -33,7 +33,7 @@ namespace OpenNos.Master.Library.Data
 
         public long ReceiverId { get; set; }
 
-        public CharacterClassType SenderClass { get; set; }
+        public ClassType SenderClass { get; set; }
 
         public GenderType SenderGender { get; set; }
 

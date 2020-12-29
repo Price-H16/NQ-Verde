@@ -23,9 +23,6 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using ChickenAPI.Enums;
-using ChickenAPI.Enums.Game.BCard;
-using ChickenAPI.Enums.Game.Buffs;
-using ChickenAPI.Enums.Game.Character;
 using CharacterState = OpenNos.Domain.CharacterState;
 using FactionType = OpenNos.Domain.FactionType;
 using GenderType = OpenNos.Domain.GenderType;
@@ -1469,8 +1466,8 @@ namespace OpenNos.GameObject.Networking
                                                        s.Account.Authority)));
                             }
 
-                            if (session.Character.GetBuff(BCardType.SpecialEffects,
-                                                (byte)BCardSubTypes.SpecialEffects.ShadowAppears) is int[]
+                            if (session.Character.GetBuff(BCardType.CardType.SpecialEffects,
+                                                (byte)AdditionalTypes.SpecialEffects.ShadowAppears) is int[]
                                         EffectData && EffectData[0] != 0 &&
                                 EffectData[1] != 0)
                             {
@@ -1487,8 +1484,8 @@ namespace OpenNos.GameObject.Networking
                                            m.PositionY = session.Character.PositionY;
                                        }
 
-                                       if (m.GetBuff(BCardType.SpecialEffects,
-                                                           (byte)BCardSubTypes.SpecialEffects.ShadowAppears) is int[]
+                                       if (m.GetBuff(BCardType.CardType.SpecialEffects,
+                                                           (byte)AdditionalTypes.SpecialEffects.ShadowAppears) is int[]
                                                    MateEffectData && MateEffectData[0] != 0 &&
                                            MateEffectData[1] != 0)
                                        {
@@ -2061,7 +2058,7 @@ namespace OpenNos.GameObject.Networking
                     IsSenderCopy = false,
                     Title = "RankingReward",
                     AttachmentVNum = vnum,
-                    SenderClass = CharacterClassType.Adventurer,
+                    SenderClass = ClassType.Adventurer,
                     SenderGender = GenderType.Male,
                     SenderHairColor = HairColorType.Black,
                     SenderHairStyle = HairStyleType.NoHair,
@@ -3169,14 +3166,15 @@ namespace OpenNos.GameObject.Networking
         {
             ThreadSafeGroupList = new ThreadSafeSortedList<long, Group>();
 
-            Observable.Interval(TimeSpan.FromMinutes(5)).Subscribe(x => { SaveAll(); });
-            Observable.Interval(TimeSpan.FromSeconds(5)).Subscribe(x => { Act4Process(); });
+            Observable.Interval(TimeSpan.FromMinutes(10)).Subscribe(x => { SaveAll(); });
+            Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(x => { Act4Process(); });
+            Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(x => { Act6Process(); });
             Observable.Interval(TimeSpan.FromSeconds(2)).Subscribe(x => { GroupProcess(); });
             Observable.Interval(TimeSpan.FromMinutes(1)).Subscribe(x => { Act4FlowerProcess(); });
             //Observable.Interval(TimeSpan.FromHours(3)).Subscribe(x => BotProcess()); activate it later
             Observable.Interval(TimeSpan.FromSeconds(5)).Subscribe(x => { MaintenanceProcess(); });
             Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(x => { RemoveItemProcess(); });
-            Observable.Interval(TimeSpan.FromSeconds(30)).Subscribe(x => { Act4StatProcess(); });
+            Observable.Interval(TimeSpan.FromMinutes(30)).Subscribe(x => { Act4StatProcess(); });
 
 
             EventHelper.Instance.RunEvent(new EventContainer(GetMapInstance(GetBaseMapInstanceIdByMapId(98)), EventActionType.NPCSEFFECTCHANGESTATE, true));
@@ -3192,18 +3190,11 @@ namespace OpenNos.GameObject.Networking
             EventHelper.GenerateEvent(EventType.ACT4SHIP);
             Observable.Interval(TimeSpan.FromMilliseconds(400)).Subscribe(x =>
             {
-                foreach (var map in _mapinstances)
+                Parallel.ForEach(_mapinstances, map =>
                 {
-                    foreach (var npc in map.Value.Npcs)
-                    {
-                        npc.StartLife();
-                    }
-
-                    foreach (var monster in map.Value.Monsters)
-                    {
-                        monster.StartLife();
-                    }
-                }
+                    Parallel.ForEach(map.Value.Npcs, npc => npc.StartLife());
+                    Parallel.ForEach(map.Value.Monsters, monster => monster.StartLife());
+                });
             });
 
             CommunicationServiceClient.Instance.SessionKickedEvent += OnSessionKicked;

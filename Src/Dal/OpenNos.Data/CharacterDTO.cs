@@ -1,5 +1,5 @@
 ﻿using System;
-using ChickenAPI.Enums.Game.Character;
+using OpenNos.Domain;
 using CharacterState = OpenNos.Domain.CharacterState;
 using FactionType = OpenNos.Domain.FactionType;
 using GenderType = OpenNos.Domain.GenderType;
@@ -34,7 +34,7 @@ namespace OpenNos.Data
 
         public long CharacterId { get; set; }
 
-        public CharacterClassType Class { get; set; }
+        public ClassType Class { get; set; }
 
         public short Compliment { get; set; }
 

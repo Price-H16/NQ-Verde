@@ -3,8 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using ChickenAPI.Enums.Game.Buffs;
-using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -635,10 +633,10 @@ namespace OpenNos.GameObject.Event.ARENA
         private static void BuffTeam(List<ArenaTeamMember> team)
         {
             //Buff y debuff de arena quitados, ya que no me parece justo
-            if (team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Archer) <= 1 ||
-                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Magician) <= 1 ||
-                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Swordsman) <= 1 ||
-                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.MartialArtist) <= 1)
+            if (team.Count(ch => ch.Session?.Character.Class == ClassType.Archer) <= 1 ||
+                team.Count(ch => ch.Session?.Character.Class == ClassType.Magician) <= 1 ||
+                team.Count(ch => ch.Session?.Character.Class == ClassType.Swordsman) <= 1 ||
+                team.Count(ch => ch.Session?.Character.Class == ClassType.MartialArtist) <= 1)
             {
                 //buff team
                 team.ForEach(sess =>
@@ -657,10 +655,10 @@ namespace OpenNos.GameObject.Event.ARENA
                 });
             }
 
-            if (team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Archer) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Magician) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.Swordsman) == 3 ||
-                team.Count(ch => ch.Session?.Character.Class == CharacterClassType.MartialArtist) == 3)
+            if (team.Count(ch => ch.Session?.Character.Class == ClassType.Archer) == 3 ||
+                team.Count(ch => ch.Session?.Character.Class == ClassType.Magician) == 3 ||
+                team.Count(ch => ch.Session?.Character.Class == ClassType.Swordsman) == 3 ||
+                team.Count(ch => ch.Session?.Character.Class == ClassType.MartialArtist) == 3)
             {
                 //debuff team
                 team.ForEach(sess =>

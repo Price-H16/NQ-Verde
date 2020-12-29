@@ -70,9 +70,14 @@
     <Compile Include="ArenaTeamType.cs" />
     <Compile Include="AscrPacketType.cs" />
     <Compile Include="AttackType.cs" />
+    <Compile Include="AuthorityType.cs" />
+    <Compile Include="AuthResponse.cs" />
     <Compile Include="BankActionType.cs" />
     <Compile Include="BazaarListType.cs" />
+    <Compile Include="BCardType.cs" />
+    <Compile Include="BuffType.cs" />
     <Compile Include="CellonOptionType.cs" />
+    <Compile Include="ClassType.cs" />
     <Compile Include="DialogType.cs" />
     <Compile Include="EntityType.cs" />
     <Compile Include="EventActionType.cs" />

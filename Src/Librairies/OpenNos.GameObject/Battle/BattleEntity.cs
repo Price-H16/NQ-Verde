@@ -3,9 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using ChickenAPI.Enums.Game.BCard;
-using ChickenAPI.Enums.Game.Buffs;
-using ChickenAPI.Enums.Game.Character;
+using System.Threading.Tasks;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -14,6 +12,7 @@ using OpenNos.GameObject.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.PathFinder;
+using static OpenNos.Domain.BCardType;
 using FactionType = OpenNos.Domain.FactionType;
 
 namespace OpenNos.GameObject.Battle
@@ -543,6 +542,7 @@ namespace OpenNos.GameObject.Battle
 
             EntityType = EntityType.Player;
             UserType = UserType.Player;
+
             DamageMinimum = character.MinHit;
             DamageMaximum = character.MaxHit;
             Hitrate = character.HitRate;
@@ -562,113 +562,102 @@ namespace OpenNos.GameObject.Battle
                 {
                     case 0:
                         AttackType = AttackType.Melee;
-                        if (character.Class == CharacterClassType.Archer)
+                        if (character.Class == ClassType.Archer)
                         {
                             DamageMinimum = character.SecondWeaponMinHit;
                             DamageMaximum = character.SecondWeaponMaxHit;
                             Hitrate = character.SecondWeaponHitRate;
                             CritChance = character.SecondWeaponCriticalChance;
                             CritRate = character.SecondWeaponCriticalRate;
-                            weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.SecondaryWeapon,
-                                InventoryType.Wear);
+                            weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.SecondaryWeapon, InventoryType.Wear);
                         }
                         else
                         {
-                            weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon,
-                                InventoryType.Wear);
+                            weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon, InventoryType.Wear);
                         }
-
                         break;
 
                     case 1:
                         AttackType = AttackType.Range;
-                        if (character.Class == CharacterClassType.Adventurer || character.Class == CharacterClassType.Swordsman ||
-                            character.Class == CharacterClassType.Magician)
+                        if (character.Class == ClassType.Adventurer || character.Class == ClassType.Swordsman || character.Class == ClassType.Magician)
                         {
                             DamageMinimum = character.SecondWeaponMinHit;
                             DamageMaximum = character.SecondWeaponMaxHit;
                             Hitrate = character.SecondWeaponHitRate;
                             CritChance = character.SecondWeaponCriticalChance;
                             CritRate = character.SecondWeaponCriticalRate;
-                            weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.SecondaryWeapon,
-                                InventoryType.Wear);
+                            weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.SecondaryWeapon, InventoryType.Wear);
                         }
                         else
                         {
-                            weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon,
-                                InventoryType.Wear);
+                            weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon, InventoryType.Wear);
                         }
-
                         break;
 
                     case 2:
                         AttackType = AttackType.Magical;
-                        weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon,
-                            InventoryType.Wear);
+                        weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon, InventoryType.Wear);
                         break;
 
                     case 3:
-                        weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon,
-                            InventoryType.Wear);
+                        weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon, InventoryType.Wear);
                         switch (character.Class)
                         {
-                            case CharacterClassType.Adventurer:
-                            case CharacterClassType.Swordsman:
+                            case ClassType.Adventurer:
+                            case ClassType.Swordsman:
+                            case ClassType.MartialArtist:
                                 AttackType = AttackType.Melee;
                                 break;
 
-                            case CharacterClassType.Archer:
+                            case ClassType.Archer:
                                 AttackType = AttackType.Range;
                                 break;
 
-                            case CharacterClassType.Magician:
+                            case ClassType.Magician:
                                 AttackType = AttackType.Magical;
                                 break;
                         }
-
                         break;
 
                     case 5:
                         AttackType = AttackType.Melee;
                         switch (character.Class)
                         {
-                            case CharacterClassType.Adventurer:
-                            case CharacterClassType.Swordsman:
-                            case CharacterClassType.Magician:
-                                weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon,
-                                    InventoryType.Wear);
+                            case ClassType.Adventurer:
+                            case ClassType.Swordsman:
+                            case ClassType.Magician:
+                            case ClassType.MartialArtist:
+                                weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon, InventoryType.Wear);
                                 break;
 
-                            case CharacterClassType.Archer:
+                            case ClassType.Archer:
                                 DamageMinimum = character.SecondWeaponMinHit;
                                 DamageMaximum = character.SecondWeaponMaxHit;
                                 Hitrate = character.SecondWeaponHitRate;
                                 CritChance = character.SecondWeaponCriticalChance;
                                 CritRate = character.SecondWeaponCriticalRate;
-                                weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.SecondaryWeapon,
-                                    InventoryType.Wear);
+                                weapon = character.Inventory.LoadBySlotAndType((byte)EquipmentType.SecondaryWeapon, InventoryType.Wear);
                                 break;
                         }
-
                         break;
                 }
             }
             else
             {
-                weapon = character.Inventory?.LoadBySlotAndType((byte)EquipmentType.SecondaryWeapon,
-                    InventoryType.Wear);
+                weapon = character.Inventory?.LoadBySlotAndType((byte)EquipmentType.SecondaryWeapon, InventoryType.Wear);
                 switch (character.Class)
                 {
-                    case CharacterClassType.Adventurer:
-                    case CharacterClassType.Swordsman:
+                    case ClassType.Adventurer:
+                    case ClassType.Swordsman:
+                    case ClassType.MartialArtist:
                         AttackType = AttackType.Melee;
                         break;
 
-                    case CharacterClassType.Archer:
+                    case ClassType.Archer:
                         AttackType = AttackType.Range;
                         break;
 
-                    case CharacterClassType.Magician:
+                    case ClassType.Magician:
                         AttackType = AttackType.Magical;
                         break;
                 }
@@ -680,11 +669,9 @@ namespace OpenNos.GameObject.Battle
                 WeaponDamageMinimum = weapon.DamageMinimum + weapon.Item.DamageMinimum;
                 WeaponDamageMaximum = weapon.DamageMaximum + weapon.Item.DamageMaximum;
 
-                if (weapon == character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon, InventoryType.Wear)
-                )
+                if (weapon == character.Inventory.LoadBySlotAndType((byte)EquipmentType.MainWeapon, InventoryType.Wear))
                 {
                     ShellWeaponEffects = character.ShellEffectMain.ToList();
-                    RuneWeaponEffects = character.RuneEffectMain.ToList();
                 }
                 else
                 {
@@ -700,7 +687,7 @@ namespace OpenNos.GameObject.Battle
                 DamageMaximum = DamageMinimum + 1;
             }
 
-            var armor = character.Inventory?.LoadBySlotAndType((byte)EquipmentType.Armor, InventoryType.Wear);
+            ItemInstance armor = character.Inventory?.LoadBySlotAndType((byte)EquipmentType.Armor, InventoryType.Wear);
             if (armor != null)
             {
                 DefenseUpgrade = armor.Upgrade;
@@ -829,7 +816,6 @@ namespace OpenNos.GameObject.Battle
                 DamageMinimum = monster.Monster.DamageMinimum;
                 DamageMaximum = monster.Monster.DamageMaximum;
             }
-
             WeaponDamageMinimum = 0;
             WeaponDamageMaximum = 0;
             Hitrate = monster.Monster.Concentrate;
@@ -963,46 +949,18 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.BrushFireJagged;
-                }
-
-                if (Mate != null)
-                {
-                    return Mate.BrushFireJagged;
-                }
-
-                if (MapMonster != null)
-                {
-                    return MapMonster.BrushFireJagged;
-                }
-
-                if (MapNpc != null)
-                {
-                    return MapNpc.BrushFireJagged;
-                }
-
-                return null;
+                if (Character != null) return Character.BrushFireJagged;
+                else if (Mate != null) return Mate.BrushFireJagged;
+                else if (MapMonster != null) return MapMonster.BrushFireJagged;
+                else if (MapNpc != null) return MapNpc.BrushFireJagged;
+                else return null;
             }
             set
             {
-                if (Character != null)
-                {
-                    Character.BrushFireJagged = value;
-                }
-                else if (Mate != null)
-                {
-                    Mate.BrushFireJagged = value;
-                }
-                else if (MapMonster != null)
-                {
-                    MapMonster.BrushFireJagged = value;
-                }
-                else if (MapNpc != null)
-                {
-                    MapNpc.BrushFireJagged = value;
-                }
+                if (Character != null) Character.BrushFireJagged = value;
+                else if (Mate != null) Mate.BrushFireJagged = value;
+                else if (MapMonster != null) MapMonster.BrushFireJagged = value;
+                else if (MapNpc != null) MapNpc.BrushFireJagged = value;
             }
         }
 
@@ -1053,46 +1011,18 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.Hp;
-                }
-
-                if (Mate != null)
-                {
-                    return (int)Mate.Hp;
-                }
-
-                if (MapMonster != null)
-                {
-                    return (int)MapMonster.CurrentHp;
-                }
-
-                if (MapNpc != null)
-                {
-                    return (int)MapNpc.CurrentHp;
-                }
-
-                return 0;
+                if (Character != null) return Character.Hp;
+                else if (Mate != null) return (int)Mate.Hp;
+                else if (MapMonster != null) return (int)MapMonster.CurrentHp;
+                else if (MapNpc != null) return (int)MapNpc.CurrentHp;
+                else return 0;
             }
             set
             {
-                if (Character != null)
-                {
-                    Character.Hp = value;
-                }
-                else if (Mate != null)
-                {
-                    Mate.Hp = value;
-                }
-                else if (MapMonster != null)
-                {
-                    MapMonster.CurrentHp = value;
-                }
-                else if (MapNpc != null)
-                {
-                    MapNpc.CurrentHp = value;
-                }
+                if (Character != null) Character.Hp = value;
+                else if (Mate != null) Mate.Hp = value;
+                else if (MapMonster != null) MapMonster.CurrentHp = value;
+                else if (MapNpc != null) MapNpc.CurrentHp = value;
             }
         }
 
@@ -1100,27 +1030,11 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return (int)Character.HPLoad();
-                }
-
-                if (Mate != null)
-                {
-                    return (int)Mate.MaxHp;
-                }
-
-                if (MapMonster != null)
-                {
-                    return (int)MapMonster.MaxHp;
-                }
-
-                if (MapNpc != null)
-                {
-                    return (int)MapNpc.MaxHp;
-                }
-
-                return 0;
+                if (Character != null) return (int)Character.HPLoad();
+                else if (Mate != null) return (int)Mate.MaxHp;
+                else if (MapMonster != null) return (int)MapMonster.MaxHp;
+                else if (MapNpc != null) return (int)MapNpc.MaxHp;
+                else return 0;
             }
         }
 
@@ -1130,46 +1044,18 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.LastDefence;
-                }
-
-                if (Mate != null)
-                {
-                    return Mate.LastDefence;
-                }
-
-                if (MapMonster != null)
-                {
-                    return MapMonster.LastDefence;
-                }
-
-                if (MapNpc != null)
-                {
-                    return MapNpc.LastDefence;
-                }
-
-                return new DateTime();
+                if (Character != null) return Character.LastDefence;
+                else if (Mate != null) return Mate.LastDefence;
+                else if (MapMonster != null) return MapMonster.LastDefence;
+                else if (MapNpc != null) return MapNpc.LastDefence;
+                else return new DateTime();
             }
             set
             {
-                if (Character != null)
-                {
-                    Character.LastDefence = value;
-                }
-                else if (Mate != null)
-                {
-                    Mate.LastDefence = value;
-                }
-                else if (MapMonster != null)
-                {
-                    MapMonster.LastDefence = value;
-                }
-                else if (MapNpc != null)
-                {
-                    MapNpc.LastDefence = value;
-                }
+                if (Character != null) Character.LastDefence = value;
+                else if (Mate != null) Mate.LastDefence = value;
+                else if (MapMonster != null) MapMonster.LastDefence = value;
+                else if (MapNpc != null) MapNpc.LastDefence = value;
             }
         }
 
@@ -1177,46 +1063,18 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.LastMonsterAggro;
-                }
-
-                if (Mate != null)
-                {
-                    return Mate.LastMonsterAggro;
-                }
-
-                if (MapMonster != null)
-                {
-                    return MapMonster.LastMonsterAggro;
-                }
-
-                if (MapNpc != null)
-                {
-                    return MapNpc.LastMonsterAggro;
-                }
-
-                return new DateTime();
+                if (Character != null) return Character.LastMonsterAggro;
+                else if (Mate != null) return Mate.LastMonsterAggro;
+                else if (MapMonster != null) return MapMonster.LastMonsterAggro;
+                else if (MapNpc != null) return MapNpc.LastMonsterAggro;
+                else return new DateTime();
             }
             set
             {
-                if (Character != null)
-                {
-                    Character.LastMonsterAggro = value;
-                }
-                else if (Mate != null)
-                {
-                    Mate.LastMonsterAggro = value;
-                }
-                else if (MapMonster != null)
-                {
-                    MapMonster.LastMonsterAggro = value;
-                }
-                else if (MapNpc != null)
-                {
-                    MapNpc.LastMonsterAggro = value;
-                }
+                if (Character != null) Character.LastMonsterAggro = value;
+                else if (Mate != null) Mate.LastMonsterAggro = value;
+                else if (MapMonster != null) MapMonster.LastMonsterAggro = value;
+                else if (MapNpc != null) MapNpc.LastMonsterAggro = value;
             }
         }
 
@@ -1230,27 +1088,11 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.CharacterId;
-                }
-
-                if (Mate != null)
-                {
-                    return Mate.MateTransportId;
-                }
-
-                if (MapMonster != null)
-                {
-                    return MapMonster.MapMonsterId;
-                }
-
-                if (MapNpc != null)
-                {
-                    return MapNpc.MapNpcId;
-                }
-
-                return 0;
+                if (Character != null) return Character.CharacterId;
+                else if (Mate != null) return Mate.MateTransportId;
+                else if (MapMonster != null) return MapMonster.MapMonsterId;
+                else if (MapNpc != null) return MapNpc.MapNpcId;
+                else return 0;
             }
         }
 
@@ -1273,46 +1115,18 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.Mp;
-                }
-
-                if (Mate != null)
-                {
-                    return (int)Mate.Mp;
-                }
-
-                if (MapMonster != null)
-                {
-                    return (int)MapMonster.CurrentMp;
-                }
-
-                if (MapNpc != null)
-                {
-                    return (int)MapNpc.CurrentMp;
-                }
-
-                return 0;
+                if (Character != null) return Character.Mp;
+                else if (Mate != null) return (int)Mate.Mp;
+                else if (MapMonster != null) return (int)MapMonster.CurrentMp;
+                else if (MapNpc != null) return (int)MapNpc.CurrentMp;
+                else return 0;
             }
             set
             {
-                if (Character != null)
-                {
-                    Character.Mp = value;
-                }
-                else if (Mate != null)
-                {
-                    Mate.Mp = value;
-                }
-                else if (MapMonster != null)
-                {
-                    MapMonster.CurrentMp = value;
-                }
-                else if (MapNpc != null)
-                {
-                    MapNpc.CurrentMp = value;
-                }
+                if (Character != null) Character.Mp = value;
+                else if (Mate != null) Mate.Mp = value;
+                else if (MapMonster != null) MapMonster.CurrentMp = value;
+                else if (MapNpc != null) MapNpc.CurrentMp = value;
             }
         }
 
@@ -1320,27 +1134,11 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return (int)Character.MPLoad();
-                }
-
-                if (Mate != null)
-                {
-                    return (int)Mate.MaxMp;
-                }
-
-                if (MapMonster != null)
-                {
-                    return (int)MapMonster.MaxMp;
-                }
-
-                if (MapNpc != null)
-                {
-                    return (int)MapNpc.MaxMp;
-                }
-
-                return 0;
+                if (Character != null) return (int)Character.MPLoad();
+                else if (Mate != null) return (int)Mate.MaxMp;
+                else if (MapMonster != null) return (int)MapMonster.MaxMp;
+                else if (MapNpc != null) return (int)MapNpc.MaxMp;
+                else return 0;
             }
         }
 
@@ -1350,46 +1148,18 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.PositionX;
-                }
-
-                if (Mate != null)
-                {
-                    return Mate.PositionX;
-                }
-
-                if (MapMonster != null)
-                {
-                    return MapMonster.MapX;
-                }
-
-                if (MapNpc != null)
-                {
-                    return MapNpc.MapX;
-                }
-
-                return 0;
+                if (Character != null) return Character.PositionX;
+                else if (Mate != null) return Mate.PositionX;
+                else if (MapMonster != null) return MapMonster.MapX;
+                else if (MapNpc != null) return MapNpc.MapX;
+                else return 0;
             }
             set
             {
-                if (Character != null)
-                {
-                    Character.PositionX = value;
-                }
-                else if (Mate != null)
-                {
-                    Mate.PositionX = value;
-                }
-                else if (MapMonster != null)
-                {
-                    MapMonster.MapX = value;
-                }
-                else if (MapNpc != null)
-                {
-                    MapNpc.MapX = value;
-                }
+                if (Character != null) Character.PositionX = value;
+                else if (Mate != null) Mate.PositionX = value;
+                else if (MapMonster != null) MapMonster.MapX = value;
+                else if (MapNpc != null) MapNpc.MapX = value;
             }
         }
 
@@ -1397,46 +1167,18 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.PositionY;
-                }
-
-                if (Mate != null)
-                {
-                    return Mate.PositionY;
-                }
-
-                if (MapMonster != null)
-                {
-                    return MapMonster.MapY;
-                }
-
-                if (MapNpc != null)
-                {
-                    return MapNpc.MapY;
-                }
-
-                return 0;
+                if (Character != null) return Character.PositionY;
+                else if (Mate != null) return Mate.PositionY;
+                else if (MapMonster != null) return MapMonster.MapY;
+                else if (MapNpc != null) return MapNpc.MapY;
+                else return 0;
             }
             set
             {
-                if (Character != null)
-                {
-                    Character.PositionY = value;
-                }
-                else if (Mate != null)
-                {
-                    Mate.PositionY = value;
-                }
-                else if (MapMonster != null)
-                {
-                    MapMonster.MapY = value;
-                }
-                else if (MapNpc != null)
-                {
-                    MapNpc.MapY = value;
-                }
+                if (Character != null) Character.PositionY = value;
+                else if (Mate != null) Mate.PositionY = value;
+                else if (MapMonster != null) MapMonster.MapY = value;
+                else if (MapNpc != null) MapNpc.MapY = value;
             }
         }
 
@@ -1444,46 +1186,18 @@ namespace OpenNos.GameObject.Battle
         {
             get
             {
-                if (Character != null)
-                {
-                    return Character.PVELockObject;
-                }
-
-                if (Mate != null)
-                {
-                    return Mate.PVELockObject;
-                }
-
-                if (MapMonster != null)
-                {
-                    return MapMonster.PVELockObject;
-                }
-
-                if (MapNpc != null)
-                {
-                    return MapNpc.PVELockObject;
-                }
-
-                return 0;
+                if (Character != null) return Character.PVELockObject;
+                else if (Mate != null) return Mate.PVELockObject;
+                else if (MapMonster != null) return MapMonster.PVELockObject;
+                else if (MapNpc != null) return MapNpc.PVELockObject;
+                else return 0;
             }
             set
             {
-                if (Character != null)
-                {
-                    Character.PVELockObject = value;
-                }
-                else if (Mate != null)
-                {
-                    Mate.PVELockObject = value;
-                }
-                else if (MapMonster != null)
-                {
-                    MapMonster.PVELockObject = value;
-                }
-                else if (MapNpc != null)
-                {
-                    MapNpc.PVELockObject = value;
-                }
+                if (Character != null) Character.PVELockObject = value;
+                else if (Mate != null) Mate.PVELockObject = value;
+                else if (MapMonster != null) MapMonster.PVELockObject = value;
+                else if (MapNpc != null) MapNpc.PVELockObject = value;
             }
         }
 
@@ -1493,8 +1207,7 @@ namespace OpenNos.GameObject.Battle
 
         public int Resistance { get; set; }
 
-        public int ResistForcedMovement => GetBuff(BCardType.AbsorbedSpirit,
-            (byte)BCardSubTypes.AbsorbedSpirit.ResistForcedMovement)[0];
+        public int ResistForcedMovement => GetBuff(CardType.AbsorbedSpirit, (byte)AdditionalTypes.AbsorbedSpirit.ResistForcedMovement)[0];
 
         public List<RuneEffectDTO> RuneWeaponEffects { get; }
 
@@ -1531,60 +1244,40 @@ namespace OpenNos.GameObject.Battle
                     return;
                 }
 
-                if (MapMonster != null &&
-                    (MapMonster.IsBoss || ServerManager.Instance.BossVNums.Contains(MapMonster.MonsterVNum)))
+                if (MapMonster != null && (MapMonster.IsBoss || ServerManager.Instance.BossVNums.Contains(MapMonster.MonsterVNum)))
                 {
-                    if (!forced && indicator.Card.BuffType == BuffType.Bad &&
-                        (indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)BCardType.SpecialAttack &&
-                                 b.SubType == (byte)BCardSubTypes.SpecialAttack.NoAttack)
-                      || indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)BCardType.Move &&
-                                 b.SubType == (byte)BCardSubTypes.Move.MovementImpossible)
-                      || indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)BCardType.Move && b.SubType == (byte)BCardSubTypes.Move.SetMovement)
-                      || indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)BCardType.Move &&
-                                 b.SubType == (byte)BCardSubTypes.Move.MovementSpeedDecreased)
-                      || indicator.Card.BCards.Any(b =>
-                                 b.Type == (byte)BCardType.Move &&
-                                 b.SubType == (byte)BCardSubTypes.Move.MoveSpeedDecreased)))
+                    if (!forced && (indicator.Card.BuffType == BuffType.Bad &&
+                       (indicator.Card.BCards.Any(b => b.Type == (byte)CardType.SpecialAttack && b.SubType == (byte)AdditionalTypes.SpecialAttack.NoAttack / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.MovementImpossible / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.SetMovement / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.SetMovementNegated / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.MovementSpeedDecreased / 10)
+                     || indicator.Card.BCards.Any(b => b.Type == (byte)CardType.Move && b.SubType == (byte)AdditionalTypes.Move.MoveSpeedDecreased / 10))))
                     {
                         return;
                     }
                 }
 
                 if (indicator.Card.BCards.Any(newbuff => Buffs.GetAllItems().Any(b => b.Card.BCards.Any(buff =>
-                                                                                                buff.CardId != newbuff.CardId
-                                                                                             && (buff.Type == (byte)BCardType.MaxHPMP && buff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumHPMPIncreased &&
-                                                                                                        (newbuff.Type == (byte)BCardType.MaxHPMP || newbuff.Type == (byte)BCardType.BearSpirit)
-                                                                                                        || newbuff.Type == (byte)BCardType.MaxHPMP && newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumHPMPIncreased &&
-                                                                                                            (buff.Type == (byte)BCardType.MaxHPMP || buff.Type == (byte)BCardType.BearSpirit)
-                                                                                                        || buff.Type == (byte)BCardType.MaxHPMP &&
-                                                                                                             (buff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumHPIncreased || buff.SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumHP) &&
-                                                                                                           (newbuff.Type == (byte)BCardType.BearSpirit && newbuff.SubType == (byte)BCardSubTypes.BearSpirit.IncreaseMaximumHP) ||
-                                                                                                           buff.Type == (byte)BCardType.MaxHPMP &&
-                                                                                                           (buff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumMPIncreased || buff.SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumMP) &&
-                                                                                                           newbuff.Type == (byte)BCardType.BearSpirit && newbuff.SubType == (byte)BCardSubTypes.BearSpirit.IncreaseMaximumMP
-                                                                                                           || newbuff.Type == (byte)BCardType.MaxHPMP &&
-                                                                                                           (newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumHPIncreased || newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumHP) &&
-                                                                                                           buff.Type == (byte)BCardType.BearSpirit && buff.SubType == (byte)BCardSubTypes.BearSpirit.IncreaseMaximumHP ||
-                                                                                                           newbuff.Type == (byte)BCardType.MaxHPMP && (newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.MaximumMPIncreased || newbuff.SubType == (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumMP) &&
-                                                                                                           buff.Type == (byte)BCardType.BearSpirit && buff.SubType == (byte)BCardSubTypes.BearSpirit.IncreaseMaximumMP || buff.Type == (byte)BCardType.MaxHPMP && newbuff.Type == (byte)BCardType.MaxHPMP &&
-                                                                                                           buff.SubType == newbuff.SubType || buff.Type == (byte)BCardType.BearSpirit && newbuff.Type == (byte)BCardType.BearSpirit && buff.SubType == newbuff.SubType)))))
+                    buff.CardId != newbuff.CardId
+                 && ((buff.Type == 33 && buff.SubType == 5 && (newbuff.Type == 33 || newbuff.Type == 58)) || (newbuff.Type == 33 && newbuff.SubType == 5 && (buff.Type == 33 || buff.Type == 58))
+                 || (buff.Type == 33 && (buff.SubType == 1 || buff.SubType == 3) && (newbuff.Type == 58 && (newbuff.SubType == 1))) || (buff.Type == 33 && (buff.SubType == 2 || buff.SubType == 4) && (newbuff.Type == 58 && (newbuff.SubType == 3)))
+                 || (newbuff.Type == 33 && (newbuff.SubType == 1 || newbuff.SubType == 3) && (buff.Type == 58 && (buff.SubType == 1))) || (newbuff.Type == 33 && (newbuff.SubType == 2 || newbuff.SubType == 4) && (buff.Type == 58 && (buff.SubType == 3)))
+                 || (buff.Type == 33 && newbuff.Type == 33 && buff.SubType == newbuff.SubType) || (buff.Type == 58 && newbuff.Type == 58 && buff.SubType == newbuff.SubType))))))
                 {
                     return;
                 }
 
-                if (indicator.Card.BCards.Any(s => s.Type == (byte)BCardType.LotusSkills && s.SubType.Equals((byte)BCardSubTypes.LotusSkills.ChangeMoonSkills / 10)))
+                if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.LotusSkills && s.SubType.Equals((byte)AdditionalTypes.LotusSkills.ChangeMoonSkills / 10)))
                 {
                     RemoveBuff(697);
                 }
 
-                if (indicator.Card.BCards.Any(s => s.Type == (byte)BCardType.LotusSkills && s.SubType.Equals((byte)BCardSubTypes.LotusSkills.ChangeLotusSkills / 10)))
+                if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.LotusSkills && s.SubType.Equals((byte)AdditionalTypes.LotusSkills.ChangeLotusSkills / 10)))
                 {
                     RemoveBuff(690);
                 }
+
 
                 switch (indicator.Card.CardId)
                 {
@@ -1661,8 +1354,7 @@ namespace OpenNos.GameObject.Battle
                             {
                                 MapInstance.InstanceBag.LaurenaRound++;
 
-                                MapInstance.Broadcast(StaticPacketHelper.Say(3, MapEntityId, 1,
-                                    Language.Instance.GetMessageFromKey("GET_OVER_HERE")));
+                                MapInstance.Broadcast(StaticPacketHelper.Say(3, MapEntityId, 1, Language.Instance.GetMessageFromKey("GET_OVER_HERE")));
                                 MapInstance.Broadcast($"npc_req 3 {MapEntityId} 9685");
 
                                 Observable.Timer(TimeSpan.FromSeconds(1))
@@ -1674,34 +1366,27 @@ namespace OpenNos.GameObject.Battle
                                             TeleportTo(new MapCell { X = 53, Y = 59 });
                                             MapInstance.Broadcast($"guri 11 3 {MapEntityId}");
 
-                                            var monstersToSummon = new List<MonsterToSummon>();
+                                            List<MonsterToSummon> monstersToSummon = new List<MonsterToSummon>();
 
                                             // Increase n by 1 every round -- max. 2
-                                            var n = Math.Min(MapInstance.InstanceBag.LaurenaRound, 1);
+                                            int n = Math.Min(MapInstance.InstanceBag.LaurenaRound, 2);
 
-                                            for (var i = 0; i < n; i++)
+                                            for (int i = 0; i < n; i++)
                                             {
-                                                var spawnCell =
-                                                    GetRandomMapCellInRange(20) ?? new MapCell
-                                                    { X = PositionX, Y = PositionY };
+                                                MapCell spawnCell = GetRandomMapCellInRange(20) ?? new MapCell { X = PositionX, Y = PositionY };
 
-                                                monstersToSummon.Add(new MonsterToSummon(2327, spawnCell, null, true)
-                                                {
-                                                    DeathEvents =
-                                                    {
-                                                    new EventContainer(MapInstance, EventActionType.REMOVELAURENABUFF,
-                                                        this)
-                                                    }
-                                                });
+                                                monstersToSummon.Add(new MonsterToSummon(2327, spawnCell, null, true) { DeathEvents = { new EventContainer(MapInstance, EventActionType.REMOVELAURENABUFF, this) } });
                                             }
 
-                                            EventHelper.Instance.RunEvent(new EventContainer(MapInstance,
-                                                EventActionType.SPAWNMONSTERS, monstersToSummon));
+                                            EventHelper.Instance.RunEvent(new EventContainer(MapInstance, EventActionType.SPAWNMONSTERS, monstersToSummon));
                                         }
                                     });
 
                                 Observable.Timer(TimeSpan.FromSeconds(3))
-                                    .Subscribe(observer => { MapInstance?.Broadcast("npc_req -1 -1"); });
+                                    .Subscribe(observer =>
+                                    {
+                                        MapInstance?.Broadcast("npc_req -1 -1");
+                                    });
                             }
                         }
                         break;
@@ -1790,7 +1475,6 @@ namespace OpenNos.GameObject.Battle
                         {
                             break;
                         }
-
                         if (Buffs.Any(s => s.Card.CardId == 728))
                         {
                             MapInstance.Broadcast(Character.GenerateBfePacket(728, 0));
@@ -1800,7 +1484,6 @@ namespace OpenNos.GameObject.Battle
                         {
                             MapInstance.Broadcast(Character.GenerateBfePacket(729, 0));
                         }
-
                         MapInstance.Broadcast(Character.GenerateBfePacket(727, 1000));
                         break;
 
@@ -1809,7 +1492,6 @@ namespace OpenNos.GameObject.Battle
                         {
                             break;
                         }
-
                         if (Buffs.Any(s => s.Card.CardId == 727))
                         {
                             MapInstance.Broadcast(Character.GenerateBfePacket(727, 0));
@@ -1819,7 +1501,6 @@ namespace OpenNos.GameObject.Battle
                         {
                             MapInstance.Broadcast(Character.GenerateBfePacket(729, 0));
                         }
-
                         MapInstance.Broadcast(Character.GenerateBfePacket(728, 1000));
                         break;
 
@@ -1828,7 +1509,6 @@ namespace OpenNos.GameObject.Battle
                         {
                             break;
                         }
-
                         if (Buffs.Any(s => s.Card.CardId == 727))
                         {
                             MapInstance.Broadcast(Character.GenerateBfePacket(727, 0));
@@ -1838,7 +1518,6 @@ namespace OpenNos.GameObject.Battle
                         {
                             MapInstance.Broadcast(Character.GenerateBfePacket(728, 0));
                         }
-
                         MapInstance.Broadcast(Character.GenerateBfePacket(729, 1000));
                         break;
 
@@ -1921,8 +1600,7 @@ namespace OpenNos.GameObject.Battle
                     // Amulet remaining time
                     if (indicator.Card.CardId == 62)
                     {
-                        var amulet =
-                            Character.Inventory.LoadBySlotAndType((byte)EquipmentType.Amulet, InventoryType.Wear);
+                        ItemInstance amulet = Character.Inventory.LoadBySlotAndType((byte)EquipmentType.Amulet, InventoryType.Wear);
                         if (amulet?.ItemDeleteTime != null)
                         {
                             buffTime = (int)amulet.ItemDeleteTime.Value.Subtract(DateTime.Now).TotalSeconds * 10;
@@ -1935,7 +1613,6 @@ namespace OpenNos.GameObject.Battle
                             indicator.RemainingTime = buffTime;
                         }
                     }
-
                     indicator.Start = DateTime.Now;
 
                     Character.Session.SendPacket($"bf 1 {MapEntityId} {(indicator.Card.CardId == 0 ? Character.ChargeValue > 7000 ? 7000 : Character.ChargeValue : amuletMaxDurability > 0 ? buffTime : 0)}.{indicator.Card.CardId}.{(indicator.Card.Duration == 0 || indicator.Card.CardId == 62 ? amuletMaxDurability > 0 ? amuletMaxDurability : buffTime : indicator.Card.Duration)} {sender.Level}");
@@ -1944,7 +1621,6 @@ namespace OpenNos.GameObject.Battle
                     {
                         Character.Session.SendPacket(Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("UNDER_EFFECT"), indicator.Card.Name), 20));
                     }
-
 
                     Character.Session.SendPacket(Character.GenerateStat());
 
@@ -1960,11 +1636,9 @@ namespace OpenNos.GameObject.Battle
                     BuffObservables.Remove(indicator.Card.CardId);
                 }
 
-                indicator.Card.BCards.ForEach(c => c.ApplyBCards(this, sender, x, y));
+                indicator.Card.BCards.ForEach(c => c.ApplyBCards(this, sender, x: x, y: y));
 
-                if (indicator.Card.BCards.Any(s =>
-                    s.Type == (byte)BCardType.Move &&
-                    !s.SubType.Equals((byte)BCardSubTypes.Move.MovementImpossible)))
+                if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.Move && !s.SubType.Equals((byte)AdditionalTypes.Move.MovementImpossible / 10)))
                 {
                     if (Character != null)
                     {
@@ -1979,18 +1653,15 @@ namespace OpenNos.GameObject.Battle
                 }
 
                 if (indicator.Card.BCards.Any(s
-                    => s.Type == (byte)BCardType.SpecialAttack &&
-                       s.SubType == (byte)BCardSubTypes.SpecialAttack.NoAttack
-                       || s.Type == (byte)BCardType.Move && s.SubType == (byte)BCardSubTypes.Move.MovementImpossible
-                       || s.Type == (byte)BCardType.FrozenDebuff &&
-                       s.SubType == (byte)BCardSubTypes.FrozenDebuff.EternalIce
-                ))
+                    => (s.Type == (byte)CardType.SpecialAttack && s.SubType == (byte)AdditionalTypes.SpecialAttack.NoAttack / 10)
+                    || (s.Type == (byte)CardType.Move && s.SubType == (byte)AdditionalTypes.Move.MovementImpossible / 10)
+                    || (s.Type == (byte)CardType.FrozenDebuff && s.SubType == (byte)AdditionalTypes.FrozenDebuff.EternalIce / 10)
+                    ))
                 {
                     if (Character != null)
                     {
                         Character.Session.SendPacket(Character.GenerateCond());
                     }
-
                     if (Mate != null)
                     {
                         Mate.Owner.Session.SendPacket(Mate.GenerateCond());
@@ -2001,29 +1672,19 @@ namespace OpenNos.GameObject.Battle
                 {
                     MapInstance?.Broadcast($"eff {(byte)UserType} {MapEntityId} 4537");
                 }
+
                 MapInstance?.Broadcast($"bf_e {(short)UserType} {MapEntityId} {indicator.Card.CardId} 100");
 
                 BuffObservables[indicator.Card.CardId] = Observable.Timer(TimeSpan.FromMilliseconds((indicator.Card.Duration == 0 || indicator.Card.CardId == 62 ? buffTime : indicator.Card.Duration) * 100)).Subscribe(o =>
                 {
-                        if (indicator.Card.CardId != 0 && amuletMaxDurability == 0)
+                    if (indicator.Card.CardId != 0 && amuletMaxDurability == 0)
+                    {
+                        RemoveBuff(indicator.Card.CardId);
+                        if (indicator.Card.TimeoutBuff != 0 && ServerManager.RandomNumber() < indicator.Card.TimeoutBuffChance)
                         {
-                            RemoveBuff(indicator.Card.CardId);
-                            if (indicator.Card.TimeoutBuff != 0 && ServerManager.RandomNumber() < indicator.Card.TimeoutBuffChance)
-                            {
-                                #region Do not add timeout buff if...  
-                                if (indicator.Card.TimeoutBuff == 664) // Mega titan wings
-                                {
-                                    if (Character != null && (Character.LastSkillUse.AddSeconds(10) <= DateTime.Now && Character.LastDefence.AddSeconds(10) <= DateTime.Now))
-                                    {
-
-                                         return;
-                                    }
-                                }
-                                #endregion
-                                
-                                AddBuff(new Buff(indicator.Card.TimeoutBuff, indicator.Level), sender);
-                            }
+                            AddBuff(new Buff(indicator.Card.TimeoutBuff, indicator.Level), sender);
                         }
+                    }
                 });
             }
         }
@@ -2117,7 +1778,7 @@ namespace OpenNos.GameObject.Battle
                                             }
                                         }
                                         else if (MapInstance.Map.MapTypes.Any(m => m.MapTypeId == (short)MapTypeEnum.PVPMap) || MapInstance.IsPVP
-                                              || HasBuff(BCardType.SpecialEffects, (byte)BCardSubTypes.SpecialEffects.AbleToFightPVP) && receiver.HasBuff(BCardType.SpecialEffects, (byte)BCardSubTypes.SpecialEffects.AbleToFightPVP))
+                                              || HasBuff(BCardType.CardType.SpecialEffects, (byte)AdditionalTypes.SpecialEffects.AbleToFightPVP) && receiver.HasBuff(BCardType.CardType.SpecialEffects, (byte)AdditionalTypes.SpecialEffects.AbleToFightPVP))
                                         {
                                             if (MapInstance == ServerManager.Instance.FamilyArenaInstance
                                                 && ((Character.Family != null && receiver.Character.Family != null && Character.Family == receiver.Character.Family)
@@ -2372,9 +2033,9 @@ namespace OpenNos.GameObject.Battle
 
         public void ClearEnemyFalcon()
         {
-            MapInstance?.BattleEntities?.Where(s => s?.FalconFocusedEntityId == MapEntityId).ToList().ForEach(s =>
+            MapInstance.BattleEntities.Where(s => s.FalconFocusedEntityId == MapEntityId).ToList().ForEach(s =>
             {
-                s?.ClearOwnFalcon();
+                s.ClearOwnFalcon();
             });
         }
 
@@ -2382,27 +2043,20 @@ namespace OpenNos.GameObject.Battle
         {
             if (FalconFocusedEntityId != 0)
             {
-                if (MapInstance.BattleEntities.FirstOrDefault(s => s.MapEntityId == FalconFocusedEntityId) is
-                    BattleEntity FalconFocusedEntity)
+                if (MapInstance.BattleEntities.FirstOrDefault(s => s.MapEntityId == FalconFocusedEntityId) is BattleEntity FalconFocusedEntity)
                 {
-                    MapInstance.Broadcast(
-                            $"eff_ob {(byte)FalconFocusedEntity.UserType} {FalconFocusedEntityId} 0 4269");
+                    MapInstance.Broadcast($"eff_ob  {(byte)FalconFocusedEntity.UserType} {FalconFocusedEntityId} 0 4269");
                 }
-
                 FalconFocusedEntityId = 0;
             }
         }
 
         public void ClearSacrificeBuff()
         {
-            if (Buffs.FirstOrDefault(s => s.Card.BCards.Any(b =>
-                    b.Type.Equals((byte)BCardType.DamageConvertingSkill) &&
-                    b.SubType.Equals((byte)BCardSubTypes.DamageConvertingSkill.TransferInflictedDamage)))
-                ?.Sender is BattleEntity SacrificeSender)
+            if (Buffs.FirstOrDefault(s => s.Card.BCards.Any(b => b.Type.Equals((byte)CardType.DamageConvertingSkill) && b.SubType.Equals((byte)AdditionalTypes.DamageConvertingSkill.TransferInflictedDamage / 10)))?.Sender is BattleEntity SacrificeSender)
             {
                 SacrificeSender.RemoveBuff(546);
             }
-
             RemoveBuff(531);
         }
 
@@ -2413,7 +2067,7 @@ namespace OpenNos.GameObject.Battle
                 amount = (short)(amount * ((100 - CellonOptions.Where(s => s.Type == CellonOptionType.MPUsage).Sum(s => s.Value)) / 100D));
             }
 
-            if (GetBuff(BCardType.HealingBurningAndCasting, (byte)BCardSubTypes.HealingBurningAndCasting.HPDecreasedByConsumingMP)[0] is int HPDecreasedByConsumingMP)
+            if (GetBuff(CardType.HealingBurningAndCasting, (byte)AdditionalTypes.HealingBurningAndCasting.HPDecreasedByConsumingMP)[0] is int HPDecreasedByConsumingMP)
             {
                 if (HPDecreasedByConsumingMP < 0)
                 {
@@ -2453,16 +2107,14 @@ namespace OpenNos.GameObject.Battle
                 ClearSacrificeBuff();
             }
 
-            var BuffsCopy = new List<Buff>();
+            List<Buff> BuffsCopy = new List<Buff>();
 
             lock (Buffs)
             {
                 BuffsCopy = Buffs.GetAllItems();
             }
 
-            var buff = BuffsCopy.Where(s =>
-                (type == BuffType.All || s.Card.BuffType == type) && !s.IsStaticBuff && s.Card.Level < level &&
-                s.Card.CardId != 62).ToList();
+            List<Buff> buff = BuffsCopy.Where(s => (type == BuffType.All || s.Card.BuffType == type) && !s.StaticBuff && s.Card.Level < level && s.Card.CardId != 62).ToList();
 
             buff.ForEach(s =>
             {
@@ -2486,9 +2138,9 @@ namespace OpenNos.GameObject.Battle
 
             if (type == BuffType.All)
             {
-                var StaticBuffsBCardDisposables = new ThreadSafeSortedList<int, IDisposable>();
+                ThreadSafeSortedList<int, IDisposable> StaticBuffsBCardDisposables = new ThreadSafeSortedList<int, IDisposable>();
 
-                Buffs.Where(s => s.IsStaticBuff)
+                Buffs.Where(s => s.StaticBuff)
                     .SelectMany(s => s.Card.BCards)
                     .Where(s => BCardDisposables.ContainsKey(s.BCardId)).ToList()
                     .ForEach(s => StaticBuffsBCardDisposables[s.BCardId] = BCardDisposables[s.BCardId]);
@@ -2523,7 +2175,7 @@ namespace OpenNos.GameObject.Battle
             return $"tp {(short)UserType} {MapEntityId} {PositionX} {PositionY} 0";
         }
 
-        public int[] GetBuff(BCardType type, byte subtype, int secondData = -1, int addValue = 0)
+        public int[] GetBuff(CardType type, byte subtype, int secondData = -1, int addValue = 0)
         {
             var value1 = 0;
             var value2 = 0;
@@ -2695,32 +2347,23 @@ namespace OpenNos.GameObject.Battle
 
         public int GetDamage(int damage, BattleEntity damager, bool dontKill = false, bool fromDebuff = false)
         {
-            if (Character?.HasGodMode == true || Mate?.Owner.HasGodMode == true || HasBuff(BCardType.HideBarrelSkill,
-                    (byte)BCardSubTypes.HideBarrelSkill.NoHPConsumption))
+            if (Character?.HasGodMode == true || Mate?.Owner.HasGodMode == true || HasBuff(CardType.HideBarrelSkill, (byte)AdditionalTypes.HideBarrelSkill.NoHPConsumption))
             {
                 return 0;
             }
 
-            if (fromDebuff) 
-                // If it comes from attack percent defense, dismin damage percent with chance, and static damages are already applied
+            if (fromDebuff) // If it comes from attack percent defense, dismin damage percent with chance, and static damages are already applied
             {
-                var percentDefense = GetBuff(BCardType.RecoveryAndDamagePercent,
-                    (byte)BCardSubTypes.RecoveryAndDamagePercent.DecreaseSelfHP);
+                int[] percentDefense = GetBuff(BCardType.CardType.RecoveryAndDamagePercent, (byte)AdditionalTypes.RecoveryAndDamagePercent.DecreaseSelfHP);
                 if (percentDefense[0] != 0)
                 {
-                    var percentDefenseDamage = HpMax / 100 * Math.Abs(percentDefense[0]);
-                    if (percentDefenseDamage < damage)
-                    {
-                        damage = percentDefenseDamage;
-                    }
+                    int percentDefenseDamage = HpMax / 100 * Math.Abs(percentDefense[0]);
+                    if (percentDefenseDamage < damage) damage = percentDefenseDamage;
                 }
 
                 if (MapMonster?.MonsterVNum == 533)
                 {
-                    if (63 < damage)
-                    {
-                        damage = 63;
-                    }
+                    if (63 < damage) damage = 63;
                 }
             }
 
@@ -2760,8 +2403,7 @@ namespace OpenNos.GameObject.Battle
 
             if (MapMonster != null)
             {
-                if (damager.Mate != null && damager.MapInstance == damager.Mate.Owner.Miniland &&
-                    damager.Mate.MateType == MateType.Pet)
+                if (damager.Mate != null && damager.MapInstance == damager.Mate.Owner.Miniland && damager.Mate.MateType == MateType.Pet)
                 {
                     if (IsMateTrainer(MapMonster.MonsterVNum))
                     {
@@ -2814,25 +2456,22 @@ namespace OpenNos.GameObject.Battle
 
                 ClearEnemyFalcon();
             }
-
             return damage;
         }
 
-        public int GetDistance(BattleEntity other) => (int)Math.Sqrt(Math.Pow(other.PositionX - PositionX, 2) + Math.Pow(other.PositionY - PositionY, 2));
-
+        public int GetDistance(BattleEntity other)
+        {
+            return (int)Math.Sqrt(Math.Pow(other.PositionX - PositionX, 2) + Math.Pow(other.PositionY - PositionY, 2));
+        }
         public List<MapMonster> GetOwnedMonsters()
         {
-            var ownedMonsters = MapInstance?.Monsters.Where(m =>
-                m.Owner?.MapEntityId == MapEntityId || Character != null &&
-                Character.Mates.Any(mate => m.Owner?.MapEntityId == mate.MateTransportId)).ToList();
+            List<MapMonster> ownedMonsters = MapInstance?.Monsters.Where(m => m.Owner?.MapEntityId == MapEntityId || Character != null && Character.Mates.Any(mate => m.Owner?.MapEntityId == mate.MateTransportId)).ToList();
             return ownedMonsters;
         }
 
         public List<MapNpc> GetOwnedNpcs()
         {
-            var ownedNpcs = MapInstance?.Npcs.Where(m =>
-                m.Owner?.MapEntityId == MapEntityId || Character != null &&
-                Character.Mates.Any(mate => m.Owner?.MapEntityId == mate.MateTransportId)).ToList();
+            List<MapNpc> ownedNpcs = MapInstance?.Npcs.Where(m => m.Owner?.MapEntityId == MapEntityId || Character != null && Character.Mates.Any(mate => m.Owner?.MapEntityId == mate.MateTransportId)).ToList();
             return ownedNpcs;
         }
 
@@ -2845,26 +2484,28 @@ namespace OpenNos.GameObject.Battle
                 return null;
             }
 
-            var walkableCellsInRange = new List<MapCell>();
+            List<MapCell> walkableCellsInRange = new List<MapCell>();
 
             while (numberOfCells > 0)
             {
-                for (var dX = -1; dX <= 1; dX++)
-                    for (var dY = -1; dY <= 1; dY++)
+                for (int dX = -1; dX <= 1; dX++)
+                {
+                    for (int dY = -1; dY <= 1; dY++)
                     {
                         if (dX == 0 && dY == 0)
                         {
                             continue;
                         }
 
-                        var x = (short)(PositionX + dX * numberOfCells);
-                        var y = (short)(PositionY + dY * numberOfCells);
+                        short x = (short)(PositionX + (dX * numberOfCells));
+                        short y = (short)(PositionY + (dY * numberOfCells));
 
                         if (!MapInstance.Map.IsBlockedZone(x, y) && MapInstance.Map.CanWalkAround(x, y))
                         {
                             walkableCellsInRange.Add(new MapCell { X = x, Y = y });
                         }
                     }
+                }
 
                 numberOfCells--;
             }
@@ -2874,38 +2515,27 @@ namespace OpenNos.GameObject.Battle
                 .FirstOrDefault();
         }
 
-        public bool HasBuff(short cardId)
-        {
-            return Buffs.GetAllItems().Any(b => b?.Card?.CardId == cardId);
-        }
+        public bool HasBuff(short cardId) => Buffs.GetAllItems().Any(b => b?.Card?.CardId == cardId);
 
-        public bool HasBuff(BCardType type, byte subtype)
+
+        public bool HasBuff(CardType type, byte subtype, bool castTypeNotZero = false)
         {
             try
             {
-                return Buffs.Any(buff => buff.Card.BCards.Any(b =>
-                    b.Type == (byte)type && b.SubType == subtype &&
-                    (b.CastType != 1 || b.CastType == 1 &&
-                     buff.Start.AddMilliseconds(buff.Card.Delay * 100) < DateTime.Now)));
+                List<BCard> bcards = Buffs.GetAllItems().SelectMany(s => s.Card.BCards).ToList();
+
+                bcards.AddRange(BCards.ToList());
+
+                return subtype % 10 == 1
+                    ? bcards.Any(s =>
+                        (!castTypeNotZero || s.CastType != 0) && s.Type.Equals((byte)type) && s.SubType.Equals((byte)(subtype / 10)) && s.FirstData >= 0)
+                    : bcards.Any(s =>
+                        (!castTypeNotZero || s.CastType != 0) && s.Type.Equals((byte)type) && s.SubType.Equals((byte)(subtype / 10))
+                        && (s.FirstData <= 0 || s.ThirdData < 0));
             }
             catch (Exception ex)
             {
                 Logger.LogEventError("HASBUFF", "Error on HasBuff(CardType type, byte subtype, bool castTypeNotZero = false) method", ex);
-                return false;
-            }
-        }
-
-        public bool HasBCard(BCardType type, byte subtype)
-        {
-            try
-            {
-                return BCards.Any(b =>
-                    b.Type == (byte)type && b.SubType == subtype);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogEventError("HASBUFF",
-                    "Error on HasBuff(CardType type, byte subtype, bool castTypeNotZero = false) method", ex);
                 return false;
             }
         }
@@ -2915,21 +2545,15 @@ namespace OpenNos.GameObject.Battle
             double MaxHp = 0;
             if (Character != null)
             {
-                var multiplicator = 1.0;
-                var hp = 0;
+                double multiplicator = 1.0;
+                int hp = 0;
                 if (Character.UseSp)
                 {
-                    var specialist =
-                        Character.Inventory?.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear);
+                    ItemInstance specialist = Character.Inventory?.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear);
                     if (specialist != null)
                     {
-                        var point = CharacterHelper.SlPoint(specialist.SlHP, 3) + Character.slhpbonus;
-                        if (point > 100)
-                        {
-                            point = 100;
-                        }
-
-                        ;
+                        int point = CharacterHelper.SlPoint(specialist.SlHP, 3) + Character.slhpbonus;
+                        if (point > 100) { point = 100; };
 
                         if (point <= 50)
                         {
@@ -2937,24 +2561,16 @@ namespace OpenNos.GameObject.Battle
                         }
                         else
                         {
-                            multiplicator += 0.5 + (point - 50.00) / 50.00;
+                            multiplicator += 0.5 + ((point - 50.00) / 50.00);
                         }
-
-                        hp = specialist.HP + specialist.SpHP * 100;
+                        hp = specialist.HP + (specialist.SpHP * 100);
                     }
                 }
-
                 hp += CellonOptions.Where(s => s.Type == CellonOptionType.HPMax).Sum(s => s.Value);
-                multiplicator += GetBuff(BCardType.BearSpirit, (byte)BCardSubTypes.BearSpirit.IncreaseMaximumHP)[0] /
-                                 100D;
-                multiplicator += GetBuff(BCardType.MaxHPMP, (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumHP)[0] / 100D;
-                multiplicator +=
-                    GetBuff(BCardType.IncreaseHpMp, (byte)BCardSubTypes.IncreaseHpMp.IncreaseHpInPercent)[0] / 100D;
+                multiplicator += GetBuff(CardType.BearSpirit, (byte)AdditionalTypes.BearSpirit.IncreaseMaximumHP)[0] / 100D;
+                multiplicator += GetBuff(CardType.MaxHPMP, (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumHP)[0] / 100D;
 
-                MaxHp = (int)((CharacterHelper.HPData[(byte)Character.Class, Level] + hp +
-                                GetBuff(BCardType.MaxHPMP, (byte)BCardSubTypes.MaxHPMP.MaximumHPIncreased)[0] +
-                                GetBuff(BCardType.MaxHPMP, (byte)BCardSubTypes.MaxHPMP.MaximumHPMPIncreased)[0]) *
-                               multiplicator);
+                MaxHp = (int)((CharacterHelper.HPData[(byte)Character.Class, Level] + hp + GetBuff(CardType.MaxHPMP, (byte)AdditionalTypes.MaxHPMP.MaximumHPIncreased)[0] + GetBuff(CardType.MaxHPMP, (byte)AdditionalTypes.MaxHPMP.MaximumHPMPIncreased)[0]) * multiplicator);
             }
             else
             {
@@ -2965,11 +2581,10 @@ namespace OpenNos.GameObject.Battle
             {
                 Hp = (int)MaxHp;
             }
-
             return MaxHp;
         }
 
-        public int HpPercent() => (int)(Hp / (double)HpMax * 100D);
+        public int HpPercent() => (int)((double)Hp / (double)HpMax * 100D);
 
         public bool IsCampfire(int vnum)
         {
@@ -2978,11 +2593,13 @@ namespace OpenNos.GameObject.Battle
 
         public bool IsInRange(int xCoordinate, int yCoordinate, int range = 50) => Math.Abs(PositionX - xCoordinate) <= range && Math.Abs(PositionY - yCoordinate) <= range;
 
-        public bool IsMateTrainer(int vnum) => vnum == 160 || vnum == 900 || vnum == 636 || vnum == 971;
-
+        public bool IsMateTrainer(int vnum)
+        {
+            return vnum == 160 || vnum == 900 || vnum == 636 || vnum == 971;
+        }
         public bool IsSignpost(int vnum)
         {
-            return new[] { 920, 921, 1385, 1428, 1499, 1519 }.Contains(vnum);
+            return new int[] { 920, 921, 1385, 1428, 1499, 1519 }.Contains(vnum);
         }
 
         public int MaxTargetedByMonstersCount(bool teamCheck)
@@ -2994,15 +2611,15 @@ namespace OpenNos.GameObject.Battle
                     switch (EntityType)
                     {
                         case EntityType.Player:
-                            return (1 + Character.Mates.Count(m => m.IsTeamMember || m.IsTemporalMate)) * 15;
+                            return (1 + Character.Mates.Count(m => m.IsTeamMember || m.IsTemporalMate)) * 20;
 
                         case EntityType.Mate:
-                            return (1 + Mate.Owner.Mates.Count(m => m.IsTeamMember || m.IsTemporalMate)) * 15;
+                            return (1 + Mate.Owner.Mates.Count(m => m.IsTeamMember || m.IsTemporalMate)) * 20;
                     }
                 }
                 else
                 {
-                    return 15;
+                    return 20;
                 }
             }
             return int.MaxValue;
@@ -3013,21 +2630,15 @@ namespace OpenNos.GameObject.Battle
             double MaxMp = 0;
             if (Character != null)
             {
-                var mp = 0;
-                var multiplicator = 1.0;
+                int mp = 0;
+                double multiplicator = 1.0;
                 if (Character.UseSp)
                 {
-                    var specialist =
-                        Character.Inventory?.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear);
+                    ItemInstance specialist = Character.Inventory?.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear);
                     if (specialist != null)
                     {
-                        var point = CharacterHelper.SlPoint(specialist.SlHP, 3) + Character.slhpbonus;
-                        if (point > 100)
-                        {
-                            point = 100;
-                        }
-
-                        ;
+                        int point = CharacterHelper.SlPoint(specialist.SlHP, 3) + Character.slhpbonus;
+                        if (point > 100) { point = 100; };
 
                         if (point <= 50)
                         {
@@ -3035,25 +2646,17 @@ namespace OpenNos.GameObject.Battle
                         }
                         else
                         {
-                            multiplicator += 0.5 + (point - 50.00) / 50.00;
+                            multiplicator += 0.5 + ((point - 50.00) / 50.00);
                         }
-
-                        mp = specialist.MP + specialist.SpHP * 100;
+                        mp = specialist.MP + (specialist.SpHP * 100);
                     }
                 }
-
                 mp += CellonOptions.Where(s => s.Type == CellonOptionType.MPMax).Sum(s => s.Value);
 
-                multiplicator += GetBuff(BCardType.BearSpirit, (byte)BCardSubTypes.BearSpirit.IncreaseMaximumMP)[0] /
-                                 100D;
-                multiplicator += GetBuff(BCardType.MaxHPMP, (byte)BCardSubTypes.MaxHPMP.IncreasesMaximumMP)[0] / 100D;
-                multiplicator +=
-                    GetBuff(BCardType.IncreaseHpMp, (byte)BCardSubTypes.IncreaseHpMp.IncreaseMpInPercent)[0] / 100D;
+                multiplicator += GetBuff(CardType.BearSpirit, (byte)AdditionalTypes.BearSpirit.IncreaseMaximumMP)[0] / 100D;
+                multiplicator += GetBuff(CardType.MaxHPMP, (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumMP)[0] / 100D;
 
-                MaxMp = (int)((CharacterHelper.MPData[(byte)Character.Class, Level] + mp +
-                                GetBuff(BCardType.MaxHPMP, (byte)BCardSubTypes.MaxHPMP.MaximumMPIncreased)[0] +
-                                GetBuff(BCardType.MaxHPMP, (byte)BCardSubTypes.MaxHPMP.MaximumHPMPIncreased)[0]) *
-                               multiplicator);
+                MaxMp = (int)((CharacterHelper.MPData[(byte)Character.Class, Level] + mp + GetBuff(CardType.MaxHPMP, (byte)AdditionalTypes.MaxHPMP.MaximumMPIncreased)[0] + GetBuff(CardType.MaxHPMP, (byte)AdditionalTypes.MaxHPMP.MaximumHPMPIncreased)[0]) * multiplicator);
             }
             else
             {
@@ -3064,11 +2667,10 @@ namespace OpenNos.GameObject.Battle
             {
                 Mp = (int)MaxMp;
             }
-
             return MaxMp;
         }
 
-        public int MpPercent() => (int)(Mp / (double)MpMax * 100D);
+        public int MpPercent() => (int)((double)Mp / (double)MpMax * 100D);
 
         public void RemoveBuff(short id, bool removePermaBuff = false)
         {
@@ -3077,7 +2679,7 @@ namespace OpenNos.GameObject.Battle
                 return;
             }
 
-            var indicator = Buffs[id];
+            Buff indicator = Buffs[id];
 
             if (indicator?.Card != null)
             {
@@ -3092,13 +2694,10 @@ namespace OpenNos.GameObject.Battle
                     Buffs.Remove(id);
 
                     if (indicator.Card.BCards.Any(s
-                            => s.Type == (byte)BCardType.SpecialAttack &&
-                               s.SubType == (byte)BCardSubTypes.SpecialAttack.NoAttack
-                            || s.Type == (byte)BCardType.Move &&
-                               s.SubType == (byte)BCardSubTypes.Move.MovementImpossible
-                            || s.Type == (byte)BCardType.FrozenDebuff &&
-                               s.SubType == (byte)BCardSubTypes.FrozenDebuff.EternalIce
-                    ))
+                        => s.Type == (byte)CardType.SpecialAttack && s.SubType == (byte)AdditionalTypes.SpecialAttack.NoAttack / 10
+                        || s.Type == (byte)CardType.Move && s.SubType == (byte)AdditionalTypes.Move.MovementImpossible / 10
+                        || s.Type == (byte)CardType.FrozenDebuff && s.SubType == (byte)AdditionalTypes.FrozenDebuff.EternalIce / 10
+                        ))
                     {
                         if (Character != null)
                         {
@@ -3112,11 +2711,8 @@ namespace OpenNos.GameObject.Battle
                         }
                     }
 
-                    if (indicator.Card.BCards.Any(s =>
-                                s.Type == (byte)BCardType.SpecialEffects &&
-                                s.SubType == (byte)BCardSubTypes.SpecialEffects.ShadowAppears)
-                     && GetBuff(BCardType.SpecialEffects,
-                                (byte)BCardSubTypes.SpecialEffects.ShadowAppears) is int[] BuffData)
+                    if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.SpecialEffects && s.SubType == (byte)AdditionalTypes.SpecialEffects.ShadowAppears / 10)
+                        && GetBuff(CardType.SpecialEffects, (byte)AdditionalTypes.SpecialEffects.ShadowAppears) is int[] BuffData)
                     {
                         MapInstance?.Broadcast($"guri 0 {(short)UserType} {MapEntityId} {BuffData[0]} {BuffData[1]}");
                     }
@@ -3125,48 +2721,33 @@ namespace OpenNos.GameObject.Battle
 
                     if (Character != null)
                     {
-                        if (indicator.IsStaticBuff)
+                        if (indicator.StaticBuff)
                         {
                             Character.Session?.SendPacket($"vb {indicator.Card.CardId} 0 {indicator.Card.Duration}");
-                            Character.Session?.SendPacket(Character.GenerateSay(
-                                    string.Format(Language.Instance.GetMessageFromKey("EFFECT_TERMINATED"),
-                                            indicator.Card.Name), 11));
+                            Character.Session?.SendPacket(Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("EFFECT_TERMINATED"), indicator.Card.Name), 11));
                         }
                         else
                         {
-                            Character.Session?.SendPacket(
-                                    $"bf 1 {Character.CharacterId} 0.{indicator.Card.CardId}.0 {Level}");
-                            Character.Session?.SendPacket(Character.GenerateSay(
-                                    string.Format(Language.Instance.GetMessageFromKey("EFFECT_TERMINATED"),
-                                            indicator.Card.Name), 20));
+                            Character.Session?.SendPacket($"bf 1 {Character.CharacterId} 0.{indicator.Card.CardId}.0 {Level}");
+                            Character.Session?.SendPacket(Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("EFFECT_TERMINATED"), indicator.Card.Name), 20));
                         }
 
                         if (Buffs[indicator.Card.CardId] != null)
                         {
                             Buffs.Remove(id);
                         }
-
-                        if (indicator.Card.BCards.Any(s =>
-                                s.Type == (byte)BCardType.Move &&
-                                !s.SubType.Equals((byte)BCardSubTypes.Move.MovementImpossible)))
+                        if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.Move && !s.SubType.Equals((byte)AdditionalTypes.Move.MovementImpossible / 10)))
                         {
                             Character.LastSpeedChange = DateTime.Now;
                             Character.LoadSpeed();
                             Character.Session?.SendPacket(Character.GenerateCond());
                         }
-
-                        if (indicator.Card.BCards.Any(s =>
-                                    s.Type == (byte)BCardType.SpecialActions &&
-                                    s.SubType.Equals((byte)BCardSubTypes.SpecialActions.Hide))
-                         || indicator.Card.BCards.Any(s =>
-                                    s.Type == (byte)BCardType.FalconSkill &&
-                                    s.SubType.Equals((byte)BCardSubTypes.FalconSkill.Hide))
-                         || indicator.Card.BCards.Any(s =>
-                                    s.Type == (byte)BCardType.FalconSkill &&
-                                    s.SubType.Equals((byte)BCardSubTypes.FalconSkill.Ambush)))
+                        if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.SpecialActions && s.SubType.Equals((byte)AdditionalTypes.SpecialActions.Hide / 10))
+                         || indicator.Card.BCards.Any(s => s.Type == (byte)CardType.FalconSkill && s.SubType.Equals((byte)AdditionalTypes.FalconSkill.Hide / 10))
+                         || indicator.Card.BCards.Any(s => s.Type == (byte)CardType.FalconSkill && s.SubType.Equals((byte)AdditionalTypes.FalconSkill.Ambush / 10)))
                         {
                             Character.Invisible = false;
-                            foreach (var teamMate in Character.Mates?.Where(m => m != null && m.IsTeamMember))
+                            foreach (Mate teamMate in Character.Mates?.Where(m => m != null && m.IsTeamMember))
                             {
                                 teamMate.PositionX = Character.PositionX;
                                 teamMate.PositionY = Character.PositionY;
@@ -3174,52 +2755,39 @@ namespace OpenNos.GameObject.Battle
 
                                 if (Character.MapInstance?.Sessions != null)
                                 {
-                                    foreach (var s in Character.MapInstance.Sessions.Where(s => s?.Character != null))
+                                    Parallel.ForEach(Character.MapInstance.Sessions.Where(s => s?.Character != null), s =>
                                     {
-                                        if (ServerManager.Instance.ChannelId != 51 ||
-                                            Character.Faction == s.Character.Faction)
+                                        if (ServerManager.Instance.ChannelId != 51 || Character.Faction == s.Character.Faction)
                                         {
-                                            s.SendPacket(teamMate.GenerateIn(false,
-                                                    ServerManager.Instance.ChannelId == 51));
+                                            s.SendPacket(teamMate.GenerateIn(false, ServerManager.Instance.ChannelId == 51));
                                         }
                                         else
                                         {
-                                            s.SendPacket(teamMate.GenerateIn(true,
-                                                    ServerManager.Instance.ChannelId == 51, s.Account.Authority));
+                                            s.SendPacket(teamMate.GenerateIn(true, ServerManager.Instance.ChannelId == 51, s.Account.Authority));
                                         }
-                                    }
+                                    });
                                 }
 
                                 Character.Session?.SendPacket(Character.GeneratePinit());
                                 Character.Mates?.ForEach(s => Character.Session?.SendPacket(s.GenerateScPacket()));
                                 Character.Session?.SendPackets(Character.GeneratePst());
                             }
-
                             MapInstance?.Broadcast(Character.GenerateInvisible());
                         }
-
-                        if (indicator.Card.BCards.Any(s =>
-                                s.Type == (byte)BCardType.FearSkill &&
-                                s.SubType.Equals((byte)BCardSubTypes.FearSkill.MoveAgainstWill)))
+                        if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.FearSkill && s.SubType.Equals((byte)AdditionalTypes.FearSkill.MoveAgainstWill / 10)))
                         {
                             Character.Session?.SendPacket($"rv_m {MapEntityId} 1 0");
                         }
-
-                        if (indicator.Card.BCards.Any(s =>
-                                s.Type == (byte)BCardType.FearSkill &&
-                                s.SubType.Equals((byte)BCardSubTypes.FearSkill.AttackRangedIncreased)))
+                        if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.FearSkill && s.SubType.Equals((byte)AdditionalTypes.FearSkill.AttackRangedIncreased / 10)))
                         {
-                            if (!Buffs.Any(s => s.Card.BCards.Any(b =>
-                                    b.Type == (byte)BCardType.FearSkill &&
-                                    b.SubType.Equals((byte)BCardSubTypes.FearSkill.AttackRangedIncreased))))
+                            if (!Buffs.Any(s => s.Card.BCards.Any(b => b.Type == (byte)CardType.FearSkill && b.SubType.Equals((byte)AdditionalTypes.FearSkill.AttackRangedIncreased / 10))))
                             {
-                                Character.Session?.SendPacket("bf_d 0 1");
+                                Character.Session?.SendPacket($"bf_d 0 1");
                             }
                         }
 
-                        if (indicator.Card.BCards.Any(s => s.Type == (byte)BCardType.DarkCloneSummon
-                                                        && s.SubType == (byte)BCardSubTypes.DarkCloneSummon
-                                                                                              .ConvertDamageToHPChance))
+                        if (indicator.Card.BCards.Any(s => s.Type == (byte)CardType.DarkCloneSummon
+                            && s.SubType == (byte)AdditionalTypes.DarkCloneSummon.ConvertDamageToHPChance / 10))
                         {
                             GetDamage(Character.ConvertedDamageToHP, this, true);
                             Character.ConvertedDamageToHP = 0;
@@ -3230,18 +2798,13 @@ namespace OpenNos.GameObject.Battle
 
                         switch (indicator.Card.CardId)
                         {
-                            case 676:
-                                Character.DragonModeObservable?.Dispose();
-                                break;
-
                             case 131:
                                 Character.Session?.SendPacket(Character.GeneratePairy());
                                 break;
 
                             case 340:
-                                if (MapInstance?.Map?.MapTypes != null &&
-                                    MapInstance.Map.MapTypes.Any(s => s.MapTypeId == (short)MapTypeEnum.Act52))
-
+                                if (MapInstance?.Map?.MapTypes != null
+                                    && MapInstance.Map.MapTypes.Any(s => s.MapTypeId == (short)MapTypeEnum.Act52))
                                 {
                                     Character.AddStaticBuff(new StaticBuffDTO
                                     {
@@ -3249,11 +2812,8 @@ namespace OpenNos.GameObject.Battle
                                         CharacterId = Character.CharacterId,
                                         RemainingTime = -1
                                     });
-                                    Character.Session?.SendPacket(
-                                            UserInterfaceHelper.GenerateInfo(
-                                                    Language.Instance.GetMessageFromKey("ENCASED_BURNING_SWORD")));
+                                    Character.Session?.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("ENCASED_BURNING_SWORD")));
                                 }
-
                                 break;
 
                             case 617:
@@ -3265,43 +2825,38 @@ namespace OpenNos.GameObject.Battle
 
                             case 620:
                                 {
-                                    if (Character.Session != null && Character.SavedLocation != null &&
-                                        indicator.Sender?.Character?.CharacterId == Character.CharacterId)
+                                    if (Character.Session != null && Character.SavedLocation != null && indicator.Sender?.Character?.CharacterId == Character.CharacterId)
                                     {
                                         Character.SavedLocation = null;
 
-                                        var characterSkill = indicator.SkillVNum.HasValue
-                                                ? Character.GetSkill(indicator.SkillVNum.Value)
-                                                : null;
+                                        CharacterSkill characterSkill = indicator.SkillVNum.HasValue ? Character.GetSkill(indicator.SkillVNum.Value) : null;
 
-                                        var skill = characterSkill?.Skill;
+                                        Skill skill = characterSkill?.Skill;
 
                                         if (skill != null)
                                         {
                                             short cooldown = 600; // 60 seconds * 10
 
-                                            Character.Session.SendPacket(
-                                                    StaticPacketHelper.SkillResetWithCoolDown(skill.CastId, cooldown));
+                                            Character.Session.SendPacket(StaticPacketHelper.SkillResetWithCoolDown(skill.CastId, cooldown));
 
                                             characterSkill.LastUse = DateTime.Now.AddMilliseconds(cooldown * 100);
 
-                                            Observable.Timer(characterSkill.LastUse).Subscribe(s =>
-                                                    Character.Session.SendPacket(StaticPacketHelper.SkillReset(skill.CastId)));
+                                            Observable.Timer(characterSkill.LastUse).Subscribe(s => Character.Session.SendPacket(StaticPacketHelper.SkillReset(skill.CastId)));
                                         }
                                     }
                                 }
                                 break;
-
                             case 697:
                             case 690:
                                 Character.Session.SendPackets(Character.GenerateQuicklist());
                                 break;
-
+                            case 676:
+                                Character.Session.Character.DragonModeObservable?.Dispose();
+                                break;
                             case 727:
                             case 728:
                             case 729:
-                                if (Buffs.Any(s =>
-                                        s.Card.CardId == 727 || s.Card.CardId == 728 || s.Card.CardId == 729))
+                                if (Buffs.Any(s => s.Card.CardId == 727 || s.Card.CardId == 728 || s.Card.CardId == 729))
                                 {
                                     break;
                                 }
@@ -3317,16 +2872,10 @@ namespace OpenNos.GameObject.Battle
                                 Character.Session.SendPackets(Character.GenerateQuicklist());
                                 break;
 
-                                // The skill doesn't work like that, so I commented that code piece
-                                //case 724:
-                                //    Character.RemoveUltimatePoints(1000);
-                                //    break;
-                        }
+                            case 724:
+                                Character.RemoveUltimatePoints(1000);
+                                break;
 
-                        if (indicator.Card.CardId == 559 && Character.TriggerAmbush)
-                        {
-                            AddBuff(new Buff(560, Character.Level), this);
-                            Character.TriggerAmbush = false;
                         }
                     }
 
@@ -3342,10 +2891,10 @@ namespace OpenNos.GameObject.Battle
             }
         }
 
+
         public void RemoveOwnedMonsters(bool OnlyFirst = false, int MonsterVNum = -1)
         {
-            var ownedMonsters = GetOwnedMonsters()?.Where(m =>
-                MonsterVNum == -1 && !IsMateTrainer(m.MonsterVNum) || m.MonsterVNum == MonsterVNum);
+            IEnumerable<MapMonster> ownedMonsters = GetOwnedMonsters()?.Where(m => (MonsterVNum == -1 && !IsMateTrainer(m.MonsterVNum)) || m.MonsterVNum == MonsterVNum);
             if (ownedMonsters != null)
             {
                 if (OnlyFirst)
@@ -3358,8 +2907,7 @@ namespace OpenNos.GameObject.Battle
                 }
                 else
                 {
-                    ownedMonsters.ToList().ForEach(m =>
-                    {
+                    ownedMonsters.ToList().ForEach(m => {
                         m.MapInstance.Broadcast(StaticPacketHelper.Out(UserType.Monster, m.MapMonsterId));
                         m.MapInstance.RemoveMonster(m);
                     });
@@ -3369,7 +2917,7 @@ namespace OpenNos.GameObject.Battle
 
         public void RemoveOwnedNpcs(bool OnlyFirst = false, int NpcVNum = -1)
         {
-            var ownedNpcs = GetOwnedNpcs()?.Where(m => NpcVNum == -1 || m.NpcVNum == NpcVNum);
+            IEnumerable<MapNpc> ownedNpcs = GetOwnedNpcs()?.Where(m => NpcVNum == -1 || m.NpcVNum == NpcVNum);
             if (ownedNpcs != null)
             {
                 if (OnlyFirst)
@@ -3382,8 +2930,7 @@ namespace OpenNos.GameObject.Battle
                 }
                 else
                 {
-                    ownedNpcs.ToList().ForEach(m =>
-                    {
+                    ownedNpcs.ToList().ForEach(m => {
                         m.MapInstance.Broadcast(StaticPacketHelper.Out(UserType.Npc, m.MapNpcId));
                         m.MapInstance.RemoveNpc(m);
                     });
@@ -3395,49 +2942,50 @@ namespace OpenNos.GameObject.Battle
         {
             if (Character != null)
             {
-                foreach (var indicator in Buffs.GetAllItems())
+                foreach (Buff indicator in Buffs.GetAllItems())
                 {
-                    if (!indicator.IsStaticBuff)
+                    if (indicator.StaticBuff)
                     {
-                        Character.Session.SendPacket(
-                                $"bf 1 {MapEntityId} {(indicator.Card.CardId == 0 ? Character.ChargeValue > 7000 ? 7000 : Character.ChargeValue : 0)}.{indicator.Card.CardId}.{indicator.RemainingTime} {indicator.Level}");
+                        Character.Session.SendPacket($"vb {indicator.Card.CardId} 1 {indicator.RemainingTime * 10}");
+                    }
+                    else
+                    {
+                        Character.Session.SendPacket($"bf 1 {MapEntityId} {(indicator.Card.CardId == 0 ? Character.ChargeValue > 7000 ? 7000 : Character.ChargeValue : 0)}.{indicator.Card.CardId}.{indicator.RemainingTime} {indicator.Level}");
                     }
                 }
             }
-
-            //Character.Session.SendPacket($"vb {indicator.Card.CardId} 1 {indicator.RemainingTime * 10}");
         }
 
         public List<BattleEntity> TargettedByMonstersList(bool teamCheck)
         {
-            if (!teamCheck)
+            try
             {
-                return MapInstance?.Monsters
-                                  .Where(s => s?.Target?.MapEntityId == MapEntityId && s.Target.EntityType == EntityType)
-                                  .Select(s => s.BattleEntity).ToList();
-            }
-
-            var targettedByMonsters = new List<BattleEntity>();
-            if (Mate?.Owner != null)
-            {
-                targettedByMonsters = Mate.Owner.BattleEntity.TargettedByMonstersList(true);
-            }
-            else
-            {
-                targettedByMonsters = MapInstance?.Monsters
-                    .Where(s => s?.Target?.MapEntityId == MapEntityId && s?.Target?.EntityType == EntityType)
-                    .Select(s => s.BattleEntity).ToList();
-                if (Character != null)
+                if (!teamCheck)
                 {
-                    Character.Mates.Where(s => s.IsTeamMember).ToList().ForEach(m =>
-                            targettedByMonsters.AddRange(MapInstance?.Monsters
-                                                                    .Where(s => s?.Target?.MapEntityId == m.BattleEntity.MapEntityId &&
-                                                                                s.Target.EntityType == m.BattleEntity.EntityType).Select(s => s.BattleEntity)
-                                                                    .ToList()));
+                    return MapInstance?.Monsters?.Where(s => s?.Target?.MapEntityId == MapEntityId && s?.Target?.EntityType == EntityType).Select(s => s.BattleEntity).ToList() ?? new List<BattleEntity>();
+                }
+                else
+                {
+                    List<BattleEntity> targettedByMonsters = new List<BattleEntity>();
+                    if (Mate?.Owner != null)
+                    {
+                        targettedByMonsters = Mate.Owner.BattleEntity.TargettedByMonstersList(true);
+                    }
+                    else if (targettedByMonsters != null)
+                    {
+                        targettedByMonsters = MapInstance?.Monsters?.Where(s => s?.Target?.MapEntityId == MapEntityId && s.Target.EntityType == EntityType).Select(s => s.BattleEntity).ToList();
+                        if (Character != null)
+                        {
+                            Character.Mates?.Where(s => s.IsTeamMember).ToList().ForEach(m => targettedByMonsters.AddRange(MapInstance?.Monsters?.Where(s => s?.Target?.MapEntityId == m.BattleEntity.MapEntityId && s.Target.EntityType == m.BattleEntity.EntityType).Select(s => s.BattleEntity).ToList()));
+                        }
+                    }
+                    return targettedByMonsters;
                 }
             }
-
-            return targettedByMonsters;
+            catch (Exception e)
+            {
+                return new List<BattleEntity>();
+            }
         }
 
         public void TeleportTo(MapCell mapCell, short distance = 0)
@@ -3447,8 +2995,7 @@ namespace OpenNos.GameObject.Battle
                 return;
             }
 
-            var mapCellTo = MapInstance.Map.GetRandomPositionByDistance(mapCell.X, mapCell.Y, distance, true) ??
-                            mapCell;
+            MapCell mapCellTo = MapInstance.Map.GetRandomPositionByDistance(mapCell.X, mapCell.Y, distance, true) ?? mapCell;
 
             PositionX = mapCellTo.X;
             PositionY = mapCellTo.Y;
@@ -3466,8 +3013,8 @@ namespace OpenNos.GameObject.Battle
 
             foreach (var bcard in defender.Character.EquipmentBCards
                                           .Where(s => s != null &&
-                                                      s.Type == (byte)BCardType.EffectSummon &&
-                                                      s.SubType == (byte)BCardSubTypes.EffectSummon.OnCellule))
+                                                      s.Type == (byte)BCardType.CardType.EffectSummon &&
+                                                      s.SubType == (byte)AdditionalTypes.EffectSummon.OnCellule))
             {
                 var a = new Buff((short)bcard.SecondData, defender.Level);
                 if (a.Card?.BuffType != BuffType.Good)

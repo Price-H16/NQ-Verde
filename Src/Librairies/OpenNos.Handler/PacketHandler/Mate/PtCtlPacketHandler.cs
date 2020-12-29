@@ -1,5 +1,4 @@
 ﻿using System;
-using ChickenAPI.Enums.Game.BCard;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.Domain;
@@ -42,7 +41,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
                 {
                     var mate = Session.Character.Mates.Find(s => s.MateTransportId == petId);
                     if (mate != null && mate.IsAlive &&
-                        !mate.HasBuff(BCardType.Move, (byte) BCardSubTypes.Move.MovementImpossible) &&
+                        !mate.HasBuff(BCardType.CardType.Move, (byte) AdditionalTypes.Move.MovementImpossible) &&
                         mate.Owner.Session.HasCurrentMapInstance && !mate.Owner.IsChangingMapInstance
                         && Session.CurrentMapInstance?.Map?.IsBlockedZone(positionX, positionY) == false)
                     {

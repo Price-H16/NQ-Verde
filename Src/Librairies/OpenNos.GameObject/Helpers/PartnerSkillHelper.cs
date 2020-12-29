@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using ChickenAPI.Enums.Game.BCard;
 using OpenNos.Domain;
 
 namespace OpenNos.GameObject.Helpers
@@ -25,18 +24,18 @@ namespace OpenNos.GameObject.Helpers
                     IsPartnerSkillBCard = true
                 };
 
-                switch ((BCardType)newBCard.Type)
+                switch ((BCardType.CardType)newBCard.Type)
                 {
-                    case BCardType.DrainAndSteal:
+                    case BCardType.CardType.DrainAndSteal:
                         {
-                            if (newBCard.SubType == (byte)BCardSubTypes.DrainAndSteal.LeechEnemyHP / 10)
+                            if (newBCard.SubType == (byte)AdditionalTypes.DrainAndSteal.LeechEnemyHP / 10)
                             {
                                 newBCard.SecondData = Convert.ToInt32(Math.Floor(multiplier * newBCard.SecondData));
                             }
                         }
                         break;
 
-                    case BCardType.Buff:
+                    case BCardType.CardType.Buff:
                         {
                             if (newBCard.SecondData < 2560 && newBCard.SecondData > 1999)
                             {

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using ChickenAPI.Enums.Game.BCard;
-using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -190,11 +188,11 @@ namespace OpenNos.GameObject
 
         public string GenerateSay(string message, int type) => $"say 2 {MapNpcId} 2 {message}";
 
-        public int[] GetBuff(BCardType type, byte subtype) => BattleEntity.GetBuff(type, subtype);
+        public int[] GetBuff(BCardType.CardType type, byte subtype) => BattleEntity.GetBuff(type, subtype);
 
         public string GetNpcDialog() => $"npc_req 2 {MapNpcId} {Dialog}";
 
-        public bool HasBuff(BCardType type, byte subtype) => BattleEntity.HasBuff(type, subtype);
+        public bool HasBuff(BCardType.CardType type, byte subtype) => BattleEntity.HasBuff(type, subtype);
 
         public void Initialize(MapInstance currentMapInstance)
         {
@@ -362,8 +360,8 @@ namespace OpenNos.GameObject
         public void SetDeathStatement()
         {
             if (Npc.BCards.Any(s =>
-                s.Type == (byte) BCardType.NoDefeatAndNoDamage &&
-                s.SubType == (byte) BCardSubTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath && s.FirstData == -1))
+                s.Type == (byte) BCardType.CardType.NoDefeatAndNoDamage &&
+                s.SubType == (byte) AdditionalTypes.NoDefeatAndNoDamage.DecreaseHPNoDeath && s.FirstData == -1))
             {
                 CurrentHp = MaxHp;
                 return;
@@ -483,7 +481,7 @@ namespace OpenNos.GameObject
 
             time = (DateTime.Now - LastMove).TotalMilliseconds;
             if (Target == -1 && IsMoving && Npc.Speed > 0 && time > _movetime &&
-                !HasBuff(BCardType.Move, (byte) BCardSubTypes.Move.MovementImpossible))
+                !HasBuff(BCardType.CardType.Move, (byte) AdditionalTypes.Move.MovementImpossible))
             {
                 _movetime = ServerManager.RandomNumber(500, 3000);
                 var maxindex = Path.Count > Npc.Speed / 2 && Npc.Speed > 1 ? Npc.Speed / 2 : Path.Count;
@@ -588,8 +586,8 @@ namespace OpenNos.GameObject
                 var damage = DamageHelper.Instance.CalculateDamage(new BattleEntity(this), new BattleEntity(monster),
                     npcMonsterSkill?.Skill, ref hitmode, ref onyxWings, ref zephyrWings);
                 if (monster.Monster.BCards.Find(s =>
-                    s.Type == (byte) BCardType.LightAndShadow &&
-                    s.SubType == (byte) BCardSubTypes.LightAndShadow.InflictDamageToMP) is BCard card)
+                    s.Type == (byte) BCardType.CardType.LightAndShadow &&
+                    s.SubType == (byte) AdditionalTypes.LightAndShadow.InflictDamageToMP) is BCard card)
                 {
                     var reduce = damage / 100 * card.FirstData;
                     if (monster.CurrentMp < reduce)
@@ -609,7 +607,7 @@ namespace OpenNos.GameObject
                     new MapCell {X = monster.MapX, Y = monster.MapY});
                 if (monster.CurrentHp > 0 &&
                     (npcMonsterSkill != null && distance < npcMonsterSkill.Skill.Range || distance <= Npc.BasicRange) &&
-                    !HasBuff(BCardType.SpecialAttack, (byte) BCardSubTypes.SpecialAttack.NoAttack))
+                    !HasBuff(BCardType.CardType.SpecialAttack, (byte) AdditionalTypes.SpecialAttack.NoAttack))
                 {
                     if ((DateTime.Now - LastSkill).TotalMilliseconds >= 1000 + Npc.BasicCooldown * 200 ||
                         npcMonsterSkill != null)
@@ -699,7 +697,7 @@ namespace OpenNos.GameObject
                 else
                 {
                     var maxdistance = Npc.NoticeRange > 5 ? Npc.NoticeRange / 2 : Npc.NoticeRange;
-                    if (IsMoving && !HasBuff(BCardType.Move, (byte) BCardSubTypes.Move.MovementImpossible))
+                    if (IsMoving && !HasBuff(BCardType.CardType.Move, (byte) AdditionalTypes.Move.MovementImpossible))
                     {
                         const short maxDistance = 5;
                         var maxindex = Path.Count > Npc.Speed / 2 && Npc.Speed > 1 ? Npc.Speed / 2 : Path.Count;

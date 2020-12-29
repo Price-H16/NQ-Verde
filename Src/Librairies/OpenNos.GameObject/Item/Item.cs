@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ChickenAPI.Enums.Game.BCard;
 using OpenNos.Data;
 using OpenNos.Domain;
 
@@ -131,8 +130,8 @@ namespace OpenNos.GameObject
                 {
                     FirstData = 100,
                     SecondData = 336,
-                    Type = (byte) BCardType.Buff,
-                    SubType = (byte) BCardSubTypes.Buff.ChanceCausing
+                    Type = (byte) BCardType.CardType.Buff,
+                    SubType = (byte) AdditionalTypes.Buff.ChanceCausing
                 });
                 switch (Morph)
                 {
@@ -167,8 +166,8 @@ namespace OpenNos.GameObject
                         BCards.Add(new BCard
                         {
                             FirstData = 5,
-                            Type = (byte) BCardType.SpecialEffects2,
-                            SubType = (byte) BCardSubTypes.SpecialEffects2.TeleportInRadius
+                            Type = (byte) BCardType.CardType.SpecialEffects2,
+                            SubType = (byte) AdditionalTypes.SpecialEffects2.TeleportInRadius
                         });
                         break;
 
@@ -180,8 +179,8 @@ namespace OpenNos.GameObject
                         BCards.Add(new BCard
                         {
                             FirstData = 5,
-                            Type = (byte) BCardType.SpecialEffects2,
-                            SubType = (byte) BCardSubTypes.SpecialEffects2.TeleportInRadius
+                            Type = (byte) BCardType.CardType.SpecialEffects2,
+                            SubType = (byte) AdditionalTypes.SpecialEffects2.TeleportInRadius
                         });
                         break;
 
@@ -193,8 +192,8 @@ namespace OpenNos.GameObject
                         BCards.Add(new BCard
                         {
                             FirstData = 4,
-                            Type = (byte) BCardType.LightAndShadow,
-                            SubType = (byte) BCardSubTypes.LightAndShadow.RemoveBadEffects
+                            Type = (byte) BCardType.CardType.LightAndShadow,
+                            SubType = (byte) AdditionalTypes.LightAndShadow.RemoveBadEffects
                         });
                         break;
 
@@ -207,15 +206,15 @@ namespace OpenNos.GameObject
                         {
                             FirstData = 15,
                             IsLevelScaled = true,
-                            Type = (byte) BCardType.HPMP,
-                            SubType = (byte) BCardSubTypes.HPMP.HPRestored
+                            Type = (byte) BCardType.CardType.HPMP,
+                            SubType = (byte) AdditionalTypes.HPMP.HPRestored
                         });
                         BCards.Add(new BCard
                         {
                             FirstData = 15,
                             IsLevelScaled = true,
-                            Type = (byte) BCardType.HPMP,
-                            SubType = (byte) BCardSubTypes.HPMP.MPRestored
+                            Type = (byte) BCardType.CardType.HPMP,
+                            SubType = (byte) AdditionalTypes.HPMP.MPRestored
                         });
                         break;
 
@@ -256,8 +255,8 @@ namespace OpenNos.GameObject
                         BCards.Add(new BCard
                         {
                             FirstData = 4,
-                            Type = (byte) BCardType.LightAndShadow,
-                            SubType = (byte) BCardSubTypes.LightAndShadow.RemoveBadEffects
+                            Type = (byte) BCardType.CardType.LightAndShadow,
+                            SubType = (byte) AdditionalTypes.LightAndShadow.RemoveBadEffects
                         });
                         break;
 
@@ -266,8 +265,8 @@ namespace OpenNos.GameObject
                         SpeedBoostDuration = 5;
                         BCards.Add(new BCard
                         {
-                            Type = (byte) BCardType.SpecialBehaviour,
-                            SubType = (byte) BCardSubTypes.SpecialBehaviour.TeleportRandom
+                            Type = (byte) BCardType.CardType.SpecialBehaviour,
+                            SubType = (byte) AdditionalTypes.SpecialBehaviour.TeleportRandom
                         });
                         break;
 
@@ -276,8 +275,8 @@ namespace OpenNos.GameObject
                         SpeedBoostDuration = 5;
                         BCards.Add(new BCard
                         {
-                            Type = (byte) BCardType.SpecialBehaviour,
-                            SubType = (byte) BCardSubTypes.SpecialBehaviour.TeleportRandom
+                            Type = (byte) BCardType.CardType.SpecialBehaviour,
+                            SubType = (byte) AdditionalTypes.SpecialBehaviour.TeleportRandom
                         });
                         break;
 
@@ -287,8 +286,8 @@ namespace OpenNos.GameObject
                         SpeedBoostDuration = 5;
                         BCards.Add(new BCard
                         {
-                            Type = (byte) BCardType.SpecialBehaviour,
-                            SubType = (byte) BCardSubTypes.SpecialBehaviour.TeleportRandom
+                            Type = (byte) BCardType.CardType.SpecialBehaviour,
+                            SubType = (byte) AdditionalTypes.SpecialBehaviour.TeleportRandom
                         });
                         break;
 
@@ -298,8 +297,8 @@ namespace OpenNos.GameObject
                         SpeedBoostDuration = 5;
                         BCards.Add(new BCard
                         {
-                            Type = (byte) BCardType.SpecialBehaviour,
-                            SubType = (byte) BCardSubTypes.SpecialBehaviour.TeleportRandom
+                            Type = (byte) BCardType.CardType.SpecialBehaviour,
+                            SubType = (byte) AdditionalTypes.SpecialBehaviour.TeleportRandom
                         });
                         break;
 
@@ -323,8 +322,8 @@ namespace OpenNos.GameObject
                         BCards.Add(new BCard
                         {
                             FirstData = 4,
-                            Type = (byte) BCardType.LightAndShadow,
-                            SubType = (byte) BCardSubTypes.LightAndShadow.RemoveBadEffects
+                            Type = (byte) BCardType.CardType.LightAndShadow,
+                            SubType = (byte) AdditionalTypes.LightAndShadow.RemoveBadEffects
                         });
                         break;
 
@@ -341,8 +340,8 @@ namespace OpenNos.GameObject
                         SpeedBoostDuration = 5;
                         BCards.Add(new BCard
                         {
-                            Type = (byte) BCardType.SpecialBehaviour,
-                            SubType = (byte) BCardSubTypes.SpecialBehaviour.TeleportRandom
+                            Type = (byte) BCardType.CardType.SpecialBehaviour,
+                            SubType = (byte) AdditionalTypes.SpecialBehaviour.TeleportRandom
                         });
                         break;
 
@@ -355,16 +354,16 @@ namespace OpenNos.GameObject
                         BCards.Add(new BCard
                         {
                             FirstData = 4,
-                            Type = (byte) BCardType.LightAndShadow,
-                            SubType = (byte) BCardSubTypes.LightAndShadow.RemoveBadEffects
+                            Type = (byte) BCardType.CardType.LightAndShadow,
+                            SubType = (byte) AdditionalTypes.LightAndShadow.RemoveBadEffects
                         });
                         BCards.Add(new BCard
                         {
                             FirstData = 50,
                             SecondData = 665,
                             ForceDelay = SpeedBoostDuration * 10,
-                            Type = (byte) BCardType.Buff,
-                            SubType = (byte) BCardSubTypes.Buff.ChanceCausing
+                            Type = (byte) BCardType.CardType.Buff,
+                            SubType = (byte) AdditionalTypes.Buff.ChanceCausing
                         });
                         break;
 
@@ -382,8 +381,8 @@ namespace OpenNos.GameObject
                         {
                             FirstData = 10,
                             SecondData = 37,
-                            Type = (byte)BCardType.Buff,
-                            SubType = (byte)BCardSubTypes.Buff.ChanceCausing
+                            Type = (byte)BCardType.CardType.Buff,
+                            SubType = (byte)AdditionalTypes.Buff.ChanceCausing
                         });
                         break;
 

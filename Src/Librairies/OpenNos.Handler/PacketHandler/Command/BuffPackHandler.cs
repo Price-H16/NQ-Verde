@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ChickenAPI.Enums.Game.Buffs;
 using NosTale.Packets.Packets.CommandPackets;
 using OpenNos.Core;
 using OpenNos.Data;

@@ -1,6 +1,6 @@
-using ChickenAPI.Enums.Game.Character;
 using OpenNos.DAL.EF;
 using OpenNos.Data;
+using OpenNos.Domain;
 using CharacterState = OpenNos.Domain.CharacterState;
 using FactionType = OpenNos.Domain.FactionType;
 
@@ -109,7 +109,7 @@ namespace OpenNos.Mapper.Mappers
             output.Biography = input.Biography;
             output.BuffBlocked = input.BuffBlocked;
             output.CharacterId = input.CharacterId;
-            output.Class = (CharacterClassType) input.Class;
+            output.Class = (ClassType) input.Class;
             output.Compliment = input.Compliment;
             output.Dignity = input.Dignity;
             output.EmoticonsBlocked = input.EmoticonsBlocked;

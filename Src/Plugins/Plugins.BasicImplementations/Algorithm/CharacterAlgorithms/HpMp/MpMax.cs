@@ -1,5 +1,4 @@
-﻿using ChickenAPI.Enums.Game.Character;
-using OpenNos.Domain;
+﻿using OpenNos.Domain;
 
 namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.HpMp
 {
@@ -10,7 +9,7 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.HpMp
 
         public void Initialize()
         {
-            _stats = new int[(int) CharacterClassType.Unknown, MAX_LEVEL];
+            _stats = new int[(int) ClassType.Unknown, MAX_LEVEL];
 
             // todo improve that shit
             var actual = 60;
@@ -23,15 +22,15 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.HpMp
 
                 actual += baseAdventurer;
 
-                _stats[(int) CharacterClassType.Adventurer, i] = actual; // approx
-                _stats[(int) CharacterClassType.Swordsman, i] = actual;
-                _stats[(int) CharacterClassType.Magician, i] = 3 * actual; // approx
-                _stats[(int) CharacterClassType.Archer, i] = actual + baseAdventurer; // approx
-                _stats[(int) CharacterClassType.MartialArtist, i] = actual; // approx
+                _stats[(int) ClassType.Adventurer, i] = actual; // approx
+                _stats[(int) ClassType.Swordsman, i] = actual;
+                _stats[(int) ClassType.Magician, i] = 3 * actual; // approx
+                _stats[(int) ClassType.Archer, i] = actual + baseAdventurer; // approx
+                _stats[(int) ClassType.MartialArtist, i] = actual; // approx
             }
         }
 
-        public int GetStat(CharacterClassType type, byte level)
+        public int GetStat(ClassType type, byte level)
         {
             return _stats[(int) type, level - 1 > 0 ? level - 1 : 0];
         }

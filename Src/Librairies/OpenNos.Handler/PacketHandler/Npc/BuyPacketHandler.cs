@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChickenAPI.Enums.Game.Character;
-using NosTale.Extension.Extension.Packet;
 using NosTale.Packets.Packets.ServerPackets;
 using OpenNos.Core;
 using OpenNos.Data;
@@ -179,19 +177,19 @@ namespace OpenNos.Handler.PacketHandler.Npc
                                     {
                                         switch (Session.Character.Class)
                                         {
-                                            case CharacterClassType.Adventurer:
+                                            case ClassType.Adventurer:
                                                 skillMiniumLevel = skillinfo.MinimumAdventurerLevel;
                                                 break;
 
-                                            case CharacterClassType.Swordsman:
+                                            case ClassType.Swordsman:
                                                 skillMiniumLevel = skillinfo.MinimumSwordmanLevel;
                                                 break;
 
-                                            case CharacterClassType.Archer:
+                                            case ClassType.Archer:
                                                 skillMiniumLevel = skillinfo.MinimumArcherLevel;
                                                 break;
 
-                                            case CharacterClassType.Magician:
+                                            case ClassType.Magician:
                                                 if (skillinfo.MinimumMagicianLevel > 0)
                                                 {
                                                     skillMiniumLevel = skillinfo.MinimumMagicianLevel;

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ChickenAPI.Enums.Game.Character;
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
@@ -18,7 +17,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
            var npc = packet.Npc;
-           if (Session.Character.Class != (byte)CharacterClassType.Adventurer)
+           if (Session.Character.Class != (byte)ClassType.Adventurer)
            {
                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_ADVENTURER"), 0));
                return;
@@ -58,14 +57,14 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 
                 Session.CurrentMapInstance?.Broadcast(Session.Character.GenerateEq());
                 Session.SendPacket(Session.Character.GenerateEquipment());
-                Session.Character.ChangeClass((CharacterClassType)packet.Type, false);
+                Session.Character.ChangeClass((ClassType)packet.Type, false);
 
-                if (Session.Character.Class == CharacterClassType.Archer)
+                if (Session.Character.Class == ClassType.Archer)
                 {
                     Session.Character.Inventory.AddNewToInventory(2083, 20, InventoryType.Etc); // arrows
                 }
 
-                if (Session.Character.Class == CharacterClassType.Swordsman)
+                if (Session.Character.Class == ClassType.Swordsman)
                 {
                     Session.Character.Inventory.AddNewToInventory(2082, 20, InventoryType.Etc); // bolts
                 }

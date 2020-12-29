@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ChickenAPI.Enums.Game.BCard;
+using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._BCards;
 using OpenNos.GameObject.Battle;
@@ -8,7 +8,7 @@ namespace Plugins.BasicImplementations.BCards.Handler
 {
     public class TestBuff : IBCardEffectAsyncHandler
     {
-        public BCardType HandledType { get; } = BCardType.Buff;
+        public BCardType.CardType HandledType { get; } = BCardType.CardType.Buff;
 
         public async Task ExecuteAsync(BattleEntity target, BattleEntity sender, BCard bcard)
         {

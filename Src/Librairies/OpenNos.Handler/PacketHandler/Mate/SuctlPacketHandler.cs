@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChickenAPI.Enums.Game.BCard;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.Data;
@@ -63,7 +62,7 @@ namespace OpenNos.Handler.PacketHandler.Mate
             GameObject.Mate attacker = Session.Character.Mates.Find(x => x.MateTransportId == suctlPacket.MateTransportId);
 
             if (attacker == null ||
-                attacker.HasBuff(BCardType.SpecialAttack, (byte)BCardSubTypes.SpecialAttack.NoAttack))
+                attacker.HasBuff(BCardType.CardType.SpecialAttack, (byte)AdditionalTypes.SpecialAttack.NoAttack))
             {
                 return;
             }

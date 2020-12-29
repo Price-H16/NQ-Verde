@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChickenAPI.Enums.Game.Character;
 using NosTale.Extension.Extension.Packet;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
@@ -138,13 +137,13 @@ namespace OpenNos.Handler.PacketHandler.Npc
                     short spVNum = 0;
                     switch (Session.Character.Class)
                     {
-                        case CharacterClassType.Swordsman:
+                        case ClassType.Swordsman:
                             spVNum = 4494;
                             break;
-                        case CharacterClassType.Archer:
+                        case ClassType.Archer:
                             spVNum = 4495;
                             break;
-                        case CharacterClassType.Magician:
+                        case ClassType.Magician:
                             spVNum = 4496;
                             break;
                     }

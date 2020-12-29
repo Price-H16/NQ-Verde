@@ -234,7 +234,7 @@ namespace OpenNos.World
             }
             var authKey = a.MasterAuthKey;
             ServerManager.Instance.ServerGroup = a.ServerGroupS1;
-            const int sessionLimit = 150; // Needs workaround
+            const int sessionLimit = 100; // Needs workaround
             var newChannelId = CommunicationServiceClient.Instance.RegisterWorldServer(new SerializableWorldServer(ServerManager.Instance.WorldId, ipAddress, _port, sessionLimit, ServerManager.Instance.ServerGroup));
             if (newChannelId.HasValue)
             {

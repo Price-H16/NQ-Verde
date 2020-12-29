@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using ChickenAPI.Enums.Game.BCard;
 using NosTale.Configuration;
 using NosTale.Configuration.Configuration.Item;
 using NosTale.Configuration.Utilities;
@@ -279,7 +278,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                 {
                     RuneEffectId = runeBuff.RuneEffectId,
                     SubType = (byte) getBuff.SubType,
-                    Type = (BCardType) getBuff.Type,
+                    Type = (BCardType.CardType) getBuff.Type,
                     FirstData = runeBuff.FirstData,
                     SecondData = getBuff.ValueByLevel[runeBuff.ThirdData - 1],
                     ThirdData = runeBuff.ThirdData,
@@ -289,7 +288,7 @@ namespace OpenNos.GameObject.Extension.Inventory
             }
             else
             {
-                if (equipment.RuneEffects.Where(x => x.Type == BCardType.A7Powers1 || x.Type == BCardType.A7Powers2)
+                if (equipment.RuneEffects.Where(x => x.Type == BCardType.CardType.A7Powers1 || x.Type == BCardType.CardType.A7Powers2)
                     .Count() >= 2)
                 {
                     equipment.ApplyRuneBuff(session, message);
@@ -299,7 +298,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                 runeBuff = new RuneEffectDTO
                 {
                     SubType = (byte) getBuff.SubType,
-                    Type = (BCardType) getBuff.Type,
+                    Type = (BCardType.CardType) getBuff.Type,
                     FirstData = 1,
                     SecondData = getBuff.ValueByLevel[0],
                     ThirdData = 1,
@@ -406,7 +405,7 @@ namespace OpenNos.GameObject.Extension.Inventory
 
             var runeEffect = DAOFactory.RuneEffectDAO.LoadByEquipmentSerialId(equipment.EquipmentSerialId).Where(
                 s => s.SubType == getTypeAndSubtype.SubType &&
-                     s.Type == (BCardType) getTypeAndSubtype.Type).FirstOrDefault();
+                     s.Type == (BCardType.CardType) getTypeAndSubtype.Type).FirstOrDefault();
 
             if (runeEffect != null)
             {
@@ -423,7 +422,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                 {
                     RuneEffectId = runeEffect.RuneEffectId,
                     SubType = (byte) getTypeAndSubtype.SubType,
-                    Type = (BCardType) getTypeAndSubtype.Type,
+                    Type = (BCardType.CardType) getTypeAndSubtype.Type,
                     FirstData = getTypeAndSubtype.ValueByLevel[runeEffect.ThirdData - 1],
                     SecondData = 0,
                     ThirdData = runeEffect.ThirdData,
@@ -432,7 +431,7 @@ namespace OpenNos.GameObject.Extension.Inventory
             }
             else
             {
-                if (equipment.RuneEffects.Where(x => x.Type != BCardType.A7Powers1 && x.Type == BCardType.A7Powers2)
+                if (equipment.RuneEffects.Where(x => x.Type != BCardType.CardType.A7Powers1 && x.Type == BCardType.CardType.A7Powers2)
                     .Count() >= 7)
                 {
                     equipment.ApplyRuneEffect(session, message);
@@ -442,7 +441,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                 runeEffect = new RuneEffectDTO
                 {
                     SubType = (byte) getTypeAndSubtype.SubType,
-                    Type = (BCardType) getTypeAndSubtype.Type,
+                    Type = (BCardType.CardType) getTypeAndSubtype.Type,
                     FirstData = getTypeAndSubtype.ValueByLevel[0],
                     SecondData = 0,
                     ThirdData = 1,

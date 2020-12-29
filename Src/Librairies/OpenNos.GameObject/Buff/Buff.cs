@@ -1,5 +1,4 @@
 ﻿using System;
-using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.Data;
 using OpenNos.GameObject.Battle;
 using OpenNos.GameObject.Networking;

@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using ChickenAPI.Enums.Game.Buffs;
 using OpenNos.GameObject.Networking;
 
 namespace OpenNos.GameObject.Event.GAMES
