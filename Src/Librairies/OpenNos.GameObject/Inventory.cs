@@ -109,18 +109,17 @@ namespace OpenNos.GameObject
 
         public ItemInstance AddIntoBazaarInventory(InventoryType inventory, byte slot, short amount)
         {
-            ItemInstance inv = LoadBySlotAndType(slot, inventory);
-            if (inv == null || amount > inv.Amount)
-            {
-                return null;
-            }
+            var inv = LoadBySlotAndType(slot, inventory);
 
-            ItemInstance invcopy = inv.DeepCopy();
+            if (amount < 0) return null;
+
+            if (inv == null || amount > inv.Amount) return null;
+
+            var invcopy = inv.DeepCopy();
             invcopy.Id = Guid.NewGuid();
             if (inv.Item.Type == InventoryType.Equipment)
             {
-                for (short i = 0; i < 255; i++)
-                {
+                for (short i = 0; i < MAX_ITEM_AMOUNT; i++)
                     if (LoadBySlotAndType(i, InventoryType.Bazaar) == null)
                     {
                         invcopy.Type = InventoryType.Bazaar;
@@ -130,14 +129,14 @@ namespace OpenNos.GameObject
                         putItem(invcopy);
                         break;
                     }
-                }
+
                 Owner.Session.SendPacket(UserInterfaceHelper.Instance.GenerateInventoryRemove(inventory, slot));
                 return invcopy;
             }
+
             if (amount >= inv.Amount)
             {
-                for (short i = 0; i < 255; i++)
-                {
+                for (short i = 0; i < MAX_ITEM_AMOUNT; i++)
                     if (LoadBySlotAndType(i, InventoryType.Bazaar) == null)
                     {
                         invcopy.Type = InventoryType.Bazaar;
@@ -147,7 +146,7 @@ namespace OpenNos.GameObject
                         putItem(invcopy);
                         break;
                     }
-                }
+
                 Owner.Session.SendPacket(UserInterfaceHelper.Instance.GenerateInventoryRemove(inventory, slot));
                 return invcopy;
             }
@@ -155,8 +154,7 @@ namespace OpenNos.GameObject
             invcopy.Amount = amount;
             inv.Amount -= amount;
 
-            for (short i = 0; i < 255; i++)
-            {
+            for (short i = 0; i < MAX_ITEM_AMOUNT; i++)
                 if (LoadBySlotAndType(i, InventoryType.Bazaar) == null)
                 {
                     invcopy.Type = InventoryType.Bazaar;
@@ -165,7 +163,6 @@ namespace OpenNos.GameObject
                     putItem(invcopy);
                     break;
                 }
-            }
 
             Owner.Session.SendPacket(inv.GenerateInventoryAdd());
             return invcopy;
@@ -221,8 +218,6 @@ namespace OpenNos.GameObject
                             max = max > MAX_ITEM_AMOUNT ? MAX_ITEM_AMOUNT : max;
                             newItem.Amount = (short)(slot.Amount + newItem.Amount - max);
                             newItem.Amount = (short)(newItem.Amount < 0 ? 0 : newItem.Amount);
-                            Logger.LogUserEvent("ITEM_CREATE", Owner.GenerateIdentity(), $"IIId: {slot.Id} ItemVNum: {slot.ItemVNum} Amount: {max - slot.Amount} MapId: {Owner.MapInstance?.Map.MapId} MapX: {Owner.PositionX} MapY: {Owner.PositionY}");
-
                             slot.Amount = (short)max;
                             invlist.Add(slot);
                             Owner.Session?.SendPacket(slot.GenerateInventoryAdd());
@@ -292,12 +287,6 @@ namespace OpenNos.GameObject
         }
 
         public int CountItem(int itemVNum) => Where(s => s.ItemVNum == itemVNum && s.Type != InventoryType.Wear && s.Type != InventoryType.FamilyWareHouse && s.Type != InventoryType.Bazaar && s.Type != InventoryType.Warehouse && s.Type != InventoryType.PetWarehouse).Sum(i => i.Amount);
-
-        public int CountBazaarItems()
-        {
-            List<BazaarItemLink> BazaarList = ServerManager.Instance.BazaarList.GetAllItems();
-            return CountLinq(s => s.Type == InventoryType.Bazaar && BazaarList.FirstOrDefault(b => b.BazaarItem.ItemInstanceId == s.Id) is BazaarItemLink bz && (bz.BazaarItem.DateStart.AddHours(bz.BazaarItem.Duration).AddDays(bz.BazaarItem.MedalUsed ? 30 : 7) - DateTime.Now).TotalMinutes > 0);
-        }
 
         public int CountItemInAnInventory(InventoryType inv) => CountLinq(s => s.Type == inv);
 

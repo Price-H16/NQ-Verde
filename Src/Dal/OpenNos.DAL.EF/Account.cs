@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ChickenAPI.Enums;
+using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF
 {

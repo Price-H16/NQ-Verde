@@ -65,11 +65,11 @@ namespace OpenNos.GameObject.Helpers
 
         public int[,] RangeDefenseDodgeData { get; private set; }
 
-        public short[] TrainerUpgradeHits { get; private set; }
+        public int[] TrainerDownRate { get; private set; }
 
-        public short[] TrainerUpRate { get; private set; }
+        public int[] TrainerUpgradeHits { get; private set; }
 
-        public short[] TrainerDownRate { get; private set; }
+        public int[] TrainerUpRate { get; private set; }
 
         public double[] XpData { get; private set; }
 
@@ -338,15 +338,33 @@ namespace OpenNos.GameObject.Helpers
             }
         }
 
-        #region Trainers
+        public void LoadPetSkills()
+        {
+            PetSkills = new List<int>
+            {
+                663, 683, // Otter Skill 1
+                1513, // Purcival
+                1514, // Baron scratch ?
+                1515, // Amiral (le chat chelou)
+                1516, // roi des pirates pussifer
+                1524, // Miaou fou
+                1575,
+                1576
+            };
+        }
+
+        public void LoadTrainerDownRate()
+        {
+            TrainerDownRate = new[] { 0, 7, 13, 16, 28, 29, 33, 36, 50, 60 };
+        }
 
         public void LoadTrainerUpgradeHits()
         {
-            TrainerUpgradeHits = new short[10];
+            TrainerUpgradeHits = new int[10];
 
-            short baseValue = 0;
+            var baseValue = 0;
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 baseValue += 50;
                 TrainerUpgradeHits[i] = baseValue;
@@ -355,16 +373,8 @@ namespace OpenNos.GameObject.Helpers
 
         public void LoadTrainerUpRate()
         {
-            TrainerUpRate = new short[] { 67, 67, 44, 34, 22, 15, 14, 8, 1, 0 };
+            TrainerUpRate = new[] { 67, 67, 44, 34, 22, 15, 14, 8, 1, 0 };
         }
-
-        public void LoadTrainerDownRate()
-        {
-            TrainerDownRate = new short[] { 0, 7, 13, 16, 28, 29, 33, 36, 50, 60 };
-        }
-
-        #endregion
-
 
         public void LoadXpData()
         {
@@ -425,31 +435,11 @@ namespace OpenNos.GameObject.Helpers
 
             foreach (var val in PartnerSpBuffs) session.Character.RemoveBuff(val, true);
         }
-        public void LoadPetSkills()
-        {
-            PetSkills = new List<int>
-            {
-                1513, // Purcival
-                1514, // Baron scratch ?
-                1515, // Amiral (le chat chelou)
-                1516, // roi des pirates pussifer
-                1524, // Miaou fou
-                1575, // Marié Bouhmiaou
-                1576, // Marie Bouhmiaou
-                1601, // Mechamiaou
-                1626, // Boris the polar bear
-                1627, // Boris the polar bear
-                663, // Otter
-                740,
-                743
-            };
-        }
 
         private void LoadMateBuffs()
         {
             MateBuffs = new Dictionary<int, int>
             {
-                //Monster / Buff
                 //{501, 4066}, // Justin
                 //{500, 4067}, // Kupei
                 //{503, 4068}, // Felix
@@ -494,8 +484,8 @@ namespace OpenNos.GameObject.Helpers
                 {4825, 3000}, // Vénus
                 {4326, 3007}, // Guerrier Squelettique Ragnar
                 {4405, 3014}, // Yuna
-                {4413, 3021},
-                {4446, 3028},
+                {4413, 3021}, // Cupidia
+                {4446, 3028} // Perti
             };
             PartnerSpBuffs = new List<short>
             {

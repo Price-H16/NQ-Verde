@@ -100,68 +100,56 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
 
 
             SpinWait.SpinUntil(() => !ServerManager.Instance.InBazaarRefreshMode);
-            StaticBonusDTO medal = Session.Character.StaticBonusList.Find(s =>
+            var medal = Session.Character.StaticBonusList.Find(s =>
                 s.StaticBonusType == StaticBonusType.BazaarMedalGold
                 || s.StaticBonusType == StaticBonusType.BazaarMedalSilver);
 
-            long price = cRegPacket.Price * cRegPacket.Amount;
-            long taxmax = price > 100000 ? price / 200 : 500;
-            long taxmin = price >= 4000
-                ? (60 + ((price - 4000) / 2000 * 30) > 10000 ? 10000 : 60 + ((price - 4000) / 2000 * 30))
+            var price = cRegPacket.Price * cRegPacket.Amount;
+            var taxmax = price > 100000 ? price / 200 : 500;
+            var taxmin = price >= 4000
+                ? 60 + (price - 4000) / 2000 * 30 > 10000 ? 10000 : 60 + (price - 4000) / 2000 * 30
                 : 50;
-            long tax = medal == null ? taxmax : taxmin;
-            long maxGold = ServerManager.Instance.Configuration.MaxGold;
+            var tax = medal == null ? taxmax : taxmin;
+            var maxGold = ServerManager.Instance.Configuration.MaxGold;
             if (Session.Character.Gold < tax || cRegPacket.Amount <= 0
-                || Session.Character.ExchangeInfo?.ExchangeList.Count > 0 || Session.Character.IsShopping)
-            {
+                                             || Session.Character.ExchangeInfo?.ExchangeList.Count > 0 ||
+                                             Session.Character.IsShopping)
                 return;
-            }
 
-            ItemInstance it = Session.Character.Inventory.LoadBySlotAndType(cRegPacket.Slot,
+            var it = Session.Character.Inventory.LoadBySlotAndType(cRegPacket.Slot,
                 cRegPacket.Inventory == 4 ? 0 : (InventoryType)cRegPacket.Inventory);
-            Session.Character.PerformItemSave(it);
 
-            if (it == null || !it.Item.IsSoldable || !it.Item.IsTradable || it.IsBound )
-            {
-                return;
-            }
+            // This is done on purpose, because when an item is fresh created and has shell (hero eq), its shell effects are being deleted cause they're not being saved in DB before adding items to NB.
+            // TODO: Find a better way to do it, ending the issue from the root.
+            Session.Character.PerformItemSave(it);//pogg
 
-            if (Session.Character.Inventory.CountBazaarItems()
+            if (it == null || !it.Item.IsSoldable || !it.Item.IsTradable ||
+                it.IsBound && it.ItemDeleteTime != null) return;
+
+            if (Session.Character.Inventory.CountItemInAnInventory(InventoryType.Bazaar)
                 >= 10 * (medal == null ? 2 : 10))
             {
-                Session.SendPacket(
-                    UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LIMIT_EXCEEDED"), 0));
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LIMIT_EXCEEDED"), 0));
+                return;
+            }
+
+            if (it.Amount < 1)
+            {
                 return;
             }
 
             if (cRegPacket.Price >= (medal == null ? 1000000 : maxGold))
             {
-                Session.SendPacket(
-                    UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("PRICE_EXCEEDED"), 0));
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("PRICE_EXCEEDED"), 0));
                 return;
             }
 
-            if (cRegPacket.Price <= 0)
-            {
-                return;
-            }
+            if (cRegPacket.Price <= 0) return;
 
-            ItemInstance bazaar = Session.Character.Inventory.AddIntoBazaarInventory(
+            var bazaar = Session.Character.Inventory.AddIntoBazaarInventory(
                 cRegPacket.Inventory == 4 ? 0 : (InventoryType)cRegPacket.Inventory, cRegPacket.Slot,
                 cRegPacket.Amount);
-            if (bazaar == null)
-            {
-                return;
-            }
-
-            if (cRegPacket.Inventory == 9)
-            {
-                Session.SendPacket("msg 4 You will be kicked now");
-                Thread.Sleep(1000);
-                ServerManager.Instance.Kick(Session.Character.Name);
-                Session.SendPacket(UserInterfaceHelper.GenerateMsg(("Really you dupe man ?"),0));
-                return;
-            }
+            if (bazaar == null) return;
 
             short duration;
             switch (cRegPacket.Durability)
@@ -188,7 +176,7 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
 
             DAOFactory.ItemInstanceDAO.InsertOrUpdate(bazaar);
 
-            BazaarItemDTO bazaarItem = new BazaarItemDTO
+            var bazaarItem = new BazaarItemDTO
             {
                 Amount = bazaar.Amount,
                 DateStart = DateTime.Now,
@@ -200,27 +188,25 @@ namespace OpenNos.Handler.PacketHandler.Bazaar
                 ItemInstanceId = bazaar.Id
             };
 
-            #region !DiscordWebhook!
-#pragma warning disable 4014
-            DiscordWebhookHelper.DiscordEventNosBazar($"Seller: {Session.Character.Name} ItemName: {bazaar.Item.Name} Amount: {cRegPacket.Amount} Price: {cRegPacket.Price} ");
-            #endregion
             DAOFactory.BazaarItemDAO.InsertOrUpdate(ref bazaarItem);
             ServerManager.Instance.BazaarRefresh(bazaarItem.BazaarItemId);
 
             Session.Character.Gold -= tax;
             Session.SendPacket(Session.Character.GenerateGold());
 
-            Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("OBJECT_IN_BAZAAR"),
-                10));
+            //Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("OBJECT_IN_BAZAAR"),
+            //    10));
             Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("OBJECT_IN_BAZAAR"),
                 0));
 
+            Session.Character.LastBazaarInsert = DateTime.Now;
+
             Logger.LogUserEvent("BAZAAR_INSERT", Session.GenerateIdentity(),
                 $"BazaarId: {bazaarItem.BazaarItemId}, IIId: {bazaarItem.ItemInstanceId} VNum: {bazaar.ItemVNum} Amount: {cRegPacket.Amount} Price: {cRegPacket.Price} Time: {duration}");
-            Logger.LogUserEvent("BAZAAR_INSERT_PACKET", Session.GenerateIdentity(), $"Packet string: {cRegPacket.OriginalContent.ToString()}");
 
             Session.SendPacket("rc_reg 1");
         }
+
+        #endregion
     }
 }
-#endregion

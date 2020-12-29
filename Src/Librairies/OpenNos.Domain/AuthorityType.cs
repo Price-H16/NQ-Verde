@@ -1,4 +1,4 @@
-﻿namespace ChickenAPI.Enums
+﻿namespace OpenNos.Domain
 {
     /// <summary>
     ///     Account basic groups
