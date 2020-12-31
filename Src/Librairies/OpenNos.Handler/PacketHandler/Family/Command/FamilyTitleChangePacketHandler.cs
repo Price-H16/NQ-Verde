@@ -41,7 +41,7 @@ namespace OpenNos.Handler.PacketHandler.Family.Command
                     Session.Character.Family.FamilyCharacters.Find(s => s.Character.Name == packetsplit[2]);
                 if (fchar != null && byte.TryParse(packetsplit[3], out var rank))
                 {
-                    fchar.Rank = (FamilyMemberRank) rank;
+                    fchar.Rank = (FamilyMemberRank)rank;
 
                     Logger.LogUserEvent("GUILDCOMMAND", Session.GenerateIdentity(),
                         $"[Title][{Session.Character.Family.FamilyId}]CharacterName: {packetsplit[2]} Title: {fchar.Rank.ToString()}");

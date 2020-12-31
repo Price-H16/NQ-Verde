@@ -60,22 +60,9 @@ namespace OpenNos.GameObject
 
         #region Methods
 
-        public void SendPacket(string packet)
-        {
-            CommunicationServiceClient.Instance.SendMessageToCharacter(new SCSCharacterMessage
-            {
-                DestinationCharacterId = FamilyId,
-                SourceCharacterId = 0,
-                SourceWorldId = ServerManager.Instance.WorldId,
-                Message = packet,
-                Type = MessageType.Family
-            });
-        }
-
         public void ChangeFaction(byte faction, ClientSession session)
         {
             session.Character.Family.FamilyFaction = faction;
-            session.Character.LastFactionChange = DateTime.Now.Ticks;
             session.Character.Family.LastFactionChange = DateTime.Now.Ticks;
             FamilyDTO fam = session.Character.Family;
             DAOFactory.FamilyDAO.InsertOrUpdate(ref fam);
@@ -83,9 +70,12 @@ namespace OpenNos.GameObject
             ServerManager.Instance.FamilyRefresh(FamilyId, true);
         }
 
-        public void InsertFamilyLog(FamilyLogType logtype, string characterName = "", string characterName2 = "", string rainBowFamily = "", string message = "", byte level = 0, int experience = 0, int itemVNum = 0, byte upgrade = 0, int raidType = 0, FamilyAuthority authority = FamilyAuthority.Head, int righttype = 0, int rightvalue = 0)
+        public void InsertFamilyLog(FamilyLogType logtype, string characterName = "", string characterName2 = "",
+            string rainBowFamily = "", string message = "", byte level = 0, int experience = 0, int itemVNum = 0,
+            byte upgrade = 0, int raidType = 0, FamilyAuthority authority = FamilyAuthority.Head, int righttype = 0,
+            int rightvalue = 0)
         {
-            string value = "";
+            var value = "";
             switch (logtype)
             {
                 case FamilyLogType.DailyMessage:
@@ -138,14 +128,14 @@ namespace OpenNos.GameObject
                 case FamilyLogType.FamilyExtension:
                     value = $"{itemVNum}";
                     break;
-                case FamilyLogType.HeroLevelUp:
-                    value = $"{characterName}|{level}";
-                    break;
-                case FamilyLogType.SkillUse:
-                    value = $"{characterName}|{level}";
+
+                case FamilyLogType.WareHouseAdded:
+                case FamilyLogType.WareHouseRemoved:
+                    value = $"{characterName}|{message}";
                     break;
             }
-            FamilyLogDTO log = new FamilyLogDTO
+
+            var log = new FamilyLogDTO
             {
                 FamilyId = FamilyId,
                 FamilyLogData = value,
@@ -160,6 +150,18 @@ namespace OpenNos.GameObject
                 SourceCharacterId = 0,
                 SourceWorldId = ServerManager.Instance.WorldId,
                 Message = "fhis_stc",
+                Type = MessageType.Family
+            });
+        }
+
+        public void SendPacket(string packet)
+        {
+            CommunicationServiceClient.Instance.SendMessageToCharacter(new SCSCharacterMessage
+            {
+                DestinationCharacterId = FamilyId,
+                SourceCharacterId = 0,
+                SourceWorldId = ServerManager.Instance.WorldId,
+                Message = packet,
                 Type = MessageType.Family
             });
         }

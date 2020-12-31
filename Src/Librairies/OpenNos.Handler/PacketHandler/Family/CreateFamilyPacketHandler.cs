@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Linq;
-using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;
@@ -10,6 +9,8 @@ using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.Master.Library.Client;
 using OpenNos.Master.Library.Data;
+using NosTale.Packets.Packets.ClientPackets;
+using Valhalla.Packets.Packets.ClientPackets;
 
 namespace OpenNos.Handler.PacketHandler.Family
 {
@@ -31,6 +32,7 @@ namespace OpenNos.Handler.PacketHandler.Family
         #endregion
 
         #region Methods
+
         public void CreateFamily(CreateFamilyPacket createFamilyPacket)
         {
             if (Session.Character.Group?.GroupType == GroupType.Group && Session.Character.Group.SessionCount == 3)
@@ -38,13 +40,17 @@ namespace OpenNos.Handler.PacketHandler.Family
                 foreach (var session in Session.Character.Group.Sessions.GetAllItems())
                     if (session.Character.Family != null || session.Character.FamilyCharacter != null)
                     {
-                        Session.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("PARTY_MEMBER_IN_FAMILY")));
+                        Session.SendPacket(
+                            UserInterfaceHelper.GenerateInfo(
+                                Language.Instance.GetMessageFromKey("PARTY_MEMBER_IN_FAMILY")));
                         return;
                     }
                     else if (session.Character.LastFamilyLeave > DateTime.Now.AddDays(-1).Ticks)
                     {
-                        Session.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("PARTY_MEMBER_HAS_PENALTY")));
-                        return;
+                        Session.SendPacket(
+                            UserInterfaceHelper.GenerateInfo(
+                                Language.Instance.GetMessageFromKey("PARTY_MEMBER_HAS_PENALTY")));
+                        //return;
                     }
 
                 if (Session.Character.Gold < 500000)
@@ -57,7 +63,9 @@ namespace OpenNos.Handler.PacketHandler.Family
                 var name = createFamilyPacket.CharacterName;
                 if (DAOFactory.FamilyDAO.LoadByName(name) != null)
                 {
-                    Session.SendPacket(UserInterfaceHelper.GenerateInfo(Language.Instance.GetMessageFromKey("FAMILY_NAME_ALREADY_USED")));
+                    Session.SendPacket(
+                        UserInterfaceHelper.GenerateInfo(
+                            Language.Instance.GetMessageFromKey("FAMILY_NAME_ALREADY_USED")));
                     return;
                 }
 
@@ -69,14 +77,18 @@ namespace OpenNos.Handler.PacketHandler.Family
                     FamilyExperience = 0,
                     FamilyLevel = 1,
                     FamilyMessage = $"Welcome to {name}!",
-                    FamilyFaction = Session.Character.Faction != FactionType.None ? (byte) Session.Character.Faction : (byte) ServerManager.RandomNumber(1, 2), // maybe doesn't work properly
-                    MaxSize = 100,
-                    WarehouseSize = 0 
+                    FamilyFaction = Session.Character.Faction != FactionType.None
+                        ? (byte)Session.Character.Faction
+                        : (byte)ServerManager.RandomNumber(1, 2), // maybe doesn't work properly
+                    MaxSize = 100
                 };
                 DAOFactory.FamilyDAO.InsertOrUpdate(ref family);
+
                 Logger.LogUserEvent("GUILDCREATE", Session.GenerateIdentity(), $"[FamilyCreate][{family.FamilyId}]");
-                DiscordWebhookHelper.DiscordEventFamily($"[FamilyCreate][{family.FamilyId}]");
-                ServerManager.Instance.Broadcast(UserInterfaceHelper.GenerateMsg(string.Format(Language.Instance.GetMessageFromKey("FAMILY_FOUNDED"), name), 0));
+
+                ServerManager.Instance.Broadcast(
+                    UserInterfaceHelper.GenerateMsg(
+                        string.Format(Language.Instance.GetMessageFromKey("FAMILY_FOUNDED"), name), 0));
                 foreach (var session in Session.Character.Group.Sessions.GetAllItems())
                 {
                     session.Character.ChangeFaction(FactionType.None);
@@ -85,7 +97,9 @@ namespace OpenNos.Handler.PacketHandler.Family
                         CharacterId = session.Character.CharacterId,
                         DailyMessage = "",
                         Experience = 0,
-                        Authority = Session.Character.CharacterId == session.Character.CharacterId ? FamilyAuthority.Head : FamilyAuthority.Familydeputy,
+                        Authority = Session.Character.CharacterId == session.Character.CharacterId
+                            ? FamilyAuthority.Head
+                            : FamilyAuthority.Familydeputy,
                         FamilyId = family.FamilyId,
                         Rank = 0
                     };

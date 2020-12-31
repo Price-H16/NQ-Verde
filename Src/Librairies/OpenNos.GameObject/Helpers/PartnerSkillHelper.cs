@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using OpenNos.Domain;
+using static OpenNos.Domain.BCardType;
 
 namespace OpenNos.GameObject.Helpers
 {
@@ -10,42 +11,32 @@ namespace OpenNos.GameObject.Helpers
 
         public static Skill ConvertToNormalSkill(PartnerSkill partnerSkill)
         {
-            Skill skill = new Skill(partnerSkill.Skill)
+            var skill = new Skill(partnerSkill.Skill)
             {
                 PartnerSkill = partnerSkill
             };
 
-            double multiplier = GetMultiplierBySkillLevel(partnerSkill.Level);
+            var multiplier = GetMultiplierBySkillLevel(partnerSkill.Level);
 
             partnerSkill.Skill.BCards.ToList().ForEach(bcard =>
             {
-                BCard newBCard = new BCard(bcard)
+                var newBCard = new BCard(bcard)
                 {
                     IsPartnerSkillBCard = true
                 };
 
-                switch ((BCardType.CardType)newBCard.Type)
+                switch ((CardType)newBCard.Type)
                 {
-                    case BCardType.CardType.DrainAndSteal:
+                    case CardType.DrainAndSteal:
                         {
-                            if (newBCard.SubType == (byte)AdditionalTypes.DrainAndSteal.LeechEnemyHP / 10)
-                            {
+                            if (newBCard.SubType == (byte)AdditionalTypes.DrainAndSteal.LeechEnemyHP)
                                 newBCard.SecondData = Convert.ToInt32(Math.Floor(multiplier * newBCard.SecondData));
-                            }
                         }
                         break;
 
-                    case BCardType.CardType.Buff:
+                    case CardType.Buff:
                         {
-                            if (newBCard.SecondData < 2560 && newBCard.SecondData > 1999)
-                            {
-                                newBCard.SecondData += (partnerSkill.Level - 1);
-                            }
-
-                            if (newBCard.SecondData != 7 /* Blackout */)
-                            {
-                                newBCard.SecondData += (partnerSkill.Level - 1);
-                            }
+                            if (newBCard.SecondData != 7 /* Blackout */) newBCard.SecondData += partnerSkill.Level - 1;
                         }
                         break;
 
@@ -68,7 +59,7 @@ namespace OpenNos.GameObject.Helpers
 
         public static double GetMultiplierBySkillLevel(byte level)
         {
-            PartnerSkillLevelType levelType = (PartnerSkillLevelType)level;
+            var levelType = (PartnerSkillLevelType)level;
 
             switch (levelType)
             {

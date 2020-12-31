@@ -55,7 +55,7 @@ namespace OpenNos.Handler.PacketHandler.Basic
                     if (ServerManager.Instance.IsAct4Online())
                     {
                         Session.Character.ChangeChannel(ServerManager.Instance.Configuration.Act4IP,
-                                ServerManager.Instance.Configuration.Act4Port, 2, false);
+                                ServerManager.Instance.Configuration.Act4Port, 2);
                         return;
                     }
 
@@ -65,11 +65,27 @@ namespace OpenNos.Handler.PacketHandler.Basic
 
             Session.CurrentMapInstance = Session.Character.MapInstance;
 
+            if (ServerManager.Instance.Configuration.SceneOnCreate && Session.Character.GeneralLogs.CountLinq(s => s.LogType == "Connection") < 2)
+            {
+                Session.SendPacket("scene 40");
+            }
+
             if (ServerManager.Instance.Configuration.WorldInformation)
             {
+                var assembly = Assembly.GetEntryAssembly();
+                var productVersion = assembly?.Location != null
+                    ? FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion
+                    : "1337";
+
                 Session.SendPacket(Session.Character.GenerateSay("------------------[NosQuest]------------------", 10));
                 Session.SendPacket(Session.Character.GenerateSay("Website: https://nosquestreborn.com", 12)); 
                 Session.SendPacket(Session.Character.GenerateSay("Discord: https://discord.gg/zM5JxBK", 12));
+                Session.SendPacket(Session.Character.GenerateSay("Founders:  Price, Devilion", 11));
+                Session.SendPacket(Session.Character.GenerateSay("TeamManager: Linky", 11));
+                Session.SendPacket(Session.Character.GenerateSay("ComumnityManager: LemonTree, Childe", 11));
+                Session.SendPacket(Session.Character.GenerateSay("SGA: Calliope", 11));
+                Session.SendPacket(Session.Character.GenerateSay("--------------------------------------------------", 10));
+                Session.SendPacket(Session.Character.GenerateSay("Hey friends, use this Command: $usr (User-Command-List)", 11));
                 Session.SendPacket(Session.Character.GenerateSay("------------------[Counter]--------------------", 10));
                 Session.SendPacket(Session.Character.GenerateSay($"Mob Kill Counter: {Session.Character.MobKillCounter.ToString("###,##0")}", 10));
                 Session.SendPacket(Session.Character.GenerateSay("--------------------------------------------------", 10));
@@ -84,6 +100,11 @@ namespace OpenNos.Handler.PacketHandler.Basic
                 Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(s => Session.SendPacket(Session.Character.GenerateSay("Welcome back, " + Session.Character.Name, 12)));
                 //Session.SendPacket(Session.Character.GenerateSay("You have access to $Warp - Unlock maps as you visit them!", 12));
                 Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(s => Session.SendPacket(Session.Character.GenerateSay("Stay updated and check #upcoming-patch in our discord!", 12)));
+            }
+
+            if (Session.Character.Level == 90)
+            {
+                Session.SendPacket(Session.Character.GenerateSay("You can now access to Family Dungeon!", 10));
             }
 
             Session.Character.LoadSpeed();
@@ -126,9 +147,8 @@ namespace OpenNos.Handler.PacketHandler.Basic
 
             #region Check StaticBonusType
 
-            StaticBonusDTO medal = Session.Character.StaticBonusList.Find(s => s.StaticBonusType == StaticBonusType.BazaarMedalGold || s.StaticBonusType == StaticBonusType.BazaarMedalSilver);
-
-            StaticBonusDTO buffs = Session.Character.StaticBonusList.Find(s => s.StaticBonusType == StaticBonusType.MedalOfErenia);
+            var medal = Session.Character.StaticBonusList.Find(s => s.StaticBonusType == StaticBonusType.BazaarMedalGold || s.StaticBonusType == StaticBonusType.BazaarMedalSilver);
+            var buffs = Session.Character.StaticBonusList.Find(s => s.StaticBonusType == StaticBonusType.MedalOfErenia);
 
             if (medal != null)
             {
@@ -172,14 +192,15 @@ namespace OpenNos.Handler.PacketHandler.Basic
             Session.SendPackets(Session.Character.GeneratePst());
 
             Session.SendPacket("zzim");
-            Session.SendPacket($"twk 1 {Session.Character.CharacterId} {Session.Account.Name} {Session.Character.Name} shtmxpdlfeoqkr");
+            Session.SendPacket( $"twk 1 {Session.Character.CharacterId} {Session.Account.Name} {Session.Character.Name} shtmxpdlfeoqkr");
 
 
-            long? familyId = DAOFactory.FamilyCharacterDAO.LoadByCharacterId(Session.Character.CharacterId)?.FamilyId;
+            var familyId = DAOFactory.FamilyCharacterDAO.LoadByCharacterId(Session.Character.CharacterId)?.FamilyId;
             if (familyId.HasValue)
             {
                 Session.Character.Family = ServerManager.Instance.FamilyList[familyId.Value];
             }
+
 
             if (Session.Character.Family != null && Session.Character.FamilyCharacter != null)
             {
@@ -200,7 +221,6 @@ namespace OpenNos.Handler.PacketHandler.Basic
 
                 }
             }
-            RewardsHelper.Instance.MobKillRewards(Session);
             RewardsHelper.Instance.DailyReward(Session);
             Session.SendPacket(Session.Character.GetSqst());
             Session.SendPacket("act6");
@@ -251,23 +271,10 @@ namespace OpenNos.Handler.PacketHandler.Basic
                 Session.SendPacket(UserInterfaceHelper.GenerateInfo(string.Format(Language.Instance.GetMessageFromKey("WARNING_INFO"), warning.Count())));
             }
 
-            //Messagge Users
-            if (Session.Character.Authority == AuthorityType.User)
 
+            Observable.Interval(TimeSpan.FromSeconds(20)).Subscribe(s =>
             {
-                Session.SendPacket(Session.Character.GenerateSay("===========NosQuest===========", 10));
-                Session.SendPacket(Session.Character.GenerateSay("Welcome " + Session.Character.Name, 12));
-                Session.SendPacket(Session.Character.GenerateSay("Use $Bank Help for info about Bank.", 10));
-                Session.SendPacket(Session.Character.GenerateSay("Use $HelpMe to contact a NQ Team", 10));
-                Session.SendPacket(Session.Character.GenerateSay("Use $Warp + Name to Move Map", 10));
-                Session.SendPacket(Session.Character.GenerateSay("Use $Help to see the list of additional commands available", 10));
-                Session.SendPacket(Session.Character.GenerateSay("Use $CheckStat for check status Glacer and Act6", 10));
-                Session.SendPacket(Session.Character.GenerateSay("========================", 10));
-            }
-
-            Observable.Interval(TimeSpan.FromSeconds(30)).Subscribe(s =>
-            {
-                Session?.SendPacket(Session?.Character?.GenerateSayTime());
+                Session.SendPacket(Session.Character.GenerateSayTime());
             });
 
             // finfo - friends info
@@ -286,7 +293,6 @@ namespace OpenNos.Handler.PacketHandler.Basic
                 Session.SendPacket(Session.Character.GenerateQuestsPacket());
             }
 
-            //Session.Character.SendSomePacket();
 
             if (Session.Character.IsSeal)
             {
@@ -298,11 +304,6 @@ namespace OpenNos.Handler.PacketHandler.Basic
                 {
                     Session.Character.IsSeal = false;
                 }
-            }
-
-            if (Session.Character.Reputation < 1)
-            {
-                Session.Character.Reputation = 1;
             }
         }
 

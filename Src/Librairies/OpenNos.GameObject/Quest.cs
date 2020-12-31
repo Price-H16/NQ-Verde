@@ -177,6 +177,6 @@ namespace OpenNos.GameObject
 
         #endregion
 
-        public string ClearAllTarget() => $"targetoff {TargetX} {TargetY} {TargetMap} {QuestId}";
+        ///public string ClearAllTarget() => $"targetoff {TargetX} {TargetY} {TargetMap} {QuestId}";
     }
 }

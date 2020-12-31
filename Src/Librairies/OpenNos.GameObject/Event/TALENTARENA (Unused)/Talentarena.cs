@@ -93,36 +93,36 @@ namespace OpenNos.GameObject.Event
 
             public void Run()
             {
-                byte[] levelCaps = {40, 50, 60, 70, 80, 85, 90, 95, 100, 120, 150, 180, 255};
+                byte[] levelCaps = { 40, 50, 60, 70, 80, 85, 90, 95, 100, 120, 150, 180, 255 };
                 while (!_shouldStop)
                 {
                     var groups = from sess in RegisteredParticipants.GetAllItems()
-                        group sess by Array.Find(levelCaps, s => s > sess.Character.Level)
+                                 group sess by Array.Find(levelCaps, s => s > sess.Character.Level)
                         into grouping
-                        select grouping;
+                                 select grouping;
                     foreach (var group in groups)
-                    foreach (var grp in group.ToList().Split(3).Where(s => s.Count == 3))
-                    {
-                        var g = new Group
+                        foreach (var grp in group.ToList().Split(3).Where(s => s.Count == 3))
                         {
-                            GroupType = GroupType.TalentArena,
-                            TalentArenaBattle = new TalentArenaBattle
+                            var g = new Group
                             {
-                                GroupLevel = group.Key
+                                GroupType = GroupType.TalentArena,
+                                TalentArenaBattle = new TalentArenaBattle
+                                {
+                                    GroupLevel = group.Key
+                                }
+                            };
+
+                            foreach (var sess in grp)
+                            {
+                                RegisteredParticipants.Remove(sess);
+                                g.JoinGroup(sess);
+                                sess.SendPacket(UserInterfaceHelper.GenerateBSInfo(1, 3, -1, 6));
+                                Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(observer =>
+                                    sess?.SendPacket(UserInterfaceHelper.GenerateBSInfo(1, 3, 300, 1)));
                             }
-                        };
 
-                        foreach (var sess in grp)
-                        {
-                            RegisteredParticipants.Remove(sess);
-                            g.JoinGroup(sess);
-                            sess.SendPacket(UserInterfaceHelper.GenerateBSInfo(1, 3, -1, 6));
-                            Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(observer =>
-                                sess?.SendPacket(UserInterfaceHelper.GenerateBSInfo(1, 3, 300, 1)));
+                            RegisteredGroups[g.GroupId] = g;
                         }
-
-                        RegisteredGroups[g.GroupId] = g;
-                    }
 
                     Thread.Sleep(5000);
                 }
@@ -151,10 +151,10 @@ namespace OpenNos.GameObject.Event
                 while (!_shouldStop)
                 {
                     var groups = from grp in RegisteredGroups.GetAllItems()
-                        where grp.TalentArenaBattle != null
-                        group grp by grp.TalentArenaBattle.GroupLevel
+                                 where grp.TalentArenaBattle != null
+                                 group grp by grp.TalentArenaBattle.GroupLevel
                         into grouping
-                        select grouping;
+                                 select grouping;
 
                     foreach (var group in groups)
                     {
@@ -171,16 +171,17 @@ namespace OpenNos.GameObject.Event
                                 RegisteredGroups.Remove(g);
                                 RegisteredGroups.Remove(prevGroup);
 
-                                var mapInstance = ServerManager.GenerateMapInstance(2015, MapInstanceType.NormalInstance, new InstanceBag());
+                                var mapInstance = ServerManager.GenerateMapInstance(2015,
+                                        MapInstanceType.NormalInstance, new InstanceBag());
                                 mapInstance.IsPVP = true;
 
-                                g.TalentArenaBattle.MapInstance         = mapInstance;
+                                g.TalentArenaBattle.MapInstance = mapInstance;
                                 prevGroup.TalentArenaBattle.MapInstance = mapInstance;
 
-                                g.TalentArenaBattle.Side         = 0;
+                                g.TalentArenaBattle.Side = 0;
                                 prevGroup.TalentArenaBattle.Side = 1;
 
-                                g.TalentArenaBattle.Calls         = 5;
+                                g.TalentArenaBattle.Calls = 5;
                                 prevGroup.TalentArenaBattle.Calls = 5;
 
                                 var gs = g.Sessions.GetAllItems().Concat(prevGroup.Sessions.GetAllItems());
@@ -206,16 +207,19 @@ namespace OpenNos.GameObject.Event
                                         x = 15;
                                     }
 
-                                    ServerManager.Instance.ChangeMapInstance(sess.Character.CharacterId,mapInstance.MapInstanceId, x, 39);
-                                    sess.SendPacketAfter(UserInterfaceHelper.GenerateTeamArenaMenu(3, 0, 0, 60, 0),5000);
+                                    ServerManager.Instance.ChangeMapInstance(sess.Character.CharacterId,
+                                            mapInstance.MapInstanceId, x, 39);
+                                    sess.SendPacketAfter(UserInterfaceHelper.GenerateTeamArenaMenu(3, 0, 0, 60, 0),
+                                            5000);
                                 }
 
-                                #warning TODO: Other Setup stuff
+#warning TODO: Other Setup stuff
 
-                                PlayingGroups[g.GroupId] = new List<Group> {g, prevGroup};
+                                PlayingGroups[g.GroupId] = new List<Group> { g, prevGroup };
 
                                 var battleThread = new BattleThread();
-                                Observable.Timer(TimeSpan.FromSeconds(0)).Subscribe(observer => battleThread.Run(PlayingGroups[g.GroupId]));
+                                Observable.Timer(TimeSpan.FromSeconds(0)).Subscribe(observer =>
+                                        battleThread.Run(PlayingGroups[g.GroupId]));
 
                                 prevGroup = null;
                             }

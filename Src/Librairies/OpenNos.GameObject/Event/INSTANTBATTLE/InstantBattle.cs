@@ -119,7 +119,9 @@ namespace OpenNos.GameObject.Event
             {
                 long maxGold = ServerManager.Instance.Configuration.MaxGold;
                 Thread.Sleep(10 * 1000);
-                if (!mapinstance.Item1.Sessions.Skip(3 - 1).Any())
+
+                //if (!mapinstance.Item1.Sessions.Skip(3 - 1).Any())
+                if (mapinstance.Item1.Sessions.Count() < 1) // 1 player to join
                 {
                     mapinstance.Item1.Sessions.Where(s => s.Character != null).ToList().ForEach(s => {
                         s.Character.RemoveBuffByBCardTypeSubType(new List<KeyValuePair<byte, byte>>()

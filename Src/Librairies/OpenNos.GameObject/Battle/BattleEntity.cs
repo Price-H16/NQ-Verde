@@ -1557,22 +1557,25 @@ namespace OpenNos.GameObject.Battle
 
                 if (indicator.Card.BCards.Any(newbuff => Buffs.GetAllItems().Any(b => b.Card.BCards.Any(buff =>
                                                                                                 buff.CardId != newbuff.CardId
-                                                                                             && (buff.Type == (byte)CardType.MaxHPMP && buff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumHPMPIncreased &&
-                                                                                                        (newbuff.Type == (byte)CardType.MaxHPMP || newbuff.Type == (byte)CardType.BearSpirit)
-                                                                                                        || newbuff.Type == (byte)CardType.MaxHPMP && newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumHPMPIncreased &&
-                                                                                                            (buff.Type == (byte)CardType.MaxHPMP || buff.Type == (byte)CardType.BearSpirit)
-                                                                                                        || buff.Type == (byte)CardType.MaxHPMP &&
-                                                                                                             (buff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumHPIncreased || buff.SubType == (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumHP) &&
-                                                                                                           (newbuff.Type == (byte)CardType.BearSpirit && newbuff.SubType == (byte)AdditionalTypes.BearSpirit.IncreaseMaximumHP) ||
-                                                                                                           buff.Type == (byte)CardType.MaxHPMP &&
-                                                                                                           (buff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumMPIncreased || buff.SubType == (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumMP) &&
-                                                                                                           newbuff.Type == (byte)CardType.BearSpirit && newbuff.SubType == (byte)AdditionalTypes.BearSpirit.IncreaseMaximumMP
-                                                                                                           || newbuff.Type == (byte)CardType.MaxHPMP &&
-                                                                                                           (newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumHPIncreased || newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumHP) &&
-                                                                                                           buff.Type == (byte)CardType.BearSpirit && buff.SubType == (byte)AdditionalTypes.BearSpirit.IncreaseMaximumHP ||
-                                                                                                           newbuff.Type == (byte)CardType.MaxHPMP && (newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.MaximumMPIncreased || newbuff.SubType == (byte)AdditionalTypes.MaxHPMP.IncreasesMaximumMP) &&
-                                                                                                           buff.Type == (byte)CardType.BearSpirit && buff.SubType == (byte)AdditionalTypes.BearSpirit.IncreaseMaximumMP || buff.Type == (byte)CardType.MaxHPMP && newbuff.Type == (byte)CardType.MaxHPMP &&
-                                                                                                           buff.SubType == newbuff.SubType || buff.Type == (byte)CardType.BearSpirit && newbuff.Type == (byte)CardType.BearSpirit && buff.SubType == newbuff.SubType)))))
+                                                                                             && (buff.Type == 33 && buff.SubType == 51 &&
+                                                                                                        (newbuff.Type == 33 || newbuff.Type == 58) || newbuff.Type == 33 && newbuff.SubType == 51 &&
+                                                                                                                                                      (buff.Type == 33 || buff.Type == 58)
+                                                                                                                                                   || buff.Type == 33 &&
+                                                                                                                                                      (buff.SubType == 11 || buff.SubType == 31) &&
+                                                                                                                                                      newbuff.Type == 58 && newbuff.SubType == 11 ||
+                                                                                                                                                      buff.Type == 33 &&
+                                                                                                                                                      (buff.SubType == 21 || buff.SubType == 41) &&
+                                                                                                                                                      newbuff.Type == 58 && newbuff.SubType == 31
+                                                                                                                                                   || newbuff.Type == 33 &&
+                                                                                                                                                      (newbuff.SubType == 11 || newbuff.SubType == 31) &&
+                                                                                                                                                      buff.Type == 58 && buff.SubType == 11 ||
+                                                                                                                                                      newbuff.Type == 33 &&
+                                                                                                                                                      (newbuff.SubType == 21 || newbuff.SubType == 41) &&
+                                                                                                                                                      buff.Type == 58 && buff.SubType == 31
+                                                                                                                                                   || buff.Type == 33 && newbuff.Type == 33 &&
+                                                                                                                                                      buff.SubType == newbuff.SubType ||
+                                                                                                                                                      buff.Type == 58 && newbuff.Type == 58 &&
+                                                                                                                                                      buff.SubType == newbuff.SubType)))))
                 {
                     return;
                 }
@@ -1593,46 +1596,6 @@ namespace OpenNos.GameObject.Battle
 
                 switch (indicator.Card.CardId)
                 {
-                    //No potion stacking
-                    case 116:
-                        RemoveBuff(4041);
-                        break;
-                    case 117:
-                        RemoveBuff(4042);
-                        break;
-                    case 118:
-                        RemoveBuff(4043);
-                        break;
-                    case 119:
-                        RemoveBuff(4046);
-                        break;
-
-                    case 71: //iron skin - don't stack with tom's power
-                        RemoveBuff(4049);
-                        break;
-
-                    //temporary fix --> bear buff overrides these buffs
-                    case 155:
-                        RemoveBuff(4051);
-                        RemoveBuff(4052);
-                        RemoveBuff(4053);
-                        break;
-
-                    // Fortune Bushtails buffs --> remove flower buffs
-                    case 710:
-                    case 711:
-                        RemoveBuff(378);
-                        RemoveBuff(379);
-                        break;
-
-                    //temporary fix --> family buffs shouldn't override monch buff
-                    case 4051:
-                    case 4052:
-                    case 4053:
-                        RemoveBuff(533);
-                        break;
-
-
                     case 272:
                     case 273:
                     case 274:
@@ -1682,7 +1645,7 @@ namespace OpenNos.GameObject.Battle
                                             var monstersToSummon = new List<MonsterToSummon>();
 
                                             // Increase n by 1 every round -- max. 2
-                                            var n = Math.Min(MapInstance.InstanceBag.LaurenaRound, 1);
+                                            var n = Math.Min(MapInstance.InstanceBag.LaurenaRound, 2);
 
                                             for (var i = 0; i < n; i++)
                                             {
@@ -1846,19 +1809,6 @@ namespace OpenNos.GameObject.Battle
 
                         MapInstance.Broadcast(Character.GenerateBfePacket(729, 1000));
                         break;
-
-                    case 4041:
-                        RemoveBuff(116);
-                        break;
-                    case 4042:
-                        RemoveBuff(117);
-                        break;
-                    case 4043:
-                        RemoveBuff(118);
-                        break;
-                    case 4044:
-                        RemoveBuff(119);
-                        break;
                 }
 
                 indicator.Card.BCards.ForEach(b => BCardDisposables[b.BCardId]?.Dispose());
@@ -1918,7 +1868,6 @@ namespace OpenNos.GameObject.Battle
                         case 2160:
                             buffTime = ServerManager.RandomNumber(100, 200);
                             break;
-
                     }
 
                     indicator.RemainingTime = indicator.Card.Duration == 0 ? buffTime : indicator.Card.Duration;
@@ -2008,30 +1957,24 @@ namespace OpenNos.GameObject.Battle
                 {
                     MapInstance?.Broadcast($"eff {(byte)UserType} {MapEntityId} 4537");
                 }
+
                 MapInstance?.Broadcast($"bf_e {(short)UserType} {MapEntityId} {indicator.Card.CardId} 100");
 
-                BuffObservables[indicator.Card.CardId] = Observable.Timer(TimeSpan.FromMilliseconds((indicator.Card.Duration == 0 || indicator.Card.CardId == 62 ? buffTime : indicator.Card.Duration) * 100)).Subscribe(o =>
-                {
-                    if (indicator.Card.CardId != 0 && amuletMaxDurability == 0)
-                    {
-                        RemoveBuff(indicator.Card.CardId);
-                        if (indicator.Card.TimeoutBuff != 0 && ServerManager.RandomNumber() < indicator.Card.TimeoutBuffChance)
-                        {
-                            #region Do not add timeout buff if...  
-                            if (indicator.Card.TimeoutBuff == 664) // Mega titan wings
-                            {
-                                if (Character != null && (Character.LastSkillUse.AddSeconds(10) <= DateTime.Now && Character.LastDefence.AddSeconds(10) <= DateTime.Now))
-                                {
-
-                                    return;
-                                }
-                            }
-                            #endregion
-
-                            AddBuff(new Buff(indicator.Card.TimeoutBuff, indicator.Level), sender);
-                        }
-                    }
-                });
+                BuffObservables[indicator.Card.CardId] = Observable
+                    .Timer(TimeSpan.FromMilliseconds((indicator.Card.Duration == 0 || indicator.Card.CardId == 62
+                                                         ? buffTime
+                                                         : indicator.Card.Duration) * 100)).Subscribe(o =>
+                                                         {
+                                                             if (indicator.Card.CardId != 0 && amuletMaxDurability == 0)
+                                                             {
+                                                                 RemoveBuff(indicator.Card.CardId);
+                                                                 if (indicator.Card.TimeoutBuff != 0 &&
+                                                                     ServerManager.RandomNumber() < indicator.Card.TimeoutBuffChance)
+                                                                 {
+                                                                     AddBuff(new Buff(indicator.Card.TimeoutBuff, indicator.Level), sender);
+                                                                 }
+                                                             }
+                                                         });
             }
         }
 
@@ -2078,30 +2021,22 @@ namespace OpenNos.GameObject.Battle
                                 return false;
                             }
 
-                            //use same safezone pos for normal arena too
-                            if (MapInstance.MapInstanceId == ServerManager.Instance.ArenaInstance.MapInstanceId && (MapInstance.Map.JaggedGrid[Character.PositionX][Character.PositionY]?.Value != 0
-                                || receiver.MapInstance.Map.JaggedGrid[receiver.PositionX][receiver.PositionY]?.Value != 0))
+                            // User in SafeZone
+                            if (MapInstance.MapInstanceId == ServerManager.Instance.ArenaInstance.MapInstanceId
+                                && (MapInstance.Map.JaggedGrid[Character.PositionX][Character.PositionY]?.Value != 0 &&
+                                    (MapInstance.Map.JaggedGrid[Character.PositionX][Character.PositionY]?.Value != 16 ||
+                                     Character.PositionY == 35)
+                                    || receiver.MapInstance.Map.JaggedGrid[receiver.PositionX][receiver.PositionY]?.Value !=
+                                    0 && (MapInstance.Map.JaggedGrid[receiver.PositionX][receiver.PositionY]?.Value != 16 ||
+                                          receiver.PositionY == 35)))
                             {
                                 return false;
                             }
 
-                            // original safezone but disabled cuz i changed arenamap
-                            //// User in SafeZone
-                            //if (MapInstance.MapInstanceId == ServerManager.Instance.ArenaInstance.MapInstanceId
-                            //    && (MapInstance.Map.JaggedGrid[Character.PositionX][Character.PositionY]?.Value != 0 &&
-                            //        (MapInstance.Map.JaggedGrid[Character.PositionX][Character.PositionY]?.Value != 16 ||
-                            //         Character.PositionY == 35)
-                            //        || receiver.MapInstance.Map.JaggedGrid[receiver.PositionX][receiver.PositionY]?.Value !=
-                            //        0 && (MapInstance.Map.JaggedGrid[receiver.PositionX][receiver.PositionY]?.Value != 16 ||
-                            //              receiver.PositionY == 35)))
-                            //{
-                            //    return false;
-                            //}
-
-                            if (MapInstance.MapInstanceId == ServerManager.Instance.FamilyArenaInstance.MapInstanceId && (MapInstance.Map.JaggedGrid[Character.PositionX][Character.PositionY]?.Value != 0
-                                 || receiver.MapInstance.Map.JaggedGrid[receiver.PositionX][receiver.PositionY]?.Value != 0))
-
-
+                            if (MapInstance.MapInstanceId == ServerManager.Instance.FamilyArenaInstance.MapInstanceId
+                             && (MapInstance.Map.JaggedGrid[Character.PositionX][Character.PositionY]?.Value != 0
+                              || receiver.MapInstance.Map.JaggedGrid[receiver.PositionX][receiver.PositionY]?.Value !=
+                                 0))
                             {
                                 return false;
                             }
@@ -2709,26 +2644,6 @@ namespace OpenNos.GameObject.Battle
             return new[] { value1, value2, value3 };
         }
 
-        public void HealEntity(int rawAmountToHeal, bool percentage = false)
-        {
-            var amountToHeal = 0;
-            if (!percentage)
-            {
-                amountToHeal = (rawAmountToHeal + Hp) >= HpMax ? (HpMax - Hp) : rawAmountToHeal;
-            }
-            else
-            {
-                var percentageToHeal = (HpMax / 100) * rawAmountToHeal;
-                amountToHeal = (percentageToHeal + Hp) >= HpMax ? (HpMax - Hp) : percentageToHeal;
-            }
-
-            // Who the hell knows
-            if (MapInstance == null) return;
-
-            MapInstance.Broadcast(GenerateRc(amountToHeal));
-            Hp += amountToHeal;
-        }
-
         public int GetDamage(int damage, BattleEntity damager, bool dontKill = false, bool fromDebuff = false)
         {
             if (Character?.HasGodMode == true || Mate?.Owner.HasGodMode == true || HasBuff(CardType.HideBarrelSkill,
@@ -2737,8 +2652,8 @@ namespace OpenNos.GameObject.Battle
                 return 0;
             }
 
-            if (fromDebuff)
-            // If it comes from attack percent defense, dismin damage percent with chance, and static damages are already applied
+            if (fromDebuff
+            ) // If it comes from attack percent defense, dismin damage percent with chance, and static damages are already applied
             {
                 var percentDefense = GetBuff(CardType.RecoveryAndDamagePercent,
                     (byte)AdditionalTypes.RecoveryAndDamagePercent.DecreaseSelfHP);
@@ -2932,21 +2847,6 @@ namespace OpenNos.GameObject.Battle
             }
         }
 
-        public bool HasBCard(CardType type, byte subtype)
-        {
-            try
-            {
-                return BCards.Any(b =>
-                    b.Type == (byte)type && b.SubType == subtype);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogEventError("HASBUFF",
-                    "Error on HasBuff(CardType type, byte subtype, bool castTypeNotZero = false) method", ex);
-                return false;
-            }
-        }
-
         public double HPLoad()
         {
             double MaxHp = 0;
@@ -3042,6 +2942,7 @@ namespace OpenNos.GameObject.Battle
                     return 15;
                 }
             }
+
             return int.MaxValue;
         }
 

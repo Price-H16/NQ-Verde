@@ -83,7 +83,6 @@ namespace OpenNos.GameObject
                             session.SendPacket(UserInterfaceHelper.GenerateMsg(
                                 Language.Instance.GetMessageFromKey("PET_IN_TEAM_UNRELEASABLE"), 0));
                         }
-                        session.Character.Savemates();
                     }
                 }
             }
@@ -108,7 +107,6 @@ namespace OpenNos.GameObject
                         session.SendPacket(mate.GenerateCond());
                         session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Npc, mate.MateTransportId, 5002));
                         session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                        session.Character.Savemates();
                     }
 
                     break;
@@ -128,7 +126,6 @@ namespace OpenNos.GameObject
                             StaticPacketHelper.GenerateEff(UserType.Npc, mate.MateTransportId, 198), mate.PositionX,
                             mate.PositionY);
                         session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                        session.Character.Savemates();
                     }
 
                     break;
@@ -148,7 +145,6 @@ namespace OpenNos.GameObject
                             StaticPacketHelper.GenerateEff(UserType.Npc, mate.MateTransportId, 198), mate.PositionX,
                             mate.PositionY);
                         session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                        session.Character.Savemates();
                     }
 
                     break;
@@ -222,7 +218,6 @@ namespace OpenNos.GameObject
                             session.SendPacket(UserInterfaceHelper.GenerateMsg(
                                 string.Format(Language.Instance.GetMessageFromKey("PET_SUMMONABLE"), mate.Name), 0));
                             session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                            session.Character.Savemates();
                         }
 
                         if (session.Character.MapInstance?.MapInstanceType == MapInstanceType.ArenaInstance)
@@ -240,7 +235,6 @@ namespace OpenNos.GameObject
                         if (mate == null || mate.MateType != MateType.Partner || mate.Level == 1) return;
                         mate.Level--;
                         session.Character.Inventory.RemoveItemFromInventory(inv.Id);
-                        session.Character.Savemates();
                     }
 
                     break;

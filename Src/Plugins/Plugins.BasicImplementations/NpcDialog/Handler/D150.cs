@@ -16,36 +16,32 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
-           var npc = packet.Npc;
+            var npc = packet.Npc;
             if (npc != null)
             {
-                if (Session.Character.Family == null)
+                if (Session.Character.Family != null)
                 {
-                    Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NEED_FAMILY"), 0));
-                    return;
-                }
-
-                if (Session.Character.Family?.LandOfDeath == null)
-                {
-                    Session.Character.Family.LandOfDeath = ServerManager.GenerateMapInstance(150, MapInstanceType.LodInstance, new InstanceBag());
-                }
-
-                if (Session.Character.Level >= 55)
-                {
-                    ServerManager.Instance.ChangeMapInstance(Session.Character.CharacterId, Session.Character.Family.LandOfDeath.MapInstanceId, 153, 145);
+                    if (Session.Character.Family.LandOfDeath != null && ServerManager.Instance.StartedEvents.Contains(EventType.LOD) && npc.Effect != 0)
+                    {
+                        if (Session.Character.Level >= 55)
+                        {
+                            ServerManager.Instance.ChangeMapInstance(Session.Character.CharacterId, Session.Character.Family.LandOfDeath.MapInstanceId, 153, 145);
+                        }
+                        else
+                        {
+                            Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LOD_REQUIERE_LVL"), 0));
+                        }
+                    }
+                    else
+                    {
+                        Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LOD_CLOSED"), 0));
+                    }
                 }
                 else
                 {
-                    Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LOD_REQUIERE_LVL"), 0));
+                    Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NEED_FAMILY"), 0));
                 }
-
-                if (Session.Character?.Family?.LandOfDeath != null)
-                {
-                    ServerManager.Instance.ChangeMapInstance(Session.Character.CharacterId, Session.Character.Family.LandOfDeath.MapInstanceId, 153, 145);
-                }            
-
             }
-            
         }
     }
 }

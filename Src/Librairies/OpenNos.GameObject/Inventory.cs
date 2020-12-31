@@ -109,17 +109,18 @@ namespace OpenNos.GameObject
 
         public ItemInstance AddIntoBazaarInventory(InventoryType inventory, byte slot, short amount)
         {
-            var inv = LoadBySlotAndType(slot, inventory);
+            ItemInstance inv = LoadBySlotAndType(slot, inventory);
+            if (inv == null || amount > inv.Amount)
+            {
+                return null;
+            }
 
-            if (amount < 0) return null;
-
-            if (inv == null || amount > inv.Amount) return null;
-
-            var invcopy = inv.DeepCopy();
+            ItemInstance invcopy = inv.DeepCopy();
             invcopy.Id = Guid.NewGuid();
             if (inv.Item.Type == InventoryType.Equipment)
             {
-                for (short i = 0; i < MAX_ITEM_AMOUNT; i++)
+                for (short i = 0; i < 255; i++)
+                {
                     if (LoadBySlotAndType(i, InventoryType.Bazaar) == null)
                     {
                         invcopy.Type = InventoryType.Bazaar;
@@ -129,14 +130,14 @@ namespace OpenNos.GameObject
                         putItem(invcopy);
                         break;
                     }
-
+                }
                 Owner.Session.SendPacket(UserInterfaceHelper.Instance.GenerateInventoryRemove(inventory, slot));
                 return invcopy;
             }
-
             if (amount >= inv.Amount)
             {
-                for (short i = 0; i < MAX_ITEM_AMOUNT; i++)
+                for (short i = 0; i < 255; i++)
+                {
                     if (LoadBySlotAndType(i, InventoryType.Bazaar) == null)
                     {
                         invcopy.Type = InventoryType.Bazaar;
@@ -146,7 +147,7 @@ namespace OpenNos.GameObject
                         putItem(invcopy);
                         break;
                     }
-
+                }
                 Owner.Session.SendPacket(UserInterfaceHelper.Instance.GenerateInventoryRemove(inventory, slot));
                 return invcopy;
             }
@@ -154,7 +155,8 @@ namespace OpenNos.GameObject
             invcopy.Amount = amount;
             inv.Amount -= amount;
 
-            for (short i = 0; i < MAX_ITEM_AMOUNT; i++)
+            for (short i = 0; i < 255; i++)
+            {
                 if (LoadBySlotAndType(i, InventoryType.Bazaar) == null)
                 {
                     invcopy.Type = InventoryType.Bazaar;
@@ -163,6 +165,7 @@ namespace OpenNos.GameObject
                     putItem(invcopy);
                     break;
                 }
+            }
 
             Owner.Session.SendPacket(inv.GenerateInventoryAdd());
             return invcopy;
@@ -252,9 +255,6 @@ namespace OpenNos.GameObject
         {
             if (Owner != null)
             {
-                Logger.LogUserEvent("ITEM_CREATE", Owner.GenerateIdentity(),
-                    $"IIId: {itemInstance.Id} ItemVNum: {itemInstance.ItemVNum} Amount: {itemInstance.Amount} MapId: {Owner.MapInstance?.Map.MapId} MapX: {Owner.PositionX} MapY: {Owner.PositionY}");
-
                 itemInstance.Slot = slot;
                 itemInstance.Type = type;
                 itemInstance.CharacterId = Owner.CharacterId;

@@ -124,15 +124,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 640;
+                        baseValue = 840;
                         break;
 
                     case 1:
-                        baseValue = 682;
+                        baseValue = 882;
                         break;
 
                     case 2:
-                        baseValue = 520;
+                        baseValue = 720;
                         break;
                 }
 
@@ -146,15 +146,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 612;
+                        baseValue = 812;
                         break;
 
                     case 1:
-                        baseValue = 510;
+                        baseValue = 710;
                         break;
 
                     case 2:
-                        baseValue = 425;
+                        baseValue = 625;
                         break;
                 }
 
@@ -168,15 +168,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 510;
+                        baseValue = 710;
                         break;
 
                     case 1:
-                        baseValue = 425;
+                        baseValue = 625;
                         break;
 
                     case 2:
-                        baseValue = 680;
+                        baseValue = 880;
                         break;
                 }
 
@@ -190,15 +190,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 600;
+                        baseValue = 800;
                         break;
 
                     case 1:
-                        baseValue = 799;
+                        baseValue = 999;
                         break;
 
                     case 2:
-                        baseValue = 575;
+                        baseValue = 775;
                         break;
                 }
 
@@ -213,15 +213,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 640;
+                        baseValue = 840;
                         break;
 
                     case 1:
-                        baseValue = 745;
+                        baseValue = 945;
                         break;
 
                     case 2:
-                        baseValue = 575;
+                        baseValue = 775;
                         break;
                 }
 
@@ -241,15 +241,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 32100; //22628
+                        baseValue = 72100; //22628
                         break;
 
                     case 1:
-                        baseValue = 22728; //12728
+                        baseValue = 62728; //12728
                         break;
 
                     case 2:
-                        baseValue = 19900; //9900
+                        baseValue = 59900; //9900
                         break;
                 }
 
@@ -268,15 +268,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 4000;
+                        baseValue = 6000;
                         break;
 
                     case 1:
-                        baseValue = 3000;
+                        baseValue = 5000;
                         break;
 
                     case 2:
-                        baseValue = 2500;
+                        baseValue = 4500;
                         break;
                 }
 
@@ -295,15 +295,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 2200;
+                        baseValue = 4200;
                         break;
 
                     case 1:
-                        baseValue = 1900;
+                        baseValue = 2900;
                         break;
 
                     case 2:
-                        baseValue = 1200;
+                        baseValue = 2200;
                         break;
                 }
 
@@ -322,15 +322,15 @@ namespace OpenNos.GameObject.Helpers
                 switch (i)
                 {
                     case 0:
-                        baseValue = 5071;
+                        baseValue = 7071;
                         break;
 
                     case 1:
-                        baseValue = 7900;
+                        baseValue = 9900;
                         break;
 
                     case 2:
-                        baseValue = 12385;
+                        baseValue = 18385;
                         break;
                 }
 

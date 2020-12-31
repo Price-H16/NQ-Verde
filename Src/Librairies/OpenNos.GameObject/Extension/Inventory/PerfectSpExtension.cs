@@ -1,9 +1,10 @@
-﻿using NosTale.Configuration;
-using NosTale.Configuration.Utilities;
+﻿
 using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using NosTale.Configuration.Utilities;
+using NosTale.Configuration;
 
 namespace OpenNos.GameObject.Extension.Inventory
 {
@@ -18,7 +19,7 @@ namespace OpenNos.GameObject.Extension.Inventory
             short stonevnum;
             byte upmode = 1;
 
-            switch ((SpecialistMorphType) e.Item.Morph)
+            switch ((SpecialistMorphType)e.Item.Morph)
             {
                 case SpecialistMorphType.Warrior:
                 case SpecialistMorphType.RedMage:
@@ -95,14 +96,10 @@ namespace OpenNos.GameObject.Extension.Inventory
 
             var specialist = session.Character.Inventory.GetItemInstanceById(e.Id);
             var rnd = ServerManager.RandomNumber();
-            if (ServerManager.Instance.Configuration.EventSpPerfection != 0)
-            {
-                rnd -= (rnd / 100) * ServerManager.Instance.Configuration.EventSpPerfection;
-            }
             if (rnd < conf.UpSuccess[upmode - 1]
             ) // + DependencyContainer.Instance.Get<JsonGameConfiguration>().DefaultEvent.PerfectionSp)
             {
-                byte type = (byte) ServerManager.RandomNumber(0, 16), count = 1;
+                byte type = (byte)ServerManager.RandomNumber(0, 16), count = 1;
                 switch (upmode)
                 {
                     case 4:
@@ -110,7 +107,7 @@ namespace OpenNos.GameObject.Extension.Inventory
                         break;
 
                     case 5:
-                        count = (byte) ServerManager.RandomNumber(3, 6);
+                        count = (byte)ServerManager.RandomNumber(3, 6);
                         break;
                 }
 

@@ -82,7 +82,7 @@ namespace OpenNos.Handler.PacketHandler.Family
                     var familyId = inviteSession.Character.Family.FamilyId;
 
                     Session.Character.Family = inviteSession.Character.Family;
-                    Session.Character.ChangeFaction((FactionType) inviteSession.Character.Family.FamilyFaction);
+                    Session.Character.ChangeFaction((FactionType)inviteSession.Character.Family.FamilyFaction);
                     Observable.Timer(TimeSpan.FromSeconds(5)).Subscribe(o =>
                         ServerManager.Instance.FamilyRefresh(familyId));
                     Observable.Timer(TimeSpan.FromSeconds(10)).Subscribe(o =>
