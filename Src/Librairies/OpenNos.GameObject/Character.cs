@@ -1142,17 +1142,17 @@ namespace OpenNos.GameObject
 
             if (!isSpQuest)
             {
-                if (!characterQuest.Quest.IsDaily && !characterQuest.IsMainQuest && (QuestType) characterQuest.Quest.QuestType != QuestType.FlowerQuest)
+                if (!characterQuest.Quest.IsDaily && !characterQuest.IsMainQuest && (QuestType)characterQuest.Quest.QuestType != QuestType.FlowerQuest)
                 {
                     if (DAOFactory.QuestLogDAO.LoadByCharacterId(CharacterId).Any(s => s.QuestId == questId))
                     {
-                        Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("QUEST_ALREADY_DONE"),0));
+                        Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("QUEST_ALREADY_DONE"), 0));
                         return;
                     }
                 }
-                else if (characterQuest.Quest.IsDaily && (QuestType) characterQuest.Quest.QuestType != QuestType.FlowerQuest)
+                else if (characterQuest.Quest.IsDaily && (QuestType)characterQuest.Quest.QuestType != QuestType.FlowerQuest)
                 {
-                    if (DAOFactory.QuestLogDAO.LoadByCharacterId(CharacterId).Any(s =>s.QuestId == questId && s.LastDaily != null && s.LastDaily.Value.AddHours(15) >= DateTime.Now))
+                    if (DAOFactory.QuestLogDAO.LoadByCharacterId(CharacterId).Any(s => s.QuestId == questId && s.LastDaily != null && s.LastDaily.Value.AddHours(24) >= DateTime.Now))
                     {
                         Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("QUEST_ALREADY_DONE_TODAY"), 0));
                         return;
@@ -2136,14 +2136,12 @@ namespace OpenNos.GameObject
                         RemoveBuff(378);
                         AddBuff(new Buff(379, Level), BattleEntity);
                     }
-
                     return true;
             }
-
             switch (questId)
             {
                 case 2255:
-                    short[] possibleRewards = new short[] {1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903};
+                    short[] possibleRewards = new short[] { 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903 };
                     GiftAdd(possibleRewards[ServerManager.RandomNumber(0, possibleRewards.Length - 1)], 1);
                     return true;
 

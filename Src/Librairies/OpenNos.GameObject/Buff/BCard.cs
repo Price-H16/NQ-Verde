@@ -2278,9 +2278,7 @@ namespace OpenNos.GameObject
                                                 {
                                                     AfterSpawnEvents = new List<EventContainer>
                                                     {
-                                                    new EventContainer(mapInstance, EventActionType.EFFECT,
-                                                        new Tuple<short, int>(monsterVNum, 0)),
-                                                    new EventContainer(mapInstance, EventActionType.REMOVEAFTER, 15)
+                                                    new EventContainer(mapInstance, EventActionType.EFFECT, new Tuple<short, int>(monsterVNum, 0)), new EventContainer(mapInstance, EventActionType.REMOVEAFTER, 15)
                                                     }
                                                 }));
                                         }

@@ -2,7 +2,7 @@
 
 using OpenNos.Core;
 
-namespace Valhalla.Packets.Packets.ClientPackets
+namespace NosTale.Packets.Packets.ClientPackets
 {
     [PacketHeader("glmk")]
     public class CreateFamilyPacket : PacketDefinition

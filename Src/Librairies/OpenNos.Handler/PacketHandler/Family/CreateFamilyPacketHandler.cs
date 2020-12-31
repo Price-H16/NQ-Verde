@@ -10,7 +10,7 @@ using OpenNos.GameObject.Networking;
 using OpenNos.Master.Library.Client;
 using OpenNos.Master.Library.Data;
 using NosTale.Packets.Packets.ClientPackets;
-using Valhalla.Packets.Packets.ClientPackets;
+using NosTale.Packets.Packets.ClientPackets;
 
 namespace OpenNos.Handler.PacketHandler.Family
 {
