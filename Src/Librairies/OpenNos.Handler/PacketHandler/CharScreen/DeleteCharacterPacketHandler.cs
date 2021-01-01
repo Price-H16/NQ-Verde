@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
@@ -38,6 +39,14 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 return;
             }
 
+            if (DateTime.Now <= Session.Account.LastDelete.AddDays(1))
+            {
+                Session.SendPacket($"info You Need Wait One Day");
+                return;
+            }
+
+            Session.Account.LastDelete = DateTime.Now;
+
             if (characterDeletePacket.Password == null)
             {
                 return;
@@ -50,7 +59,6 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
             {
                 return;
             }
-
             if (account.Password.ToLower() == CryptographyBase.Sha512(characterDeletePacket.Password))
             {
                 var character = DAOFactory.CharacterDAO.LoadBySlot(account.AccountId, characterDeletePacket.Slot);

@@ -26,6 +26,7 @@ namespace OpenNos.Data
 
         public long BankMoney { get; set; }
 
+        public DateTime LastDelete { get; set; }
         #endregion
     }
 }
