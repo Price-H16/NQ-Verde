@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using ChickenAPI.Events;
 using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -13,6 +6,11 @@ using OpenNos.GameObject.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.PathFinder;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 using static OpenNos.Domain.BCardType;
 
 namespace OpenNos.GameObject.Battle
@@ -910,34 +908,6 @@ namespace OpenNos.GameObject.Battle
 
         #region Properties
 
-        public EventEntity Event
-        {
-            get
-            {
-                if (Character != null)
-                {
-                    return Character.Event;
-                }
-
-                if (Mate != null)
-                {
-                    return Mate.Event;
-                }
-
-                if (MapMonster != null)
-                {
-                    return MapMonster.Event;
-                }
-
-                if (MapNpc != null)
-                {
-                    return MapNpc.Event;
-                }
-
-                return null;
-            }
-        }
-
         public double AdditionalHp { get; set; }
 
         public double AdditionalMp { get; set; }
@@ -1039,6 +1009,34 @@ namespace OpenNos.GameObject.Battle
         public int ElementRate { get; }
 
         public EntityType EntityType { get; }
+
+        public EventEntity Event
+        {
+            get
+            {
+                if (Character != null)
+                {
+                    return Character.Event;
+                }
+
+                if (Mate != null)
+                {
+                    return Mate.Event;
+                }
+
+                if (MapMonster != null)
+                {
+                    return MapMonster.Event;
+                }
+
+                if (MapNpc != null)
+                {
+                    return MapNpc.Event;
+                }
+
+                return null;
+            }
+        }
 
         public long FalconFocusedEntityId { get; set; }
 
@@ -2529,6 +2527,7 @@ namespace OpenNos.GameObject.Battle
             lock (Buffs)
             {
                 foreach (var buff in Buffs.GetAllItems())
+
                     // THIS ONE DOES NOT FOR STUFFS
 
                     foreach (var entry in buff.Card.BCards

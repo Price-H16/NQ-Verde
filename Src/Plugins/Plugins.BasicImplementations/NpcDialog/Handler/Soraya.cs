@@ -10,7 +10,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class Soraya : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 340;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -23,10 +29,11 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 0));
                 }
             }
         }
+
+        #endregion
     }
 }

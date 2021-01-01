@@ -1,23 +1,29 @@
-﻿// WingsEmu
-// 
-// Developed by NosWings Team
-
+﻿using ChickenAPI.Core.Logging;
+using ChickenAPI.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ChickenAPI.Core.Logging;
-using ChickenAPI.Core.Utils;
 
 namespace ChickenAPI.Core.Events
 {
     public class BasicEventPipelineAsync : IEventPipeline
     {
+        #region Members
+
         private readonly ILogger _log;
         private readonly Dictionary<Type, List<IEventPostProcessor>> _postprocessorsDictionary = new Dictionary<Type, List<IEventPostProcessor>>();
         private readonly Dictionary<Type, List<IEventPreprocessor>> _preprocessorsDictionary = new Dictionary<Type, List<IEventPreprocessor>>();
 
+        #endregion
+
+        #region Instantiation
+
         public BasicEventPipelineAsync(ILogger log) => _log = log;
+
+        #endregion
+
+        #region Methods
 
         public async Task Notify<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : IEventNotification
         {
@@ -44,6 +50,20 @@ namespace ChickenAPI.Core.Events
             }
         }
 
+        public Task RegisterPostProcessorAsync(IEventPostProcessor postProcessor, Type type)
+        {
+            if (!_postprocessorsDictionary.TryGetValue(type, out List<IEventPostProcessor> handlers))
+            {
+                handlers = new List<IEventPostProcessor>();
+                _postprocessorsDictionary[type] = handlers;
+            }
+
+            handlers.Add(postProcessor);
+            return Task.CompletedTask;
+        }
+
+        public Task RegisterPostProcessorAsync<T>(IEventPostProcessor postProcessor) where T : IEventNotification => RegisterPostProcessorAsync(postProcessor, typeof(T));
+
         public Task RegisterPreprocessorAsync<T>(IEventPreprocessor preprocessor) where T : IEventNotification => RegisterPreprocessorAsync(preprocessor, typeof(T));
 
         public Task RegisterPreprocessorAsync(IEventPreprocessor preprocessor, Type type)
@@ -63,28 +83,13 @@ namespace ChickenAPI.Core.Events
             return Task.CompletedTask;
         }
 
-        public Task UnregisterPreprocessorAsync<T>(IEventPreprocessor preprocessor) where T : IEventNotification => UnregisterPreprocessorAsync(preprocessor, typeof(T));
-
-        public Task UnregisterPreprocessorAsync(IEventPreprocessor preprocessor, Type type) => Task.CompletedTask;
-
-        public Task RegisterPostProcessorAsync(IEventPostProcessor postProcessor, Type type)
-        {
-            if (!_postprocessorsDictionary.TryGetValue(type, out List<IEventPostProcessor> handlers))
-            {
-                handlers = new List<IEventPostProcessor>();
-                _postprocessorsDictionary[type] = handlers;
-            }
-
-            handlers.Add(postProcessor);
-            return Task.CompletedTask;
-        }
-
-        public Task RegisterPostProcessorAsync<T>(IEventPostProcessor postProcessor) where T : IEventNotification => RegisterPostProcessorAsync(postProcessor, typeof(T));
-
         public Task UnregisterPostprocessorAsync<T>(IEventPostProcessor preprocessor) where T : IEventNotification => UnregisterPostprocessorAsync(preprocessor, typeof(T));
 
         public Task UnregisterPostprocessorAsync(IEventPostProcessor postProcessor, Type type) => Task.CompletedTask;
 
+        public Task UnregisterPreprocessorAsync<T>(IEventPreprocessor preprocessor) where T : IEventNotification => UnregisterPreprocessorAsync(preprocessor, typeof(T));
+
+        public Task UnregisterPreprocessorAsync(IEventPreprocessor preprocessor, Type type) => Task.CompletedTask;
 
         private async Task<bool> CanSendEvent(IEventNotification e, Type type, CancellationToken cancellationToken)
         {
@@ -104,5 +109,7 @@ namespace ChickenAPI.Core.Events
 
             return true;
         }
+
+        #endregion
     }
 }

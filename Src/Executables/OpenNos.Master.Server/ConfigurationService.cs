@@ -1,9 +1,9 @@
-﻿using System;
-using NosTale.Configuration;
+﻿using NosTale.Configuration;
 using NosTale.Configuration.Utilities;
 using OpenNos.Master.Library.Data;
 using OpenNos.Master.Library.Interface;
 using OpenNos.SCS.Communication.ScsServices.Service;
+using System;
 
 namespace OpenNos.Master.Server
 {

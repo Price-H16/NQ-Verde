@@ -10,6 +10,12 @@ namespace ChickenApi.Plugins
 {
     public class SimplePluginManager : IPluginManager
     {
+        #region Methods
+
+        public DirectoryInfo GetConfigDirectory() => new DirectoryInfo("config");
+
+        public DirectoryInfo GetPluginDirectory() => new DirectoryInfo("plugins");
+
         public IPlugin[] LoadPlugin(FileInfo file)
         {
             try
@@ -67,8 +73,6 @@ namespace ChickenApi.Plugins
             return null;
         }
 
-        public DirectoryInfo GetPluginDirectory() => new DirectoryInfo("plugins");
-
-        public DirectoryInfo GetConfigDirectory() => new DirectoryInfo("config");
+        #endregion
     }
 }

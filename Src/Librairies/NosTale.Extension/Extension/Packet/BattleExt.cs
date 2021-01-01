@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject.Battle;
@@ -14,6 +7,13 @@ using OpenNos.GameObject.Extension;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.GameObject.RainbowBattle;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NosTale.Extension.Extension.Packet
 {
@@ -56,7 +56,6 @@ namespace NosTale.Extension.Extension.Packet
                     damage = 0;
                     hitmode = 4;
                 }
-
                 else if (target.Character.LastPVPRevive > DateTime.Now.AddSeconds(-10) || hitRequest.Session.Character.LastPVPRevive > DateTime.Now.AddSeconds(-10))
                 {
                     damage = 0;
@@ -231,7 +230,6 @@ namespace NosTale.Extension.Extension.Packet
                         }
                     }
 
-
                     target.Character.LastPvPKiller = Session;
                     if (target.CurrentMapInstance.Map?.MapTypes.Any(s => s.MapTypeId == (short)MapTypeEnum.Act4) == true)
                     {
@@ -265,7 +263,6 @@ namespace NosTale.Extension.Extension.Packet
 
                         if (target.CleanIpAddress != hitRequest.Session.CleanIpAddress)
                         {
-
                             // check if meets requirements to give items
                             if (target.Character.Level >= 60 && hitRequest.Session.Character.Level >= 60 && target.Character.Reputation >= 100000)
                             {
@@ -278,6 +275,7 @@ namespace NosTale.Extension.Extension.Packet
                                         {
                                             hitRequest.Session.Character.GiftAdd(11128, 1);
                                         }
+
                                         // get item when killing angels
                                         if (hitRequest.Session.Character.Faction == FactionType.Demon)
                                         {
@@ -289,7 +287,7 @@ namespace NosTale.Extension.Extension.Packet
 
                                 target.Character.GetReputation(-3000);
                                 target.GoldLess(50000);
-                            }                 
+                            }
 
                             var alreadyHaveRep = new List<long>();
                             var amount = target.Character.DamageList.Keys.Count();
@@ -379,7 +377,6 @@ namespace NosTale.Extension.Extension.Packet
                             // revert the stats as they were before after the kill
                             target.Character.Act4Dead--;
                             target.Character.GetAct4Points(1);
-
                         }
 
                         foreach (var sess in ServerManager.Instance.Sessions.Where(s => s.HasSelectedCharacter))
@@ -387,12 +384,10 @@ namespace NosTale.Extension.Extension.Packet
                             if (sess.Character.Faction == Session.Character.Faction)
                             {
                                 sess.SendPacket(sess.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey($"ACT4_PVP_KILL{(int)target.Character.Faction}"), Session.Character.Name), 12));
-
                             }
                             else if (sess.Character.Faction == target.Character.Faction)
                             {
                                 sess.SendPacket(sess.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey($"ACT4_PVP_DEATH{(int)target.Character.Faction}"), target.Character.Name), 11));
-
                             }
                         }
 
@@ -413,7 +408,6 @@ namespace NosTale.Extension.Extension.Packet
                             target.SendPacket(target.Character.GenerateSay(Language.Instance.GetMessageFromKey("ACT4_PVP_DIE"), 11));
                             target.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("ACT4_PVP_DIE"), 0));
                             Observable.Timer(TimeSpan.FromMilliseconds(2000)).Subscribe(o => target.Character.SetSeal());
-
                         }
                     }
                     else if (target.CurrentMapInstance.MapInstanceType == MapInstanceType.IceBreakerInstance)
@@ -478,7 +472,6 @@ namespace NosTale.Extension.Extension.Packet
                         target.Character.isFreezed = true;
                         target.SendPacket(target?.Character?.GenerateCond());
 
-
                         Observable.Timer(TimeSpan.FromSeconds(20)).Subscribe(o =>
                         {
                             if (target.Character.isFreezed)
@@ -496,7 +489,7 @@ namespace NosTale.Extension.Extension.Packet
                     }
                     else
                     {
-                        hitRequest.Session.CurrentMapInstance?.Broadcast(Session.Character.GenerateSay( $"[{target.Character.Name}] has been slain by [{hitRequest.Session.Character.Name}]", 10));
+                        hitRequest.Session.CurrentMapInstance?.Broadcast(Session.Character.GenerateSay($"[{target.Character.Name}] has been slain by [{hitRequest.Session.Character.Name}]", 10));
 #pragma warning disable 4014
                         DiscordWebhookHelper.DiscordEventlogPVP($"ScoreArena: {target.Character.Name}  was killed by { hitRequest.Session.Character.Name} Record");
                         hitRequest.Session.Character.BattleEntity.ApplyScoreArena(target.Character.BattleEntity);
@@ -516,10 +509,8 @@ namespace NosTale.Extension.Extension.Packet
                             target.SendPacket(Session.Character.GenerateSay(string.Format(Language.Instance.GetMessageFromKey("PVP_SCORE"), target.Character.CurrentArenaKill, target.Character.CurrentArenaDeath), 10));
                             hitRequest.Session.SendPacket(hitRequest.Session.Character.GenerateAscr());
                             target.SendPacket(target.Character.GenerateAscr());
-
                         }
                         Observable.Timer(TimeSpan.FromMilliseconds(1000)).Subscribe(o => ServerManager.Instance.AskPvpRevive(target.Character.CharacterId));
-
                     }
                 }
 
@@ -640,6 +631,7 @@ namespace NosTale.Extension.Extension.Packet
                         .ForEach(s => s.ApplyBCards(target.Character.BattleEntity, Session.Character.BattleEntity));
 
                     #region Useless. But ?
+
                     if (battleEntity?.ShellWeaponEffects != null)
                     {
                         foreach (var shell in battleEntity.ShellWeaponEffects)
@@ -747,6 +739,7 @@ namespace NosTale.Extension.Extension.Packet
                             }
                         }
                     }
+
                     #endregion
                 }
 
@@ -965,7 +958,8 @@ namespace NosTale.Extension.Extension.Packet
                 if (ski != null)
                 {
                     // We will reinstantiate the skill so we can edit cooldown without modifying anything
-                    // Note: I did it like this because I didn't know MapMonster.cs had the cooldown reset calculation... Have to re-do it later.
+                    // Note: I did it like this because I didn't know MapMonster.cs had the cooldown
+                    //       reset calculation... Have to re-do it later.
                     ski.ReinstantiateSkill();
                     if (!Session.Character.WeaponLoaded(ski) || !ski.CanBeUsed())
                     {
@@ -1319,7 +1313,6 @@ namespace NosTale.Extension.Extension.Packet
                                             Session.Character.PositionX, Session.Character.PositionY, true,
                                             (int)(Session.Character.Hp / Session.Character.HPLoad() * 100), 0, -1,
                                             (byte)(ski.Skill.SkillType - 1)));
-
 
                             // test?
                             if (ski.SkillVNum == 1330)
@@ -2398,6 +2391,7 @@ namespace NosTale.Extension.Extension.Packet
 
                                     var dateTimeNow = DateTime.Now;
                                     if (skill != null
+
                                         //&&
                                         //    skill.LastUse.AddMilliseconds(
                                         //        (short)(skill.Skill.Cooldown) * 100 - 100) <=
@@ -2405,12 +2399,12 @@ namespace NosTale.Extension.Extension.Packet
                                         // If we set the time to send the packet, then it shouldn't be an issue about "re-looking" for the skill last use. This may cause troubles.
                                         )
                                     {
-                                // ????
-                                if (cooldownReduction < 0)
+                                        // ????
+                                        if (cooldownReduction < 0)
                                         {
-                                    //skill.LastUse =
-                                    //        DateTime.Now.AddMilliseconds(skill.Skill.Cooldown * 100 * -1);
-                                }
+                                            //skill.LastUse =
+                                            //        DateTime.Now.AddMilliseconds(skill.Skill.Cooldown * 100 * -1);
+                                        }
 
                                         Session.SendPacket(StaticPacketHelper.SkillReset(castingId));
                                         skill.ReinstantiateSkill();
@@ -2439,7 +2433,6 @@ namespace NosTale.Extension.Extension.Packet
                         Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_MP"), 10));
                     }
                 }
-
             }
             else
             {
@@ -2533,7 +2526,7 @@ namespace NosTale.Extension.Extension.Packet
                             $" {(short)(characterSkill.Skill.Cooldown - reducedCooldown)} {characterSkill.Skill.AttackAnimation}" +
                             $" {characterSkill.Skill.Effect} 0 0 1 1 0 0 0");
 
-                        if (characterSkill.Skill.BCards.ToList().Any(s => 
+                        if (characterSkill.Skill.BCards.ToList().Any(s =>
                         s.Type == (byte)BCardType.CardType.FairyXPIncrease && s.SubType == ((byte)AdditionalTypes.FairyXPIncrease.TeleportToLocation / 10)))
                         {
                             characterSkill.Skill.BCards.ToList().ForEach(s => s.ApplyBCards(Session.Character.BattleEntity, Session.Character.BattleEntity));
@@ -2568,9 +2561,9 @@ namespace NosTale.Extension.Extension.Packet
 
                         var count = 0;
 
-                //foreach (long id in Session.Character.MTListTargetQueue.Where(s => s.EntityType == UserType.Monster).Select(s => s.TargetId))
-                foreach (var id in Session.Character.GetMTListTargetQueue_QuickFix(characterSkill,
-            UserType.Monster))
+                        //foreach (long id in Session.Character.MTListTargetQueue.Where(s => s.EntityType == UserType.Monster).Select(s => s.TargetId))
+                        foreach (var id in Session.Character.GetMTListTargetQueue_QuickFix(characterSkill,
+                    UserType.Monster))
                         {
                             var mon = Session.CurrentMapInstance.GetMonsterById(id);
                             if (mon?.CurrentHp > 0 && mon?.Owner?.MapEntityId != Session.Character.CharacterId)
@@ -2582,9 +2575,9 @@ namespace NosTale.Extension.Extension.Packet
                             }
                         }
 
-                //foreach (long id in Session.Character.MTListTargetQueue.Where(s => s.EntityType == UserType.Player).Select(s => s.TargetId))
-                foreach (var id in Session.Character.GetMTListTargetQueue_QuickFix(characterSkill,
-            UserType.Player))
+                        //foreach (long id in Session.Character.MTListTargetQueue.Where(s => s.EntityType == UserType.Player).Select(s => s.TargetId))
+                        foreach (var id in Session.Character.GetMTListTargetQueue_QuickFix(characterSkill,
+                    UserType.Player))
                         {
                             var character = ServerManager.Instance.GetSessionByCharacterId(id);
                             if (character != null && character.CurrentMapInstance == Session.CurrentMapInstance
@@ -2631,7 +2624,6 @@ namespace NosTale.Extension.Extension.Packet
                                     (short)(characterSkill.Skill.Cooldown - reducedCooldown) * 100 - 100) <=
                                 DateTime.Now)
                             {
-
                                 Session.SendPacket(StaticPacketHelper.SkillReset(castingId));
                             }
                         });

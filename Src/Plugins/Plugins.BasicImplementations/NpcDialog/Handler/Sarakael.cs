@@ -1,5 +1,4 @@
 ﻿using OpenNos.Core;
-using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
@@ -10,7 +9,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class Sarakael : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 196;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -19,6 +24,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
             {
                 return;
             }
+
             //if (packet.Type == 0)
             //{
             //    Session.SendPacket($"qna #n_run^{packet.Runner}^56^{packet.Value}^{packet.NpcId} {Language.Instance.GetMessageFromKey("ASK_TRADE")}");
@@ -27,13 +33,14 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
             {
                 Session.Character.GiftAdd(5977, 1);
                 Session.Character.Inventory.RemoveItemAmount(5987, 1);
-               
-            }       
+            }
             else
             {
                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_ENOUGH_INGREDIENTS"), 0));
                 return;
             }
         }
+
+        #endregion
     }
 }

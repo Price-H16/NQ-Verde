@@ -7,25 +7,26 @@ using OpenNos.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OpenNos.DAL.DAO
 {
     public class FamilySkillMissionDAO : IFamilySkillMissionDAO
     {
+        #region Methods
+
         public void DailyReset(FamilySkillMissionDTO fsm)
         {
             try
             {
                 fsm.CurrentValue = (short)(fsm.ItemVNum < 9604 ? 1 : 0);
                 InsertOrUpdate(ref fsm);
-
             }
             catch (Exception e)
             {
                 Logger.Error(string.Format(Language.Instance.GetMessageFromKey("INSERT_ERROR"), "famskillmission", e.Message), e);
             }
         }
+
         public DeleteResult Delete(long itemVNum, long familyId)
         {
             try
@@ -77,20 +78,6 @@ namespace OpenNos.DAL.DAO
             }
         }
 
-        public IList<FamilySkillMissionDTO> LoadByFamilyId(long familyId)
-        {
-            using (OpenNosContext context = DataAccessHelper.CreateContext())
-            {
-                List<FamilySkillMissionDTO> result = new List<FamilySkillMissionDTO>();
-                foreach (FamilySkillMission entity in context.FamilySkillMission.Where(fs => fs.FamilyId.Equals(familyId)))
-                {
-                    FamilySkillMissionDTO dto = new FamilySkillMissionDTO();
-                    Mapper.Mappers.FamilySkillMissionMapper.ToFamilySkillMissionDTO(entity, dto);
-                    result.Add(dto);
-                }
-                return result;
-            }
-        }
         public IEnumerable<FamilySkillMissionDTO> LoadAll()
         {
             using (OpenNosContext context = DataAccessHelper.CreateContext())
@@ -100,6 +87,21 @@ namespace OpenNos.DAL.DAO
                 {
                     FamilySkillMissionDTO dto = new FamilySkillMissionDTO();
                     Mapper.Mappers.FamilySkillMissionMapper.ToFamilySkillMissionDTO(FamilySkillMission, dto);
+                    result.Add(dto);
+                }
+                return result;
+            }
+        }
+
+        public IList<FamilySkillMissionDTO> LoadByFamilyId(long familyId)
+        {
+            using (OpenNosContext context = DataAccessHelper.CreateContext())
+            {
+                List<FamilySkillMissionDTO> result = new List<FamilySkillMissionDTO>();
+                foreach (FamilySkillMission entity in context.FamilySkillMission.Where(fs => fs.FamilyId.Equals(familyId)))
+                {
+                    FamilySkillMissionDTO dto = new FamilySkillMissionDTO();
+                    Mapper.Mappers.FamilySkillMissionMapper.ToFamilySkillMissionDTO(entity, dto);
                     result.Add(dto);
                 }
                 return result;
@@ -135,5 +137,7 @@ namespace OpenNos.DAL.DAO
 
             return null;
         }
+
+        #endregion
     }
 }

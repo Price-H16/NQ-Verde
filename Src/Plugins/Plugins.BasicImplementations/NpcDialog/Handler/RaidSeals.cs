@@ -1,15 +1,20 @@
-﻿using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
-using OpenNos.GameObject.Helpers;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class RaidSeals : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 645;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -31,11 +36,19 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 
     public class RaidSeals2 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 646;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -57,11 +70,19 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 
     public class RaidSeals3 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 647;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -83,11 +104,19 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 
     public class RaidSeals4 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 648;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -109,11 +138,19 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 
     public class RaidSeals5 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 649;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -136,9 +173,237 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
             }
         }
 
+        #endregion
+
+        #region Classes
+
+        public class NoeliaDailyQuests : INpcDialogAsyncHandler
+        {
+            #region Properties
+
+            public long HandledId => 720;
+
+            #endregion
+
+            #region Methods
+
+            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
+            {
+                var npc = packet.Npc;
+                if (npc != null)
+                {
+                    if (Session.Character.Level >= 30) //  Daily Cuby
+                    {
+                        Session.Character.AddQuest(6160, false);
+                    }
+                    else
+                    {
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+        }
+
+        public class NoeliaDailyQuests1 : INpcDialogAsyncHandler
+        {
+            #region Properties
+
+            public long HandledId => 721;
+
+            #endregion
+
+            #region Methods
+
+            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
+            {
+                var npc = packet.Npc;
+                if (npc != null)
+                {
+                    if (Session.Character.Level >= 30) //  Daily Ginseng
+                    {
+                        Session.Character.AddQuest(6161, false);
+                    }
+                    else
+                    {
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+        }
+
+        public class NoeliaDailyQuests2 : INpcDialogAsyncHandler
+        {
+            #region Properties
+
+            public long HandledId => 722;
+
+            #endregion
+
+            #region Methods
+
+            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
+            {
+                var npc = packet.Npc;
+                if (npc != null)
+                {
+                    if (Session.Character.Level >= 30) //  Daily Castra
+                    {
+                        Session.Character.AddQuest(6162, false);
+                    }
+                    else
+                    {
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+        }
+
+        public class NoeliaDailyQuests3 : INpcDialogAsyncHandler
+        {
+            #region Properties
+
+            public long HandledId => 723;
+
+            #endregion
+
+            #region Methods
+
+            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
+            {
+                var npc = packet.Npc;
+                if (npc != null)
+                {
+                    if (Session.Character.Level >= 40) //  Daily Slade
+                    {
+                        Session.Character.AddQuest(6388, false);
+                    }
+                    else
+                    {
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+        }
+
+        public class NoeliaDailyQuests4 : INpcDialogAsyncHandler
+        {
+            #region Properties
+
+            public long HandledId => 724;
+
+            #endregion
+
+            #region Methods
+
+            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
+            {
+                var npc = packet.Npc;
+                if (npc != null)
+                {
+                    if (Session.Character.Level >= 40) //  Daily Slade
+                    {
+                        Session.Character.AddQuest(6389, false);
+                    }
+                    else
+                    {
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+        }
+
+        public class RaidSeals10 : INpcDialogAsyncHandler
+        {
+            #region Properties
+
+            public long HandledId => 654;
+
+            #endregion
+
+            #region Methods
+
+            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
+            {
+                var npc = packet.Npc;
+                if (npc != null)
+                {
+                    if (Session.Character.Inventory.CountItem(1012) >= 10 && Session.Character.Gold >= 500000)
+                    {
+                        Session.Character.GiftAdd(5921, 1);
+                        Session.Character.Inventory.RemoveItemAmount(1012, 10);
+                        Session.Character.Gold -= 500000;
+                        Session.SendPacket(Session.Character.GenerateGold());
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("THANK_YOU"), 10));
+                    }
+                    else
+                    {
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_INGREDIENTS"), 10));
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+        }
+
+        public class RaidSeals11 : INpcDialogAsyncHandler
+        {
+            #region Properties
+
+            public long HandledId => 655;
+
+            #endregion
+
+            #region Methods
+
+            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
+            {
+                var npc = packet.Npc;
+                if (npc != null)
+                {
+                    if (Session.Character.Inventory.CountItem(1012) >= 10 && Session.Character.Gold >= 500000)
+                    {
+                        Session.Character.GiftAdd(5922, 1);
+                        Session.Character.Inventory.RemoveItemAmount(1012, 10);
+                        Session.Character.Gold -= 500000;
+                        Session.SendPacket(Session.Character.GenerateGold());
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("THANK_YOU"), 10));
+                    }
+                    else
+                    {
+                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_INGREDIENTS"), 10));
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+        }
+
         public class RaidSeals6 : INpcDialogAsyncHandler
         {
+            #region Properties
+
             public long HandledId => 650;
+
+            #endregion
+
+            #region Methods
 
             public async Task Execute(ClientSession Session, NpcDialogEvent packet)
             {
@@ -160,6 +425,8 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                     }
                 }
             }
+
+            #endregion
         }
 
         //public class RaidSeals7 : INpcDialogAsyncHandler
@@ -212,7 +479,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 
         public class RaidSeals9 : INpcDialogAsyncHandler
         {
+            #region Properties
+
             public long HandledId => 653;
+
+            #endregion
+
+            #region Methods
 
             public async Task Execute(ClientSession Session, NpcDialogEvent packet)
             {
@@ -234,168 +507,10 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                     }
                 }
             }
+
+            #endregion
         }
 
-        public class RaidSeals10 : INpcDialogAsyncHandler
-        {
-            public long HandledId => 654;
-
-            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
-            {
-                var npc = packet.Npc;
-                if (npc != null)
-                {
-                    if (Session.Character.Inventory.CountItem(1012) >= 10 && Session.Character.Gold >= 500000)
-                    {
-                        Session.Character.GiftAdd(5921, 1);
-                        Session.Character.Inventory.RemoveItemAmount(1012, 10);
-                        Session.Character.Gold -= 500000;
-                        Session.SendPacket(Session.Character.GenerateGold());
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("THANK_YOU"), 10));
-                    }
-                    else
-                    {
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_INGREDIENTS"), 10));
-                        return;
-                    }
-                }
-            }
-        }
-
-        public class RaidSeals11 : INpcDialogAsyncHandler
-        {
-            public long HandledId => 655;
-
-            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
-            {
-                var npc = packet.Npc;
-                if (npc != null)
-                {
-                    if (Session.Character.Inventory.CountItem(1012) >= 10 && Session.Character.Gold >= 500000)
-                    {
-                        Session.Character.GiftAdd(5922, 1);
-                        Session.Character.Inventory.RemoveItemAmount(1012, 10);
-                        Session.Character.Gold -= 500000;
-                        Session.SendPacket(Session.Character.GenerateGold());
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("THANK_YOU"), 10));
-                    }
-                    else
-                    {
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_INGREDIENTS"), 10));
-                        return;
-                    }
-                }
-            }
-        }
-
-        public class NoeliaDailyQuests : INpcDialogAsyncHandler
-        {
-            public long HandledId => 720;
-
-            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
-            {
-                var npc = packet.Npc;
-                if (npc != null)
-                {
-                    if (Session.Character.Level >= 30) //  Daily Cuby
-                    {
-                        Session.Character.AddQuest(6160, false);
-                    }
-                    else
-                    {
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
-                        return;
-                    }
-                }
-            }
-        }
-
-        public class NoeliaDailyQuests1 : INpcDialogAsyncHandler
-        {
-            public long HandledId => 721;
-
-            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
-            {
-                var npc = packet.Npc;
-                if (npc != null)
-                {
-                    if (Session.Character.Level >= 30) //  Daily Ginseng
-                    {
-                        Session.Character.AddQuest(6161, false);
-                    }
-                    else
-                    {
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
-                        return;
-                    }
-                }
-            }
-        }
-
-        public class NoeliaDailyQuests2 : INpcDialogAsyncHandler
-        {
-            public long HandledId => 722;
-
-            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
-            {
-                var npc = packet.Npc;
-                if (npc != null)
-                {
-                    if (Session.Character.Level >= 30) //  Daily Castra
-                    {
-                        Session.Character.AddQuest(6162, false);
-                    }
-                    else
-                    {
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
-                        return;
-                    }
-                }
-            }
-        }
-
-        public class NoeliaDailyQuests3 : INpcDialogAsyncHandler
-        {
-            public long HandledId => 723;
-
-            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
-            {
-                var npc = packet.Npc;
-                if (npc != null)
-                {
-                    if (Session.Character.Level >= 40) //  Daily Slade
-                    {
-                        Session.Character.AddQuest(6388, false);
-                    }
-                    else
-                    {
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
-                        return;
-                    }
-                }
-            }
-        }
-
-        public class NoeliaDailyQuests4 : INpcDialogAsyncHandler
-        {
-            public long HandledId => 724;
-
-            public async Task Execute(ClientSession Session, NpcDialogEvent packet)
-            {
-                var npc = packet.Npc;
-                if (npc != null)
-                {
-                    if (Session.Character.Level >= 40) //  Daily Slade
-                    {
-                        Session.Character.AddQuest(6389, false);
-                    }
-                    else
-                    {
-                        Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
-                        return;
-                    }
-                }
-            }
-        }
+        #endregion
     }
 }

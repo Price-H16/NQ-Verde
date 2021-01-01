@@ -1,40 +1,44 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Helpers;
-using OpenNos.GameObject.Networking;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class D1 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 1;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
-           var npc = packet.Npc;
-           if (Session.Character.Class != (byte)ClassType.Adventurer)
-           {
-               Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_ADVENTURER"), 0));
-               return;
-           }
-           if (Session.Character.Level < 15 || Session.Character.JobLevel < 20)
-           {
-               Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LOW_LVL"), 0));
-               return;
-           }
-           if (packet.Type > 3 || packet.Type < 1)
-           {
-               return;
-           }
-           if (packet.Type == (byte)Session.Character.Class)
-           {
-               return;
-           }
+            var npc = packet.Npc;
+            if (Session.Character.Class != (byte)ClassType.Adventurer)
+            {
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_ADVENTURER"), 0));
+                return;
+            }
+            if (Session.Character.Level < 15 || Session.Character.JobLevel < 20)
+            {
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LOW_LVL"), 0));
+                return;
+            }
+            if (packet.Type > 3 || packet.Type < 1)
+            {
+                return;
+            }
+            if (packet.Type == (byte)Session.Character.Class)
+            {
+                return;
+            }
             if (Session.Character.Inventory.All(i => i.Type != InventoryType.Wear))
             {
                 Session.Character.Inventory.AddNewToInventory((short)(4 + packet.Type * 14), 1, InventoryType.Wear, 4, 5);
@@ -69,10 +73,12 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                     Session.Character.Inventory.AddNewToInventory(2082, 20, InventoryType.Etc); // bolts
                 }
             }
-           else
-           {
-               Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("EQ_NOT_EMPTY"), 0));
-           }
+            else
+            {
+                Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("EQ_NOT_EMPTY"), 0));
+            }
         }
+
+        #endregion
     }
 }

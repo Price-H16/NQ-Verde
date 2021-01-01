@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NosTale.Configuration.Utilities;
+using System;
+using System.IO;
 
 namespace NosTale.Configuration.Helper
 {

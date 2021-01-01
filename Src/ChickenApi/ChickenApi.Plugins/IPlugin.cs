@@ -2,20 +2,29 @@
 {
     public interface IPlugin
     {
+        #region Properties
+
         PluginEnableTime EnableTime { get; }
+
         /// <summary>
-        ///     Name of the plugin
+        /// Name of the plugin
         /// </summary>
         string Name { get; }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        ///     Called when this plugin is disabled
+        /// Called when this plugin is disabled
         /// </summary>
         void OnDisable();
 
         /// <summary>
-        ///     Called when this plugin is enabled
+        /// Called when this plugin is enabled
         /// </summary>
         void OnEnable();
+
+        #endregion
     }
 }

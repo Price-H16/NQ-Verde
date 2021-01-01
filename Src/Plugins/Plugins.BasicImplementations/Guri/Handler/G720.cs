@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
-using OpenNos.Core.Extensions;
-using OpenNos.DAL;
-using OpenNos.Data;
-using OpenNos.Domain;
+﻿using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._Guri;
 using OpenNos.GameObject._Guri.Event;
-using OpenNos.GameObject.Event;
-using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.GameObject.RainbowBattle;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.Guri.Handler
 {
     public class G720 : IGuriHandler
     {
+        #region Properties
+
         public long GuriEffectId => 720;
+
+        #endregion
+
+        #region Methods
 
         public async Task ExecuteAsync(ClientSession Session, GuriEvent e)
         {
@@ -34,7 +31,6 @@ namespace Plugins.BasicImplementations.Guri.Handler
 
                 //Packet Hacking
                 if (npc == null) return;
-
 
                 int dist = Map.GetDistance(
                     new MapCell { X = Session.Character.PositionX, Y = Session.Character.PositionY },
@@ -51,5 +47,7 @@ namespace Plugins.BasicImplementations.Guri.Handler
                 RainbowBattleManager.AddFlag(Session, RainbowTeam, (RainbowNpcType)e.Argument, (int)e.User);
             }
         }
+
+        #endregion
     }
-} 
+}

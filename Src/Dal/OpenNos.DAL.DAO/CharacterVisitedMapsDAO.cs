@@ -1,16 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using OpenNos.DAL.DAO.Generic;
+﻿using OpenNos.DAL.DAO.Generic;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
 using OpenNos.Data;
 using OpenNos.Mapper.Mappers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
     public class CharacterVisitedMapsDAO : GenericDAO<CharacterVisitedMapDTO, CharacterVisitedMaps>, ICharacterVisitedMapsDAO
     {
+        #region Methods
+
+        public void DeleteByCharacterId(long characterId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public CharacterVisitedMapDTO InsertOrUpdate(CharacterVisitedMapDTO dto)
         {
             using (var context = DataAccessHelper.CreateContext())
@@ -34,18 +41,13 @@ namespace OpenNos.DAL.DAO
 
                         dto.CharacterVisitedMapId = newId;
                     }
-                    
+
                     dto.CharacterId = characterId;
-                    InsertOrUpdate(context, dto, context.CharacterVisitedMaps, new CharacterVisitedMapsMapper(), 
+                    InsertOrUpdate(context, dto, context.CharacterVisitedMaps, new CharacterVisitedMapsMapper(),
                         x => x.CharacterVisitedMapId == dto.CharacterVisitedMapId);
                     context.SaveChanges();
                 }
             }
-        }
-
-        public void DeleteByCharacterId(long characterId)
-        {
-            throw new System.NotImplementedException();
         }
 
         public List<CharacterVisitedMapDTO> LoadByCharacterId(long characterId)
@@ -63,5 +65,7 @@ namespace OpenNos.DAL.DAO
                 return result;
             }
         }
+
+        #endregion
     }
 }

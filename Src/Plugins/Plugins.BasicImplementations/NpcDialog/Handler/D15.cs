@@ -1,21 +1,27 @@
-﻿using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Helpers;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class D15 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 15;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
-           var npc = packet.Npc;
-           if (npc != null)
-           {
+            var npc = packet.Npc;
+            if (npc != null)
+            {
                 if (packet.Value == 2)
                 {
                     Session.SendPacket($"qna #n_run^15^1^1^{npc.MapNpcId} {Language.Instance.GetMessageFromKey("ASK_CHANGE_SPAWNLOCATION")}");
@@ -49,8 +55,10 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                             break;
                     }
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("RESPAWNLOCATION_CHANGED"), 0));
-                }      
-           }
+                }
+            }
         }
+
+        #endregion
     }
 }

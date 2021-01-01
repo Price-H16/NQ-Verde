@@ -8,7 +8,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class RamosQuest : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 727;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -21,10 +27,11 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("CANT_MEET_REQUIREMENTS"), 10));
                 }
             }
         }
+
+        #endregion
     }
 }

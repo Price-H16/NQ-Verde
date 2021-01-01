@@ -4,14 +4,18 @@ namespace OpenNos.DAL.EF.Migrations
 {
     public partial class ChangeName : DbMigration
     {
-        public override void Up()
-        {
-            AddColumn("dbo.Character", "IsChangeName", c => c.Boolean(false));
-        }
+        #region Methods
 
         public override void Down()
         {
             DropColumn("dbo.Character", "IsChangeName");
         }
+
+        public override void Up()
+        {
+            AddColumn("dbo.Character", "IsChangeName", c => c.Boolean(false));
+        }
+
+        #endregion
     }
 }

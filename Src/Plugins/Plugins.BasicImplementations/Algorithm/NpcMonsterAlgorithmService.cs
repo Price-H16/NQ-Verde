@@ -6,11 +6,17 @@ namespace Plugins.BasicImplementations.Algorithm
 {
     public class NpcMonsterAlgorithmService : INpcMonsterAlgorithmService
     {
+        #region Members
+
         private readonly IMonsterRaceStatAlgorithm _heroXp;
         private readonly IMonsterRaceStatAlgorithm _hpMax;
         private readonly IMonsterRaceStatAlgorithm _jobXp;
         private readonly IMonsterRaceStatAlgorithm _mpMax;
         private readonly IMonsterRaceStatAlgorithm _xp;
+
+        #endregion
+
+        #region Instantiation
 
         public NpcMonsterAlgorithmService()
         {
@@ -27,17 +33,22 @@ namespace Plugins.BasicImplementations.Algorithm
             _heroXp.Initialize();
         }
 
+        #endregion
 
-        public int GetHpMax(NpcMonsterRaceType type, byte level, bool isMonster) => _hpMax.GetStat(type, level, isMonster);
-
-        public int GetMpMax(NpcMonsterRaceType type, byte level, bool isMonster) => _mpMax.GetStat(type, level, isMonster);
-
-        public int GetXp(NpcMonsterRaceType type, byte level, bool isMonster) => _xp.GetStat(type, level, isMonster);
-
-        public int GetJobXp(NpcMonsterRaceType type, byte level, bool isMonster) => _jobXp.GetStat(type, level, isMonster);
+        #region Methods
 
         public int GetHeroXp(NpcMonsterRaceType type, byte level, bool isMonster) => _heroXp.GetStat(type, level, isMonster);
 
+        public int GetHpMax(NpcMonsterRaceType type, byte level, bool isMonster) => _hpMax.GetStat(type, level, isMonster);
+
+        public int GetJobXp(NpcMonsterRaceType type, byte level, bool isMonster) => _jobXp.GetStat(type, level, isMonster);
+
+        public int GetMpMax(NpcMonsterRaceType type, byte level, bool isMonster) => _mpMax.GetStat(type, level, isMonster);
+
         public int GetReputation(NpcMonsterRaceType type, byte level, bool isMonster) => 0;
+
+        public int GetXp(NpcMonsterRaceType type, byte level, bool isMonster) => _xp.GetStat(type, level, isMonster);
+
+        #endregion
     }
 }

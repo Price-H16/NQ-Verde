@@ -1,5 +1,5 @@
 ﻿// WingsEmu
-// 
+//
 // Developed by NosWings Team
 
 namespace ChickenAPI.Core.Utils

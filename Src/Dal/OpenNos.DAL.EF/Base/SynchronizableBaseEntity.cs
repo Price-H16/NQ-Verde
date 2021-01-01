@@ -8,7 +8,7 @@ namespace OpenNos.DAL.EF
     {
         #region Properties
 
-        [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid Id { get; set; }
 
         #endregion

@@ -1,11 +1,13 @@
-﻿using System;
-using OpenNos.Domain;
+﻿using OpenNos.Domain;
 using OpenNos.GameObject.Helpers;
+using System;
 
 namespace OpenNos.GameObject.Battle
 {
     public static class BattleEntityExtension
     {
+        #region Methods
+
         public static int ReflectDamage(this BattleEntity attacker, BattleEntity target, int damage, bool isPrimary)
         {
             int data;
@@ -29,5 +31,7 @@ namespace OpenNos.GameObject.Battle
 
             return damage -= reflectedDamage;
         }
+
+        #endregion
     }
 }

@@ -8,7 +8,15 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class MissingScout : INpcDialogAsyncHandler
     {
-        public long HandledId => 302; // Missing Scout
+        #region Properties
+
+        public long HandledId => 302;
+
+        #endregion
+
+        // Missing Scout
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -26,5 +34,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 }

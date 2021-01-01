@@ -1,8 +1,4 @@
-﻿// WingsEmu
-// 
-// Developed by NosWings Team
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace ChickenAPI.Core.Events

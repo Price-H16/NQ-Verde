@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using OpenNos.DAL.Interface;
 using OpenNos.Data;
+using System;
+using System.Collections.Generic;
 
 namespace OpenNos.DAL.DAO.Base
 {
@@ -11,12 +11,15 @@ namespace OpenNos.DAL.DAO.Base
     {
         #region Members
 
-        protected readonly IDictionary<Type, Type> _mappings = new Dictionary<Type, Type>();
         protected readonly IMapper _mapper;
+        protected readonly IDictionary<Type, Type> _mappings = new Dictionary<Type, Type>();
+
+        #endregion
+
+        #region Instantiation
 
         protected MappingBaseDao(IMapper mapper) => _mapper = mapper;
 
         #endregion
-
     }
 }

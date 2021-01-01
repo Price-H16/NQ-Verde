@@ -4,6 +4,14 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Xp
 {
     public class LevelBasedAlgorithm : ILevelBasedDataAlgorithm
     {
+        #region Properties
+
+        public long[] Data { get; set; }
+
+        #endregion
+
+        #region Methods
+
         public void Initialize()
         {
             Data = new long[256];
@@ -23,9 +31,11 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Xp
                         case 14:
                             var = 6 / 3d;
                             break;
+
                         case 39:
                             var = 19 / 3d;
                             break;
+
                         case 59:
                             var = 70 / 3d;
                             break;
@@ -41,9 +51,11 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Xp
                     case 79:
                         var = 5000;
                         break;
+
                     case 82:
                         var = 9000;
                         break;
+
                     case 84:
                         var = 13000;
                         break;
@@ -53,6 +65,6 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Xp
             }
         }
 
-        public long[] Data { get; set; }
+        #endregion
     }
 }

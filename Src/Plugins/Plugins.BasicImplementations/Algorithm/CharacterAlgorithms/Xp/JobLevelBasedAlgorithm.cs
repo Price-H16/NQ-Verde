@@ -2,7 +2,15 @@
 {
     public class JobLevelBasedAlgorithm : ILevelBasedDataAlgorithm
     {
+        #region Properties
+
+        public long[] Data { get; set; }
+
         public long[] FirstJobXpData { get; set; }
+
+        #endregion
+
+        #region Methods
 
         public void Initialize()
         {
@@ -24,6 +32,6 @@
             }
         }
 
-        public long[] Data { get; set; }
+        #endregion
     }
 }

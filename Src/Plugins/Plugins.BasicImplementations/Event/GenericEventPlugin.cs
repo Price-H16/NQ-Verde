@@ -1,18 +1,23 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using ChickenAPI.Events;
 using ChickenAPI.Plugins;
 using OpenNos.Core;
 using OpenNos.Core.Extensions;
+using System;
 
 namespace Plugins.BasicImplementations.Event
 {
     public class GenericEventPlugin : IGamePlugin
     {
-        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+        #region Members
 
         private readonly IContainer _container;
+
         private readonly IEventPipeline _handlers;
+
+        #endregion
+
+        #region Instantiation
 
         public GenericEventPlugin(IEventPipeline handlers, IContainer container)
         {
@@ -20,7 +25,17 @@ namespace Plugins.BasicImplementations.Event
             _container = container;
         }
 
+        #endregion
+
+        #region Properties
+
+        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+
         public string Name => nameof(GenericEventPlugin);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -50,5 +65,7 @@ namespace Plugins.BasicImplementations.Event
         public void OnLoad()
         {
         }
+
+        #endregion
     }
 }

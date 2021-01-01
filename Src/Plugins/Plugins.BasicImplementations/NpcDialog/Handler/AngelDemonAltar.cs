@@ -2,14 +2,19 @@
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
-using OpenNos.GameObject.Helpers;
 using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class AngelDemonAltar : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 725;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -22,16 +27,23 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("CANT_MEET_REQUIREMENTS"), 10));
                 }
             }
         }
+
+        #endregion
     }
 
     public class AngelDemonAltar1 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 726;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -44,10 +56,11 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("CANT_MEET_REQUIREMENTS"), 10));
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
@@ -9,6 +6,9 @@ using OpenNos.Data;
 using OpenNos.Data.Enums;
 using OpenNos.Domain;
 using OpenNos.Mapper.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
@@ -43,7 +43,7 @@ namespace OpenNos.DAL.DAO
                 using (var context = DataAccessHelper.CreateContext())
                 {
                     var bon = context.StaticBonus.FirstOrDefault(c =>
-                        c.StaticBonusType == (StaticBonusType) bonusToDelete && c.CharacterId == characterId);
+                        c.StaticBonusType == (StaticBonusType)bonusToDelete && c.CharacterId == characterId);
 
                     if (bon != null)
                     {
@@ -112,7 +112,7 @@ namespace OpenNos.DAL.DAO
                 using (var context = DataAccessHelper.CreateContext())
                 {
                     return context.StaticBonus.Where(i => i.CharacterId == characterId)
-                        .Select(qle => (short) qle.StaticBonusType).ToList();
+                        .Select(qle => (short)qle.StaticBonusType).ToList();
                 }
             }
             catch (Exception e)

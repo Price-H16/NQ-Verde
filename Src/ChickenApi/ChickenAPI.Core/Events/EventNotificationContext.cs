@@ -9,6 +9,10 @@ namespace OpenNos.GameObject._gameEvent
         /// </summary>
         //public WorldServerDTO Server { get; set; }
 
+        #region Properties
+
         public NotifiableEventType NotifiableEventType { get; set; }
+
+        #endregion
     }
 }

@@ -9,6 +9,7 @@ namespace OpenNos.Core
 
         public LoginCryptography() : base(false)
         {
+            //lol
         }
 
         #endregion

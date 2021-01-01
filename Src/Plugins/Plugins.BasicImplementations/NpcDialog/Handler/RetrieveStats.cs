@@ -2,7 +2,6 @@
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
-using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using System;
 using System.Reactive.Linq;
@@ -12,7 +11,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class RetrieveStats : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 663;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -36,9 +41,10 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                     Session.SendPacket(Session.Character.GenerateSay($"A4 Demons %: {ServerManager.Instance.Act4DemonStat.Percentage}", 10));
                     Session.SendPacket(Session.Character.GenerateSay($"Monsters Killed: {Session.Character.MobKillCounter.ToString("###,##0")}", 10));
                     Session.SendPacket(Session.Character.GenerateSay("---------------------------------------------------------------------", 10));
-
                 });
             }
         }
+
+        #endregion
     }
 }

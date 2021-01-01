@@ -1,34 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using OpenNos.Core;
-using OpenNos.GameObject;
+﻿using OpenNos.Core;
 using OpenNos.GameObject._Event;
 using OpenNos.GameObject._Guri;
 using OpenNos.GameObject._Guri.Event;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.Guri
 {
     public class BaseGuriHandler : IGuriHandlerContainer
     {
+        #region Members
+
         protected readonly Dictionary<long, IGuriHandler> HandlersByDialogId;
+
+        #endregion
+
+        #region Instantiation
 
         public BaseGuriHandler()
         {
             HandlersByDialogId = new Dictionary<long, IGuriHandler>();
         }
 
-        public async Task Register(IGuriHandler handler)
-        {
-            if (HandlersByDialogId.ContainsKey(handler.GuriEffectId)) return;
+        #endregion
 
-            Logger.Log.Debug($"[GURI][REGISTER_HANDLER] GURI_EFFECT : {handler.GuriEffectId} REGISTERED !");
-            HandlersByDialogId.Add(handler.GuriEffectId, handler);
-        }
-
-        public async Task Unregister(long guriEffectId)
-        {
-            HandlersByDialogId.Remove(guriEffectId);
-        }
+        #region Methods
 
         public void Handle(EventEntity player, GuriEvent args)
         {
@@ -45,5 +41,20 @@ namespace Plugins.BasicImplementations.Guri
 
             await handler.ExecuteAsync(player.Character.Session, args);
         }
+
+        public async Task Register(IGuriHandler handler)
+        {
+            if (HandlersByDialogId.ContainsKey(handler.GuriEffectId)) return;
+
+            Logger.Log.Debug($"[GURI][REGISTER_HANDLER] GURI_EFFECT : {handler.GuriEffectId} REGISTERED !");
+            HandlersByDialogId.Add(handler.GuriEffectId, handler);
+        }
+
+        public async Task Unregister(long guriEffectId)
+        {
+            HandlersByDialogId.Remove(guriEffectId);
+        }
+
+        #endregion
     }
 }

@@ -6,9 +6,15 @@ namespace NosQuest.Plugins.Logging
 {
     public class LoggingPlugin : ICorePlugin
     {
+        #region Properties
+
         public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
 
         public string Name => nameof(LoggingPlugin);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -22,5 +28,7 @@ namespace NosQuest.Plugins.Logging
         {
             builder.RegisterType<SerilogLogger>().As<ILogger>();
         }
+
+        #endregion
     }
 }

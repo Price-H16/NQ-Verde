@@ -80,6 +80,7 @@
     <Compile Include="Networking\Communication\Scs\Communication\Messages\ScsPingMessage.cs" />
     <Compile Include="Networking\INetworkClient.cs" />
     <Compile Include="Handling\IPacketHandler.cs" />
+    <Compile Include="Networking\INetworkSession.cs" />
     <Compile Include="Networking\NetworkClient.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Threading\ThreadSafeGenericList.cs" />

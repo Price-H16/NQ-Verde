@@ -1,10 +1,9 @@
-﻿using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 
 namespace NosTale.Packets.Packets.CommandPackets
 {
-    [PacketHeader("$Quest", PassNonParseablePacket = true, Authorities = new[] {AuthorityType.Administrator})]
+    [PacketHeader("$Quest", PassNonParseablePacket = true, Authorities = new[] { AuthorityType.Administrator })]
     public class AddQuestPacket : PacketDefinition
     {
         #region Properties

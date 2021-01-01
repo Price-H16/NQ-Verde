@@ -1,7 +1,7 @@
+using OpenNos.Domain;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF
 {
@@ -74,9 +74,9 @@ namespace OpenNos.DAL.EF
 
         public short? FireResistance { get; set; }
 
-        public short? HitRate { get; set; }
-
         public bool? HasSkin { get; set; }
+
+        public short? HitRate { get; set; }
 
         public short? HoldingVNum { get; set; }
 
@@ -155,7 +155,7 @@ namespace OpenNos.DAL.EF
         public short? WaterResistance { get; set; }
 
         public long? XP { get; set; }
-        
+
         #endregion
     }
 }

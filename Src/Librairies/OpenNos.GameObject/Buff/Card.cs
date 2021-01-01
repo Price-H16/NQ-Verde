@@ -1,20 +1,15 @@
-﻿using System.Collections.Generic;
-using OpenNos.Data;
+﻿using OpenNos.Data;
+using System.Collections.Generic;
 
 namespace OpenNos.GameObject
 {
     public class Card : CardDTO
     {
-        #region Properties
-
-        public List<BCard> BCards { get; set; }
-
-        #endregion
-
         #region Instantiation
 
         public Card()
         {
+            //wtf is that
         }
 
         public Card(CardDTO input)
@@ -30,6 +25,12 @@ namespace OpenNos.GameObject
             TimeoutBuff = input.TimeoutBuff;
             TimeoutBuffChance = input.TimeoutBuffChance;
         }
+
+        #endregion
+
+        #region Properties
+
+        public List<BCard> BCards { get; set; }
 
         #endregion
     }

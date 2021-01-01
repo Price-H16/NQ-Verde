@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using OpenNos.Core;
+using OpenNos.Core.Networking;
 using OpenNos.Domain;
 using OpenNos.GameObject.Extension;
 using OpenNos.GameObject.Helpers;
@@ -28,6 +29,7 @@ namespace OpenNos.GameObject
         #endregion
 
         #region Members
+        protected Type PacketHandler { get; }
 
         protected Type _packetHandler;
 
@@ -36,7 +38,6 @@ namespace OpenNos.GameObject
         #endregion
 
         #region Methods
-
         public void AddSession(INetworkClient customClient)
         {
             Logger.Info(Language.Instance.GetMessageFromKey("NEW_CONNECT") + customClient.ClientId);

@@ -4,6 +4,15 @@ namespace OpenNos.DAL.EF.Migrations
 {
     public partial class Title : DbMigration
     {
+        #region Methods
+
+        public override void Down()
+        {
+            DropForeignKey("dbo.CharacterTitle", "CharacterId", "dbo.Character");
+            DropIndex("dbo.CharacterTitle", new[] { "CharacterId" });
+            DropTable("dbo.CharacterTitle");
+        }
+
         public override void Up()
         {
             CreateTable(
@@ -20,11 +29,6 @@ namespace OpenNos.DAL.EF.Migrations
                 .Index(t => t.CharacterId);
         }
 
-        public override void Down()
-        {
-            DropForeignKey("dbo.CharacterTitle", "CharacterId", "dbo.Character");
-            DropIndex("dbo.CharacterTitle", new[] {"CharacterId"});
-            DropTable("dbo.CharacterTitle");
-        }
+        #endregion
     }
 }

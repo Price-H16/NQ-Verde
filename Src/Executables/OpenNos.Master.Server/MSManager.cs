@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using NosTale.Configuration;
+﻿using NosTale.Configuration;
 using NosTale.Configuration.Utilities;
 using OpenNos.Core;
 using OpenNos.Master.Library.Data;
 using OpenNos.SCS.Communication.ScsServices.Service;
+using System;
+using System.Collections.Generic;
 
 namespace OpenNos.Master.Server
 {
@@ -91,8 +91,6 @@ namespace OpenNos.Master.Server
                 EventRuneUp = a.Event.EventRuneUp,
                 EventTattoUp = a.Event.EventTattoUp
 
-
-
                 #endregion
             };
         }
@@ -105,6 +103,8 @@ namespace OpenNos.Master.Server
 
         public ThreadSafeGenericLockedList<long> AuthentificatedClients { get; set; }
 
+        public Dictionary<long, DateTime> CharactersUnderSaveProcess { get; set; }
+
         public ConfigurationObject ConfigurationObject { get; set; }
 
         public ThreadSafeGenericList<AccountConnection> ConnectedAccounts { get; set; }
@@ -112,8 +112,6 @@ namespace OpenNos.Master.Server
         public List<IScsServiceClient> LoginServers { get; set; }
 
         public List<WorldServer> WorldServers { get; set; }
-        
-        public Dictionary<long, DateTime> CharactersUnderSaveProcess { get; set; }
 
         #endregion
     }

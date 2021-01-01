@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -9,6 +9,13 @@
 	
 	<ItemGroup>
 		<PackageReference Include="dotenv.net" Version="1.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
 		<PackageReference Include="NetCoreServer" Version="5.0.5" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Librairies\NosQuest.Network\NosQuest.Network.csproj" />
+	  <ProjectReference Include="..\..\Librairies\OpenNos.Core\OpenNos.Core.csproj" />
+	  <ProjectReference Include="..\..\Librairies\OpenNos.GameObject\OpenNos.GameObject.csproj" />
 	</ItemGroup>
 </Project>

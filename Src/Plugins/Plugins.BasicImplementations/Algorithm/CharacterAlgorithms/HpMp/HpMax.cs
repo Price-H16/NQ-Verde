@@ -4,12 +4,20 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.HpMp
 {
     public class HpMax : ICharacterStatAlgorithm
     {
+        #region Members
+
         private const int MAX_LEVEL = 256;
         private int[,] _stats;
 
+        #endregion
+
+        #region Methods
+
+        public int GetStat(ClassType type, byte level) => _stats[(int)type, level - 1 > 0 ? level - 1 : 0];
+
         public void Initialize()
         {
-            _stats = new int[(int) ClassType.Unknown, MAX_LEVEL];
+            _stats = new int[(int)ClassType.Unknown, MAX_LEVEL];
 
             // todo improve that shit
             for (var i = 0; i < MAX_LEVEL; i++)
@@ -49,14 +57,14 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.HpMp
                     ++jArcher;
                 }
 
-                _stats[(int) ClassType.Adventurer, i] = (int) (1 / 2.0 * i * i + 31 / 2.0 * i + 205); // approx
-                _stats[(int) ClassType.Swordsman, i] = hpSwordman;
-                _stats[(int) ClassType.Magician, i] = (int) ((i + 15) * (i + 15) + i + 15.0 - 465 + 550); // approx
-                _stats[(int) ClassType.Archer, i] = hpArcher; // approx
-                _stats[(int) ClassType.MartialArtist, i] = hpSwordman; // approx
+                _stats[(int)ClassType.Adventurer, i] = (int)(1 / 2.0 * i * i + 31 / 2.0 * i + 205); // approx
+                _stats[(int)ClassType.Swordsman, i] = hpSwordman;
+                _stats[(int)ClassType.Magician, i] = (int)((i + 15) * (i + 15) + i + 15.0 - 465 + 550); // approx
+                _stats[(int)ClassType.Archer, i] = hpArcher; // approx
+                _stats[(int)ClassType.MartialArtist, i] = hpSwordman; // approx
             }
         }
 
-        public int GetStat(ClassType type, byte level) => _stats[(int) type, level - 1 > 0 ? level - 1 : 0];
+        #endregion
     }
 }

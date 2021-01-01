@@ -1,16 +1,22 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using OpenNos.Domain;
+﻿using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._BCards;
 using OpenNos.GameObject.Battle;
+using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.BCards.Handler
 {
     public class TestHealingBurningAndCasting : IBCardEffectAsyncHandler
     {
+        #region Properties
+
         public BCardType.CardType HandledType { get; } = BCardType.CardType.HealingBurningAndCasting;
+
+        #endregion
+
+        #region Methods
 
         public async Task ExecuteAsync(BattleEntity target, BattleEntity sender, BCard bcard)
         {
@@ -20,14 +26,13 @@ namespace Plugins.BasicImplementations.BCards.Handler
             var IsLevelScaled = bcard.IsLevelScaled;
             var session = target;
             var ThirdData = bcard.ThirdData;
-             /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
-                             {
-                                 return;
-                             }*/
+            /* if (session.HasBuff(BCardType.CardType.RecoveryAndDamagePercent, 01))
+                            {
+                                return;
+                            }*/
 
-                            // WTF ? Why Cryless ?
+            // WTF ? Why Cryless ?
 
-                           
             var amount = bcard.IsLevelDivided ? senderLevel / (firstData += 1) :
                 IsLevelDivided && IsLevelScaled ? senderLevel / (firstData += 1) :
                 IsLevelScaled ? senderLevel * (firstData += 1) : firstData;
@@ -41,7 +46,7 @@ namespace Plugins.BasicImplementations.BCards.Handler
 
                 switch (bcard.SubType)
                 {
-                    case (byte) AdditionalTypes.HealingBurningAndCasting.RestoreHP:
+                    case (byte)AdditionalTypes.HealingBurningAndCasting.RestoreHP:
 
                         if (session.Hp + amount > session.HpMax)
                         {
@@ -51,7 +56,7 @@ namespace Plugins.BasicImplementations.BCards.Handler
                         if (amount > 0)
                         {
                             if (session.HasBuff(BCardType.CardType.DarkCloneSummon,
-                                (byte) AdditionalTypes.DarkCloneSummon.ConvertRecoveryToDamage))
+                                (byte)AdditionalTypes.DarkCloneSummon.ConvertRecoveryToDamage))
                             {
                                 amount = session.GetDamage(amount, sender, true, true);
 
@@ -67,7 +72,7 @@ namespace Plugins.BasicImplementations.BCards.Handler
 
                         break;
 
-                    case (byte) AdditionalTypes.HealingBurningAndCasting.RestoreMP:
+                    case (byte)AdditionalTypes.HealingBurningAndCasting.RestoreMP:
 
                         if (session.Mp + amount > session.MpMax)
                         {
@@ -78,14 +83,14 @@ namespace Plugins.BasicImplementations.BCards.Handler
 
                         break;
 
-                    case (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseHP:
+                    case (byte)AdditionalTypes.HealingBurningAndCasting.DecreaseHP:
 
                         session.Hp = session.Hp - amount <= 0 ? 1 : session.Hp - amount;
                         session.MapInstance?.Broadcast(session.GenerateDm(amount));
 
                         break;
 
-                    case (byte) AdditionalTypes.HealingBurningAndCasting.DecreaseMP:
+                    case (byte)AdditionalTypes.HealingBurningAndCasting.DecreaseMP:
 
                         session.Mp = session.Mp - amount <= 0 ? 1 : session.Mp - amount;
 
@@ -119,5 +124,7 @@ namespace Plugins.BasicImplementations.BCards.Handler
                 session.BCardDisposables[bcard.BCardId] = bcardDisposable;
             }
         }
+
+        #endregion
     }
 }

@@ -27,6 +27,7 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
         #region Properties
 
         private ClientSession Session { get; }
+        public DateTime LastDelete { get; private set; }
 
         #endregion
 
@@ -45,6 +46,7 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
             }
 
             Logger.LogUserEvent("DELETECHARACTER", Session.GenerateIdentity(), $"[DeleteCharacter]Name: {characterDeletePacket.Slot}");
+            LastDelete = DateTime.Now.AddDays(1);
             var account = DAOFactory.AccountDAO.LoadById(Session.Account.AccountId);
             if (account == null)
             {
@@ -58,7 +60,6 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 {
                     return;
                 }
-
 
                 // Remove all relations from deleted character
                 var relationshipList = ServerManager.Instance.CharacterRelations.Where(s => s.CharacterId == character.CharacterId || s.RelatedCharacterId == character.CharacterId).ToList();
@@ -74,6 +75,20 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 {
                     PacketData = string.Empty
                 }); ;
+
+                FamilyCharacterDTO familyCharacter = DAOFactory.FamilyCharacterDAO.LoadByCharacterId(character.CharacterId);
+                if (familyCharacter == null)
+                {
+                    new EntryPointPacketHandler(Session).LoadCharacters(new OpenNosEntryPointPacket
+                    {
+                        PacketData = string.Empty
+                    }); ;
+                    return;
+                }
+
+                // REMOVE FROM FAMILY
+                DAOFactory.FamilyCharacterDAO.Delete(character.CharacterId);
+                ServerManager.Instance.FamilyRefresh(familyCharacter.FamilyId);
             }
             else
             {
@@ -83,7 +98,7 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
 
         private static void DeleteRelation(long mainCharacterId, List<CharacterRelationDTO> relations, long characterId, CharacterRelationType relationType)
         {
-            CharacterRelationDTO chara = relations.Find(s =>  (s.RelatedCharacterId == characterId || s.CharacterId == characterId) && s.RelationType == relationType);
+            CharacterRelationDTO chara = relations.Find(s => (s.RelatedCharacterId == characterId || s.CharacterId == characterId) && s.RelationType == relationType);
             if (chara != null)
             {
                 long id = chara.CharacterRelationId;
@@ -95,14 +110,14 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 {
                     List<CharacterRelationDTO> lst = ServerManager.Instance.CharacterRelations.Where(s => s.CharacterId == characterId || s.RelatedCharacterId == characterId).ToList();
                     string result = "finit";
-                    
+
                     foreach (CharacterRelationDTO relation in lst.Where(c => c.RelationType == CharacterRelationType.Friend || c.RelationType == CharacterRelationType.Spouse))
                     {
                         long id2 = relation.RelatedCharacterId == charac.CharacterId ? relation.CharacterId : relation.RelatedCharacterId;
                         bool isOnline = CommunicationServiceClient.Instance.IsCharacterConnected(ServerManager.Instance.ServerGroup, id2);
                         result += $" {id2}|{(short)relation.RelationType}|{(isOnline ? 1 : 0)}|{DAOFactory.CharacterDAO.LoadById(id2).Name}";
                     }
-                    
+
                     int? sentChannelId = CommunicationServiceClient.Instance.SendMessageToCharacter(new SCSCharacterMessage
                     {
                         DestinationCharacterId = charac.CharacterId,

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using OpenNos.DAL;
+﻿using OpenNos.DAL;
 using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject.Networking;
 using OpenNos.Master.Library.Client;
 using OpenNos.Master.Library.Data;
+using System;
+using System.Collections.Generic;
 
 namespace OpenNos.GameObject
 {
@@ -46,11 +46,11 @@ namespace OpenNos.GameObject
 
         public MapInstance Act4RaidBossMap { get; set; }
 
-        public List<FamilySkillMission> FamilySkillMissions { get; set; }
-
         public List<FamilyCharacter> FamilyCharacters { get; set; }
 
         public List<FamilyLogDTO> FamilyLogs { get; set; }
+
+        public List<FamilySkillMission> FamilySkillMissions { get; set; }
 
         public MapInstance LandOfDeath { get; set; }
 
@@ -125,6 +125,7 @@ namespace OpenNos.GameObject
                 case FamilyLogType.FamilyMission:
                     value = $"{itemVNum}";
                     break;
+
                 case FamilyLogType.FamilyExtension:
                     value = $"{itemVNum}";
                     break;
@@ -166,7 +167,7 @@ namespace OpenNos.GameObject
             });
         }
 
-        internal Family DeepCopy() => (Family) MemberwiseClone();
+        internal Family DeepCopy() => (Family)MemberwiseClone();
 
         #endregion
     }

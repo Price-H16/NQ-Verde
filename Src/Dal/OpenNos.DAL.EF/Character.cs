@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using OpenNos.DAL.EF.Entities;
 using OpenNos.Domain;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace OpenNos.DAL.EF
 {
@@ -43,13 +43,19 @@ namespace OpenNos.DAL.EF
 
         public int Act4Points { get; set; }
 
-        public long RBBWin { get; set; }
+        public int ArenaDeath { get; set; }
 
-        public long RBBLose { get; set; }
+        public long ArenaDie { get; set; }
+
+        public int ArenaKill { get; set; }
+
+        public long ArenaTc { get; set; }
 
         public int ArenaWinner { get; set; }
-        
-        public int ItemShopShip { get; set; }
+
+        public int BattleTowerExp { get; set; }
+
+        public byte BattleTowerStage { get; set; }
 
         public virtual ICollection<BazaarItem> BazaarItem { get; set; }
 
@@ -66,7 +72,7 @@ namespace OpenNos.DAL.EF
         public virtual ICollection<CharacterSkill> CharacterSkill { get; set; }
 
         public virtual ICollection<CharacterTitle> CharacterTitle { get; set; }
-        
+
         public virtual ICollection<CharacterVisitedMaps> CharacterVisitedMaps { get; set; }
 
         public byte Class { get; set; }
@@ -93,6 +99,8 @@ namespace OpenNos.DAL.EF
 
         public long Gold { get; set; }
 
+        public long GoldBank { get; set; }
+
         public bool GroupRequestBlocked { get; set; }
 
         public HairColorType HairColor { get; set; }
@@ -105,11 +113,15 @@ namespace OpenNos.DAL.EF
 
         public long HeroXp { get; set; }
 
+        public bool HideHat { get; set; }
+
         public int Hp { get; set; }
 
         public bool HpBlocked { get; set; }
 
         public virtual ICollection<ItemInstance> Inventory { get; set; }
+
+        public bool IsChangeName { get; set; }
 
         public bool IsPartnerAutoRelive { get; set; }
 
@@ -117,15 +129,21 @@ namespace OpenNos.DAL.EF
 
         public bool IsSeal { get; set; }
 
+        public int ItemShopShip { get; set; }
+
         public byte JobLevel { get; set; }
 
         public long JobLevelXp { get; set; }
+
+        public long LastFactionChange { get; set; }
 
         public long LastFamilyLeave { get; set; }
 
         public byte Level { get; set; }
 
         public long LevelXp { get; set; }
+
+        public string LockCode { get; set; }
 
         public virtual ICollection<Mail> Mail { get; set; }
 
@@ -161,6 +179,8 @@ namespace OpenNos.DAL.EF
 
         public MinilandState MinilandState { get; set; }
 
+        public int MobKillCounter { get; set; }
+
         public bool MouseAimLock { get; set; }
 
         public int Mp { get; set; }
@@ -172,6 +192,10 @@ namespace OpenNos.DAL.EF
         public virtual ICollection<QuicklistEntry> QuicklistEntry { get; set; }
 
         public long RagePoint { get; set; }
+
+        public long RBBLose { get; set; }
+
+        public long RBBWin { get; set; }
 
         public long Reputation { get; set; }
 
@@ -195,37 +219,14 @@ namespace OpenNos.DAL.EF
 
         public int TalentWin { get; set; }
 
-        public int ArenaKill { get; set; }
-
-        public int ArenaDeath { get; set; }
-
-        public bool WhisperBlocked { get; set; }
-
-        public bool IsChangeName { get; set; }
-
-        public int MobKillCounter { get; set; }
-        
-        public byte UnlockedHLevel { get; set; }
-
-        public bool HideHat { get; set; }
-
         public bool UiBlocked { get; set; }
 
-        public string LockCode { get; set; }
+        public byte UnlockedHLevel { get; set; }
 
         public bool VerifiedLock { get; set; }
 
-        public long ArenaDie { get; set; }
+        public bool WhisperBlocked { get; set; }
 
-        public long ArenaTc { get; set; }
-
-        public long LastFactionChange { get; set; }
-
-        public int BattleTowerExp { get; set; }
-
-        public byte BattleTowerStage { get; set; }
-
-        public long GoldBank { get; set; }
         #endregion
     }
 }

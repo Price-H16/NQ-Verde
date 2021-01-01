@@ -1,5 +1,5 @@
 ﻿// WingsEmu
-// 
+//
 // Developed by NosWings Team
 
 using System.Linq;
@@ -10,6 +10,8 @@ namespace ChickenAPI.Core.Utils
 {
     public static class StringExtensions
     {
+        #region Methods
+
         public static string ToSha512(this string str)
         {
             using (SHA512 hash = SHA512.Create())
@@ -19,5 +21,7 @@ namespace ChickenAPI.Core.Utils
         }
 
         public static string Truncate(this string str, int length) => str.Length > length ? str.Substring(0, length) : str;
+
+        #endregion
     }
 }

@@ -8,6 +8,8 @@
 
         public long MaxGold { get; set; }
 
+        public long MaxGoldBank { get; set; }
+
         public byte MaxHeroLevel { get; set; }
 
         public byte MaxJobLevel { get; set; }
@@ -17,8 +19,6 @@
         public byte MaxSPLevel { get; set; }
 
         public byte MaxUpgrade { get; set; }
-
-        public long MaxGoldBank { get; set; }
 
         #endregion
     }

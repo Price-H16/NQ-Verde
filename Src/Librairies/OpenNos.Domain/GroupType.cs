@@ -9,6 +9,5 @@
         RBBBlue = 3,
         BigTeam = 15,
         GiantTeam = 40
-
     }
 }

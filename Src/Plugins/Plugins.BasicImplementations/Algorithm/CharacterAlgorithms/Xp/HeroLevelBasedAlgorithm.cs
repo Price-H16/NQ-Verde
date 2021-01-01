@@ -2,6 +2,14 @@
 {
     public class HeroLevelBasedAlgorithm : ILevelBasedDataAlgorithm
     {
+        #region Properties
+
+        public long[] Data { get; set; }
+
+        #endregion
+
+        #region Methods
+
         public void Initialize()
         {
             var index = 1;
@@ -26,6 +34,6 @@
             }
         }
 
-        public long[] Data { get; set; }
+        #endregion
     }
 }

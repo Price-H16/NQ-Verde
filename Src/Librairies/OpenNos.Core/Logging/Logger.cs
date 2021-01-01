@@ -1,21 +1,31 @@
-﻿using System;
+﻿using ChickenAPI.Core.Logging;
+using System;
 using System.Runtime.CompilerServices;
-using ChickenAPI.Core.Logging;
-using log4net;
 
 namespace OpenNos.Core
 {
     public static class Logger
     {
         #region Properties
+
         public static ILogger Log { get; set; }
-        //public static ILog Log { get; set; }
 
         #endregion
 
         #region Methods
+
         /// <summary>
-        ///     Wraps up the error message with the CallerMemberName
+        /// Wraps up the error message with the CallerMemberName
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="memberName"></param>
+        public static void Debug(string data, [CallerMemberName] string memberName = "")
+        {
+            Log?.Debug($"[{memberName}]: {data}");
+        }
+
+        /// <summary>
+        /// Wraps up the error message with the CallerMemberName
         /// </summary>
         /// <param name="memberName"></param>
         /// <param name="innerException"></param>
@@ -26,18 +36,9 @@ namespace OpenNos.Core
                 Log?.Error($"{memberName}: {innerException.Message}", innerException);
             }
         }
-        /// <summary>
-        ///     Wraps up the error message with the CallerMemberName
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="memberName"></param>
-        public static void Debug(string data, [CallerMemberName] string memberName = "")
-        {
-            Log?.Debug($"[{memberName}]: {data}");
-        }
 
         /// <summary>
-        ///     Wraps up the error message with the CallerMemberName
+        /// Wraps up the error message with the CallerMemberName
         /// </summary>
         /// <param name="data"></param>
         /// <param name="ex"></param>
@@ -49,7 +50,7 @@ namespace OpenNos.Core
         }
 
         /// <summary>
-        ///     Wraps up the fatal message with the CallerMemberName
+        /// Wraps up the fatal message with the CallerMemberName
         /// </summary>
         /// <param name="data"></param>
         /// <param name="ex"></param>
@@ -61,7 +62,7 @@ namespace OpenNos.Core
         }
 
         /// <summary>
-        ///     Wraps up the info message with the CallerMemberName
+        /// Wraps up the info message with the CallerMemberName
         /// </summary>
         /// <param name="message"></param>
         /// <param name="ex"></param>
@@ -73,17 +74,14 @@ namespace OpenNos.Core
             else
                 Log?.InfoFormat($"[{memberName}]: {message}");
         }
+
         public static void InitializeLogger(ILogger log)
         {
             Log = log;
         }
-        //public static void InitializeLogger(ILog log)
-        //{
-        //    Log = log;
-        //}
 
         /// <summary>
-        ///     Wraps up the error message with the Logging Event
+        /// Wraps up the error message with the Logging Event
         /// </summary>
         /// <param name="logEvent"></param>
         /// <param name="data"></param>
@@ -99,7 +97,7 @@ namespace OpenNos.Core
         }
 
         /// <summary>
-        ///     Wraps up the error message with the Logging Event
+        /// Wraps up the error message with the Logging Event
         /// </summary>
         /// <param name="logEvent"></param>
         /// <param name="data"></param>
@@ -113,7 +111,7 @@ namespace OpenNos.Core
         }
 
         /// <summary>
-        ///     Wraps up the error message with the Logging Event
+        /// Wraps up the error message with the Logging Event
         /// </summary>
         /// <param name="logEvent"></param>
         /// <param name="caller"></param>
@@ -124,7 +122,7 @@ namespace OpenNos.Core
         }
 
         /// <summary>
-        ///     Wraps up the message with the CallerMemberName
+        /// Wraps up the message with the CallerMemberName
         /// </summary>
         /// <param name="logEvent"></param>
         /// <param name="caller"></param>
@@ -135,7 +133,7 @@ namespace OpenNos.Core
         }
 
         /// <summary>
-        ///     Wraps up the error message with the Logging Event
+        /// Wraps up the error message with the Logging Event
         /// </summary>
         /// <param name="logEvent"></param>
         /// <param name="caller"></param>
@@ -147,7 +145,7 @@ namespace OpenNos.Core
         }
 
         /// <summary>
-        ///     Wraps up the warn message with the CallerMemberName
+        /// Wraps up the warn message with the CallerMemberName
         /// </summary>
         /// <param name="data"></param>
         /// <param name="innerException"></param>

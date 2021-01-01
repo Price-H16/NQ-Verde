@@ -7,9 +7,15 @@ namespace Plugins.BasicImplementations.Guri
 {
     public class GuriPluginCore : ICorePlugin
     {
+        #region Properties
+
         public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
 
         public string Name => nameof(GuriPluginCore);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -27,5 +33,7 @@ namespace Plugins.BasicImplementations.Guri
             builder.Register(_ => new BaseGuriHandler())
                 .As<IGuriHandlerContainer>().SingleInstance();
         }
+
+        #endregion
     }
 }

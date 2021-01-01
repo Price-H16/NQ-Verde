@@ -78,76 +78,76 @@ namespace OpenNos.DAL.EF.Migrations
             DropForeignKey("dbo.StaticBuff", "CardId", "dbo.Card");
             DropForeignKey("dbo.ItemInstance", "BoundCharacterId", "dbo.Character");
             DropForeignKey("dbo.BazaarItem", "SellerId", "dbo.Character");
-            DropIndex("dbo.CharacterQuest", new[] {"QuestId"});
-            DropIndex("dbo.PenaltyLog", new[] {"AccountId"});
-            DropIndex("dbo.StaticBonus", new[] {"CharacterId"});
-            DropIndex("dbo.QuicklistEntry", new[] {"CharacterId"});
-            DropIndex("dbo.MinigameLog", new[] {"CharacterId"});
-            DropIndex("dbo.GeneralLog", new[] {"CharacterId"});
-            DropIndex("dbo.GeneralLog", new[] {"AccountId"});
-            DropIndex("dbo.FamilyLog", new[] {"FamilyId"});
-            DropIndex("dbo.FamilyCharacter", new[] {"FamilyId"});
-            DropIndex("dbo.FamilyCharacter", new[] {"CharacterId"});
-            DropIndex("dbo.CharacterRelation", new[] {"RelatedCharacterId"});
-            DropIndex("dbo.CharacterRelation", new[] {"CharacterId"});
-            DropIndex("dbo.MinilandObject", new[] {"ItemInstanceId"});
-            DropIndex("dbo.MinilandObject", new[] {"CharacterId"});
-            DropIndex("dbo.RollGeneratedItem", new[] {"OriginalItemVNum"});
-            DropIndex("dbo.RollGeneratedItem", new[] {"ItemGeneratedVNum"});
-            DropIndex("dbo.Mail", new[] {"SenderId"});
-            DropIndex("dbo.Mail", new[] {"ReceiverId"});
-            DropIndex("dbo.Mail", new[] {"AttachmentVNum"});
-            DropIndex("dbo.Mate", new[] {"NpcMonsterVNum"});
-            DropIndex("dbo.Mate", new[] {"CharacterId"});
-            DropIndex("dbo.ScriptedInstance", new[] {"MapId"});
-            DropIndex("dbo.RespawnMapType", new[] {"DefaultMapId"});
-            DropIndex("dbo.Respawn", new[] {"RespawnMapTypeId"});
-            DropIndex("dbo.Respawn", new[] {"MapId"});
-            DropIndex("dbo.Respawn", new[] {"CharacterId"});
-            DropIndex("dbo.Portal", new[] {"SourceMapId"});
-            DropIndex("dbo.Portal", new[] {"DestinationMapId"});
-            DropIndex("dbo.Teleporter", new[] {"MapNpcId"});
-            DropIndex("dbo.Teleporter", new[] {"MapId"});
-            DropIndex("dbo.NpcMonsterSkill", new[] {"SkillVNum"});
-            DropIndex("dbo.NpcMonsterSkill", new[] {"NpcMonsterVNum"});
-            DropIndex("dbo.Combo", new[] {"SkillVNum"});
-            DropIndex("dbo.CharacterSkill", new[] {"SkillVNum"});
-            DropIndex("dbo.CharacterSkill", new[] {"CharacterId"});
-            DropIndex("dbo.ShopSkill", new[] {"SkillVNum"});
-            DropIndex("dbo.ShopSkill", new[] {"ShopId"});
-            DropIndex("dbo.ShopItem", new[] {"ShopId"});
-            DropIndex("dbo.ShopItem", new[] {"ItemVNum"});
-            DropIndex("dbo.Shop", new[] {"MapNpcId"});
-            DropIndex("dbo.RecipeItem", new[] {"RecipeId"});
-            DropIndex("dbo.RecipeItem", new[] {"ItemVNum"});
-            DropIndex("dbo.Recipe", new[] {"ItemVNum"});
-            DropIndex("dbo.RecipeList", new[] {"RecipeId"});
-            DropIndex("dbo.RecipeList", new[] {"MapNpcId"});
-            DropIndex("dbo.RecipeList", new[] {"ItemVNum"});
-            DropIndex("dbo.MapNpc", new[] {"NpcVNum"});
-            DropIndex("dbo.MapNpc", new[] {"MapId"});
-            DropIndex("dbo.MapMonster", new[] {"MonsterVNum"});
-            DropIndex("dbo.MapMonster", new[] {"MapId"});
-            DropIndex("dbo.MapTypeMap", new[] {"MapTypeId"});
-            DropIndex("dbo.MapTypeMap", new[] {"MapId"});
-            DropIndex("dbo.MapType", new[] {"ReturnMapTypeId"});
-            DropIndex("dbo.MapType", new[] {"RespawnMapTypeId"});
-            DropIndex("dbo.Drop", new[] {"MonsterVNum"});
-            DropIndex("dbo.Drop", new[] {"MapTypeId"});
-            DropIndex("dbo.Drop", new[] {"ItemVNum"});
-            DropIndex("dbo.StaticBuff", new[] {"CharacterId"});
-            DropIndex("dbo.StaticBuff", new[] {"CardId"});
-            DropIndex("dbo.BCard", new[] {"SkillVNum"});
-            DropIndex("dbo.BCard", new[] {"NpcMonsterVNum"});
-            DropIndex("dbo.BCard", new[] {"ItemVNum"});
-            DropIndex("dbo.BCard", new[] {"CardId"});
-            DropIndex("dbo.ItemInstance", new[] {"ItemVNum"});
+            DropIndex("dbo.CharacterQuest", new[] { "QuestId" });
+            DropIndex("dbo.PenaltyLog", new[] { "AccountId" });
+            DropIndex("dbo.StaticBonus", new[] { "CharacterId" });
+            DropIndex("dbo.QuicklistEntry", new[] { "CharacterId" });
+            DropIndex("dbo.MinigameLog", new[] { "CharacterId" });
+            DropIndex("dbo.GeneralLog", new[] { "CharacterId" });
+            DropIndex("dbo.GeneralLog", new[] { "AccountId" });
+            DropIndex("dbo.FamilyLog", new[] { "FamilyId" });
+            DropIndex("dbo.FamilyCharacter", new[] { "FamilyId" });
+            DropIndex("dbo.FamilyCharacter", new[] { "CharacterId" });
+            DropIndex("dbo.CharacterRelation", new[] { "RelatedCharacterId" });
+            DropIndex("dbo.CharacterRelation", new[] { "CharacterId" });
+            DropIndex("dbo.MinilandObject", new[] { "ItemInstanceId" });
+            DropIndex("dbo.MinilandObject", new[] { "CharacterId" });
+            DropIndex("dbo.RollGeneratedItem", new[] { "OriginalItemVNum" });
+            DropIndex("dbo.RollGeneratedItem", new[] { "ItemGeneratedVNum" });
+            DropIndex("dbo.Mail", new[] { "SenderId" });
+            DropIndex("dbo.Mail", new[] { "ReceiverId" });
+            DropIndex("dbo.Mail", new[] { "AttachmentVNum" });
+            DropIndex("dbo.Mate", new[] { "NpcMonsterVNum" });
+            DropIndex("dbo.Mate", new[] { "CharacterId" });
+            DropIndex("dbo.ScriptedInstance", new[] { "MapId" });
+            DropIndex("dbo.RespawnMapType", new[] { "DefaultMapId" });
+            DropIndex("dbo.Respawn", new[] { "RespawnMapTypeId" });
+            DropIndex("dbo.Respawn", new[] { "MapId" });
+            DropIndex("dbo.Respawn", new[] { "CharacterId" });
+            DropIndex("dbo.Portal", new[] { "SourceMapId" });
+            DropIndex("dbo.Portal", new[] { "DestinationMapId" });
+            DropIndex("dbo.Teleporter", new[] { "MapNpcId" });
+            DropIndex("dbo.Teleporter", new[] { "MapId" });
+            DropIndex("dbo.NpcMonsterSkill", new[] { "SkillVNum" });
+            DropIndex("dbo.NpcMonsterSkill", new[] { "NpcMonsterVNum" });
+            DropIndex("dbo.Combo", new[] { "SkillVNum" });
+            DropIndex("dbo.CharacterSkill", new[] { "SkillVNum" });
+            DropIndex("dbo.CharacterSkill", new[] { "CharacterId" });
+            DropIndex("dbo.ShopSkill", new[] { "SkillVNum" });
+            DropIndex("dbo.ShopSkill", new[] { "ShopId" });
+            DropIndex("dbo.ShopItem", new[] { "ShopId" });
+            DropIndex("dbo.ShopItem", new[] { "ItemVNum" });
+            DropIndex("dbo.Shop", new[] { "MapNpcId" });
+            DropIndex("dbo.RecipeItem", new[] { "RecipeId" });
+            DropIndex("dbo.RecipeItem", new[] { "ItemVNum" });
+            DropIndex("dbo.Recipe", new[] { "ItemVNum" });
+            DropIndex("dbo.RecipeList", new[] { "RecipeId" });
+            DropIndex("dbo.RecipeList", new[] { "MapNpcId" });
+            DropIndex("dbo.RecipeList", new[] { "ItemVNum" });
+            DropIndex("dbo.MapNpc", new[] { "NpcVNum" });
+            DropIndex("dbo.MapNpc", new[] { "MapId" });
+            DropIndex("dbo.MapMonster", new[] { "MonsterVNum" });
+            DropIndex("dbo.MapMonster", new[] { "MapId" });
+            DropIndex("dbo.MapTypeMap", new[] { "MapTypeId" });
+            DropIndex("dbo.MapTypeMap", new[] { "MapId" });
+            DropIndex("dbo.MapType", new[] { "ReturnMapTypeId" });
+            DropIndex("dbo.MapType", new[] { "RespawnMapTypeId" });
+            DropIndex("dbo.Drop", new[] { "MonsterVNum" });
+            DropIndex("dbo.Drop", new[] { "MapTypeId" });
+            DropIndex("dbo.Drop", new[] { "ItemVNum" });
+            DropIndex("dbo.StaticBuff", new[] { "CharacterId" });
+            DropIndex("dbo.StaticBuff", new[] { "CardId" });
+            DropIndex("dbo.BCard", new[] { "SkillVNum" });
+            DropIndex("dbo.BCard", new[] { "NpcMonsterVNum" });
+            DropIndex("dbo.BCard", new[] { "ItemVNum" });
+            DropIndex("dbo.BCard", new[] { "CardId" });
+            DropIndex("dbo.ItemInstance", new[] { "ItemVNum" });
             DropIndex("dbo.ItemInstance", "IX_SlotAndType");
-            DropIndex("dbo.ItemInstance", new[] {"BoundCharacterId"});
-            DropIndex("dbo.BazaarItem", new[] {"SellerId"});
-            DropIndex("dbo.BazaarItem", new[] {"ItemInstanceId"});
-            DropIndex("dbo.Character", new[] {"MapId"});
-            DropIndex("dbo.Character", new[] {"AccountId"});
+            DropIndex("dbo.ItemInstance", new[] { "BoundCharacterId" });
+            DropIndex("dbo.BazaarItem", new[] { "SellerId" });
+            DropIndex("dbo.BazaarItem", new[] { "ItemInstanceId" });
+            DropIndex("dbo.Character", new[] { "MapId" });
+            DropIndex("dbo.Character", new[] { "AccountId" });
             DropTable("dbo.ShellEffect");
             DropTable("dbo.QuestReward");
             DropTable("dbo.QuestObjective");
@@ -380,7 +380,7 @@ namespace OpenNos.DAL.EF.Migrations
                 .ForeignKey("dbo.Item", t => t.ItemVNum)
                 .ForeignKey("dbo.Character", t => t.CharacterId)
                 .Index(t => t.BoundCharacterId)
-                .Index(t => new {t.CharacterId, t.Slot, t.Type}, "IX_SlotAndType")
+                .Index(t => new { t.CharacterId, t.Slot, t.Type }, "IX_SlotAndType")
                 .Index(t => t.ItemVNum);
 
             CreateTable(
@@ -614,7 +614,7 @@ namespace OpenNos.DAL.EF.Migrations
                         MapId = c.Short(false),
                         MapTypeId = c.Short(false)
                     })
-                .PrimaryKey(t => new {t.MapId, t.MapTypeId})
+                .PrimaryKey(t => new { t.MapId, t.MapTypeId })
                 .ForeignKey("dbo.Map", t => t.MapId)
                 .ForeignKey("dbo.MapType", t => t.MapTypeId)
                 .Index(t => t.MapId)

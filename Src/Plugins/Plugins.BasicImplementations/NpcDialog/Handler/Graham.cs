@@ -1,15 +1,21 @@
-﻿using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Helpers;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class Graham : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 299;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -18,7 +24,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
             {
                 if (Session.Character.Level >= 85) //  REQUIRED LEVEL
                 {
-                    Session.Character.AddQuest(6041); 
+                    Session.Character.AddQuest(6041);
                 }
                 else
                 {
@@ -26,5 +32,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -1,10 +1,9 @@
-﻿using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 
 namespace NosTale.Packets.Packets.CommandPackets
 {
-    [PacketHeader("$PspXp", PassNonParseablePacket = true, Authorities = new[] {AuthorityType.Administrator})]
+    [PacketHeader("$PspXp", PassNonParseablePacket = true, Authorities = new[] { AuthorityType.Administrator })]
     public class PartnerSpXpPacket : PacketDefinition
     {
         #region Methods

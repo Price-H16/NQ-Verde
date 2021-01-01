@@ -1,6 +1,4 @@
-﻿using OpenNos.Domain;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace OpenNos.DAL.EF
 {
@@ -8,17 +6,17 @@ namespace OpenNos.DAL.EF
     {
         #region Properties
 
-        public long FamilySkillMissionId { get; set; }
+        public short CurrentValue { get; set; }
+
+        public DateTime Date { get; set; }
 
         public long FamilyId { get; set; }
 
+        public long FamilySkillMissionId { get; set; }
+
         public short ItemVNum { get; set; }
 
-        public short CurrentValue { get; set; }
-
         public int TotalValue { get; set; }
-
-        public DateTime Date { get; set; }
 
         #endregion
     }

@@ -1,36 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
 using OpenNos.Data;
 using OpenNos.Data.Enums;
 using OpenNos.Mapper.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
     public class MapMonsterDAO : IMapMonsterDAO
     {
         #region Methods
-
-        public IEnumerable<MapMonsterDTO> LoadAll()
-        {
-            using (var context = DataAccessHelper.CreateContext())
-            {
-                var result = new List<MapMonsterDTO>();
-                foreach (var MapMonster in context.MapMonster)
-                {
-                    var dto = new MapMonsterDTO();
-                    MapMonsterMapper.ToMapMonsterDTO(MapMonster, dto);
-                    result.Add(dto);
-                }
-
-                return result;
-            }
-        }
 
         public DeleteResult DeleteById(int mapMonsterId)
         {
@@ -107,6 +91,22 @@ namespace OpenNos.DAL.DAO
             {
                 Logger.Error(e);
                 return null;
+            }
+        }
+
+        public IEnumerable<MapMonsterDTO> LoadAll()
+        {
+            using (var context = DataAccessHelper.CreateContext())
+            {
+                var result = new List<MapMonsterDTO>();
+                foreach (var MapMonster in context.MapMonster)
+                {
+                    var dto = new MapMonsterDTO();
+                    MapMonsterMapper.ToMapMonsterDTO(MapMonster, dto);
+                    result.Add(dto);
+                }
+
+                return result;
             }
         }
 

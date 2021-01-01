@@ -7,9 +7,15 @@ namespace Plugins.BasicImplementations.Algorithm
 {
     public class AlgorithmPluginCore : ICorePlugin
     {
+        #region Properties
+
         public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
 
         public string Name => nameof(AlgorithmPluginCore);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -27,5 +33,7 @@ namespace Plugins.BasicImplementations.Algorithm
             builder.Register(s => new DamageAlgorithm()).As<IDamageAlgorithm>();
             Logger.Log.InfoFormat("Algorithms initialized");
         }
+
+        #endregion
     }
 }

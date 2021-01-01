@@ -4,8 +4,12 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms
 {
     public interface ICharacterStatAlgorithm
     {
-        void Initialize();
+        #region Methods
 
         int GetStat(ClassType type, byte level);
+
+        void Initialize();
+
+        #endregion
     }
 }

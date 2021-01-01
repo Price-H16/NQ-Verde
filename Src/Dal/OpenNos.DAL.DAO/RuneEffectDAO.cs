@@ -7,13 +7,13 @@ using OpenNos.Mapper.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenNos.DAL.DAO
 {
     public class RuneEffectDAO : GenericDAO<RuneEffectDTO, RuneEffect>, IRuneEffectDAO
     {
+        #region Methods
+
         public void DeleteByEquipmentSerialId(Guid equipmentSerialId)
         {
             using (var context = DataAccessHelper.CreateContext())
@@ -36,7 +36,7 @@ namespace OpenNos.DAL.DAO
 
         public void InsertOrUpdateFromList(List<RuneEffectDTO> runeEffects, Guid equipmentSerialId)
         {
-            if (!runeEffects.Any()) return; 
+            if (!runeEffects.Any()) return;
 
             using (var context = DataAccessHelper.CreateContext())
             {
@@ -64,5 +64,7 @@ namespace OpenNos.DAL.DAO
                 return result;
             }
         }
+
+        #endregion
     }
 }

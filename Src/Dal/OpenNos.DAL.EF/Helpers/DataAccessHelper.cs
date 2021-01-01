@@ -1,7 +1,7 @@
-﻿using System;
+﻿using OpenNos.Core;
+using System;
 using System.Data;
 using System.Data.Common;
-using OpenNos.Core;
 
 namespace OpenNos.DAL.EF.Helpers
 {
@@ -22,8 +22,8 @@ namespace OpenNos.DAL.EF.Helpers
         #region Methods
 
         /// <summary>
-        ///     Begins and returns a new transaction. Be sure to commit/rollback/dispose this transaction
-        ///     or use it in an using-clause.
+        /// Begins and returns a new transaction. Be sure to commit/rollback/dispose this
+        /// transaction or use it in an using-clause.
         /// </summary>
         /// <returns>A new transaction.</returns>
         public static DbTransaction BeginTransaction()
@@ -37,7 +37,7 @@ namespace OpenNos.DAL.EF.Helpers
         }
 
         /// <summary>
-        ///     Creates new instance of database context.
+        /// Creates new instance of database context.
         /// </summary>
         public static OpenNosContext CreateContext()
         {
@@ -45,7 +45,7 @@ namespace OpenNos.DAL.EF.Helpers
         }
 
         /// <summary>
-        ///     Disposes the current instance of database context.
+        /// Disposes the current instance of database context.
         /// </summary>
         public static void DisposeContext()
         {

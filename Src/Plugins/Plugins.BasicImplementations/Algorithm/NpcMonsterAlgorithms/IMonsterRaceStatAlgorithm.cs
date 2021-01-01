@@ -4,8 +4,12 @@ namespace Plugins.BasicImplementations.Algorithm.NpcMonsterAlgorithms
 {
     public interface IMonsterRaceStatAlgorithm
     {
-        void Initialize();
+        #region Methods
 
         int GetStat(NpcMonsterRaceType type, byte level, bool isMonster);
+
+        void Initialize();
+
+        #endregion
     }
 }

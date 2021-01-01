@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using CharacterState = OpenNos.Domain.CharacterState;
 using GenderType = OpenNos.Domain.GenderType;
 using HairColorType = OpenNos.Domain.HairColorType;
@@ -19,26 +19,20 @@ namespace NosTale.Extension.GameExtension.Character
     {
         #region Methods
 
-        public static void OpenBank(this ClientSession Session)
-        {
-            Session.SendPacket(Session.Character.GenerateGB((byte) GoldBankPacketType.OpenBank));
-            Session.SendPacket(UserInterfaceHelper.GenerateShopMemo((byte) SmemoType.Information, Language.Instance.GetMessageFromKey("OPEN_BANK")));
-
-        }
-
         public static bool CanCreateCharacter(this ClientSession Session, byte slot, string characterName)
         {
             if (slot > 3 || DAOFactory.CharacterDAO.LoadBySlot(Session.Account.AccountId, slot) != null)
             {
                 return false;
-            }               
+            }
 
-            if (characterName.Length <= 3 || characterName.Length >= 15)
+            if (characterName.Length <= 4 || characterName.Length >= 15)
             {
                 return false;
             }
-            
+
             var rg = new Regex(@"^[A-Za-z0-9_äÄöÖüÜß~*<>°+-.!_-Ð™¤£±†‡×ßø^\u0021-\u007E\u00A1-\u00AC\u00AE-\u00FF\u4E00-\u9FA5\u0E01-\u0E3A\u0E3F-\u0E5B\u002E]*$");
+
             //@"^[\u0021-\u007E\u00A1-\u00AC\u00AE-\u00FF\u4E00-\u9FA5\u0E01-\u0E3A\u0E3F-\u0E5B\u002E]*$");
 
             if (rg.Matches(characterName).Count != 1)
@@ -64,6 +58,11 @@ namespace NosTale.Extension.GameExtension.Character
                 "fuck",
                 "fucker",
                 "nigger",
+                "owner",
+                "Hacker",
+                "motherfucker",
+                "anal",
+                "pussy",
             };
 
             if (BlackListed.Any(s => characterName.ToLower().Contains(s)))
@@ -76,7 +75,7 @@ namespace NosTale.Extension.GameExtension.Character
             {
                 return false;
             }
-               
+
             return true;
         }
 
@@ -87,8 +86,8 @@ namespace NosTale.Extension.GameExtension.Character
                 Class = isMartial ? ClassType.MartialArtist : ClassType.Adventurer,
                 Mp = isMartial ? 3156 : 69,
                 Hp = isMartial ? 9401 : 515,
-                Level = (byte) (isMartial ? 80 : 1),
-                JobLevel = (byte) (isMartial ? 20 : 1),
+                Level = (byte)(isMartial ? 80 : 1),
+                JobLevel = (byte)(isMartial ? 20 : 1),
                 Gender = gender,
                 HairColor = hairColor,
                 HairStyle = hairStyle,
@@ -178,7 +177,6 @@ namespace NosTale.Extension.GameExtension.Character
                 IsMainQuest = true
             };
 
-
             DAOFactory.CharacterQuestDAO.InsertOrUpdate(firstQuest);
 
             if (isMartial)
@@ -201,21 +199,27 @@ namespace NosTale.Extension.GameExtension.Character
                 {
                     startupInventory.AddNewToInventory(1, 1, InventoryType.Wear, 5, 5);
                     startupInventory.AddNewToInventory(8, 1, InventoryType.Wear, 5, 5);
-                    startupInventory.AddNewToInventory(12, 1, InventoryType.Wear,5, 5);
+                    startupInventory.AddNewToInventory(12, 1, InventoryType.Wear, 5, 5);
                 }
 
                 startupInventory.AddNewToInventory(1008, 10, InventoryType.Main);
                 startupInventory.AddNewToInventory(1012, 5, InventoryType.Main); //seeds
                 startupInventory.AddNewToInventory(5332, 1, InventoryType.Main);
                 startupInventory.AddNewToInventory(9041, 1, InventoryType.Main);
-                startupInventory.AddNewToInventory(800, 5, InventoryType.Equipment); 
-                startupInventory.AddNewToInventory(801, 5, InventoryType.Equipment); 
+                startupInventory.AddNewToInventory(800, 5, InventoryType.Equipment);
+                startupInventory.AddNewToInventory(801, 5, InventoryType.Equipment);
                 startupInventory.AddNewToInventory(802, 5, InventoryType.Equipment);
                 startupInventory.AddNewToInventory(803, 5, InventoryType.Equipment);
                 startupInventory.AddNewToInventory(2081, 5, InventoryType.Etc);
 
                 startupInventory.ForEach(i => DAOFactory.ItemInstanceDAO.InsertOrUpdate(i));
             }
+        }
+
+        public static void OpenBank(this ClientSession Session)
+        {
+            Session.SendPacket(Session.Character.GenerateGB((byte)GoldBankPacketType.OpenBank));
+            Session.SendPacket(UserInterfaceHelper.GenerateShopMemo((byte)SmemoType.Information, Language.Instance.GetMessageFromKey("OPEN_BANK")));
         }
 
         #endregion

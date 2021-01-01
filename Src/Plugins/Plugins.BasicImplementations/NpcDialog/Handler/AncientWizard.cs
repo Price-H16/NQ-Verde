@@ -1,15 +1,21 @@
-﻿using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Networking;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class AncientWizard : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 712;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -25,14 +31,21 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                     Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
                     return;
                 }
-
             }
         }
+
+        #endregion
     }
 
     public class AncientWizard2 : INpcDialogAsyncHandler // first TP
     {
+        #region Properties
+
         public long HandledId => 713;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -48,14 +61,21 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                     Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 10));
                     return;
                 }
-
             }
         }
+
+        #endregion
     }
 
     public class AncientWizard3 : INpcDialogAsyncHandler // second TP
     {
+        #region Properties
+
         public long HandledId => 714;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -71,14 +91,21 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                     Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("CANT_MEET_REQUIREMENTS"), 10));
                     return;
                 }
-
             }
         }
+
+        #endregion
     }
 
     public class AncientWizard4 : INpcDialogAsyncHandler // third TP
     {
+        #region Properties
+
         public long HandledId => 715;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -94,8 +121,9 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                     Session.SendPacket(npc?.GenerateSay(Language.Instance.GetMessageFromKey("CANT_MEET_REQUIREMENTS"), 10));
                     return;
                 }
-
             }
         }
+
+        #endregion
     }
 }

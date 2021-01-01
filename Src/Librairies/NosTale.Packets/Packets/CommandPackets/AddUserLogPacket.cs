@@ -1,10 +1,9 @@
-﻿using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 
 namespace NosTale.Packets.Packets.CommandPackets
 {
-    [PacketHeader("$AddUserLog", PassNonParseablePacket = true, Authorities = new[] {AuthorityType.Administrator})]
+    [PacketHeader("$AddUserLog", PassNonParseablePacket = true, Authorities = new[] { AuthorityType.Administrator })]
     public class AddUserLogPacket : PacketDefinition
     {
         #region Properties

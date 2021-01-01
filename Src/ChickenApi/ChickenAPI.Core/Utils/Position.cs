@@ -1,5 +1,5 @@
 ﻿// WingsEmu
-// 
+//
 // Developed by NosWings Team
 
 using System;
@@ -9,6 +9,8 @@ namespace ChickenAPI.Core.Utils
 {
     public class Position<T> : IEquatable<Position<T>>
     {
+        #region Instantiation
+
         public Position(T x, T y)
         {
             X = x;
@@ -19,23 +21,19 @@ namespace ChickenAPI.Core.Utils
         {
         }
 
+        #endregion
+
+        #region Properties
+
         public T X { get; set; }
+
         public T Y { get; set; }
 
-        public bool Equals(Position<T> other)
-        {
-            if (other is null)
-            {
-                return false;
-            }
+        #endregion
 
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
+        #region Methods
 
-            return EqualityComparer<T>.Default.Equals(X, other.X) && EqualityComparer<T>.Default.Equals(Y, other.Y);
-        }
+        public static bool operator !=(Position<T> obj1, Position<T> obj2) => !(obj1 == obj2);
 
         public static bool operator ==(Position<T> obj1, Position<T> obj2)
         {
@@ -57,7 +55,20 @@ namespace ChickenAPI.Core.Utils
             return EqualityComparer<T>.Default.Equals(obj1.X, obj2.X) && EqualityComparer<T>.Default.Equals(obj1.Y, obj2.Y);
         }
 
-        public static bool operator !=(Position<T> obj1, Position<T> obj2) => !(obj1 == obj2);
+        public bool Equals(Position<T> other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return EqualityComparer<T>.Default.Equals(X, other.X) && EqualityComparer<T>.Default.Equals(Y, other.Y);
+        }
 
         public override bool Equals(object obj)
         {
@@ -83,5 +94,7 @@ namespace ChickenAPI.Core.Utils
         }
 
         public override string ToString() => "(" + X + "," + Y + ")";
+
+        #endregion
     }
 }

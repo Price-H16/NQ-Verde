@@ -4,11 +4,15 @@ namespace Plugins.BasicImplementations.Algorithm.CharacterAlgorithms.Magical
 {
     public class MagicDodgeAlgorithm : ICharacterStatAlgorithm
     {
+        #region Methods
+
+        public int GetStat(ClassType type, byte level) => 0;
+
         public void Initialize()
         {
             // no dodge possible without shells effects
         }
 
-        public int GetStat(ClassType type, byte level) => 0;
+        #endregion
     }
 }

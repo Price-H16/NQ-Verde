@@ -1,19 +1,14 @@
-﻿using System;
-using System.Reactive.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System;
+using System.Reactive.Linq;
 
 namespace OpenNos.GameObject.Event.ACT7
 {
     public static class Act7Ship
     {
-        private static void SendMsg(this ClientSession session, byte sec)
-        {
-            session.SendPacket(
-                UserInterfaceHelper.GenerateMsg(
-                    string.Format(Language.Instance.GetMessageFromKey("MAURICE_SHIP_SEC"), sec), 0));
-        }
+        #region Methods
 
         public static void Run(ClientSession session)
         {
@@ -47,5 +42,14 @@ namespace OpenNos.GameObject.Event.ACT7
                 ServerManager.Instance.ChangeMap(session.Character.CharacterId, 2631, 7, 46);
             });
         }
+
+        private static void SendMsg(this ClientSession session, byte sec)
+        {
+            session.SendPacket(
+                UserInterfaceHelper.GenerateMsg(
+                    string.Format(Language.Instance.GetMessageFromKey("MAURICE_SHIP_SEC"), sec), 0));
+        }
+
+        #endregion
     }
 }

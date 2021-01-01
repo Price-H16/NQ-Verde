@@ -1,18 +1,23 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using ChickenAPI.Plugins;
 using OpenNos.Core;
 using OpenNos.Core.Extensions;
 using OpenNos.GameObject._Guri;
+using System;
 
 namespace Plugins.BasicImplementations.Guri
 {
     public class GuriPlugin : IGamePlugin
     {
-        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+        #region Members
 
         private readonly IContainer _container;
+
         private readonly IGuriHandlerContainer _handlers;
+
+        #endregion
+
+        #region Instantiation
 
         public GuriPlugin(IGuriHandlerContainer handlers, IContainer container)
         {
@@ -20,7 +25,17 @@ namespace Plugins.BasicImplementations.Guri
             _container = container;
         }
 
+        #endregion
+
+        #region Properties
+
+        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+
         public string Name => nameof(GuriPlugin);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -48,5 +63,7 @@ namespace Plugins.BasicImplementations.Guri
         public void OnLoad()
         {
         }
+
+        #endregion
     }
 }

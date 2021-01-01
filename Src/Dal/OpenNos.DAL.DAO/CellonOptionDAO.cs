@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
 using OpenNos.Data;
 using OpenNos.Data.Enums;
 using OpenNos.Mapper.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
@@ -84,7 +84,7 @@ namespace OpenNos.DAL.DAO
             try
             {
                 if (!cellonOption.Any()) return;
-                
+
                 using (var context = DataAccessHelper.CreateContext())
                 {
                     void insert(CellonOptionDTO cellonoption)
@@ -103,7 +103,7 @@ namespace OpenNos.DAL.DAO
                             CellonOptionMapper.ToCellonOption(cellonoption, _entity);
                         }
                     }
-                    
+
                     foreach (var item in cellonOption)
                     {
                         item.EquipmentSerialId = equipmentSerialId;

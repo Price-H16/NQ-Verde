@@ -1,5 +1,4 @@
 ﻿using OpenNos.Core;
-using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
@@ -11,7 +10,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class Ragnar : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 309;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -28,15 +33,25 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_ENOUGH_GOLD"), 0));
             }
         }
+
+        #endregion
     }
 
     public class Ragnar2 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 310;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
             Session.Character.AddQuest(6152, false); // take normal questline order
         }
+
+        #endregion
     }
 }

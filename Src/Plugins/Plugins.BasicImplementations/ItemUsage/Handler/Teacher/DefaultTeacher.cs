@@ -1,27 +1,30 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._ItemUsage;
 using OpenNos.GameObject._ItemUsage.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
-using OpenNos.GameObject.Extension;
-
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.ItemUsage.Handler.Teacher
 {
-   public class DefaultTeacher : IUseItemRequestHandlerAsync
+    public class DefaultTeacher : IUseItemRequestHandlerAsync
     {
-        public ItemPluginType Type => ItemPluginType.Teacher;
-        
+        #region Properties
+
         public long EffectId => default;
+
+        public ItemPluginType Type => ItemPluginType.Teacher;
+
+        #endregion
+
+        #region Methods
 
         public async Task HandleAsync(ClientSession session, InventoryUseItemEvent e)
         {
-
             if (session.Character.IsVehicled)
             {
                 session.SendPacket(
@@ -61,7 +64,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Teacher
                                 byte i = 0;
                                 session.Character.Mates.Where(s => s.MateType == MateType.Partner).ToList().ForEach(s =>
                                 {
-                                    s.GetInventory().ForEach(item => item.Type = (InventoryType) (13 + i));
+                                    s.GetInventory().ForEach(item => item.Type = (InventoryType)(13 + i));
                                     s.PetId = i;
                                     i++;
                                 });
@@ -272,5 +275,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Teacher
                     break;
             }
         }
+
+        #endregion
     }
 }

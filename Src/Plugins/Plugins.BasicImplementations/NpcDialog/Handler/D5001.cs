@@ -1,57 +1,64 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class D5001 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 5001;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
-           var npc = packet.Npc;
-                               
-           if (npc != null)
-           {
-               MapInstance map = null;
-               switch (Session.Character.Faction)
-               {
-                   case FactionType.None:
-                       Session.SendPacket(UserInterfaceHelper.GenerateInfo("You need to be part of a faction to join Act 4!"));
-                       return;
+            var npc = packet.Npc;
 
-                   case FactionType.Angel:
-                       map = ServerManager.GetAllMapInstances().Find(s => s.MapInstanceType.Equals(MapInstanceType.Act4ShipAngel));
+            if (npc != null)
+            {
+                MapInstance map = null;
+                switch (Session.Character.Faction)
+                {
+                    case FactionType.None:
+                        Session.SendPacket(UserInterfaceHelper.GenerateInfo("You need to be part of a faction to join Act 4!"));
+                        return;
 
-                       break;
+                    case FactionType.Angel:
+                        map = ServerManager.GetAllMapInstances().Find(s => s.MapInstanceType.Equals(MapInstanceType.Act4ShipAngel));
 
-                   case FactionType.Demon:
-                       map = ServerManager.GetAllMapInstances().Find(s => s.MapInstanceType.Equals(MapInstanceType.Act4ShipDemon));
+                        break;
 
-                       break;
-               }
-               if (map == null || npc.EffectActivated)
-               {
-                   Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("SHIP_NOTARRIVED"), 0));
-                   return;
-               }
-               if (3000 > Session.Character.Gold)
-               {
-                   Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_MONEY"), 10));
-                   return;
-               }
-               Session.Character.Gold -= 3000;
-               Session.SendPacket(Session.Character.GenerateGold());
-               var pos = map.Map.GetRandomPosition();
-               ServerManager.Instance.ChangeMapInstance(Session.Character.CharacterId, map.MapInstanceId, pos.X, pos.Y);
-           }
+                    case FactionType.Demon:
+                        map = ServerManager.GetAllMapInstances().Find(s => s.MapInstanceType.Equals(MapInstanceType.Act4ShipDemon));
+
+                        break;
+                }
+                if (map == null || npc.EffectActivated)
+                {
+                    Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("SHIP_NOTARRIVED"), 0));
+                    return;
+                }
+                if (3000 > Session.Character.Gold)
+                {
+                    Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_MONEY"), 10));
+                    return;
+                }
+                Session.Character.Gold -= 3000;
+                Session.SendPacket(Session.Character.GenerateGold());
+                var pos = map.Map.GetRandomPosition();
+                ServerManager.Instance.ChangeMapInstance(Session.Character.CharacterId, map.MapInstanceId, pos.X, pos.Y);
+            }
         }
+
+        #endregion
     }
 }

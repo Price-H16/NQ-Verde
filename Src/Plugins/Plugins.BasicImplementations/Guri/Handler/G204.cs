@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
-using OpenNos.Core.Extensions;
+﻿using OpenNos.Core;
 using OpenNos.DAL;
-using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._Guri;
 using OpenNos.GameObject._Guri.Event;
-using OpenNos.GameObject.Event;
 using OpenNos.GameObject.Helpers;
-using OpenNos.GameObject.Networking;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.Guri.Handler
 {
     public class G204 : IGuriHandler
     {
+        #region Properties
+
         public long GuriEffectId => 204;
+
+        #endregion
+
+        #region Methods
 
         public async Task ExecuteAsync(ClientSession Session, GuriEvent e)
         {
@@ -30,7 +28,6 @@ namespace Plugins.BasicImplementations.Guri.Handler
                     var shell = Session.Character.Inventory.LoadBySlotAndType(slot, InventoryType.Equipment);
                     if (shell?.ShellEffects.Count == 0 && shell.Upgrade > 0 && shell.Rare > 0 && Session.Character.Inventory.CountItem(1429) >= shell.Upgrade / 10 + shell.Rare)
                     {
-             
                         if (!ShellGeneratorHelper.Instance.ShellTypes.TryGetValue(shell.ItemVNum, out var shellType))
                         {
                             // SHELL TYPE NOT IMPLEMENTED
@@ -87,7 +84,8 @@ namespace Plugins.BasicImplementations.Guri.Handler
                     }
                 }
             }
-            
         }
+
+        #endregion
     }
-} 
+}

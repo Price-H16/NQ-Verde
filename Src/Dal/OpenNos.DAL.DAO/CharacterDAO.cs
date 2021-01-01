@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
@@ -10,6 +6,9 @@ using OpenNos.Data;
 using OpenNos.Data.Enums;
 using OpenNos.Domain;
 using OpenNos.Mapper.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
@@ -26,11 +25,11 @@ namespace OpenNos.DAL.DAO
                     // actually a Character wont be deleted, it just will be disabled for future traces
                     var character = context.Character.SingleOrDefault(c =>
                         c.AccountId.Equals(accountId) && c.Slot.Equals(characterSlot) &&
-                        c.State.Equals((byte) CharacterState.Active));
+                        c.State.Equals((byte)CharacterState.Active));
 
                     if (character != null)
                     {
-                        character.State = (byte) CharacterState.Inactive;
+                        character.State = (byte)CharacterState.Inactive;
                         character.Name = $"[DELETED]{character.Name}";
                         context.SaveChanges();
                     }
@@ -48,7 +47,7 @@ namespace OpenNos.DAL.DAO
         }
 
         /// <summary>
-        ///     Returns first 30 occurences of highest Compliment
+        /// Returns first 30 occurences of highest Compliment
         /// </summary>
         /// <returns></returns>
         public List<CharacterDTO> GetTopCompliment()
@@ -57,7 +56,7 @@ namespace OpenNos.DAL.DAO
             {
                 var result = new List<CharacterDTO>();
                 foreach (var entity in context.Character
-                    .Where(c => c.State == (byte) CharacterState.Active && c.Account.Authority == AuthorityType.User &&
+                    .Where(c => c.State == (byte)CharacterState.Active && c.Account.Authority == AuthorityType.User &&
                                 !c.Account.PenaltyLog.Any(l =>
                                     l.Penalty == PenaltyType.Banned && l.DateEnd > DateTime.Now))
                     .OrderByDescending(c => c.Compliment).Take(30))
@@ -72,7 +71,7 @@ namespace OpenNos.DAL.DAO
         }
 
         /// <summary>
-        ///     Returns first 30 occurences of highest Act4Points
+        /// Returns first 30 occurences of highest Act4Points
         /// </summary>
         /// <returns></returns>
         public List<CharacterDTO> GetTopPoints()
@@ -81,7 +80,7 @@ namespace OpenNos.DAL.DAO
             {
                 var result = new List<CharacterDTO>();
                 foreach (var entity in context.Character
-                    .Where(c => c.State == (byte) CharacterState.Active && c.Account.Authority == AuthorityType.User &&
+                    .Where(c => c.State == (byte)CharacterState.Active && c.Account.Authority == AuthorityType.User &&
                                 !c.Account.PenaltyLog.Any(l =>
                                     l.Penalty == PenaltyType.Banned && l.DateEnd > DateTime.Now))
                     .OrderByDescending(c => c.Act4Points).Take(30))
@@ -96,7 +95,7 @@ namespace OpenNos.DAL.DAO
         }
 
         /// <summary>
-        ///     Returns first 30 occurences of highest Reputation
+        /// Returns first 30 occurences of highest Reputation
         /// </summary>
         /// <returns></returns>
         public List<CharacterDTO> GetTopReputation()
@@ -105,7 +104,7 @@ namespace OpenNos.DAL.DAO
             {
                 var result = new List<CharacterDTO>();
                 foreach (var entity in context.Character
-                    .Where(c => c.State == (byte) CharacterState.Active && c.Account.Authority == AuthorityType.User &&
+                    .Where(c => c.State == (byte)CharacterState.Active && c.Account.Authority == AuthorityType.User &&
                                 !c.Account.PenaltyLog.Any(l =>
                                     l.Penalty == PenaltyType.Banned && l.DateEnd > DateTime.Now))
                     .OrderByDescending(c => c.Reputation).Take(43))
@@ -184,7 +183,7 @@ namespace OpenNos.DAL.DAO
             {
                 var result = new List<CharacterDTO>();
                 foreach (var entity in context.Character
-                    .Where(c => c.AccountId.Equals(accountId) && c.State.Equals((byte) CharacterState.Active))
+                    .Where(c => c.AccountId.Equals(accountId) && c.State.Equals((byte)CharacterState.Active))
                     .OrderByDescending(c => c.Slot))
                 {
                     var dto = new CharacterDTO();
@@ -247,7 +246,7 @@ namespace OpenNos.DAL.DAO
                     if (CharacterMapper.ToCharacterDTO(
                         context.Character.SingleOrDefault(c =>
                             c.AccountId.Equals(accountId) && c.Slot.Equals(slot) &&
-                            c.State.Equals((byte) CharacterState.Active)), dto)) return dto;
+                            c.State.Equals((byte)CharacterState.Active)), dto)) return dto;
 
                     return null;
                 }

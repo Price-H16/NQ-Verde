@@ -2,6 +2,14 @@
 {
     public class SpLevelBasedAlgorithm : ILevelBasedDataAlgorithm
     {
+        #region Properties
+
+        public long[] Data { get; set; }
+
+        #endregion
+
+        #region Methods
+
         public void Initialize()
         {
             // Load SpData
@@ -13,6 +21,6 @@
             for (var i = 20; i < Data.Length; i++) Data[i] = Data[i - 1] + 6 * (3 * i * (i + 1) + 1);
         }
 
-        public long[] Data { get; set; }
+        #endregion
     }
 }

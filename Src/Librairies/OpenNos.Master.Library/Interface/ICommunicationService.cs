@@ -57,6 +57,7 @@ namespace OpenNos.Master.Library.Interface
         string RetrieveOriginWorld(long accountId);
         void RefreshPenalty(int penaltyId);
         void RunGlobalEvent(EventType eventType, byte value);
+        void SetWorldServerAsInvisible(Guid worldId);
 
         /*
          * Session

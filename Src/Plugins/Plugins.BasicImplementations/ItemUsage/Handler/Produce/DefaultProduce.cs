@@ -1,21 +1,25 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._ItemUsage;
 using OpenNos.GameObject._ItemUsage.Event;
-using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.ItemUsage.Handler.Produce
 {
-   public class DefaultProduce : IUseItemRequestHandlerAsync
+    public class DefaultProduce : IUseItemRequestHandlerAsync
     {
-        public ItemPluginType Type => ItemPluginType.Produce;
-        
+        #region Properties
+
         public long EffectId => default;
+
+        public ItemPluginType Type => ItemPluginType.Produce;
+
+        #endregion
+
+        #region Methods
 
         public async Task HandleAsync(ClientSession session, InventoryUseItemEvent e)
         {
@@ -49,5 +53,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Produce
                     break;
             }
         }
+
+        #endregion
     }
 }

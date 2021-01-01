@@ -7,9 +7,15 @@ namespace Plugins.BasicImplementations.NpcDialog
 {
     public class NpcDialogPluginCore : ICorePlugin
     {
+        #region Properties
+
         public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
 
         public string Name => nameof(NpcDialogPluginCore);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -26,5 +32,7 @@ namespace Plugins.BasicImplementations.NpcDialog
             builder.Register(_ => new NpcDialogHandlerContainer())
                 .As<INpcDialogHandlerContainer>().SingleInstance();
         }
+
+        #endregion
     }
 }

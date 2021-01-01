@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NosTale.Configuration;
+﻿using NosTale.Configuration;
 using NosTale.Configuration.Utilities;
 using OpenNos.Core;
 using OpenNos.DAL;
@@ -11,17 +8,30 @@ using OpenNos.Master.Library.Data;
 using OpenNos.Master.Library.Interface;
 using OpenNos.SCS.Communication.Scs.Communication.EndPoints.Tcp;
 using OpenNos.SCS.Communication.ScsServices.Service;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenNos.Master.Server
 {
     internal class CommunicationService : ScsService, ICommunicationService
     {
+        #region Instantiation
+
         public CommunicationService()
         {
             //nvm
         }
 
+        #endregion
+
         #region Methods
+
+        public void AddOrRemoveSavingCharacters(long characterId, bool add)
+        {
+            // if (add) { MSManager.Instance.CharactersUnderSaveProcess[characterId] = DateTime.Now;
+            // } else if (!add) { MSManager.Instance.CharactersUnderSaveProcess.Remove(characterId); }
+        }
 
         public bool Authenticate(string authKey)
         {
@@ -36,23 +46,6 @@ namespace OpenNos.Master.Server
             }
 
             return false;
-        }
-
-        public bool IsCharacterSaving(long characterId)
-        {
-            return false;
-        }
-
-        public void AddOrRemoveSavingCharacters(long characterId, bool add)
-        {
-            // if (add)
-            // {
-            //     MSManager.Instance.CharactersUnderSaveProcess[characterId] = DateTime.Now;
-            // }
-            // else if (!add)
-            // {
-            //     MSManager.Instance.CharactersUnderSaveProcess.Remove(characterId);
-            // }
         }
 
         public void CheckForStuckAccountsAtSaving()
@@ -70,7 +63,6 @@ namespace OpenNos.Master.Server
             {
                 MSManager.Instance.CharactersUnderSaveProcess.Remove(key);
             }
-
         }
 
         public void Cleanup()
@@ -223,7 +215,7 @@ namespace OpenNos.Master.Server
             if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return false;
 
             return MSManager.Instance.ConnectedAccounts.Any(c =>
-                c.AccountId == accountId && c.ConnectedWorld != null /* && c.LastPulse.AddSeconds(90) >= DateTime.Now*/);
+                c.AccountId == accountId && c.ConnectedWorld != null  && c.LastPulse.AddSeconds(90) >= DateTime.Now);
         }
 
         public bool IsAct4Online(string worldGroup)
@@ -241,6 +233,11 @@ namespace OpenNos.Master.Server
 
             return MSManager.Instance.ConnectedAccounts.Any(c =>
                 c.ConnectedWorld != null && c.ConnectedWorld.WorldGroup == worldGroup && c.CharacterId == characterId);
+        }
+
+        public bool IsCharacterSaving(long characterId)
+        {
+            return false;
         }
 
         public bool IsCrossServerLoginPermitted(long accountId, int sessionId)
@@ -405,12 +402,8 @@ namespace OpenNos.Master.Server
             string lastGroup = "";
             byte worldCount = 0;
 
-
             foreach (WorldServer world in MSManager.Instance.WorldServers.OrderBy(w => w.WorldGroup))
             {
-                
-
-
                 if (lastGroup != world.WorldGroup)
                 {
                     worldCount++;
@@ -429,6 +422,7 @@ namespace OpenNos.Master.Server
             }
             return channelPacket;
         }
+
         public IEnumerable<string> RetrieveServerStatistics(bool isStart)
         {
             if (!MSManager.Instance.AuthentificatedClients.Any(s => s.Equals(CurrentClient.ClientId))) return null;

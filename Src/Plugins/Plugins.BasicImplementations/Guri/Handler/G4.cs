@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Core.Extensions;
-using OpenNos.DAL;
-using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._Guri;
 using OpenNos.GameObject._Guri.Event;
-using OpenNos.GameObject.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.Master.Library.Client;
 using OpenNos.Master.Library.Data;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.Guri.Handler
 {
     public class G4 : IGuriHandler
     {
+        #region Properties
+
         public long GuriEffectId => 4;
+
+        #endregion
+
+        #region Methods
 
         public async Task ExecuteAsync(ClientSession Session, GuriEvent e)
         {
@@ -152,7 +153,7 @@ namespace Plugins.BasicImplementations.Guri.Handler
                     }
                     else
                     {
-                        //sayPacket = Session.Character.GenerateSay(message, 13);    
+                        //sayPacket = Session.Character.GenerateSay(message, 13);
                         CommunicationServiceClient.Instance.SendMessageToCharacter(new SCSCharacterMessage
                         {
                             DestinationCharacterId = null,
@@ -226,5 +227,7 @@ namespace Plugins.BasicImplementations.Guri.Handler
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -12,7 +12,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class RaidLobby : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 644;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -23,10 +29,11 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 
                 Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(o =>
                 {
-                    
                     ServerManager.Instance.ChangeMap(Session.Character.CharacterId, 5415, 18, 18);
                 });
             }
         }
+
+        #endregion
     }
 }

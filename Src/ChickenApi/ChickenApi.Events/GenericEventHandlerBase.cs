@@ -7,7 +7,13 @@ namespace ChickenAPI.Events
     public abstract class GenericEventHandlerBase<TNotification> : IEventHandler
         where TNotification : IEventNotification
     {
+        #region Properties
+
         public Type Type => typeof(TNotification);
+
+        #endregion
+
+        #region Methods
 
         public Task Handle(IEventNotification notification, CancellationToken cancellation)
         {
@@ -17,5 +23,7 @@ namespace ChickenAPI.Events
         }
 
         protected abstract Task Handle(TNotification e, CancellationToken cancellation);
+
+        #endregion
     }
 }

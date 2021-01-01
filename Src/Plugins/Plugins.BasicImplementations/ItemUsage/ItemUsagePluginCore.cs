@@ -7,9 +7,15 @@ namespace Plugins.BasicImplementations.ItemUsage
 {
     public class ItemUsagePluginCore : ICorePlugin
     {
+        #region Properties
+
         public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
 
         public string Name => nameof(ItemUsagePluginCore);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -25,5 +31,7 @@ namespace Plugins.BasicImplementations.ItemUsage
                 .Where(s => s.ImplementsInterface<IUseItemRequestHandlerAsync>());
             builder.Register(_ => new ItemUsageHandlerContainer()).As<IItemUsageHandlerContainer>().SingleInstance();
         }
+
+        #endregion
     }
 }

@@ -1,35 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
 using OpenNos.Data;
 using OpenNos.Data.Enums;
 using OpenNos.Mapper.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
     public class CharacterTitleDAO : ICharacterTitleDAO
     {
         #region Methods
-
-        public IEnumerable<CharacterTitleDTO> LoadByCharacterId(long characterId)
-        {
-            using (var context = DataAccessHelper.CreateContext())
-            {
-                var result = new List<CharacterTitleDTO>();
-                foreach (var charQuest in context.CharacterTitle.Where(s => s.CharacterId == characterId))
-                {
-                    var dto = new CharacterTitleDTO();
-                    CharacterTitleMapper.ToTitleDTO(charQuest, dto);
-                    result.Add(dto);
-                }
-
-                return result;
-            }
-        }
 
         public DeleteResult Delete(long CharacterTitleId)
         {
@@ -83,6 +67,22 @@ namespace OpenNos.DAL.DAO
                     string.Format(Language.Instance.GetMessageFromKey("UPDATE_CHARACTERTITLE_ERROR"),
                         CharacterTitle.CharacterTitleId, e.Message), e);
                 return SaveResult.Error;
+            }
+        }
+
+        public IEnumerable<CharacterTitleDTO> LoadByCharacterId(long characterId)
+        {
+            using (var context = DataAccessHelper.CreateContext())
+            {
+                var result = new List<CharacterTitleDTO>();
+                foreach (var charQuest in context.CharacterTitle.Where(s => s.CharacterId == characterId))
+                {
+                    var dto = new CharacterTitleDTO();
+                    CharacterTitleMapper.ToTitleDTO(charQuest, dto);
+                    result.Add(dto);
+                }
+
+                return result;
             }
         }
 

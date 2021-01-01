@@ -19,8 +19,10 @@ namespace OpenNos.DAL
         private static ICharacterSkillDAO _characterSkillDAO;
         private static ICharacterTitleDAO _characterTitleDAO;
         private static ICharacterVisitedMapsDAO _characterVisitedMapsDAO;
+
         //private static IChatLogDAO _chatLogDAO;
         private static IComboDAO _comboDAO;
+
         private static IDropDAO _dropDAO;
         private static IFamilyCharacterDAO _familyCharacterDAO;
         private static IFamilyDAO _familyDAO;
@@ -29,6 +31,7 @@ namespace OpenNos.DAL
         private static IGeneralLogDAO _generalLogDAO;
         private static IItemDAO _itemDAO;
         private static IItemInstanceDAO _itemInstanceDAO;
+        private static ILogsCommandsDAO _logsCommandsDAO;
         private static IMailDAO _mailDAO;
         private static IMaintenanceLogDAO _maintenanceLogDAO;
         private static IMapDAO _mapDAO;
@@ -65,13 +68,10 @@ namespace OpenNos.DAL
         private static IStaticBonusDAO _staticBonusDAO;
         private static IStaticBuffDAO _staticBuffDAO;
         private static ITeleporterDAO _teleporterDAO;
-        private static ILogsCommandsDAO _logsCommandsDAO;
 
         #endregion
 
         #region Properties
-
-        public static ILogsCommandsDAO LogsCommandsDAO => _logsCommandsDAO ?? (_logsCommandsDAO = new LogsCommandsDAO());
 
         public static IAccountDAO AccountDAO => _accountDAO ?? (_accountDAO = new AccountDAO());
 
@@ -84,8 +84,6 @@ namespace OpenNos.DAL
         public static ICardDAO CardDAO => _cardDAO ?? (_cardDAO = new CardDAO());
 
         public static ICellonOptionDAO CellonOptionDAO => _cellonOptionDAO ?? (_cellonOptionDAO = new CellonOptionDAO());
-
-        public static IFamilySkillMissionDAO FamilySkillMissionDAO => _familySkillMissionDAO ?? (_familySkillMissionDAO = new FamilySkillMissionDAO());
 
         public static ICharacterDAO CharacterDAO => _characterDAO ?? (_characterDAO = new CharacterDAO());
 
@@ -100,11 +98,9 @@ namespace OpenNos.DAL
 
         public static ICharacterTitleDAO CharacterTitleDAO =>
             _characterTitleDAO ?? (_characterTitleDAO = new CharacterTitleDAO());
-        
+
         public static ICharacterVisitedMapsDAO CharacterVisitedMapsDAO =>
             _characterVisitedMapsDAO ?? (_characterVisitedMapsDAO = new CharacterVisitedMapsDAO());
-
-        //public static IChatLogDAO ChatLogDAO => _chatLogDAO ?? (_chatLogDAO = new ChatLogDAO());
 
         public static IComboDAO ComboDAO => _comboDAO ?? (_comboDAO = new ComboDAO());
 
@@ -117,12 +113,16 @@ namespace OpenNos.DAL
 
         public static IFamilyLogDAO FamilyLogDAO => _familyLogDAO ?? (_familyLogDAO = new FamilyLogDAO());
 
+        public static IFamilySkillMissionDAO FamilySkillMissionDAO => _familySkillMissionDAO ?? (_familySkillMissionDAO = new FamilySkillMissionDAO());
+
         public static IGeneralLogDAO GeneralLogDAO => _generalLogDAO ?? (_generalLogDAO = new GeneralLogDAO());
 
         public static IItemDAO ItemDAO => _itemDAO ?? (_itemDAO = new ItemDAO());
 
         public static IItemInstanceDAO ItemInstanceDAO =>
             _itemInstanceDAO ?? (_itemInstanceDAO = new ItemInstanceDAO());
+
+        public static ILogsCommandsDAO LogsCommandsDAO => _logsCommandsDAO ?? (_logsCommandsDAO = new LogsCommandsDAO());
 
         public static IMailDAO MailDAO => _mailDAO ?? (_mailDAO = new MailDAO());
 
@@ -205,8 +205,6 @@ namespace OpenNos.DAL
         public static IStaticBuffDAO StaticBuffDAO => _staticBuffDAO ?? (_staticBuffDAO = new StaticBuffDAO());
 
         public static ITeleporterDAO TeleporterDAO => _teleporterDAO ?? (_teleporterDAO = new TeleporterDAO());
-
-
 
         #endregion
     }

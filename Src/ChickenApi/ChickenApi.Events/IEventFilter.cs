@@ -5,12 +5,16 @@ namespace ChickenAPI.Events
 {
     public interface IEventFilter
     {
+        #region Methods
+
         /// <summary>
-        ///     Handles the preprocessor
+        /// Handles the preprocessor
         /// </summary>
         /// <param name="notification"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         Task<bool> Handle(IEventNotification notification, CancellationToken token);
+
+        #endregion
     }
 }

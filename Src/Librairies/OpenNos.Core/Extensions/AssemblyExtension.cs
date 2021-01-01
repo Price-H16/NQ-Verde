@@ -7,25 +7,30 @@ namespace OpenNos.Core.Extensions
 {
     public static class AssemblyExtensions
     {
-        public static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
+        #region Methods
+
+        public static Type[] GetTypesDerivedFrom<T>(this Assembly assembly)
         {
-            if (generic == toCheck) return false;
+            return assembly.GetTypes().Where(s => s.IsSubclassOf(typeof(T))).ToArray();
+        }
 
-            while (toCheck != null && toCheck != typeof(object))
-            {
-                var cur = toCheck.IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
-                if (generic == cur) return true;
+        public static Type[] GetTypesImplementingGenericClass(this Assembly assembly, params Type[] types)
+        {
+            var list = new List<Type>();
+            foreach (var type in types) list.AddRange(assembly.GetTypesImplementingGenericClass(type));
 
-                toCheck = toCheck.BaseType;
-            }
+            return list.ToArray();
+        }
 
-            return false;
+        public static Type[] GetTypesImplementingGenericClass(this Assembly assembly, Type type)
+        {
+            return assembly.GetTypes().Where(s => IsSubclassOfRawGeneric(type, s)).ToArray();
         }
 
         public static Type[] GetTypesImplementingInterface(this Assembly assembly, params Type[] types)
         {
             var list = new List<Type>();
-            foreach (var type in types) list.AddRange(GetTypesImplementingInterface(assembly, new[] {type}));
+            foreach (var type in types) list.AddRange(GetTypesImplementingInterface(assembly, new[] { type }));
 
             return list.ToArray();
         }
@@ -45,28 +50,26 @@ namespace OpenNos.Core.Extensions
             return type.GetInterfaces().Any(s => s == typeof(T));
         }
 
-
         public static bool ImplementsInterface(this Type type, Type interfaceType)
         {
             return type.GetInterfaces().Any(s => s == interfaceType);
         }
 
-        public static Type[] GetTypesImplementingGenericClass(this Assembly assembly, params Type[] types)
+        public static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
         {
-            var list = new List<Type>();
-            foreach (var type in types) list.AddRange(assembly.GetTypesImplementingGenericClass(type));
+            if (generic == toCheck) return false;
 
-            return list.ToArray();
+            while (toCheck != null && toCheck != typeof(object))
+            {
+                var cur = toCheck.IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
+                if (generic == cur) return true;
+
+                toCheck = toCheck.BaseType;
+            }
+
+            return false;
         }
 
-        public static Type[] GetTypesImplementingGenericClass(this Assembly assembly, Type type)
-        {
-            return assembly.GetTypes().Where(s => IsSubclassOfRawGeneric(type, s)).ToArray();
-        }
-
-        public static Type[] GetTypesDerivedFrom<T>(this Assembly assembly)
-        {
-            return assembly.GetTypes().Where(s => s.IsSubclassOf(typeof(T))).ToArray();
-        }
+        #endregion
     }
 }

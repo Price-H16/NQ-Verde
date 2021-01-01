@@ -1,18 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
 using OpenNos.Data;
 using OpenNos.Mapper.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
     public class MapTypeMapDAO : IMapTypeMapDAO
     {
         #region Methods
+
+        public short GetMapTypeIdByMapId(short mapId)
+        {
+            using (OpenNosContext context = DataAccessHelper.CreateContext())
+            {
+                short result = -1;
+                foreach (MapTypeMap MapTypeMap in context.MapTypeMap.Where(c => c.MapId.Equals(mapId)))
+                {
+                    MapTypeMapDTO dto = new MapTypeMapDTO();
+                    Mapper.Mappers.MapTypeMapMapper.ToMapTypeMapDTO(MapTypeMap, dto);
+                    result = dto.MapTypeId;
+                }
+                return result;
+            }
+        }
 
         public void Insert(List<MapTypeMapDTO> mapTypeMaps)
         {
@@ -53,20 +68,7 @@ namespace OpenNos.DAL.DAO
                 return result;
             }
         }
-        public short GetMapTypeIdByMapId(short mapId)
-        {
-            using (OpenNosContext context = DataAccessHelper.CreateContext())
-            {
-                short result = -1;
-                foreach (MapTypeMap MapTypeMap in context.MapTypeMap.Where(c => c.MapId.Equals(mapId)))
-                {
-                    MapTypeMapDTO dto = new MapTypeMapDTO();
-                    Mapper.Mappers.MapTypeMapMapper.ToMapTypeMapDTO(MapTypeMap, dto);
-                    result = dto.MapTypeId;
-                }
-                return result;
-            }
-        }
+
         public MapTypeMapDTO LoadByMapAndMapType(short mapId, short maptypeId)
         {
             try

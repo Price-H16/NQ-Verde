@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
@@ -11,6 +6,10 @@ using OpenNos.Data;
 using OpenNos.Data.Enums;
 using OpenNos.Domain;
 using OpenNos.Mapper.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
@@ -39,30 +38,6 @@ namespace OpenNos.DAL.DAO
             }
         }
 
-        public void Insert(List<AccountDTO> account)
-        {
-            try
-            {
-                using (var context = DataAccessHelper.CreateContext())
-                {
-                    context.Configuration.AutoDetectChangesEnabled = false;
-                    foreach (var Account in account)
-                    {
-                        var entity = new Account();
-                        AccountMapper.ToAccount(Account, entity);
-                        context.Account.Add(entity);
-                    }
-
-                    context.Configuration.AutoDetectChangesEnabled = true;
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-            }
-        }
-
         public DeleteResult Delete(long accountId)
         {
             try
@@ -86,6 +61,30 @@ namespace OpenNos.DAL.DAO
                     string.Format(Language.Instance.GetMessageFromKey("DELETE_ACCOUNT_ERROR"), accountId, e.Message),
                     e);
                 return DeleteResult.Error;
+            }
+        }
+
+        public void Insert(List<AccountDTO> account)
+        {
+            try
+            {
+                using (var context = DataAccessHelper.CreateContext())
+                {
+                    context.Configuration.AutoDetectChangesEnabled = false;
+                    foreach (var Account in account)
+                    {
+                        var entity = new Account();
+                        AccountMapper.ToAccount(Account, entity);
+                        context.Account.Add(entity);
+                    }
+
+                    context.Configuration.AutoDetectChangesEnabled = true;
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
             }
         }
 
@@ -167,30 +166,13 @@ namespace OpenNos.DAL.DAO
             return null;
         }
 
-        // public int AmountDailyRewardsGiven(string registrationIP)
-        // {
-        //     try
-        //     {
-        //         using (var context = DataAccessHelper.CreateContext())
-        //         {
-        //             var account = context.Account.Count(a => a.RegistrationIP.Equals(registrationIP));
-        //             if (account != null)
-        //             {
-        //                 var accountDTO = new AccountDTO();
-        //                 if (AccountMapper.ToAccountDTO(account, accountDTO))
-        //                 {
-        //                     return accountDTO;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Logger.Error(e);
-        //     }
+        // public int AmountDailyRewardsGiven(string registrationIP) { try { using (var context =
+        // DataAccessHelper.CreateContext()) { var account = context.Account.Count(a =>
+        // a.RegistrationIP.Equals(registrationIP)); if (account != null) { var accountDTO = new
+        // AccountDTO(); if (AccountMapper.ToAccountDTO(account, accountDTO)) { return accountDTO; }
+        // } } } catch (Exception e) { Logger.Error(e); }
         //
-        //     return 0;
-        // }
+        // return 0; }
 
         public void WriteGeneralLog(long accountId, string ipAddress, long? characterId, GeneralLogType logType,
             string logData)
@@ -245,7 +227,6 @@ namespace OpenNos.DAL.DAO
 
             return null;
         }
-        
 
         #endregion
     }

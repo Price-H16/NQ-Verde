@@ -1,5 +1,5 @@
-﻿using System;
-using OpenNos.Domain;
+﻿using OpenNos.Domain;
+using System;
 
 namespace OpenNos.DAL.EF
 {

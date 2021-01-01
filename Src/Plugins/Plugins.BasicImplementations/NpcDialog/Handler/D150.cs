@@ -1,18 +1,23 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class D105 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 150;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -43,5 +48,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 }

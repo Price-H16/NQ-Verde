@@ -14,29 +14,7 @@ namespace OpenNos.DAL.DAO
 {
     public class LogsCommandsDAO : ILogsCommandsDAO
     {
-        private static LogCommandsDTO Insert(LogCommandsDTO account, OpenNosContext context)
-        {
-            var entity = new LogCommands();
-            LogsCommmandsMapper.ToLogsCommmand(account, entity);
-            context.LogCommands.Add(entity);
-            context.SaveChanges();
-            LogsCommmandsMapper.LogsCommmandDTO(entity, account);
-            return account;
-        }
-
-        private static LogCommandsDTO Update(LogCommands entity, LogCommandsDTO account, OpenNosContext context)
-        {
-            if (entity != null)
-            {
-                LogsCommmandsMapper.ToLogsCommmand(account, entity);
-                context.Entry(entity).State = EntityState.Modified;
-                context.SaveChanges();
-            }
-
-            if (LogsCommmandsMapper.LogsCommmandDTO(entity, account)) return account;
-
-            return null;
-        }
+        #region Methods
 
         public SaveResult InsertOrUpdate(LogCommandsDTO log)
         {
@@ -81,5 +59,31 @@ namespace OpenNos.DAL.DAO
                 Logger.Error(e);
             }
         }
+
+        private static LogCommandsDTO Insert(LogCommandsDTO account, OpenNosContext context)
+        {
+            var entity = new LogCommands();
+            LogsCommmandsMapper.ToLogsCommmand(account, entity);
+            context.LogCommands.Add(entity);
+            context.SaveChanges();
+            LogsCommmandsMapper.LogsCommmandDTO(entity, account);
+            return account;
+        }
+
+        private static LogCommandsDTO Update(LogCommands entity, LogCommandsDTO account, OpenNosContext context)
+        {
+            if (entity != null)
+            {
+                LogsCommmandsMapper.ToLogsCommmand(account, entity);
+                context.Entry(entity).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+
+            if (LogsCommmandsMapper.LogsCommmandDTO(entity, account)) return account;
+
+            return null;
+        }
+
+        #endregion
     }
 }

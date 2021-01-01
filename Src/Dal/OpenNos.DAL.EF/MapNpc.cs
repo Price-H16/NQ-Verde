@@ -22,8 +22,6 @@ namespace OpenNos.DAL.EF
 
         public short Effect { get; set; }
 
-        public byte Score { get; set; }
-
         public short EffectDelay { get; set; }
 
         public bool IsDisabled { get; set; }
@@ -52,6 +50,8 @@ namespace OpenNos.DAL.EF
         public byte Position { get; set; }
 
         public virtual ICollection<RecipeList> RecipeList { get; set; }
+
+        public byte Score { get; set; }
 
         public virtual ICollection<Shop> Shop { get; set; }
 

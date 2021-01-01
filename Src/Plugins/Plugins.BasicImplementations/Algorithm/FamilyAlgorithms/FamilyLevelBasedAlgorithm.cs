@@ -2,6 +2,14 @@
 {
     public class FamilyLevelBasedAlgorithm : ILevelBasedDataAlgorithm
     {
+        #region Properties
+
+        public long[] Data { get; set; }
+
+        #endregion
+
+        #region Methods
+
         public void Initialize()
         {
             Data = new long[]
@@ -13,6 +21,6 @@
             };
         }
 
-        public long[] Data { get; set; }
+        #endregion
     }
 }

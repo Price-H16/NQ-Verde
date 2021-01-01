@@ -1,5 +1,4 @@
-﻿using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 
 namespace NosTale.Packets.Packets.CommandPackets
@@ -9,11 +8,15 @@ namespace NosTale.Packets.Packets.CommandPackets
     {
         #region Properties
 
+        [PacketIndex(1)]
+        public string newlock { get; set; }
+
         [PacketIndex(0)]
         public string oldlock { get; set; }
 
-        [PacketIndex(1)]
-        public string newlock { get; set; }
+        #endregion
+
+        #region Methods
 
         public static string ReturnHelp()
         {

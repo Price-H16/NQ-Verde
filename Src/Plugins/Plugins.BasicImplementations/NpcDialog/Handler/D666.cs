@@ -1,44 +1,50 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Extension.Inventory;
-using OpenNos.GameObject.Helpers;
-using OpenNos.GameObject.Networking;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class D666 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 666;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
-           var npc = packet.Npc;
-           // 4949 ~ 4966 = c25/c28 4978 ~ 4986 = c45/c48
+            var npc = packet.Npc;
 
-           const long price = 10000000;
+            // 4949 ~ 4966 = c25/c28 4978 ~ 4986 = c45/c48
 
-           var itemInstance = Session?.Character?.Inventory?.LoadBySlotAndType(0, InventoryType.Equipment);
+            const long price = 10000000;
 
-           if (itemInstance?.Item != null && (itemInstance.ItemVNum >= 4949 && itemInstance.ItemVNum <= 4966 || itemInstance.ItemVNum >= 4978 && itemInstance.ItemVNum <= 4986) && itemInstance.Rare == 8)
-           {
-               if (Session.Character.Gold < price)
-               {
-                   Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_MONEY"), 10));
-                   return;
-               }
+            var itemInstance = Session?.Character?.Inventory?.LoadBySlotAndType(0, InventoryType.Equipment);
 
-               Session.Character.Gold -= price;
-               Session.SendPacket(Session.Character.GenerateGold());
+            if (itemInstance?.Item != null && (itemInstance.ItemVNum >= 4949 && itemInstance.ItemVNum <= 4966 || itemInstance.ItemVNum >= 4978 && itemInstance.ItemVNum <= 4986) && itemInstance.Rare == 8)
+            {
+                if (Session.Character.Gold < price)
+                {
+                    Session.SendPacket(Session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_ENOUGH_MONEY"), 10));
+                    return;
+                }
 
-               itemInstance.RarifyItem(Session, RarifyMode.HeroEquipmentDowngrade, RarifyProtection.None);
+                Session.Character.Gold -= price;
+                Session.SendPacket(Session.Character.GenerateGold());
 
-               Session.SendPacket(itemInstance.GenerateInventoryAdd());
-           }
+                itemInstance.RarifyItem(Session, RarifyMode.HeroEquipmentDowngrade, RarifyProtection.None);
+
+                Session.SendPacket(itemInstance.GenerateInventoryAdd());
+            }
         }
+
+        #endregion
     }
 }

@@ -8,12 +8,16 @@
 
         public string AuthentificationServiceAuthKey { get; set; }
 
+        public bool BCardsInArenaTalent { get; set; }
+
         public string IPAddress { get; set; }
 
         public bool LagMode { get; set; }
 
         // World configuration console ↓
         public string Language { get; set; }
+
+        public bool LockSystem { get; set; }
 
         public int LogerPort { get; set; }
 
@@ -41,10 +45,6 @@
         public bool WorldInformation { get; set; }
 
         public int WorldPort { get; set; }
-
-        public bool BCardsInArenaTalent { get; set; }
-
-        public bool LockSystem { get; set; }
 
         #endregion
     }

@@ -5,7 +5,15 @@ using System.Threading.Tasks;
 
 public class D500 : INpcDialogAsyncHandler
 {
-    public long HandledId => 1500; //Fortune-teller
+    #region Properties
+
+    public long HandledId => 1500;
+
+    #endregion
+
+    //Fortune-teller
+
+    #region Methods
 
     public async Task Execute(ClientSession Session, NpcDialogEvent packet)
     {
@@ -15,4 +23,6 @@ public class D500 : INpcDialogAsyncHandler
             Session.Character.AddQuest(2252, false);
         }
     }
+
+    #endregion
 }

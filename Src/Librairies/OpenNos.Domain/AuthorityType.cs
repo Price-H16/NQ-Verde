@@ -1,7 +1,7 @@
 ﻿namespace OpenNos.Domain
 {
     /// <summary>
-    ///     Account basic groups
+    /// Account basic groups
     /// </summary>
     public enum AuthorityType : short
     {

@@ -13,12 +13,12 @@
  */
 
 using OpenNos.Data;
-using System;
-using OpenNos.GameObject.Networking;
-using System.Collections.Generic;
-using OpenNos.GameObject.Helpers;
-using System.Linq;
 using OpenNos.Domain;
+using OpenNos.GameObject.Helpers;
+using OpenNos.GameObject.Networking;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using static OpenNos.Domain.BCardType;
 
 namespace OpenNos.GameObject
@@ -93,16 +93,6 @@ namespace OpenNos.GameObject
             return Skill != null && LastUse.AddMilliseconds(Skill.Cooldown * 100) < DateTime.Now;
         }
 
-        public void ReinstantiateSkill()
-        {
-            var newSkill = ServerManager.GetSkill(SkillVNum);
-            _skill = new Skill(newSkill);
-
-            _skill.BCards = newSkill.BCards;
-            _skill.Combos = newSkill.Combos;
-            _skill.PartnerSkill = newSkill.PartnerSkill;
-        }
-
         public List<BCard> GetSkillBCards()
         {
             List<BCard> SkillBCards = new List<BCard>();
@@ -127,6 +117,7 @@ namespace OpenNos.GameObject
                         }
                     }
                 }
+
                 //Passive Skills
                 SkillBCards.AddRange(PassiveSkillHelper.Instance.PassiveSkillToBCards(Session.Character.Skills?.Where(s => s.Skill.SkillType == 0)));
 
@@ -180,6 +171,16 @@ namespace OpenNos.GameObject
                 }
             }
             return mpCost;
+        }
+
+        public void ReinstantiateSkill()
+        {
+            var newSkill = ServerManager.GetSkill(SkillVNum);
+            _skill = new Skill(newSkill);
+
+            _skill.BCards = newSkill.BCards;
+            _skill.Combos = newSkill.Combos;
+            _skill.PartnerSkill = newSkill.PartnerSkill;
         }
 
         public byte TargetRange()

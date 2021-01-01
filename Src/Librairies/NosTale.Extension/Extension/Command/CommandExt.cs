@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL;
 using OpenNos.Data;
 using OpenNos.Domain;
@@ -9,13 +6,34 @@ using OpenNos.GameObject;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.Master.Library.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NosTale.Extension.Extension.Command
 {
     public static class CommandExt
     {
+        #region Methods
+
+        public static void AddMate(this ClientSession Session, short vnum, byte level, MateType mateType)
+        {
+            var mateNpc = ServerManager.GetNpcMonster(vnum);
+            if (Session.CurrentMapInstance == Session.Character.Miniland && mateNpc != null)
+            {
+                level = level == 0 ? (byte)1 : level;
+                var mate = new Mate(Session.Character, mateNpc, level, mateType);
+                Session.Character.AddPet(mate);
+            }
+            else
+            {
+                Session.SendPacket(
+                    UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_IN_MINILAND"), 0));
+            }
+        }
+
         public static void AddPortal(this ClientSession Session, short destinationMapId, short destinationX,
-            short destinationY, short type,
+                    short destinationY, short type,
             bool insertToDatabase)
         {
             if (Session.HasCurrentMapInstance)
@@ -48,7 +66,7 @@ namespace NosTale.Extension.Extension.Command
                 if (sessionTarget != null)
                 {
                     ServerManager.Instance.Kick(characterName);
-                
+
                     var log = new PenaltyLogDTO
                     {
                         AccountId = character.AccountId,
@@ -181,20 +199,6 @@ namespace NosTale.Extension.Extension.Command
             Session.SendPacket(Session.Character.GenerateSay("----- ------------ -----", 13));
         }
 
-        public static void AddMate(this ClientSession Session, short vnum, byte level, MateType mateType)
-        {
-            var mateNpc = ServerManager.GetNpcMonster(vnum);
-            if (Session.CurrentMapInstance == Session.Character.Miniland && mateNpc != null)
-            {
-                level = level == 0 ? (byte) 1 : level;
-                var mate = new Mate(Session.Character, mateNpc, level, mateType);
-                Session.Character.AddPet(mate);
-            }
-            else
-            {
-                Session.SendPacket(
-                    UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_IN_MINILAND"), 0));
-            }
-        }
+        #endregion
     }
 }

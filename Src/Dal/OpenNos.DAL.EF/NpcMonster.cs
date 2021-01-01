@@ -1,8 +1,8 @@
+using OpenNos.DAL.EF.Entities;
+using OpenNos.Domain;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using OpenNos.DAL.EF.Entities;
-using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF
 {
@@ -71,6 +71,8 @@ namespace OpenNos.DAL.EF
 
         public short ElementRate { get; set; }
 
+        public short EvolvePet { get; set; }
+
         public short FireResistance { get; set; }
 
         public byte HeroLevel { get; set; }
@@ -125,8 +127,6 @@ namespace OpenNos.DAL.EF
         public short WaterResistance { get; set; }
 
         public int XP { get; set; }
-
-        public short EvolvePet { get; set; }
 
         #endregion
     }

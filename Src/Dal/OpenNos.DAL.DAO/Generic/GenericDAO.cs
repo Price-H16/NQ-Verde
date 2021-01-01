@@ -1,22 +1,17 @@
-﻿using Microsoft.VisualBasic.CompilerServices;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
-using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface.PropertiesMapping;
-using OpenNos.Mapper.Mappers;
-using OpenNos.Mapper.Props;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenNos.DAL.DAO.Generic
 {
     public class GenericDAO<TDTOEntity, TEntity> where TDTOEntity : class where TEntity : class
     {
+        #region Methods
+
         public TDTOEntity InsertOrUpdate(OpenNosContext context, TDTOEntity dtoEntity, DbSet<TEntity> contextList, IModuleMapper<TDTOEntity, TEntity> moduleMapper, Func<TEntity, bool> condition)
         {
             try
@@ -77,5 +72,7 @@ namespace OpenNos.DAL.DAO.Generic
 
             return null;
         }
+
+        #endregion
     }
 }

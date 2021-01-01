@@ -1,5 +1,4 @@
-﻿using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 
 namespace OpenNos.GameObject.CommandPackets
@@ -11,6 +10,10 @@ namespace OpenNos.GameObject.CommandPackets
 
         [PacketIndex(0)]
         public string lockcode { get; set; }
+
+        #endregion
+
+        #region Methods
 
         public static string ReturnHelp()
         {

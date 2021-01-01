@@ -12,6 +12,8 @@ namespace OpenNos.DAL.DAO
 {
     public class PartnerSkillDAO : IPartnerSkillDAO
     {
+        #region Methods
+
         public PartnerSkillDTO Insert(PartnerSkillDTO partnerSkillDTO)
         {
             try
@@ -65,7 +67,6 @@ namespace OpenNos.DAL.DAO
             catch (Exception e)
             {
                 Logger.Error(e);
-
             }
 
             return partnerSkillDTOs;
@@ -98,5 +99,6 @@ namespace OpenNos.DAL.DAO
             return DeleteResult.Error;
         }
 
+        #endregion
     }
 }

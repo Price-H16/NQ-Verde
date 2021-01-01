@@ -209,6 +209,11 @@ namespace OpenNos.Master.Library.Client
             return _client.ServiceProxy.RegisterWorldServer(worldServer);
         }
 
+        public void SetWorldServerAsInvisible(Guid worldId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Restart(string worldGroup, int time = 5)
         {
             _client.ServiceProxy.Restart(worldGroup, time);

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Validation;
-using System.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.DAL.EF;
 using OpenNos.DAL.EF.Helpers;
 using OpenNos.DAL.Interface;
 using OpenNos.Data;
 using OpenNos.Data.Enums;
 using OpenNos.Mapper.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 
 namespace OpenNos.DAL.DAO
 {
@@ -153,11 +153,12 @@ namespace OpenNos.DAL.DAO
             {
                 Exception raise = dbEx;
                 foreach (var validationErrors in dbEx.EntityValidationErrors)
-                foreach (var validationError in validationErrors.ValidationErrors)
-                    // raise a new exception nesting the current instance as InnerException
-                    Logger.Error(
-                        new InvalidOperationException($"{validationErrors.Entry.Entity}:{validationError.ErrorMessage}",
-                            raise));
+                    foreach (var validationError in validationErrors.ValidationErrors)
+
+                        // raise a new exception nesting the current instance as InnerException
+                        Logger.Error(
+                            new InvalidOperationException($"{validationErrors.Entry.Entity}:{validationError.ErrorMessage}",
+                                raise));
                 return null;
             }
             catch (Exception e)

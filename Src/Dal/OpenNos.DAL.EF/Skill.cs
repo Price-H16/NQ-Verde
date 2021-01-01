@@ -79,7 +79,7 @@ namespace OpenNos.DAL.EF
 
         public byte SkillType { get; set; }
 
-        [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short SkillVNum { get; set; }
 
         public byte TargetRange { get; set; }

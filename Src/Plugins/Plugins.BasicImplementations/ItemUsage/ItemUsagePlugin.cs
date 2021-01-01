@@ -1,18 +1,23 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using ChickenAPI.Plugins;
 using OpenNos.Core;
 using OpenNos.Core.Extensions;
 using OpenNos.GameObject._ItemUsage;
+using System;
 
 namespace Plugins.BasicImplementations.ItemUsage
 {
     public class ItemUsagePlugin : IGamePlugin
     {
-        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+        #region Members
 
         private readonly IContainer _container;
+
         private readonly IItemUsageHandlerContainer _handlers;
+
+        #endregion
+
+        #region Instantiation
 
         public ItemUsagePlugin(IItemUsageHandlerContainer handlers, IContainer container)
         {
@@ -20,7 +25,17 @@ namespace Plugins.BasicImplementations.ItemUsage
             _container = container;
         }
 
+        #endregion
+
+        #region Properties
+
+        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+
         public string Name => nameof(ItemUsagePlugin);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -49,5 +64,7 @@ namespace Plugins.BasicImplementations.ItemUsage
         public void OnLoad()
         {
         }
+
+        #endregion
     }
 }

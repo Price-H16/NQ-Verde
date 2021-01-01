@@ -1,6 +1,6 @@
+using OpenNos.Domain;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF
 {
@@ -23,6 +23,8 @@ namespace OpenNos.DAL.EF
 
         public AuthorityType Authority { get; set; }
 
+        public long BankMoney { get; set; }
+
         public virtual ICollection<Character> Character { get; set; }
 
         //public bool DailyRewardSent { get; set; }
@@ -37,13 +39,11 @@ namespace OpenNos.DAL.EF
 
         public virtual ICollection<PenaltyLog> PenaltyLog { get; set; }
 
-        //public long ReferrerId { get; set; }
+        public long LastDelete { get; set; }
 
         [MaxLength(45)] public string RegistrationIP { get; set; }
 
         [MaxLength(32)] public string VerificationToken { get; set; }
-
-        public long BankMoney { get; set; }
 
         #endregion
     }

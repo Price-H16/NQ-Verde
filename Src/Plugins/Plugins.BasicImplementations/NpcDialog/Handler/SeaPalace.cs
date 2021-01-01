@@ -9,7 +9,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class SeaPalace : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 197;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -22,16 +28,23 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 0));
                 }
             }
         }
+
+        #endregion
     }
 
     public class SeaPalace2 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 201;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -44,10 +57,11 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 0));
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -9,7 +9,15 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class AirShipCaptain : INpcDialogAsyncHandler
     {
-        public long HandledId => 307; // "Destination"
+        #region Properties
+
+        public long HandledId => 307;
+
+        #endregion
+
+        // "Destination"
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -27,11 +35,21 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 
     public class AirShipCaptain2 : INpcDialogAsyncHandler
     {
-        public long HandledId => 305; // "Destination"
+        #region Properties
+
+        public long HandledId => 305;
+
+        #endregion
+
+        // "Destination"
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -49,11 +67,21 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 
     public class AirShipCaptainQuest : INpcDialogAsyncHandler
     {
-        public long HandledId => 308; // "Destination"
+        #region Properties
+
+        public long HandledId => 308;
+
+        #endregion
+
+        // "Destination"
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -71,5 +99,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 }

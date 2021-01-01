@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using OpenNos.Domain;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF
 {
@@ -19,7 +19,7 @@ namespace OpenNos.DAL.EF
 
         public BuffType BuffType { get; set; }
 
-        [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short CardId { get; set; }
 
         public int Delay { get; set; }

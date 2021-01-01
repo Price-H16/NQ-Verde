@@ -1,18 +1,23 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using ChickenAPI.Plugins;
 using OpenNos.Core;
 using OpenNos.Core.Extensions;
 using OpenNos.GameObject._BCards;
+using System;
 
 namespace Plugins.BasicImplementations.BCards
 {
     public class BCardPlugin : IGamePlugin
     {
-        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+        #region Members
 
         private readonly IContainer _container;
+
         private readonly IBCardEffectHandlerContainer _handlers;
+
+        #endregion
+
+        #region Instantiation
 
         public BCardPlugin(IBCardEffectHandlerContainer handlers, IContainer container)
         {
@@ -20,7 +25,17 @@ namespace Plugins.BasicImplementations.BCards
             _container = container;
         }
 
+        #endregion
+
+        #region Properties
+
+        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+
         public string Name => nameof(BCardPlugin);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -49,5 +64,7 @@ namespace Plugins.BasicImplementations.BCards
         public void OnLoad()
         {
         }
+
+        #endregion
     }
 }

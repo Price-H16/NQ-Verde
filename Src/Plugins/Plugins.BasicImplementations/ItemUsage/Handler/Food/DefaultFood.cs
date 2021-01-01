@@ -1,200 +1,204 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using OpenNos.Core;
-using OpenNos.Data;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._ItemUsage;
 using OpenNos.GameObject._ItemUsage.Event;
-using OpenNos.GameObject.Extension;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.ItemUsage.Handler.Food
 {
-   public class DefaultFood : IUseItemRequestHandlerAsync
-   {
-       public ItemPluginType Type => ItemPluginType.Food;
-       
-       public long EffectId => default;
-       
-       private static IDisposable _regenerateDisposable { get; set; }
+    public class DefaultFood : IUseItemRequestHandlerAsync
+    {
+        #region Properties
 
-       public async Task HandleAsync(ClientSession session, InventoryUseItemEvent e) 
-       {
-           if (session.Character.IsVehicled)
-           {
-               session.SendPacket(
-                   session.Character.GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_VEHICLED"), 10));
-               return;
-           }
+        public long EffectId => default;
 
-           if (session.CurrentMapInstance.MapInstanceType == MapInstanceType.TalentArenaMapInstance)
-           {
-               return;
-           }
+        public ItemPluginType Type => ItemPluginType.Food;
 
-           if ((DateTime.Now - session.Character.LastPotion).TotalMilliseconds < 750)
-           {
-               return;
-           }
-           session.Character.LastPotion = DateTime.Now;
-           var item = e.Item.Item;
-           switch (e.Item.Item.Effect)
-           {
-               default:
-                   if (session.Character.Hp <= 0)
-                   {
-                       return;
-                   }
+        private static IDisposable _regenerateDisposable { get; set; }
 
-                   if (item.VNum == 2291 || item.VNum == 10035)
-                   {
-                       if (!session.Character.IsSitting)
-                       {
-                           session.Character.Rest();
-                       }
+        #endregion
 
-                       session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Player,
-                           session.Character.CharacterId, 6000));
+        #region Methods
 
-                       session.Character.SpPoint += 1500;
+        public async Task HandleAsync(ClientSession session, InventoryUseItemEvent e)
+        {
+            if (session.Character.IsVehicled)
+            {
+                session.SendPacket(
+                    session.Character.GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_VEHICLED"), 10));
+                return;
+            }
 
-                       if (session.Character.SpPoint > 10000)
-                       {
-                           session.Character.SpPoint = 10000;
-                       }
+            if (session.CurrentMapInstance.MapInstanceType == MapInstanceType.TalentArenaMapInstance)
+            {
+                return;
+            }
 
-                       session.Character.Inventory.RemoveItemFromInventory(e.Item.Id);
-                       session.SendPacket(session.Character.GenerateSpPoint());
-                       return;
-                   }
+            if ((DateTime.Now - session.Character.LastPotion).TotalMilliseconds < 750)
+            {
+                return;
+            }
+            session.Character.LastPotion = DateTime.Now;
+            var item = e.Item.Item;
+            switch (e.Item.Item.Effect)
+            {
+                default:
+                    if (session.Character.Hp <= 0)
+                    {
+                        return;
+                    }
 
-                   if (session.Character.FoodAmount < 0)
-                   {
-                       session.Character.FoodAmount = 0;
-                   }
+                    if (item.VNum == 2291 || item.VNum == 10035)
+                    {
+                        if (!session.Character.IsSitting)
+                        {
+                            session.Character.Rest();
+                        }
 
-                   var amount = session.Character.FoodAmount;
+                        session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Player,
+                            session.Character.CharacterId, 6000));
 
-                   if (amount < 5)
-                   {
-                       if (item.BCards.Find(s =>
-                               s.Type == (byte) BCardType.CardType.HPMP &&
-                               s.SubType == (byte) AdditionalTypes.HPMP.ReceiveAdditionalHP &&
-                               s.FirstData > 0) is BCard
-                           AdditionalHpBCard)
-                       {
-                           // MaxAdditionalHpPercent = AdditionalHp.SecondData;
-                           double AdditionalHp = 0;
-                           if (session.Character.BattleEntity.AdditionalHp + AdditionalHpBCard.FirstData <=
-                               session.Character.HPLoad() * 0.2)
-                           {
-                               AdditionalHp = AdditionalHpBCard.FirstData;
-                           }
-                           else if (session.Character.BattleEntity.AdditionalHp < session.Character.HPLoad() * 0.2)
-                           {
-                               AdditionalHp = session.Character.HPLoad() * 0.2 -
-                                              session.Character.BattleEntity.AdditionalHp;
-                           }
+                        session.Character.SpPoint += 1500;
 
-                           if (AdditionalHp > 0 && AdditionalHp <= AdditionalHpBCard.FirstData)
-                           {
-                               session.Character.FoodAmount++;
-                               session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Player,
-                                   session.Character.CharacterId, 6000));
-                               session.Character.BattleEntity.AdditionalHp += AdditionalHp;
-                               session.SendPacket(session.Character.GenerateAdditionalHpMp());
-                               session.SendPacket(session.Character.GenerateStat());
-                               session.Character.Inventory.RemoveItemFromInventory(e.Item.Id);
-                               Observable.Timer(TimeSpan.FromMilliseconds(1800))
-                                   .Subscribe(s => session.Character.FoodAmount--);
-                           }
+                        if (session.Character.SpPoint > 10000)
+                        {
+                            session.Character.SpPoint = 10000;
+                        }
 
-                           return;
-                       }
+                        session.Character.Inventory.RemoveItemFromInventory(e.Item.Id);
+                        session.SendPacket(session.Character.GenerateSpPoint());
+                        return;
+                    }
 
-                       if (item.BCards.Find(s =>
-                               s.Type == (byte) BCardType.CardType.HPMP &&
-                               s.SubType == (byte) AdditionalTypes.HPMP.ReceiveAdditionalMP &&
-                               s.FirstData < 0) is BCard
-                           AdditionalMpBCard)
-                       {
-                           // MaxAdditionalMpPercent = AdditionalMp.SecondData;
-                           double AdditionalMp = 0;
-                           if (session.Character.BattleEntity.AdditionalMp + -AdditionalMpBCard.FirstData <=
-                               session.Character.MPLoad() * 0.2)
-                           {
-                               AdditionalMp = -AdditionalMpBCard.FirstData;
-                           }
-                           else if (session.Character.BattleEntity.AdditionalMp < session.Character.MPLoad() * 0.2)
-                           {
-                               AdditionalMp = session.Character.MPLoad() * 0.2 -
-                                              session.Character.BattleEntity.AdditionalMp;
-                           }
+                    if (session.Character.FoodAmount < 0)
+                    {
+                        session.Character.FoodAmount = 0;
+                    }
 
-                           if (AdditionalMp > 0 && AdditionalMp <= -AdditionalMpBCard.FirstData)
-                           {
-                               session.Character.FoodAmount++;
-                               session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Player,
-                                   session.Character.CharacterId, 6000));
-                               session.Character.BattleEntity.AdditionalMp += AdditionalMp;
-                               session.SendPacket(session.Character.GenerateAdditionalHpMp());
-                               session.SendPacket(session.Character.GenerateStat());
-                               session.Character.Inventory.RemoveItemFromInventory(e.Item.Id);
-                               Observable.Timer(TimeSpan.FromMilliseconds(1800))
-                                   .Subscribe(s => session.Character.FoodAmount--);
-                           }
+                    var amount = session.Character.FoodAmount;
 
-                           return;
-                       }
-                   }
+                    if (amount < 5)
+                    {
+                        if (item.BCards.Find(s =>
+                                s.Type == (byte)BCardType.CardType.HPMP &&
+                                s.SubType == (byte)AdditionalTypes.HPMP.ReceiveAdditionalHP &&
+                                s.FirstData > 0) is BCard
+                            AdditionalHpBCard)
+                        {
+                            // MaxAdditionalHpPercent = AdditionalHp.SecondData;
+                            double AdditionalHp = 0;
+                            if (session.Character.BattleEntity.AdditionalHp + AdditionalHpBCard.FirstData <=
+                                session.Character.HPLoad() * 0.2)
+                            {
+                                AdditionalHp = AdditionalHpBCard.FirstData;
+                            }
+                            else if (session.Character.BattleEntity.AdditionalHp < session.Character.HPLoad() * 0.2)
+                            {
+                                AdditionalHp = session.Character.HPLoad() * 0.2 -
+                                               session.Character.BattleEntity.AdditionalHp;
+                            }
 
-                   if (!session.Character.IsSitting)
-                   {
-                       session.Character.Rest();
-                   }
+                            if (AdditionalHp > 0 && AdditionalHp <= AdditionalHpBCard.FirstData)
+                            {
+                                session.Character.FoodAmount++;
+                                session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Player,
+                                    session.Character.CharacterId, 6000));
+                                session.Character.BattleEntity.AdditionalHp += AdditionalHp;
+                                session.SendPacket(session.Character.GenerateAdditionalHpMp());
+                                session.SendPacket(session.Character.GenerateStat());
+                                session.Character.Inventory.RemoveItemFromInventory(e.Item.Id);
+                                Observable.Timer(TimeSpan.FromMilliseconds(1800))
+                                    .Subscribe(s => session.Character.FoodAmount--);
+                            }
 
-                   session.Character.Mates.Where(s => s.IsTeamMember).ToList().ForEach(m =>
-                                   session.CurrentMapInstance?.Broadcast(m.GenerateRest(true)));
+                            return;
+                        }
 
-                   if (amount < 5)
-                   {
-                       if (!session.Character.IsSitting)
-                       {
-                           return;
-                       }
+                        if (item.BCards.Find(s =>
+                                s.Type == (byte)BCardType.CardType.HPMP &&
+                                s.SubType == (byte)AdditionalTypes.HPMP.ReceiveAdditionalMP &&
+                                s.FirstData < 0) is BCard
+                            AdditionalMpBCard)
+                        {
+                            // MaxAdditionalMpPercent = AdditionalMp.SecondData;
+                            double AdditionalMp = 0;
+                            if (session.Character.BattleEntity.AdditionalMp + -AdditionalMpBCard.FirstData <=
+                                session.Character.MPLoad() * 0.2)
+                            {
+                                AdditionalMp = -AdditionalMpBCard.FirstData;
+                            }
+                            else if (session.Character.BattleEntity.AdditionalMp < session.Character.MPLoad() * 0.2)
+                            {
+                                AdditionalMp = session.Character.MPLoad() * 0.2 -
+                                               session.Character.BattleEntity.AdditionalMp;
+                            }
 
-                       var workerThread = new Thread(() => Regenerate(session, item));
-                       workerThread.Start();
-                       session.Character.Inventory.RemoveItemFromInventory(e.Item.Id);
-                   }
-                   else
-                   {
-                       session.SendPacket(session.Character.Gender == GenderType.Female
-                           ? session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_HUNGRY_FEMALE"), 1)
-                           : session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_HUNGRY_MALE"), 1));
-                   }
+                            if (AdditionalMp > 0 && AdditionalMp <= -AdditionalMpBCard.FirstData)
+                            {
+                                session.Character.FoodAmount++;
+                                session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Player,
+                                    session.Character.CharacterId, 6000));
+                                session.Character.BattleEntity.AdditionalMp += AdditionalMp;
+                                session.SendPacket(session.Character.GenerateAdditionalHpMp());
+                                session.SendPacket(session.Character.GenerateStat());
+                                session.Character.Inventory.RemoveItemFromInventory(e.Item.Id);
+                                Observable.Timer(TimeSpan.FromMilliseconds(1800))
+                                    .Subscribe(s => session.Character.FoodAmount--);
+                            }
 
-                   if (amount == 0)
-                   {
-                       if (!session.Character.IsSitting)
-                       {
-                           return;
-                       }
+                            return;
+                        }
+                    }
 
-                       var workerThread2 = new Thread(() => Sync(session));
-                       workerThread2.Start();
-                   }
+                    if (!session.Character.IsSitting)
+                    {
+                        session.Character.Rest();
+                    }
 
-                   break;
-           }
+                    session.Character.Mates.Where(s => s.IsTeamMember).ToList().ForEach(m =>
+                                    session.CurrentMapInstance?.Broadcast(m.GenerateRest(true)));
+
+                    if (amount < 5)
+                    {
+                        if (!session.Character.IsSitting)
+                        {
+                            return;
+                        }
+
+                        var workerThread = new Thread(() => Regenerate(session, item));
+                        workerThread.Start();
+                        session.Character.Inventory.RemoveItemFromInventory(e.Item.Id);
+                    }
+                    else
+                    {
+                        session.SendPacket(session.Character.Gender == GenderType.Female
+                            ? session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_HUNGRY_FEMALE"), 1)
+                            : session.Character.GenerateSay(Language.Instance.GetMessageFromKey("NOT_HUNGRY_MALE"), 1));
+                    }
+
+                    if (amount == 0)
+                    {
+                        if (!session.Character.IsSitting)
+                        {
+                            return;
+                        }
+
+                        var workerThread2 = new Thread(() => Sync(session));
+                        workerThread2.Start();
+                    }
+
+                    break;
+            }
         }
-        
-                private static void Regenerate(ClientSession session, Item item)
+
+        private static void Regenerate(ClientSession session, Item item)
         {
             session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 6000));
             session.Character.FoodAmount++;
@@ -225,14 +229,14 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Food
                     return;
                 }
 
-                var hpLoad = (int) session.Character.HPLoad();
-                var mpLoad = (int) session.Character.MPLoad();
+                var hpLoad = (int)session.Character.HPLoad();
+                var mpLoad = (int)session.Character.MPLoad();
 
                 var buffRc = session.Character.GetBuff(BCardType.CardType.LeonaPassiveSkill,
-                                 (byte) AdditionalTypes.LeonaPassiveSkill.IncreaseRecoveryItems)[0] / 100D;
+                                 (byte)AdditionalTypes.LeonaPassiveSkill.IncreaseRecoveryItems)[0] / 100D;
 
-                var hpAmount = session.Character.FoodHp + (int) (session.Character.FoodHp * buffRc);
-                var mpAmount = session.Character.FoodMp + (int) (session.Character.FoodMp * buffRc);
+                var hpAmount = session.Character.FoodHp + (int)(session.Character.FoodHp * buffRc);
+                var mpAmount = session.Character.FoodMp + (int)(session.Character.FoodMp * buffRc);
 
                 if (session.Character.Hp + hpAmount > hpLoad)
                 {
@@ -246,7 +250,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Food
 
                 var convertRecoveryToDamage = ServerManager.RandomNumber() <
                                               session.Character.GetBuff(BCardType.CardType.DarkCloneSummon,
-                                                      (byte) AdditionalTypes.DarkCloneSummon.ConvertRecoveryToDamage)[0];
+                                                      (byte)AdditionalTypes.DarkCloneSummon.ConvertRecoveryToDamage)[0];
 
                 if (convertRecoveryToDamage)
                 {
@@ -284,12 +288,12 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Food
 
                     if (mate.Hp + hpAmount > hpLoad)
                     {
-                        hpAmount = hpLoad - (int) mate.Hp;
+                        hpAmount = hpLoad - (int)mate.Hp;
                     }
 
                     if (mate.Mp + mpAmount > mpLoad)
                     {
-                        mpAmount = mpLoad - (int) mate.Mp;
+                        mpAmount = mpLoad - (int)mate.Mp;
                     }
 
                     mate.Hp += hpAmount;
@@ -314,5 +318,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Food
                 }
             }
         }
+
+        #endregion
     }
 }

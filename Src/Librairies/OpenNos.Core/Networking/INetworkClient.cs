@@ -34,8 +34,10 @@ namespace OpenNos.Core
         void Initialize(CryptographyBase encryptor);
 
         void SendPacket(string packet, byte priority = 10);
+        Task SendPacketAsync(string packet, byte priority = 10);
 
         void SendPacketFormat(string packet, params object[] param);
+        Task SendPacketAsyncFormat(string packet, params object[] param);
 
         void SendPackets(IEnumerable<string> packets, byte priority = 10);
 

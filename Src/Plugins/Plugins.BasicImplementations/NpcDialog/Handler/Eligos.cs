@@ -9,7 +9,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class Eligos : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 716;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -22,16 +28,23 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 0));
                 }
             }
         }
+
+        #endregion
     }
 
     public class Panuel : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 717;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -44,10 +57,11 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 0));
                 }
             }
         }
+
+        #endregion
     }
 }

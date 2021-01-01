@@ -1,20 +1,24 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._ItemUsage;
 using OpenNos.GameObject._ItemUsage.Event;
-using OpenNos.GameObject.Helpers;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.ItemUsage.Handler.Title
 {
-   public class DefaultTitle : IUseItemRequestHandlerAsync
+    public class DefaultTitle : IUseItemRequestHandlerAsync
     {
-        public ItemPluginType Type => ItemPluginType.Title;
-        
+        #region Properties
+
         public long EffectId => default;
+
+        public ItemPluginType Type => ItemPluginType.Title;
+
+        #endregion
+
+        #region Methods
 
         public async Task HandleAsync(ClientSession session, InventoryUseItemEvent e)
         {
@@ -42,5 +46,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Title
 
             session.SendPacket($"qna #guri^306^{e.Item.ItemVNum}^{e.Item.Slot} {Language.Instance.GetMessageFromKey("ASK_TITLE")}");
         }
+
+        #endregion
     }
 }

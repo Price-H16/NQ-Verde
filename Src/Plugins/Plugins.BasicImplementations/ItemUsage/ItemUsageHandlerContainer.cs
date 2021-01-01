@@ -1,18 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
-using OpenNos.GameObject;
 using OpenNos.GameObject._Event;
 using OpenNos.GameObject._ItemUsage;
 using OpenNos.GameObject._ItemUsage.Event;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.ItemUsage
 {
     public class ItemUsageHandlerContainer : IItemUsageHandlerContainer
     {
+        #region Members
+
         private readonly Dictionary<(long, ItemPluginType), IUseItemRequestHandlerAsync> _handlers
             = new Dictionary<(long, ItemPluginType), IUseItemRequestHandlerAsync>();
+
+        #endregion
+
+        #region Methods
 
         public async Task RegisterItemUsageCallback(IUseItemRequestHandlerAsync handler)
         {
@@ -45,5 +50,7 @@ namespace Plugins.BasicImplementations.ItemUsage
 
             await handler.HandleAsync(player.Character.Session, e);
         }
+
+        #endregion
     }
 }

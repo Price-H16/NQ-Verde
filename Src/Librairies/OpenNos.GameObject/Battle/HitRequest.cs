@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using OpenNos.Data;
+﻿using OpenNos.Data;
 using OpenNos.Domain;
+using System;
+using System.Collections.Generic;
 
 namespace OpenNos.GameObject.Battle
 {
@@ -74,7 +74,7 @@ namespace OpenNos.GameObject.Battle
         public ClientSession Session { get; set; }
 
         /// <summary>
-        ///     Some AOE Skills need to show additional SU packet for Animation
+        /// Some AOE Skills need to show additional SU packet for Animation
         /// </summary>
         public bool ShowTargetHitAnimation { get; set; }
 

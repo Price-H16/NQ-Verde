@@ -1,19 +1,25 @@
-﻿using System;
+﻿using OpenNos.Core;
+using OpenNos.Core.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenNos.Core;
-using OpenNos.Core.Extensions;
 
 namespace ChickenAPI.Events
 {
     public class BasicEventPipelineAsync : IEventPipeline
     {
+        #region Members
+
         private readonly Dictionary<Type, List<IEventHandler>> _postprocessorsDictionary =
             new Dictionary<Type, List<IEventHandler>>();
 
         private readonly Dictionary<Type, List<IEventFilter>> _preprocessorsDictionary =
             new Dictionary<Type, List<IEventFilter>>();
+
+        #endregion
+
+        #region Methods
 
         public async Task Notify<TNotification>(TNotification notification,
             CancellationToken cancellationToken = default) where TNotification : IEventNotification
@@ -31,6 +37,23 @@ namespace ChickenAPI.Events
                 {
                     Logger.Log.Error("Notify()", e);
                 }
+        }
+
+        public Task RegisterPostProcessorAsync(IEventHandler handler, Type type)
+        {
+            if (!_postprocessorsDictionary.TryGetValue(type, out var handlers))
+            {
+                handlers = new List<IEventHandler>();
+                _postprocessorsDictionary[type] = handlers;
+            }
+
+            handlers.Add(handler);
+            return Task.CompletedTask;
+        }
+
+        public Task RegisterPostProcessorAsync<T>(IEventHandler handler) where T : IEventNotification
+        {
+            return RegisterPostProcessorAsync(handler, typeof(T));
         }
 
         public Task RegisterPreprocessorAsync<T>(IEventFilter filter) where T : IEventNotification
@@ -53,33 +76,6 @@ namespace ChickenAPI.Events
             return Task.CompletedTask;
         }
 
-        public Task UnregisterPreprocessorAsync<T>(IEventFilter filter) where T : IEventNotification
-        {
-            return UnregisterPreprocessorAsync(filter, typeof(T));
-        }
-
-        public Task UnregisterPreprocessorAsync(IEventFilter filter, Type type)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task RegisterPostProcessorAsync(IEventHandler handler, Type type)
-        {
-            if (!_postprocessorsDictionary.TryGetValue(type, out var handlers))
-            {
-                handlers = new List<IEventHandler>();
-                _postprocessorsDictionary[type] = handlers;
-            }
-
-            handlers.Add(handler);
-            return Task.CompletedTask;
-        }
-
-        public Task RegisterPostProcessorAsync<T>(IEventHandler handler) where T : IEventNotification
-        {
-            return RegisterPostProcessorAsync(handler, typeof(T));
-        }
-
         public Task UnregisterPostprocessorAsync<T>(IEventHandler preprocessor) where T : IEventNotification
         {
             return UnregisterPostprocessorAsync(preprocessor, typeof(T));
@@ -90,17 +86,29 @@ namespace ChickenAPI.Events
             return Task.CompletedTask;
         }
 
+        public Task UnregisterPreprocessorAsync<T>(IEventFilter filter) where T : IEventNotification
+        {
+            return UnregisterPreprocessorAsync(filter, typeof(T));
+        }
+
+        public Task UnregisterPreprocessorAsync(IEventFilter filter, Type type)
+        {
+            return Task.CompletedTask;
+        }
 
         private async Task<bool> CanSendEvent(IEventNotification e, Type type, CancellationToken cancellationToken)
         {
             if (!_preprocessorsDictionary.TryGetValue(type, out var filters)) return true;
 
             foreach (var filter in filters)
+
                 // filter is not passed correctly
                 if (await filter.Handle(e, cancellationToken) == false)
                     return false;
 
             return true;
         }
+
+        #endregion
     }
 }

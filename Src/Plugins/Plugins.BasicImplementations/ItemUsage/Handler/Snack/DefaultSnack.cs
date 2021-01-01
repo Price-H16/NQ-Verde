@@ -1,31 +1,34 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._ItemUsage;
 using OpenNos.GameObject._ItemUsage.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
-using OpenNos.GameObject.Extension;
-
+using System;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.ItemUsage.Handler.Snack
 {
-   public class DefaultSnack : IUseItemRequestHandlerAsync
+    public class DefaultSnack : IUseItemRequestHandlerAsync
     {
-        public ItemPluginType Type => ItemPluginType.Snack;
-        
+        #region Properties
+
         public long EffectId => default;
-        
+
+        public ItemPluginType Type => ItemPluginType.Snack;
+
         private static IDisposable _regenerateDisposable { get; set; }
+
+        #endregion
+
+        #region Methods
 
         public async Task HandleAsync(ClientSession session, InventoryUseItemEvent e)
         {
-
             if (session.Character.IsVehicled)
             {
                 session.SendPacket(session.Character.GenerateSay(Language.Instance.GetMessageFromKey("CANT_DO_VEHICLED"), 10));
@@ -54,7 +57,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Snack
                     {
                         if (ServerManager.RandomNumber() < Buff.FirstData)
                         {
-                            session.Character.AddBuff(new Buff((short) Buff.SecondData, session.Character.Level),
+                            session.Character.AddBuff(new Buff((short)Buff.SecondData, session.Character.Level),
                                     session.Character.BattleEntity);
                         }
 
@@ -93,7 +96,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Snack
                     break;
             }
         }
-        
+
         private static void Regenerate(ClientSession session, Item item)
         {
             session.SendPacket(StaticPacketHelper.GenerateEff(UserType.Player, session.Character.CharacterId, 6000));
@@ -125,14 +128,14 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Snack
                     return;
                 }
 
-                var hpLoad = (int) session.Character.HPLoad();
-                var mpLoad = (int) session.Character.MPLoad();
+                var hpLoad = (int)session.Character.HPLoad();
+                var mpLoad = (int)session.Character.MPLoad();
 
                 var buffRc = session.Character.GetBuff(BCardType.CardType.LeonaPassiveSkill,
-                                 (byte) AdditionalTypes.LeonaPassiveSkill.IncreaseRecoveryItems)[0] / 100D;
+                                 (byte)AdditionalTypes.LeonaPassiveSkill.IncreaseRecoveryItems)[0] / 100D;
 
-                var hpAmount = session.Character.SnackHp + (int) (session.Character.SnackHp * buffRc);
-                var mpAmount = session.Character.SnackMp + (int) (session.Character.SnackMp * buffRc);
+                var hpAmount = session.Character.SnackHp + (int)(session.Character.SnackHp * buffRc);
+                var mpAmount = session.Character.SnackMp + (int)(session.Character.SnackMp * buffRc);
 
                 if (session.Character.Hp + hpAmount > hpLoad)
                 {
@@ -146,7 +149,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Snack
 
                 var convertRecoveryToDamage = ServerManager.RandomNumber() <
                                               session.Character.GetBuff(BCardType.CardType.DarkCloneSummon,
-                                                      (byte) AdditionalTypes.DarkCloneSummon.ConvertRecoveryToDamage)[0];
+                                                      (byte)AdditionalTypes.DarkCloneSummon.ConvertRecoveryToDamage)[0];
 
                 if (convertRecoveryToDamage)
                 {
@@ -184,12 +187,12 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Snack
 
                     if (mate.Hp + hpAmount > hpLoad)
                     {
-                        hpAmount = hpLoad - (int) mate.Hp;
+                        hpAmount = hpLoad - (int)mate.Hp;
                     }
 
                     if (mate.Mp + mpAmount > mpLoad)
                     {
-                        mpAmount = mpLoad - (int) mate.Mp;
+                        mpAmount = mpLoad - (int)mate.Mp;
                     }
 
                     mate.Hp += hpAmount;
@@ -220,5 +223,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Snack
 
             session.Character.SnackAmount = 0;
         }
+
+        #endregion
     }
 }

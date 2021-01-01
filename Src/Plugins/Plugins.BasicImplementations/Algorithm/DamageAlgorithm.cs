@@ -5,9 +5,13 @@ namespace Plugins.BasicImplementations.Algorithm
 {
     public class DamageAlgorithm : IDamageAlgorithm
     {
+        #region Methods
+
         public uint GenerateDamage(HitRequest hit)
-         {
-             return 1;
-         }
+        {
+            return 1;
+        }
+
+        #endregion
     }
 }

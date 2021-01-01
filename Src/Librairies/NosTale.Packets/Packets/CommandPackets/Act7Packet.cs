@@ -1,5 +1,4 @@
-﻿using ChickenAPI.Enums;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 
 namespace NosTale.Packets.Packets.CommandPackets
@@ -8,7 +7,7 @@ namespace NosTale.Packets.Packets.CommandPackets
 
     public class Act7Packet : PacketDefinition
     {
-        #region Properties
+        #region Methods
 
         public static string ReturnHelp() => "$Act7";
 

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject.Networking;
 using OpenNos.Master.Library.Client;
 using OpenNos.Master.Library.Data;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 
 namespace OpenNos.GameObject.Event.ACT6
 {
@@ -38,7 +38,6 @@ namespace OpenNos.GameObject.Event.ACT6
             RaidInstance =
                 ServerManager.Instance.Act6Raids.FirstOrDefault(s => s.Id == (raidType == FactionType.Angel ? 23 : 24));
 
-
             if (RaidInstance == null)
             {
                 Logger.Log.InfoFormat(Language.Instance.GetMessageFromKey("CANT_CREATE_RAIDS"));
@@ -56,7 +55,7 @@ namespace OpenNos.GameObject.Event.ACT6
 
             EntryMap.CreatePortal(new Portal
             {
-                Type = (byte) PortalType.Raid,
+                Type = (byte)PortalType.Raid,
                 SourceMapId = RaidInstance.MapId,
                 SourceX = RaidInstance.PositionX,
                 SourceY = RaidInstance.PositionY

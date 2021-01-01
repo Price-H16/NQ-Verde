@@ -22,45 +22,42 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace OpenNos.GameObject.Networking
 {
     public class ServerManager : BroadcastableBase
     {
-        #region Instantiation
-
-        private ServerManager()
-        {
-        }
-
-        #endregion
-
         #region Members
 
         public bool InShutdown;
-        public bool ShutdownStop;
-        public ThreadSafeSortedList<long, Group> ThreadSafeGroupList;
 
-        public static List<Card> Cards { get; set; }
+        public bool ShutdownStop;
+
+        public ThreadSafeSortedList<long, Group> ThreadSafeGroupList;
 
         private static readonly ConcurrentDictionary<Guid, MapInstance> _mapinstances =
             new ConcurrentDictionary<Guid, MapInstance>();
 
-        private static readonly List<Map> Maps = new List<Map>();
         private static readonly CryptoRandom _random = new CryptoRandom();
-        private static readonly List<Skill> Skills = new List<Skill>();
+
         private static readonly List<Item> Items = new List<Item>();
+
+        private static readonly List<Map> Maps = new List<Map>();
+
         private static readonly List<NpcMonster> Npcs = new List<NpcMonster>();
+
+        private static readonly RNGCryptoServiceProvider rand = new RNGCryptoServiceProvider();
 
         //Function to get a random number
         private static readonly Random random = new Random();
-        private static readonly RNGCryptoServiceProvider rand = new RNGCryptoServiceProvider();
+
+        private static readonly List<Skill> Skills = new List<Skill>();
 
         private static readonly object syncLock = new object();
 
         private static ServerManager _instance;
 
         private ConcurrentBag<NpcMonsterSkill> _allMonsterSkills;
+
         private List<DropDTO> _generalDrops;
 
         private bool _inRelationRefreshMode;
@@ -72,6 +69,7 @@ namespace OpenNos.GameObject.Networking
         private Dictionary<short, List<DropDTO>> _monsterDrops;
 
         private Dictionary<short, List<NpcMonsterSkill>> _monsterSkills;
+
         private ThreadSafeSortedList<int, RecipeListDTO> _recipeLists;
 
         private ThreadSafeSortedList<short, Recipe> _recipes;
@@ -86,12 +84,21 @@ namespace OpenNos.GameObject.Networking
 
         #endregion
 
+        #region Instantiation
+
+        private ServerManager()
+        {
+        }
+
+        #endregion
+
         #region Properties
+
+        public static List<Card> Cards { get; set; }
 
         public static ServerManager Instance => _instance ?? (_instance = new ServerManager());
 
-        public List<RainbowBattleTeam> RainbowBattleMembers { get; set; } = new List<RainbowBattleTeam>();
-
+        public static bool IsUnderDebugMode => Debugger.IsAttached;
 
         public Act4Stat Act4AngelStat { get; set; }
 
@@ -140,7 +147,6 @@ namespace OpenNos.GameObject.Networking
 
         public long? FlowerQuestId { get; set; }
 
-
         public ThreadSafeGenericLockedList<Group> GroupList { get; set; } = new ThreadSafeGenericLockedList<Group>();
 
         public List<Group> Groups => ThreadSafeGroupList.GetAllItems();
@@ -169,6 +175,8 @@ namespace OpenNos.GameObject.Networking
 
         public ConcurrentBag<ScriptedInstance> Raids { get; set; }
 
+        public List<RainbowBattleTeam> RainbowBattleMembers { get; set; } = new List<RainbowBattleTeam>();
+
         public Task RebootTask { get; set; }
 
         public List<Schedule> Schedules { get; set; }
@@ -192,8 +200,6 @@ namespace OpenNos.GameObject.Networking
         public Guid WorldId { get; private set; }
 
         private DateTime LastMaintenanceAdvert { get; set; }
-
-        public static bool IsUnderDebugMode => Debugger.IsAttached;
 
         #endregion
 
@@ -284,6 +290,8 @@ namespace OpenNos.GameObject.Networking
             }
         }
 
+        public static T RandomNumber<T>(int min = 0, int max = 100) => (T)Convert.ChangeType(RandomNumber(min, max), typeof(T));
+
         public static bool RandomProbabilityCheck(double probability)
         {
             if (probability == 0) return false;
@@ -293,8 +301,6 @@ namespace OpenNos.GameObject.Networking
             if (randomNumber <= probability) return true;
             else return false;
         }
-
-        public static T RandomNumber<T>(int min = 0, int max = 100) => (T)Convert.ChangeType(RandomNumber(min, max), typeof(T));
 
         public static void RemoveMapInstance(Guid mapId)
         {
@@ -310,24 +316,6 @@ namespace OpenNos.GameObject.Networking
                 map.Value.Dispose();
                 ((IDictionary)_mapinstances).Remove(map.Key);
             }
-        }
-
-        public static T TrueRandomNumber<T>(int min, int max)
-        {
-            uint scale = uint.MaxValue;
-            while (scale == uint.MaxValue)
-            {
-                // Get four random bytes.
-                byte[] four_bytes = new byte[4];
-                rand.GetBytes(four_bytes);
-
-                // Convert that into an uint.
-                scale = BitConverter.ToUInt32(four_bytes, 0);
-            }
-
-            // Add min to the scaled difference between max and min.
-            return (T)Convert.ChangeType((int)(min + (max - min) *
-                (scale / (double)uint.MaxValue)), typeof(T));
         }
 
         public static MapInstance ResetMapInstance(MapInstance baseMapInstance)
@@ -392,6 +380,24 @@ namespace OpenNos.GameObject.Networking
             Instance.Broadcast(UserInterfaceHelper.GenerateSay(
                 (noAdminTag ? "" : $"({Language.Instance.GetMessageFromKey("ADMINISTRATOR")})") + message, 10));
             Instance.Broadcast(UserInterfaceHelper.GenerateMsg(message, 2));
+        }
+
+        public static T TrueRandomNumber<T>(int min, int max)
+        {
+            uint scale = uint.MaxValue;
+            while (scale == uint.MaxValue)
+            {
+                // Get four random bytes.
+                byte[] four_bytes = new byte[4];
+                rand.GetBytes(four_bytes);
+
+                // Convert that into an uint.
+                scale = BitConverter.ToUInt32(four_bytes, 0);
+            }
+
+            // Add min to the scaled difference between max and min.
+            return (T)Convert.ChangeType((int)(min + (max - min) *
+                (scale / (double)uint.MaxValue)), typeof(T));
         }
 
         public void Act4Process()
@@ -595,17 +601,11 @@ namespace OpenNos.GameObject.Networking
             Parallel.ForEach(
                 Sessions.Where(s =>
                     s?.Character != null && s.CurrentMapInstance?.Map.MapId == 236 || s?.CurrentMapInstance?.Map.MapId == 232), sess => sess.SendPacket(sess.Character.GenerateAct6()));
-
         }
 
         public void AddGroup(Group group)
         {
             ThreadSafeGroupList[group.GroupId] = group;
-        }
-
-        public IEnumerable<ClientSession> FindSameIpAddresses(List<ClientSession> sessions)
-        {
-            return sessions.Where(session => sessions.Count(s => s.ParsedAddress == session.ParsedAddress) > 3);
         }
 
         public void AskPvpRevive(long characterId)
@@ -827,7 +827,6 @@ namespace OpenNos.GameObject.Networking
                             session.CurrentMapInstance?.Broadcast(session, session.Character.GenerateIn(InEffect: 1), ReceiverType.AllExceptMe);
 
                             session.CurrentMapInstance?.Broadcast(session, session.Character.GenerateGidx(), ReceiverType.AllExceptMe);
-
                         }
 
                         session.SendPacket(UserInterfaceHelper.GenerateDialog(
@@ -917,7 +916,6 @@ namespace OpenNos.GameObject.Networking
                             Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(s =>
 
                             session.SendPacket(UserInterfaceHelper.GenerateInfo("INFO: You can only use sealed vessels in this map.")));
-
                         }
                         break;
 
@@ -928,13 +926,10 @@ namespace OpenNos.GameObject.Networking
                             session.SendPacket(UserInterfaceHelper.GenerateDialog($"#revival^0 #revival^1 {Language.Instance.GetMessageFromKey("ASK_REVIVE_LOD")}"));
                             ReviveTask(session);
                         }
-
                         else
                         {
-
                             session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_ENOUGH_SAVER"), 0));
                             Observable.Timer(TimeSpan.FromSeconds(5)).Subscribe(o => Instance.ReviveFirstPosition(session.Character.CharacterId));
-
                         }
                         break;
 
@@ -1016,8 +1011,8 @@ namespace OpenNos.GameObject.Networking
             var session = GetSessionByCharacterId(id);
             if (session?.Character != null)
             {
-
                 if (mapId != null)
+
                 //MapInstance gotoMapInstance = GetMapInstanceByMapId(mapId.Value);
                 /*if (session.Character.Level < gotoMapInstance.MinLevel || session.Character.Level > gotoMapInstance.MaxLevel)
                     {
@@ -1032,7 +1027,6 @@ namespace OpenNos.GameObject.Networking
                 ChangeMapInstance(id, session.Character.MapInstanceId, mapX, mapY);
             }
         }
-
 
         // Both partly
         public void ChangeMapInstance(long characterId, Guid mapInstanceId, int? mapX = null, int? mapY = null, bool noAggroLoss = false)
@@ -1090,13 +1084,11 @@ namespace OpenNos.GameObject.Networking
                         {
                             Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(s =>
                             session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("LOD_TIP"), 0)));
-
                         }
                     }
 
                     if (gotoMapInstance.MapInstanceType.Equals(MapInstanceType.BaseMapInstance))
                     {
-
                         #region Interaction on map join
 
                         if (gotoMapInstance.Map.MapId == 54)
@@ -1115,17 +1107,15 @@ namespace OpenNos.GameObject.Networking
                         {
                             Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(s =>
                             session.SendPacket(session.Character.GenerateSay(Language.Instance.GetMessageFromKey("MAP_179_DIALOG"), 0)));
-
                         }
 
                         if (gotoMapInstance.Map.MapId == 260)
                         {
                             Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(s =>
                             session.SendPacket(session.Character.GenerateSay(Language.Instance.GetMessageFromKey("MAP_260_DIALOG"), 0)));
-
                         }
-                        #endregion
 
+                        #endregion
                     }
 
                     static void RemoveAllPetInTeam(ClientSession session)
@@ -1154,26 +1144,22 @@ namespace OpenNos.GameObject.Networking
                         }
                     }
 
-
                     //if (gotoMapInstance == CaligorRaid.CaligorMapInstance && session.Character.MapInstance != CaligorRaid.CaligorMapInstance)
                     //{
                     //    session.Character.OriginalFaction = (byte)session.Character.Faction;
 
-                    //    //random??
-                    //    if (CaligorRaid.CaligorMapInstance.Sessions.ToList().Count(s => s.Character?.Faction == FactionType.Angel) >
-                    //        CaligorRaid.CaligorMapInstance.Sessions.ToList().Count(s => s.Character?.Faction == FactionType.Demon)
-                    //        && session.Character.Faction != FactionType.Demon)
-                    //    {
-                    //        session.Character.Faction = FactionType.Demon;
-                    //        session.SendPacket(session.Character.GenerateFaction());
-                    //    }
-                    //    else if (CaligorRaid.CaligorMapInstance.Sessions.ToList().Count(s => s.Character?.Faction == FactionType.Demon) >
-                    //             CaligorRaid.CaligorMapInstance.Sessions.ToList().Count(s => s.Character?.Faction == FactionType.Angel)
-                    //             && session.Character.Faction != FactionType.Angel)
-                    //    {
-                    //        session.Character.Faction = FactionType.Angel;
-                    //        session.SendPacket(session.Character.GenerateFaction());
-                    //    }
+                    // //random?? if (CaligorRaid.CaligorMapInstance.Sessions.ToList().Count(s =>
+                    // s.Character?.Faction == FactionType.Angel) >
+                    // CaligorRaid.CaligorMapInstance.Sessions.ToList().Count(s =>
+                    // s.Character?.Faction == FactionType.Demon) && session.Character.Faction !=
+                    // FactionType.Demon) { session.Character.Faction = FactionType.Demon;
+                    // session.SendPacket(session.Character.GenerateFaction()); } else if
+                    // (CaligorRaid.CaligorMapInstance.Sessions.ToList().Count(s =>
+                    // s.Character?.Faction == FactionType.Demon) >
+                    // CaligorRaid.CaligorMapInstance.Sessions.ToList().Count(s =>
+                    // s.Character?.Faction == FactionType.Angel) && session.Character.Faction !=
+                    // FactionType.Angel) { session.Character.Faction = FactionType.Angel;
+                    // session.SendPacket(session.Character.GenerateFaction()); }
                     if (mapX <= 0 && mapY <= 0)
                     {
                         switch (session.Character.Faction)
@@ -1189,6 +1175,7 @@ namespace OpenNos.GameObject.Networking
                                 break;
                         }
                     }
+
                     //}
                     //else if (gotoMapInstance != CaligorRaid.CaligorMapInstance && session.Character.MapInstance == CaligorRaid.CaligorMapInstance)
                     //{
@@ -1219,12 +1206,10 @@ namespace OpenNos.GameObject.Networking
                         {
                             var specialist = session.Character.Inventory?.LoadBySlotAndType((byte)EquipmentType.Sp, InventoryType.Wear);
 
-
                             if (specialist != null || specialist.ItemVNum == session.Character.Timespace.SpNeeded?[(byte)session.Character.Class])
 
                             {
                                 Observable.Timer(TimeSpan.FromMilliseconds(300)).Subscribe(s => session.Character.RemoveSp(specialist.ItemVNum, true));
-
                             }
                         }
 
@@ -1509,7 +1494,6 @@ namespace OpenNos.GameObject.Networking
                     if (session.Character.Group?.GroupType == GroupType.Group)
                     {
                         session.CurrentMapInstance?.Broadcast(session, session.Character.GeneratePidx(), ReceiverType.AllExceptMe);
-
                     }
 
                     /*if (session.CurrentMapInstance?.Map.MapTypes.All(s => s.MapTypeId != (short)MapTypeEnum.Act52) == true && session.Character.Buff.Any(s => s.Card.CardId == 339)) //Act5.2 debuff
@@ -1552,6 +1536,11 @@ namespace OpenNos.GameObject.Networking
             }
         }
 
+        public void CharacterSynchronizingAtSaveProcess(long characterId, bool lockOrUnlock)
+        {
+            CommunicationServiceClient.Instance.AddOrRemoveSavingCharacters(characterId, lockOrUnlock);
+        }
+
         public void DisconnectAll()
         {
             foreach (var session in Sessions)
@@ -1563,6 +1552,11 @@ namespace OpenNos.GameObject.Networking
         public void FamilyRefresh(long familyId, bool changeFaction = false)
         {
             CommunicationServiceClient.Instance.UpdateFamily(ServerGroup, familyId, changeFaction);
+        }
+
+        public IEnumerable<ClientSession> FindSameIpAddresses(List<ClientSession> sessions)
+        {
+            return sessions.Where(session => sessions.Count(s => s.ParsedAddress == session.ParsedAddress) > 3);
         }
 
         public List<Recipe> GetAllRecipes() => _recipes.GetAllItems();
@@ -1839,204 +1833,16 @@ namespace OpenNos.GameObject.Networking
             }
         }
 
-        private void RewardByPopularity(bool reset)
-        {
-            List<CharacterDTO> characters = DAOFactory.CharacterDAO.GetTopCompliment();
-            int rankspot = 1;
-            foreach (CharacterDTO _ in characters)
-            {
-                CharacterDTO dto = _;
-                switch (rankspot)
-                {
-                    case 1:
-                        SendItemToMail(dto.CharacterId, 5993, 3, 0, 0);
-                        break;
-                    case 2:
-                        SendItemToMail(dto.CharacterId, 5993, 2, 0, 0);
-                        break;
-                    case 3:
-                        SendItemToMail(dto.CharacterId, 5993, 1, 0, 0);
-                        break;
-                }
-
-                rankspot++;
-                if (reset)
-                {
-                    dto.Compliment = 0;
-                    DAOFactory.CharacterDAO.InsertOrUpdate(ref dto);
-                }
-            }
-        }
-
-        private void RewardByReputation()
-        {
-            List<CharacterDTO> characters = DAOFactory.CharacterDAO.GetTopReputation();
-            int rankspot = 1;
-            foreach (CharacterDTO _ in characters)
-            {
-                CharacterDTO dto = _;
-                switch (rankspot)
-                {
-                    case 1:
-                        SendItemToMail(dto.CharacterId, 5993, 5, 0, 0);
-                        break;
-                    case 2:
-                        SendItemToMail(dto.CharacterId, 5993, 4, 0, 0);
-                        break;
-                    case 3:
-                        SendItemToMail(dto.CharacterId, 5993, 3, 0, 0);
-                        break;
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 10:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 14:
-                        SendItemToMail(dto.CharacterId, 5993, 2, 0, 0);
-                        break;
-                    case 15:
-                    case 16:
-                    case 17:
-                    case 18:
-                    case 19:
-                    case 20:
-                    case 21:
-                    case 22:
-                    case 23:
-                    case 24:
-                    case 25:
-                    case 26:
-                    case 27:
-                    case 28:
-                    case 29:
-                    case 30:
-                    case 31:
-                    case 32:
-                    case 33:
-                    case 34:
-                    case 35:
-                    case 36:
-                    case 37:
-                    case 38:
-                    case 39:
-                    case 40:
-                    case 41:
-                    case 42:
-                    case 43:
-                        SendItemToMail(dto.CharacterId, 5993, 1, 0, 0);
-                        break;
-                }
-                rankspot++;
-            }
-        }
-
-        private void RewardByScore(bool reset)
-        {
-            List<CharacterDTO> characters = DAOFactory.CharacterDAO.GetTopPoints();
-            int rankspot = 1;
-            foreach (CharacterDTO _ in characters)
-            {
-                CharacterDTO dto = _;
-                switch (rankspot)
-                {
-                    case 1:
-                        SendItemToMail(dto.CharacterId, 5993, 5, 0, 0);
-                        break;
-                    case 2:
-                        SendItemToMail(dto.CharacterId, 5993, 4, 0, 0);
-                        break;
-                    case 3:
-                        SendItemToMail(dto.CharacterId, 5993, 3, 0, 0);
-                        break;
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 10:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 14:
-                        SendItemToMail(dto.CharacterId, 5993, 1, 0, 0);
-                        break;
-                }
-                rankspot++;
-                if (reset)
-                {
-                    dto.Act4Points = 0;
-                    DAOFactory.CharacterDAO.InsertOrUpdate(ref dto);
-                }
-            }
-        }
-
-        private void SendItemToMail(long id, short vnum, byte amount, sbyte rare, byte upgrade)
-        {
-            Item it = GetItem(vnum);
-
-            if (it != null)
-            {
-                if (it.ItemType != ItemType.Weapon && it.ItemType != ItemType.Armor && it.ItemType != ItemType.Specialist)
-                {
-                    upgrade = 0;
-                }
-                else if (it.ItemType != ItemType.Weapon && it.ItemType != ItemType.Armor)
-                {
-                    rare = 0;
-                }
-                if (rare > 8 || rare < -2)
-                {
-                    rare = 0;
-                }
-                if (upgrade > 10 && it.ItemType != ItemType.Specialist)
-                {
-                    upgrade = 0;
-                }
-                else if (it.ItemType == ItemType.Specialist && upgrade > 15)
-                {
-                    upgrade = 0;
-                }
-
-                // maximum size of the amount is 99
-                if (amount > 99)
-                {
-                    amount = 99;
-                }
-
-                MailDTO mail = new MailDTO
-                {
-                    AttachmentAmount = it.Type == InventoryType.Etc || it.Type == InventoryType.Main ? amount : (byte)1,
-                    IsOpened = false,
-                    Date = DateTime.UtcNow,
-                    ReceiverId = id,
-                    SenderId = id,
-                    AttachmentRarity = (byte)rare,
-                    AttachmentUpgrade = upgrade,
-                    IsSenderCopy = false,
-                    Title = "RankingReward",
-                    AttachmentVNum = vnum,
-                    SenderClass = ClassType.Adventurer,
-                    SenderGender = GenderType.Male,
-                    SenderHairColor = HairColorType.Black,
-                    SenderHairStyle = HairStyleType.NoHair,
-                    EqPacket = string.Empty,
-                    SenderMorphId = 0
-                };
-                MailServiceClient.Instance.SendMail(mail);
-            }
-        }
-
         public bool IsAct4Online() => CommunicationServiceClient.Instance.IsAct4Online(ServerGroup);
 
         public bool IsCharacterMemberOfGroup(long characterId)
         {
             return Groups?.Any(g => g.IsMemberOfGroup(characterId)) == true;
+        }
+
+        public bool IsCharacterSaving(long characterId)
+        {
+            return CommunicationServiceClient.Instance.IsCharacterSaving(characterId);
         }
 
         public bool IsCharactersGroupFull(long characterId)
@@ -2139,16 +1945,6 @@ namespace OpenNos.GameObject.Networking
             }
         }
 
-        public void CharacterSynchronizingAtSaveProcess(long characterId, bool lockOrUnlock)
-        {
-            CommunicationServiceClient.Instance.AddOrRemoveSavingCharacters(characterId, lockOrUnlock);
-        }
-
-        public bool IsCharacterSaving(long characterId)
-        {
-            return CommunicationServiceClient.Instance.IsCharacterSaving(characterId);
-        }
-
         public void LoadBazaar()
         {
             BazaarList = new List<BazaarItemLink>();
@@ -2178,30 +1974,6 @@ namespace OpenNos.GameObject.Networking
             BoxItems = box;
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("BOX_ITEMS_LOADED"),
                 BoxItems.Count));
-        }
-
-        private void LoadCards()
-        {
-            Cards = new List<Card>();
-
-            var bcards = DAOFactory.BCardDAO.LoadAll().ToArray().Where(s => s.CardId.HasValue);
-            IEnumerable<CardDTO> cards = DAOFactory.CardDAO.LoadAll().ToArray();
-            foreach (var card in cards)
-            {
-                var tmp = new Card(card)
-                {
-                    BCards = new List<BCard>()
-                };
-
-                foreach (var bcard in bcards.Where(s => s.CardId == tmp.CardId))
-                {
-                    tmp.BCards.Add(new BCard(bcard));
-                }
-
-                Cards.Add(tmp);
-            }
-
-            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("CARDS_LOADED"), Cards.Count));
         }
 
         public void LoadDropMonster()
@@ -2330,80 +2102,6 @@ namespace OpenNos.GameObject.Networking
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("ITEMS_LOADED"), Items.Count));
         }
 
-        private static void LoadMapsAndContent()
-        {
-            try
-            {
-                var i = 0;
-                var monstercount = 0;
-
-                var monsters = DAOFactory.MapMonsterDAO.LoadAll().GroupBy(s => s.MapId)
-                    .ToDictionary(s => s.Key, s => s.ToArray());
-                var npcs = DAOFactory.MapNpcDAO.LoadAll().GroupBy(s => s.MapId)
-                    .ToDictionary(s => s.Key, s => s.ToArray());
-                var portals = DAOFactory.PortalDAO.LoadAll().GroupBy(s => s.SourceMapId)
-                    .ToDictionary(s => s.Key, s => s.ToArray());
-                var mapTypes = DAOFactory.MapTypeMapDAO.LoadAll().ToArray();
-                var mapTypeMap = DAOFactory.MapTypeDAO.LoadAll().ToArray();
-                var respawns = DAOFactory.RespawnMapTypeDAO.LoadAll();
-
-                foreach (var map in DAOFactory.MapDAO.LoadAll().ToArray())
-                {
-                    var guid = Guid.NewGuid();
-                    var mapinfo = new Map(map.MapId, map.GridMapId, map.Data)
-                    {
-                        Music = map.Music,
-                        Name = map.Name,
-                        ShopAllowed = map.ShopAllowed,
-                        XpRate = map.XpRate
-                    };
-                    var newMap = new MapInstance(mapinfo, guid, map.ShopAllowed,
-                        MapInstanceType.BaseMapInstance, new InstanceBag(), true);
-                    _mapinstances.TryAdd(guid, newMap);
-
-                    if (portals.TryGetValue(map.MapId, out var port))
-                    {
-                        newMap.LoadPortals(port);
-                    }
-
-                    if (npcs.TryGetValue(map.MapId, out var np))
-                    {
-                        newMap.LoadNpcs(np);
-                    }
-
-                    if (monsters.TryGetValue(map.MapId, out var monst))
-                    {
-                        newMap.LoadMonsters(monst);
-                    }
-
-                    foreach (var mapNpc in newMap.Npcs)
-                    {
-                        mapNpc.MapInstance = newMap;
-                        newMap.AddNPC(mapNpc);
-                    }
-
-                    foreach (var mapMonster in newMap.Monsters)
-                    {
-                        mapMonster.MapInstance = newMap;
-                        newMap.AddMonster(mapMonster);
-                    }
-
-
-                    monstercount += newMap.Monsters.Count;
-                    Maps.Add(mapinfo);
-                    i++;
-                }
-
-                Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MAPS_LOADED"), i));
-                Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MAPMONSTERS_LOADED"),
-                    monstercount));
-            }
-            catch (Exception e)
-            {
-                Logger.Error("General Error", e);
-            }
-        }
-
         public void LoadMapNpc()
         {
             _mapNpcs = new Dictionary<short, List<MapNpc>>();
@@ -2430,24 +2128,6 @@ namespace OpenNos.GameObject.Networking
             }
 
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MONSTERSKILLS_LOADED"), _monsterSkills.Sum(i => i.Value.Count)));
-        }
-
-        private void LoadQuest()
-        {
-            Quests = new List<Quest>();
-            var questRewards = DAOFactory.QuestRewardDAO.LoadAll();
-            var questObjectives = DAOFactory.QuestObjectiveDAO.LoadAll();
-            foreach (var questdto in DAOFactory.QuestDAO.LoadAll().ToArray())
-            {
-                var quest = new Quest(questdto);
-                quest.QuestRewards = questRewards.Where(s => s.QuestId == quest.QuestId).ToList();
-                quest.QuestObjectives = questObjectives.Where(s => s.QuestId == quest.QuestId).ToList();
-                Quests.Add(quest);
-            }
-
-            FlowerQuestId = Quests.Find(q => q.QuestType == (byte)QuestType.FlowerQuest)?.QuestId;
-
-            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("QUESTS_LOADED"), Quests.Count));
         }
 
         public void LoadRecipes()
@@ -2548,17 +2228,6 @@ namespace OpenNos.GameObject.Networking
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SHOPS_LOADED"), _shops.Count));
         }
 
-        private void LoadShopItems()
-        {
-            _shopItems = new Dictionary<int, List<ShopItemDTO>>();
-            foreach (var shopItemGrouping in DAOFactory.ShopItemDAO.LoadAll().GroupBy(s => s.ShopId))
-            {
-                _shopItems[shopItemGrouping.Key] = shopItemGrouping.ToList();
-            }
-
-            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SHOPITEMS_LOADED"), _shopItems.Sum(i => i.Value.Count)));
-        }
-
         public void LoadShopSkills()
         {
             _shopSkills = new Dictionary<int, List<ShopSkillDTO>>();
@@ -2568,32 +2237,6 @@ namespace OpenNos.GameObject.Networking
             }
 
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SHOPSKILLS_LOADED"), _shopSkills.Sum(i => i.Value.Count)));
-        }
-
-        private static void LoadSkills()
-        {
-            IEnumerable<ComboDTO> combos = DAOFactory.ComboDAO.LoadAll().ToArray();
-            var bcards = DAOFactory.BCardDAO.LoadAll().ToArray().Where(s => s.SkillVNum.HasValue);
-            foreach (var skillItem in DAOFactory.SkillDAO.LoadAll().ToArray())
-            {
-                var tmp = new Skill(skillItem);
-                if (!(tmp is Skill skillObj))
-                {
-                    return;
-                }
-
-                skillObj.Combos.AddRange(combos.Where(s => s.SkillVNum == skillObj.SkillVNum).ToList());
-                skillObj.BCards = new List<BCard>();
-
-                foreach (var o in bcards.Where(s => s.SkillVNum == skillObj.SkillVNum))
-                {
-                    skillObj.BCards.Add(new BCard(o));
-                }
-
-                Skills.Add(skillObj);
-            }
-
-            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SKILLS_LOADED"), Skills.Count));
         }
 
         public void LoadTeleporter()
@@ -2612,13 +2255,6 @@ namespace OpenNos.GameObject.Networking
             return _recipeLists.Any(r => r.MapNpcId == mapNpcId);
         }
 
-        public void RefreshRanking()
-        {
-            TopComplimented = DAOFactory.CharacterDAO.GetTopCompliment();
-            TopPoints = DAOFactory.CharacterDAO.GetTopPoints();
-            TopReputation = DAOFactory.CharacterDAO.GetTopReputation();
-        }
-
         public void RefreshDailyMissions()
         {
             foreach (var fsm in DAOFactory.FamilySkillMissionDAO.LoadAll())
@@ -2627,6 +2263,13 @@ namespace OpenNos.GameObject.Networking
 
                 DAOFactory.FamilySkillMissionDAO.DailyReset(fsm);
             }
+        }
+
+        public void RefreshRanking()
+        {
+            TopComplimented = DAOFactory.CharacterDAO.GetTopCompliment();
+            TopPoints = DAOFactory.CharacterDAO.GetTopPoints();
+            TopReputation = DAOFactory.CharacterDAO.GetTopReputation();
         }
 
         public void RelationRefresh(long relationId)
@@ -2916,6 +2559,7 @@ namespace OpenNos.GameObject.Networking
                 //_shopItems.Dispose();
                 //_shops.Dispose();
                 _recipes.Dispose();
+
                 //_mapNpcs.Dispose();
                 //_teleporters.Dispose();
                 GC.SuppressFinalize(this);
@@ -2940,18 +2584,78 @@ namespace OpenNos.GameObject.Networking
             });
         }
 
-        // Server
-        //private static void BotProcess()
-        //{
-        //    try
-        //    {
-        //        Shout(Language.Instance.GetMessageFromKey($"BOT_MESSAGE_{RandomNumber(0, 4)}"));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger.Error(e);
-        //    }
-        //}
+        private static void LoadMapsAndContent()
+        {
+            try
+            {
+                var i = 0;
+                var monstercount = 0;
+
+                var monsters = DAOFactory.MapMonsterDAO.LoadAll().GroupBy(s => s.MapId)
+                    .ToDictionary(s => s.Key, s => s.ToArray());
+                var npcs = DAOFactory.MapNpcDAO.LoadAll().GroupBy(s => s.MapId)
+                    .ToDictionary(s => s.Key, s => s.ToArray());
+                var portals = DAOFactory.PortalDAO.LoadAll().GroupBy(s => s.SourceMapId)
+                    .ToDictionary(s => s.Key, s => s.ToArray());
+                var mapTypes = DAOFactory.MapTypeMapDAO.LoadAll().ToArray();
+                var mapTypeMap = DAOFactory.MapTypeDAO.LoadAll().ToArray();
+                var respawns = DAOFactory.RespawnMapTypeDAO.LoadAll();
+
+                foreach (var map in DAOFactory.MapDAO.LoadAll().ToArray())
+                {
+                    var guid = Guid.NewGuid();
+                    var mapinfo = new Map(map.MapId, map.GridMapId, map.Data)
+                    {
+                        Music = map.Music,
+                        Name = map.Name,
+                        ShopAllowed = map.ShopAllowed,
+                        XpRate = map.XpRate
+                    };
+                    var newMap = new MapInstance(mapinfo, guid, map.ShopAllowed,
+                        MapInstanceType.BaseMapInstance, new InstanceBag(), true);
+                    _mapinstances.TryAdd(guid, newMap);
+
+                    if (portals.TryGetValue(map.MapId, out var port))
+                    {
+                        newMap.LoadPortals(port);
+                    }
+
+                    if (npcs.TryGetValue(map.MapId, out var np))
+                    {
+                        newMap.LoadNpcs(np);
+                    }
+
+                    if (monsters.TryGetValue(map.MapId, out var monst))
+                    {
+                        newMap.LoadMonsters(monst);
+                    }
+
+                    foreach (var mapNpc in newMap.Npcs)
+                    {
+                        mapNpc.MapInstance = newMap;
+                        newMap.AddNPC(mapNpc);
+                    }
+
+                    foreach (var mapMonster in newMap.Monsters)
+                    {
+                        mapMonster.MapInstance = newMap;
+                        newMap.AddMonster(mapMonster);
+                    }
+
+                    monstercount += newMap.Monsters.Count;
+                    Maps.Add(mapinfo);
+                    i++;
+                }
+
+                Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MAPS_LOADED"), i));
+                Logger.Info(string.Format(Language.Instance.GetMessageFromKey("MAPMONSTERS_LOADED"),
+                    monstercount));
+            }
+            catch (Exception e)
+            {
+                Logger.Error("General Error", e);
+            }
+        }
 
         private static void LoadNpcMonsters()
         {
@@ -2983,6 +2687,44 @@ namespace OpenNos.GameObject.Networking
             Logger.Info(string.Format(Language.Instance.GetMessageFromKey("NPCMONSTERS_LOADED"), Npcs.Count));
         }
 
+        private static void LoadSkills()
+        {
+            IEnumerable<ComboDTO> combos = DAOFactory.ComboDAO.LoadAll().ToArray();
+            var bcards = DAOFactory.BCardDAO.LoadAll().ToArray().Where(s => s.SkillVNum.HasValue);
+            foreach (var skillItem in DAOFactory.SkillDAO.LoadAll().ToArray())
+            {
+                var tmp = new Skill(skillItem);
+                if (!(tmp is Skill skillObj))
+                {
+                    return;
+                }
+
+                skillObj.Combos.AddRange(combos.Where(s => s.SkillVNum == skillObj.SkillVNum).ToList());
+                skillObj.BCards = new List<BCard>();
+
+                foreach (var o in bcards.Where(s => s.SkillVNum == skillObj.SkillVNum))
+                {
+                    skillObj.BCards.Add(new BCard(o));
+                }
+
+                Skills.Add(skillObj);
+            }
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SKILLS_LOADED"), Skills.Count));
+        }
+
+        // Server
+        //private static void BotProcess()
+        //{
+        //    try
+        //    {
+        //        Shout(Language.Instance.GetMessageFromKey($"BOT_MESSAGE_{RandomNumber(0, 4)}"));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Logger.Error(e);
+        //    }
+        //}
         private static void OnGlobalEvent(object sender, EventArgs e)
         {
             var tuple = (Tuple<EventType, byte>)sender;
@@ -3002,6 +2744,20 @@ namespace OpenNos.GameObject.Networking
                 Instance.IsReboot = true;
                 Instance.TaskShutdown = Instance.ShutdownTaskAsync((int)sender);
             }
+        }
+        public void Shutdown()
+        {
+            //CommunicationServiceClient.Instance.SetWorldServerAsInvisible(WorldId); TODO
+            string message = string.Format(Language.Instance.GetMessageFromKey("SHUTDOWN_SEC"), 15);
+            Instance.Broadcast($"say 1 0 10 ({Language.Instance.GetMessageFromKey("ADMINISTRATOR")}){message}");
+            Instance.Broadcast(UserInterfaceHelper.GenerateMsg(message, 2));
+
+            Observable.Timer(TimeSpan.FromSeconds(15)).Subscribe(c =>
+            {
+                Instance.SaveAll(true);
+                Instance.DisconnectAll();
+                CommunicationServiceClient.Instance.UnregisterWorldServer(WorldId);
+            });
         }
 
         private static void OnShutdown(object sender, EventArgs e)
@@ -3053,6 +2809,7 @@ namespace OpenNos.GameObject.Networking
                     i.MapInstance.Broadcast(i.GenerateIn());
                 }
         }
+
         private void FlushLogs(bool init = false)
         {
             if (init)
@@ -3317,6 +3074,30 @@ namespace OpenNos.GameObject.Networking
             };
         }
 
+        private void LoadCards()
+        {
+            Cards = new List<Card>();
+
+            var bcards = DAOFactory.BCardDAO.LoadAll().ToArray().Where(s => s.CardId.HasValue);
+            IEnumerable<CardDTO> cards = DAOFactory.CardDAO.LoadAll().ToArray();
+            foreach (var card in cards)
+            {
+                var tmp = new Card(card)
+                {
+                    BCards = new List<BCard>()
+                };
+
+                foreach (var bcard in bcards.Where(s => s.CardId == tmp.CardId))
+                {
+                    tmp.BCards.Add(new BCard(bcard));
+                }
+
+                Cards.Add(tmp);
+            }
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("CARDS_LOADED"), Cards.Count));
+        }
+
         private void LoadCharacterRelations()
         {
             CharacterRelations = DAOFactory.CharacterRelationDAO.LoadAll().ToList();
@@ -3387,9 +3168,9 @@ namespace OpenNos.GameObject.Networking
             FamilyArenaInstance.CreatePortal(portal);
         }
 
-        // This is a function being called when the server starts
-        // This function actually loads all the Instances of the gemstone maps, example:
-        // SP1, SP2, SP3... You know these maps are the same map, but different gemstone inside of it
+        // This is a function being called when the server starts This function actually loads all
+        // the Instances of the gemstone maps, example: SP1, SP2, SP3... You know these maps are the
+        // same map, but different gemstone inside of it
         private void LoadGemStone()
         {
             // If map 2107 doesn't exist in DB, don't do this
@@ -3413,7 +3194,7 @@ namespace OpenNos.GameObject.Networking
             // F
             void loadSpecialistGemMap(short npcVNum)
             {
-                // 
+
                 MapInstance specialistGemMapInstance;
                 specialistGemMapInstance = GenerateMapInstance(2107, MapInstanceType.GemmeStoneInstance,
                     new InstanceBag());
@@ -3454,6 +3235,35 @@ namespace OpenNos.GameObject.Networking
             };
 
             ArenaInstance.CreatePortal(portal);
+        }
+
+        private void LoadQuest()
+        {
+            Quests = new List<Quest>();
+            var questRewards = DAOFactory.QuestRewardDAO.LoadAll();
+            var questObjectives = DAOFactory.QuestObjectiveDAO.LoadAll();
+            foreach (var questdto in DAOFactory.QuestDAO.LoadAll().ToArray())
+            {
+                var quest = new Quest(questdto);
+                quest.QuestRewards = questRewards.Where(s => s.QuestId == quest.QuestId).ToList();
+                quest.QuestObjectives = questObjectives.Where(s => s.QuestId == quest.QuestId).ToList();
+                Quests.Add(quest);
+            }
+
+            FlowerQuestId = Quests.Find(q => q.QuestType == (byte)QuestType.FlowerQuest)?.QuestId;
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("QUESTS_LOADED"), Quests.Count));
+        }
+
+        private void LoadShopItems()
+        {
+            _shopItems = new Dictionary<int, List<ShopItemDTO>>();
+            foreach (var shopItemGrouping in DAOFactory.ShopItemDAO.LoadAll().GroupBy(s => s.ShopId))
+            {
+                _shopItems[shopItemGrouping.Key] = shopItemGrouping.ToList();
+            }
+
+            Logger.Info(string.Format(Language.Instance.GetMessageFromKey("SHOPITEMS_LOADED"), _shopItems.Sum(i => i.Value.Count)));
         }
 
         private void MaintenanceProcess()
@@ -3891,6 +3701,152 @@ namespace OpenNos.GameObject.Networking
             }
         }
 
+        private void RewardByPopularity(bool reset)
+        {
+            List<CharacterDTO> characters = DAOFactory.CharacterDAO.GetTopCompliment();
+            int rankspot = 1;
+            foreach (CharacterDTO _ in characters)
+            {
+                CharacterDTO dto = _;
+                switch (rankspot)
+                {
+                    case 1:
+                        SendItemToMail(dto.CharacterId, 5993, 3, 0, 0);
+                        break;
+
+                    case 2:
+                        SendItemToMail(dto.CharacterId, 5993, 2, 0, 0);
+                        break;
+
+                    case 3:
+                        SendItemToMail(dto.CharacterId, 5993, 1, 0, 0);
+                        break;
+                }
+
+                rankspot++;
+                if (reset)
+                {
+                    dto.Compliment = 0;
+                    DAOFactory.CharacterDAO.InsertOrUpdate(ref dto);
+                }
+            }
+        }
+
+        private void RewardByReputation()
+        {
+            List<CharacterDTO> characters = DAOFactory.CharacterDAO.GetTopReputation();
+            int rankspot = 1;
+            foreach (CharacterDTO _ in characters)
+            {
+                CharacterDTO dto = _;
+                switch (rankspot)
+                {
+                    case 1:
+                        SendItemToMail(dto.CharacterId, 5993, 5, 0, 0);
+                        break;
+
+                    case 2:
+                        SendItemToMail(dto.CharacterId, 5993, 4, 0, 0);
+                        break;
+
+                    case 3:
+                        SendItemToMail(dto.CharacterId, 5993, 3, 0, 0);
+                        break;
+
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                        SendItemToMail(dto.CharacterId, 5993, 2, 0, 0);
+                        break;
+
+                    case 15:
+                    case 16:
+                    case 17:
+                    case 18:
+                    case 19:
+                    case 20:
+                    case 21:
+                    case 22:
+                    case 23:
+                    case 24:
+                    case 25:
+                    case 26:
+                    case 27:
+                    case 28:
+                    case 29:
+                    case 30:
+                    case 31:
+                    case 32:
+                    case 33:
+                    case 34:
+                    case 35:
+                    case 36:
+                    case 37:
+                    case 38:
+                    case 39:
+                    case 40:
+                    case 41:
+                    case 42:
+                    case 43:
+                        SendItemToMail(dto.CharacterId, 5993, 1, 0, 0);
+                        break;
+                }
+                rankspot++;
+            }
+        }
+
+        private void RewardByScore(bool reset)
+        {
+            List<CharacterDTO> characters = DAOFactory.CharacterDAO.GetTopPoints();
+            int rankspot = 1;
+            foreach (CharacterDTO _ in characters)
+            {
+                CharacterDTO dto = _;
+                switch (rankspot)
+                {
+                    case 1:
+                        SendItemToMail(dto.CharacterId, 5993, 5, 0, 0);
+                        break;
+
+                    case 2:
+                        SendItemToMail(dto.CharacterId, 5993, 4, 0, 0);
+                        break;
+
+                    case 3:
+                        SendItemToMail(dto.CharacterId, 5993, 3, 0, 0);
+                        break;
+
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                        SendItemToMail(dto.CharacterId, 5993, 1, 0, 0);
+                        break;
+                }
+                rankspot++;
+                if (reset)
+                {
+                    dto.Act4Points = 0;
+                    DAOFactory.CharacterDAO.InsertOrUpdate(ref dto);
+                }
+            }
+        }
+
         // Server
         private void SaveAllProcess()
         {
@@ -3902,6 +3858,62 @@ namespace OpenNos.GameObject.Networking
             catch (Exception e)
             {
                 Logger.Error(e);
+            }
+        }
+
+        private void SendItemToMail(long id, short vnum, byte amount, sbyte rare, byte upgrade)
+        {
+            Item it = GetItem(vnum);
+
+            if (it != null)
+            {
+                if (it.ItemType != ItemType.Weapon && it.ItemType != ItemType.Armor && it.ItemType != ItemType.Specialist)
+                {
+                    upgrade = 0;
+                }
+                else if (it.ItemType != ItemType.Weapon && it.ItemType != ItemType.Armor)
+                {
+                    rare = 0;
+                }
+                if (rare > 8 || rare < -2)
+                {
+                    rare = 0;
+                }
+                if (upgrade > 10 && it.ItemType != ItemType.Specialist)
+                {
+                    upgrade = 0;
+                }
+                else if (it.ItemType == ItemType.Specialist && upgrade > 15)
+                {
+                    upgrade = 0;
+                }
+
+                // maximum size of the amount is 99
+                if (amount > 99)
+                {
+                    amount = 99;
+                }
+
+                MailDTO mail = new MailDTO
+                {
+                    AttachmentAmount = it.Type == InventoryType.Etc || it.Type == InventoryType.Main ? amount : (byte)1,
+                    IsOpened = false,
+                    Date = DateTime.UtcNow,
+                    ReceiverId = id,
+                    SenderId = id,
+                    AttachmentRarity = (byte)rare,
+                    AttachmentUpgrade = upgrade,
+                    IsSenderCopy = false,
+                    Title = "RankingReward",
+                    AttachmentVNum = vnum,
+                    SenderClass = ClassType.Adventurer,
+                    SenderGender = GenderType.Male,
+                    SenderHairColor = HairColorType.Black,
+                    SenderHairStyle = HairStyleType.NoHair,
+                    EqPacket = string.Empty,
+                    SenderMorphId = 0
+                };
+                MailServiceClient.Instance.SendMail(mail);
             }
         }
 

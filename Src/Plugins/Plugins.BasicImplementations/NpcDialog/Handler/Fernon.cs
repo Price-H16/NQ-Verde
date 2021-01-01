@@ -10,7 +10,13 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class Fernon : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 731;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -23,16 +29,23 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_RIGHT_FACTION"), 0));
                 }
             }
         }
+
+        #endregion
     }
 
     public class Fernon2 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 732;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -45,16 +58,23 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("NOT_RIGHT_FACTION"), 0));
                 }
             }
         }
+
+        #endregion
     }
 
     public class Fernon3 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 733;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -67,10 +87,11 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
                 else
                 {
-
                     Session.SendPacket(UserInterfaceHelper.GenerateMsg(Language.Instance.GetMessageFromKey("TOO_LOW_LVL"), 0));
                 }
             }
         }
+
+        #endregion
     }
 }

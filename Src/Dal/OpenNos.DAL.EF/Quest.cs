@@ -7,6 +7,8 @@ namespace OpenNos.DAL.EF
     {
         #region Properties
 
+        public bool CanBeDoneOnlyOnce { get; set; }
+
         public int? DialogNpcId { get; set; }
 
         public int? DialogNpcVNum { get; set; }
@@ -17,15 +19,13 @@ namespace OpenNos.DAL.EF
 
         public bool IsDaily { get; set; }
 
-        public bool CanBeDoneOnlyOnce { get; set; }
-
         public byte LevelMax { get; set; }
 
         public byte LevelMin { get; set; }
 
         public long? NextQuestId { get; set; }
 
-        [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long QuestId { get; set; }
 
         public int QuestType { get; set; }

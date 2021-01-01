@@ -1,12 +1,12 @@
+using OpenNos.Domain;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF
 {
     /// <summary>
-    ///     Do Not forget to change Mapping in Item GO when changing this class
+    /// Do Not forget to change Mapping in Item GO when changing this class
     /// </summary>
     public class Item
     {
@@ -89,8 +89,6 @@ namespace OpenNos.DAL.EF
 
         public bool IsColored { get; set; }
 
-        public bool IsWarehouseable { get; set; }
-
         public bool IsConsumable { get; set; }
 
         public bool IsDroppable { get; set; }
@@ -104,6 +102,8 @@ namespace OpenNos.DAL.EF
         public bool IsSoldable { get; set; }
 
         public bool IsTradable { get; set; }
+
+        public bool IsWarehouseable { get; set; }
 
         public virtual ICollection<ItemInstance> ItemInstances { get; set; }
 
@@ -185,7 +185,7 @@ namespace OpenNos.DAL.EF
 
         public byte Type { get; set; }
 
-        [Key,DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short VNum { get; set; }
 
         public short WaitDelay { get; set; }

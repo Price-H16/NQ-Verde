@@ -1,18 +1,23 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using ChickenAPI.Plugins;
 using OpenNos.Core;
 using OpenNos.Core.Extensions;
 using OpenNos.GameObject._NpcDialog;
+using System;
 
 namespace Plugins.BasicImplementations.NpcDialog
 {
     public class NpcDialogPlugin : IGamePlugin
     {
-        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+        #region Members
 
         private readonly IContainer _container;
+
         private readonly INpcDialogHandlerContainer _handlers;
+
+        #endregion
+
+        #region Instantiation
 
         public NpcDialogPlugin(INpcDialogHandlerContainer handlers, IContainer container)
         {
@@ -20,7 +25,17 @@ namespace Plugins.BasicImplementations.NpcDialog
             _container = container;
         }
 
+        #endregion
+
+        #region Properties
+
+        public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
+
         public string Name => nameof(NpcDialogPlugin);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -49,5 +64,7 @@ namespace Plugins.BasicImplementations.NpcDialog
         public void OnLoad()
         {
         }
+
+        #endregion
     }
 }

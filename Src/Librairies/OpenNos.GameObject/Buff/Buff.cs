@@ -1,6 +1,6 @@
-﻿using System;
-using OpenNos.GameObject.Battle;
+﻿using OpenNos.GameObject.Battle;
 using OpenNos.GameObject.Networking;
+using System;
 
 namespace OpenNos.GameObject
 {

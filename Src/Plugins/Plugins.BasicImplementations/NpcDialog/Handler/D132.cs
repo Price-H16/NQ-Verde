@@ -1,17 +1,45 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.GameObject;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
+    public class D131 : INpcDialogAsyncHandler
+    {
+        #region Properties
+
+        public long HandledId => 131;
+
+        #endregion
+
+        #region Methods
+
+        public async Task Execute(ClientSession Session, NpcDialogEvent packet) //ICE COLD main quest
+        {
+            var npc = packet.Npc;
+            if (npc != null)
+            {
+                Session.Character.AddQuest(5982, false);
+            }
+        }
+
+        #endregion
+    }
+
     public class D132 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 132;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet) //glacerus the ice cold
         {
@@ -22,25 +50,19 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 ServerManager.Instance.ChangeMap(Session.Character.CharacterId, tp.MapId, tp.MapX, tp.MapY);
             }
         }
-    }
 
-    public class D131 : INpcDialogAsyncHandler
-    {
-        public long HandledId => 131;
-
-        public async Task Execute(ClientSession Session, NpcDialogEvent packet) //ICE COLD main quest
-        {
-            var npc = packet.Npc;
-            if (npc != null)
-            {
-                Session.Character.AddQuest(5982, false);
-            }
-        }
+        #endregion
     }
 
     public class D133 : INpcDialogAsyncHandler
     {
+        #region Properties
+
         public long HandledId => 133;
+
+        #endregion
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -66,5 +88,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 Session.Character.Inventory.RemoveItemAmount(2307, 5);
             }
         }
+
+        #endregion
     }
 }

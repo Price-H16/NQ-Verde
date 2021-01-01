@@ -12,21 +12,25 @@
  * GNU General Public License for more details.
  */
 
+using OpenNos.Core;
+using OpenNos.Domain;
+using OpenNos.GameObject.Helpers;
+using OpenNos.GameObject.Networking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using OpenNos.Core;
-using OpenNos.Domain;
-using OpenNos.GameObject.Helpers;
-using OpenNos.GameObject.Networking;
 
 namespace OpenNos.GameObject.Event
 {
     public static class Act4Raid
     {
+        #region Properties
+
         public static List<MapMonster> Guardians { get; set; }
+
+        #endregion
 
         #region Methods
 
@@ -42,15 +46,14 @@ namespace OpenNos.GameObject.Event
                 DestinationMapId = 0,
                 DestinationX = 1,
                 DestinationY = 1,
-                Type = (short) (9 + faction)
+                Type = (short)(9 + faction)
             });
-
 
             #region Guardian Spawning
 
             Guardians.Add(new MapMonster
             {
-                MonsterVNum = (short) (678 + faction),
+                MonsterVNum = (short)(678 + faction),
                 MapX = 147,
                 MapY = 88,
                 MapId = 134,
@@ -62,7 +65,7 @@ namespace OpenNos.GameObject.Event
             });
             Guardians.Add(new MapMonster
             {
-                MonsterVNum = (short) (678 + faction),
+                MonsterVNum = (short)(678 + faction),
                 MapX = 149,
                 MapY = 94,
                 MapId = 134,
@@ -74,7 +77,7 @@ namespace OpenNos.GameObject.Event
             });
             Guardians.Add(new MapMonster
             {
-                MonsterVNum = (short) (678 + faction),
+                MonsterVNum = (short)(678 + faction),
                 MapX = 147,
                 MapY = 101,
                 MapId = 134,
@@ -86,7 +89,7 @@ namespace OpenNos.GameObject.Event
             });
             Guardians.Add(new MapMonster
             {
-                MonsterVNum = (short) (678 + faction),
+                MonsterVNum = (short)(678 + faction),
                 MapX = 139,
                 MapY = 105,
                 MapId = 134,
@@ -98,7 +101,7 @@ namespace OpenNos.GameObject.Event
             });
             Guardians.Add(new MapMonster
             {
-                MonsterVNum = (short) (678 + faction),
+                MonsterVNum = (short)(678 + faction),
                 MapX = 132,
                 MapY = 101,
                 MapId = 134,
@@ -110,7 +113,7 @@ namespace OpenNos.GameObject.Event
             });
             Guardians.Add(new MapMonster
             {
-                MonsterVNum = (short) (678 + faction),
+                MonsterVNum = (short)(678 + faction),
                 MapX = 129,
                 MapY = 94,
                 MapId = 134,
@@ -122,7 +125,7 @@ namespace OpenNos.GameObject.Event
             });
             Guardians.Add(new MapMonster
             {
-                MonsterVNum = (short) (678 + faction),
+                MonsterVNum = (short)(678 + faction),
                 MapX = 132,
                 MapY = 88,
                 MapId = 134,
@@ -155,6 +158,7 @@ namespace OpenNos.GameObject.Event
     {
         #region Members
 
+        private const int _interval = 60;
         private readonly List<long> _wonFamilies = new List<long>();
 
         private short _bossMapId = 136;
@@ -175,15 +179,12 @@ namespace OpenNos.GameObject.Event
 
         private short _mapId = 135;
 
+        private int _raidTime = 3600;
         private MapInstanceType _raidType;
 
         private short _sourcePortalX = 146;
 
         private short _sourcePortalY = 43;
-
-        private int _raidTime = 3600;
-
-        private const int _interval = 60;
 
         #endregion
 
@@ -235,7 +236,6 @@ namespace OpenNos.GameObject.Event
                     _bossMove = true;
                     break;
             }
-
 
             _raidTime = 3000;
 
@@ -325,11 +325,11 @@ namespace OpenNos.GameObject.Event
             };
             if (_raidType.Equals(MapInstanceType.Act4Berios))
             {
-                onDeathEvents.Add(new EventContainer(fam.Act4RaidBossMap, EventActionType.THROWITEMS,  new Tuple<int, short, byte, int, int, short>(_bossVNum, 2395, 15, 1, 2, 0)));
-                onDeathEvents.Add(new EventContainer(fam.Act4RaidBossMap, EventActionType.THROWITEMS,  new Tuple<int, short, byte, int, int, short>(_bossVNum, 2396, 15, 1, 2, 0)));
-                onDeathEvents.Add(new EventContainer(fam.Act4RaidBossMap, EventActionType.THROWITEMS,  new Tuple<int, short, byte, int, int, short>(_bossVNum, 2397, 15, 1, 2, 0)));
+                onDeathEvents.Add(new EventContainer(fam.Act4RaidBossMap, EventActionType.THROWITEMS, new Tuple<int, short, byte, int, int, short>(_bossVNum, 2395, 15, 1, 2, 0)));
+                onDeathEvents.Add(new EventContainer(fam.Act4RaidBossMap, EventActionType.THROWITEMS, new Tuple<int, short, byte, int, int, short>(_bossVNum, 2396, 15, 1, 2, 0)));
+                onDeathEvents.Add(new EventContainer(fam.Act4RaidBossMap, EventActionType.THROWITEMS, new Tuple<int, short, byte, int, int, short>(_bossVNum, 2397, 15, 1, 2, 0)));
 
-                fam.Act4RaidBossMap.OnCharacterDiscoveringMapEvents.Add(new Tuple<EventContainer, List<long>>( new EventContainer(fam.Act4RaidBossMap, EventActionType.SPAWNMONSTER, new MonsterToSummon(621, fam.Act4RaidBossMap.Map.GetRandomPosition(), null, true,  hasDelay: 30)), new List<long>()));
+                fam.Act4RaidBossMap.OnCharacterDiscoveringMapEvents.Add(new Tuple<EventContainer, List<long>>(new EventContainer(fam.Act4RaidBossMap, EventActionType.SPAWNMONSTER, new MonsterToSummon(621, fam.Act4RaidBossMap.Map.GetRandomPosition(), null, true, hasDelay: 30)), new List<long>()));
                 fam.Act4RaidBossMap.OnCharacterDiscoveringMapEvents.Add(new Tuple<EventContainer, List<long>>(
                     new EventContainer(fam.Act4RaidBossMap, EventActionType.SPAWNMONSTER,
                         new MonsterToSummon(622, fam.Act4RaidBossMap.Map.GetRandomPosition(), null, true,
@@ -340,13 +340,13 @@ namespace OpenNos.GameObject.Event
                             hasDelay: 380)), new List<long>()));
             }
 
-            onDeathEvents.Add(new EventContainer(fam.Act4RaidBossMap, EventActionType.SCRIPTEND, (byte) 1));
+            onDeathEvents.Add(new EventContainer(fam.Act4RaidBossMap, EventActionType.SCRIPTEND, (byte)1));
             onDeathEvents.Add(new EventContainer(fam.Act4Raid, EventActionType.CHANGEPORTALTYPE,
                 new Tuple<int, PortalType>(
                     fam.Act4Raid.Portals
                         .Find(s => s.SourceX == _sourcePortalX && s.SourceY == _sourcePortalY && !s.IsDisabled)
                         .PortalId, PortalType.Closed)));
-            var bossMob = new MonsterToSummon(_bossVNum, new MapCell {X = _bossX, Y = _bossY}, null, _bossMove)
+            var bossMob = new MonsterToSummon(_bossVNum, new MapCell { X = _bossX, Y = _bossY }, null, _bossMove)
             {
                 DeathEvents = onDeathEvents
             };
@@ -375,7 +375,7 @@ namespace OpenNos.GameObject.Event
                     fam.Act4RaidBossMap = ServerManager.GenerateMapInstance(_bossMapId, _raidType, new InstanceBag());
                 }
 
-                if (remaining <= 3000 && !fam.Act4Raid.Portals.Any(s =>  s.DestinationMapInstanceId.Equals(fam.Act4RaidBossMap.MapInstanceId))) //opens at min 50
+                if (remaining <= 3000 && !fam.Act4Raid.Portals.Any(s => s.DestinationMapInstanceId.Equals(fam.Act4RaidBossMap.MapInstanceId))) //opens at min 50
                 {
                     fam.Act4Raid.CreatePortal(new Portal
                     {

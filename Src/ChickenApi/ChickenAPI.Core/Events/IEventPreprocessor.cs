@@ -1,5 +1,5 @@
 ﻿// WingsEmu
-// 
+//
 // Developed by NosWings Team
 
 using System.Threading;
@@ -9,12 +9,16 @@ namespace ChickenAPI.Core.Events
 {
     public interface IEventPreprocessor
     {
+        #region Methods
+
         /// <summary>
-        ///     Handles the preprocessor
+        /// Handles the preprocessor
         /// </summary>
         /// <param name="notification"></param>
         /// <param name="token"></param>
         /// <returns></returns>
         Task<bool> Handle(IEventNotification notification, CancellationToken token);
+
+        #endregion
     }
 }

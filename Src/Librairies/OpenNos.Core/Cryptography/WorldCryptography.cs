@@ -10,6 +10,7 @@ namespace OpenNos.Core
 
         public WorldCryptography() : base(true)
         {
+            //lol
         }
 
         #endregion
@@ -19,7 +20,7 @@ namespace OpenNos.Core
         public static string Decrypt2(string str)
         {
             var receiveData = new List<byte>();
-            char[] table = {' ', '-', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'n'};
+            char[] table = { ' ', '-', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'n' };
             for (var i = 0; i < str.Length; i++)
                 if (str[i] <= 0x7A)
                 {
@@ -31,7 +32,7 @@ namespace OpenNos.Core
 
                         try
                         {
-                            receiveData.Add(unchecked((byte) (str[i] ^ 0xFF)));
+                            receiveData.Add(unchecked((byte)(str[i] ^ 0xFF)));
                         }
                         catch (Exception)
                         {
@@ -74,11 +75,11 @@ namespace OpenNos.Core
 
                         if (highbyte != 0x0 && highbyte != 0xF)
                         {
-                            receiveData.Add(unchecked((byte) table[highbyte - 1]));
+                            receiveData.Add(unchecked((byte)table[highbyte - 1]));
                             j++;
                         }
 
-                        if (lowbyte != 0x0 && lowbyte != 0xF) receiveData.Add(unchecked((byte) table[lowbyte - 1]));
+                        if (lowbyte != 0x0 && lowbyte != 0xF) receiveData.Add(unchecked((byte)table[lowbyte - 1]));
                     }
                 }
 
@@ -88,9 +89,9 @@ namespace OpenNos.Core
         public override string Decrypt(byte[] data, int sessionId = 0)
         {
             var sessionKey = sessionId & 0xFF;
-            var sessionNumber = unchecked((byte) (sessionId >> 6));
+            var sessionNumber = unchecked((byte)(sessionId >> 6));
             sessionNumber &= 0xFF;
-            sessionNumber &= unchecked((byte) 0x80000003);
+            sessionNumber &= unchecked((byte)0x80000003);
 
             var decryptPart = new StringBuilder();
             switch (sessionNumber)
@@ -99,9 +100,9 @@ namespace OpenNos.Core
 
                     foreach (var character in data)
                     {
-                        var firstbyte = unchecked((byte) (sessionKey + 0x40));
-                        var highbyte = unchecked((byte) (character - firstbyte));
-                        decryptPart.Append((char) highbyte);
+                        var firstbyte = unchecked((byte)(sessionKey + 0x40));
+                        var highbyte = unchecked((byte)(character - firstbyte));
+                        decryptPart.Append((char)highbyte);
                     }
 
                     break;
@@ -109,9 +110,9 @@ namespace OpenNos.Core
                 case 1:
                     foreach (var character in data)
                     {
-                        var firstbyte = unchecked((byte) (sessionKey + 0x40));
-                        var highbyte = unchecked((byte) (character + firstbyte));
-                        decryptPart.Append((char) highbyte);
+                        var firstbyte = unchecked((byte)(sessionKey + 0x40));
+                        var highbyte = unchecked((byte)(character + firstbyte));
+                        decryptPart.Append((char)highbyte);
                     }
 
                     break;
@@ -119,9 +120,9 @@ namespace OpenNos.Core
                 case 2:
                     foreach (var character in data)
                     {
-                        var firstbyte = unchecked((byte) (sessionKey + 0x40));
-                        var highbyte = unchecked((byte) ((character - firstbyte) ^ 0xC3));
-                        decryptPart.Append((char) highbyte);
+                        var firstbyte = unchecked((byte)(sessionKey + 0x40));
+                        var highbyte = unchecked((byte)((character - firstbyte) ^ 0xC3));
+                        decryptPart.Append((char)highbyte);
                     }
 
                     break;
@@ -129,25 +130,25 @@ namespace OpenNos.Core
                 case 3:
                     foreach (var character in data)
                     {
-                        var firstbyte = unchecked((byte) (sessionKey + 0x40));
-                        var highbyte = unchecked((byte) ((character + firstbyte) ^ 0xC3));
-                        decryptPart.Append((char) highbyte);
+                        var firstbyte = unchecked((byte)(sessionKey + 0x40));
+                        var highbyte = unchecked((byte)((character + firstbyte) ^ 0xC3));
+                        decryptPart.Append((char)highbyte);
                     }
 
                     break;
 
                 default:
-                    decryptPart.Append((char) 0xF);
+                    decryptPart.Append((char)0xF);
                     break;
             }
 
             var decrypted = new StringBuilder();
 
-            var encryptedSplit = decryptPart.ToString().Split((char) 0xFF);
+            var encryptedSplit = decryptPart.ToString().Split((char)0xFF);
             for (var i = 0; i < encryptedSplit.Length; i++)
             {
                 decrypted.Append(Decrypt2(encryptedSplit[i]));
-                if (i < encryptedSplit.Length - 2) decrypted.Append((char) 0xFF);
+                if (i < encryptedSplit.Length - 2) decrypted.Append((char)0xFF);
             }
 
             return decrypted.ToString();
@@ -222,16 +223,16 @@ namespace OpenNos.Core
         public override byte[] Encrypt(string data)
         {
             var dataBytes = Encoding.Default.GetBytes(data);
-            var encryptedData = new byte[dataBytes.Length + (int) Math.Ceiling((decimal) dataBytes.Length / 0x7E) + 1];
+            var encryptedData = new byte[dataBytes.Length + (int)Math.Ceiling((decimal)dataBytes.Length / 0x7E) + 1];
             for (int i = 0, j = 0; i < dataBytes.Length; i++)
             {
                 if (i % 0x7E == 0)
                 {
-                    encryptedData[i + j] = (byte) (dataBytes.Length - i > 0x7E ? 0x7E : dataBytes.Length - i);
+                    encryptedData[i + j] = (byte)(dataBytes.Length - i > 0x7E ? 0x7E : dataBytes.Length - i);
                     j++;
                 }
 
-                encryptedData[i + j] = (byte) ~dataBytes[i];
+                encryptedData[i + j] = (byte)~dataBytes[i];
             }
 
             encryptedData[encryptedData.Length - 1] = 0xFF;

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._Guri;
@@ -7,12 +6,19 @@ using OpenNos.GameObject._Guri.Event;
 using OpenNos.GameObject.Extension;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.Guri.Handler
 {
     public class G199 : IGuriHandler
     {
+        #region Properties
+
         public long GuriEffectId => 199;
+
+        #endregion
+
+        #region Methods
 
         public async Task ExecuteAsync(ClientSession Session, GuriEvent e)
         {
@@ -23,7 +29,7 @@ namespace Plugins.BasicImplementations.Guri.Handler
                     return;
                 }
 
-                short[] listWingOfFriendship = {2160, 2312, 10048};
+                short[] listWingOfFriendship = { 2160, 2312, 10048 };
                 short vnumToUse = -1;
                 foreach (var vnum in listWingOfFriendship)
                 {
@@ -100,7 +106,7 @@ namespace Plugins.BasicImplementations.Guri.Handler
                     return;
                 }
 
-                short[] listWingOfFriendship = {2160, 2312, 10048};
+                short[] listWingOfFriendship = { 2160, 2312, 10048 };
                 short vnumToUse = -1;
                 foreach (var vnum in listWingOfFriendship)
                 {
@@ -167,5 +173,7 @@ namespace Plugins.BasicImplementations.Guri.Handler
                 Session.SendPacket(UserInterfaceHelper.GenerateDelay(3000, 7, $"#guri^199^2^{e.User}"));
             }
         }
+
+        #endregion
     }
 }

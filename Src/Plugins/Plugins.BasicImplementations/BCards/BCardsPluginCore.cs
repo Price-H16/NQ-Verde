@@ -7,9 +7,15 @@ namespace Plugins.BasicImplementations.BCards
 {
     public class BCardPluginCore : ICorePlugin
     {
+        #region Properties
+
         public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
 
         public string Name => nameof(BCardPluginCore);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -27,5 +33,7 @@ namespace Plugins.BasicImplementations.BCards
             builder.Register(_ => new BCardHandlerContainer())
                 .As<IBCardEffectHandlerContainer>().SingleInstance();
         }
+
+        #endregion
     }
 }

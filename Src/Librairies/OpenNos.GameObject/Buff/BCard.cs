@@ -1,17 +1,16 @@
+using OpenNos.Core;
+using OpenNos.Data;
+using OpenNos.Domain;
+using OpenNos.GameObject.Battle;
+using OpenNos.GameObject.Helpers;
+using OpenNos.GameObject.Networking;
+using OpenNos.PathFinder;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Media.Media3D;
-using OpenNos.Core;
-using OpenNos.Data;
-using OpenNos.Domain;
-using OpenNos.GameObject._BCards.Event;
-using OpenNos.GameObject.Battle;
-using OpenNos.GameObject.Helpers;
-using OpenNos.GameObject.Networking;
-using OpenNos.PathFinder;
 
 namespace OpenNos.GameObject
 {
@@ -148,7 +147,8 @@ namespace OpenNos.GameObject
                                             (byte)AdditionalTypes.DebuffResistance.NeverBadEffectChance) is int[]
                                         NeverBadEffectChance)
                                 {
-                                    // I divide in NeverBadEffectChance[3] since we have to avoid the Level debuffs being added
+                                    // I divide in NeverBadEffectChance[3] since we have to avoid
+                                    // the Level debuffs being added
                                     if (ServerManager.RandomNumber() < NeverBadEffectChance[1]
                                         && buff.Card.Level <= (NeverBadEffectChance[0]))
                                     {
@@ -251,6 +251,7 @@ namespace OpenNos.GameObject
                                         else if (buff.Card?.BuffType == BuffType.Bad
                                                  && session.HasBuff(BCardType.CardType.TauntSkill,
                                                      (byte)AdditionalTypes.TauntSkill.ReflectBadEffect)
+
                                                  //&& ServerManager.RandomNumber() < FirstData
                                                  )
                                         {
@@ -611,7 +612,8 @@ namespace OpenNos.GameObject
                             }
                             else if (SubType == (byte)AdditionalTypes.DrainAndSteal.LeechEnemyMP)
                             {
-                                // FirstData = -100 SecondData = 3 CardId = 228 (MAna Drain) ThirdData = 1
+                                // FirstData = -100 SecondData = 3 CardId = 228 (MAna Drain)
+                                // ThirdData = 1
 
                                 if (ThirdData != 0)
                                 {
@@ -2818,7 +2820,6 @@ namespace OpenNos.GameObject
                                     }
 
                                     break;
-
                             }
                             break;
 
@@ -2893,6 +2894,7 @@ namespace OpenNos.GameObject
                             break;
 
                         default:
+
                             //Logger.Warn($"Card Type {Type} not defined!");
                             break;
                     }

@@ -4,6 +4,7 @@ namespace ChickenAPI.DAL
 {
     public interface IKeyValueSyncRepository<TObject, in TKey>
     {
+        #region Methods
 
         /// <summary>
         /// Gets all the objects stored within the cache
@@ -11,6 +12,12 @@ namespace ChickenAPI.DAL
         /// <returns></returns>
         IEnumerable<TObject> GetAll();
 
+        /// <summary>
+        /// Gets the object with the given key from the cache
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        TObject GetById(TKey id);
 
         /// <summary>
         /// Gets all the objects that are contained in the given id enumerable
@@ -18,13 +25,6 @@ namespace ChickenAPI.DAL
         /// <param name="ids"></param>
         /// <returns></returns>
         IEnumerable<TObject> GetByIds(IEnumerable<TKey> ids);
-
-        /// <summary>
-        /// Gets the object with the given key from the cache
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        TObject GetById(TKey id);
 
         /// <summary>
         /// Registers the object that are contained
@@ -42,7 +42,8 @@ namespace ChickenAPI.DAL
         void Register(TObject obj);
 
         /// <summary>
-        /// Asynchronously registers all the objects given as parameter assuming that these objects contains a key
+        /// Asynchronously registers all the objects given as parameter assuming that these objects
+        /// contains a key
         /// </summary>
         /// <param name="objs"></param>
         void Register(IEnumerable<TObject> objs);
@@ -53,11 +54,12 @@ namespace ChickenAPI.DAL
         /// <param name="id"></param>
         TObject Remove(TKey id);
 
-
         /// <summary>
         /// Asynchronously removes the objects with the given keys
         /// </summary>
         /// <param name="ids"></param>
         IEnumerable<TObject> Remove(IEnumerable<TKey> ids);
+
+        #endregion
     }
 }

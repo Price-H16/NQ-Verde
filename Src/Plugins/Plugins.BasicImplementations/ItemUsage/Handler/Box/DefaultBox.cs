@@ -1,26 +1,30 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject._ItemUsage;
 using OpenNos.GameObject._ItemUsage.Event;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
-using OpenNos.GameObject.Extension;
-
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.ItemUsage.Handler.Box
 {
-   public class DefaultBox : IUseItemRequestHandlerAsync
+    public class DefaultBox : IUseItemRequestHandlerAsync
     {
-        public ItemPluginType Type => ItemPluginType.Box;
+        #region Properties
+
         public long EffectId => default;
+
+        public ItemPluginType Type => ItemPluginType.Box;
+
+        #endregion
+
+        #region Methods
 
         public async Task HandleAsync(ClientSession session, InventoryUseItemEvent e)
         {
- 
             if (session.Character.IsVehicled && e.Item.Item.Effect != 888)
             {
                 session.SendPacket(
@@ -149,7 +153,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Box
                                                 rare = 7;
                                             }
 
-                                            upgrade = (byte) ServerManager.RandomNumber(50, 81);
+                                            upgrade = (byte)ServerManager.RandomNumber(50, 81);
                                         }
 
                                         if (rollitem.IsRareRandom)
@@ -160,7 +164,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Box
                                             {
                                                 if (rnd < ItemHelper.RareRate[j])
                                                 {
-                                                    rare = (sbyte) j;
+                                                    rare = (sbyte)j;
                                                     break;
                                                 }
                                             }
@@ -172,7 +176,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Box
                                         }
 
                                         session.Character.GiftAdd(rollitem.ItemGeneratedVNum,
-                                            rollitem.ItemGeneratedAmount, (byte) rare, upgrade,
+                                            rollitem.ItemGeneratedAmount, (byte)rare, upgrade,
                                             rollitem.ItemGeneratedDesign);
                                         session.SendPacket(
                                             $"rdi {rollitem.ItemGeneratedVNum} {rollitem.ItemGeneratedAmount}");
@@ -227,7 +231,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Box
                                         session.Character.Mates.Where(s => s.MateType == MateType.Partner).ToList()
                                             .ForEach(s =>
                                             {
-                                                s.GetInventory().ForEach(item => item.Type = (InventoryType) (13 + i));
+                                                s.GetInventory().ForEach(item => item.Type = (InventoryType)(13 + i));
                                                 s.PetId = i;
                                                 i++;
                                             });
@@ -275,7 +279,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Box
                     }
                     else
                     {
-                        var heldMonster = ServerManager.GetNpcMonster((short) e.Item.Item.EffectValue);
+                        var heldMonster = ServerManager.GetNpcMonster((short)e.Item.Item.EffectValue);
                         if (session.CurrentMapInstance == session.Character.Miniland && heldMonster != null)
                         {
                             var mate = new Mate(session.Character, heldMonster, e.Item.Item.LevelMinimum,
@@ -467,5 +471,7 @@ namespace Plugins.BasicImplementations.ItemUsage.Handler.Box
                     break;
             }
         }
+
+        #endregion
     }
 }

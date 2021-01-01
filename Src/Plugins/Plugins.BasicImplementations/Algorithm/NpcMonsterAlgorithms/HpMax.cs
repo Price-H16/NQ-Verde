@@ -4,13 +4,30 @@ namespace Plugins.BasicImplementations.Algorithm.NpcMonsterAlgorithms
 {
     public class HpMax : IMonsterRaceStatAlgorithm
     {
+        #region Members
+
         private const int MAX_LEVEL = 256;
         private int[] _stats;
+
+        #endregion
+
+        #region Methods
+
+        public int GetStat(NpcMonsterRaceType type, byte level, bool isMonster)
+        {
+            var hpSupp = 0;
+            switch (type)
+            {
+                case NpcMonsterRaceType.Race0UnknownYet:
+                    return RaceZeroStats(level, isMonster);
+            }
+
+            return _stats[level] + hpSupp;
+        }
 
         public void Initialize()
         {
             _stats = new int[MAX_LEVEL];
-
 
             // basicHpLoad
             var baseHp = 138;
@@ -33,18 +50,6 @@ namespace Plugins.BasicImplementations.Algorithm.NpcMonsterAlgorithms
             }
         }
 
-        public int GetStat(NpcMonsterRaceType type, byte level, bool isMonster)
-        {
-            var hpSupp = 0;
-            switch (type)
-            {
-                case NpcMonsterRaceType.Race0UnknownYet:
-                    return RaceZeroStats(level, isMonster);
-            }
-
-            return _stats[level] + hpSupp;
-        }
-
         private int RaceZeroStats(byte level, bool isMonster)
         {
             double hp = 1;
@@ -56,7 +61,7 @@ namespace Plugins.BasicImplementations.Algorithm.NpcMonsterAlgorithms
                 hp += hpUp;
             }
 
-            if (!isMonster) return (int) hp;
+            if (!isMonster) return (int)hp;
 
             if (level <= 71)
             {
@@ -75,7 +80,9 @@ namespace Plugins.BasicImplementations.Algorithm.NpcMonsterAlgorithms
                 hp += hp * 2.5;
             }
 
-            return (int) hp;
+            return (int)hp;
         }
+
+        #endregion
     }
 }

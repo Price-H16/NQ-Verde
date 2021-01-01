@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using OpenNos.Core;
+﻿using OpenNos.Core;
 using OpenNos.Data;
 using OpenNos.Domain;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
 using OpenNos.Master.Library.Client;
 using OpenNos.Master.Library.Data;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 
 namespace OpenNos.GameObject.Event.ARENA
 {
@@ -877,6 +877,7 @@ namespace OpenNos.GameObject.Event.ARENA
                 team.Any(ch => ch.Session?.Character.Class == ClassType.Magician) &&
                 team.Any(ch => ch.Session?.Character.Class == ClassType.Swordsman) &&
                 team.Any(ch => ch.Session?.Character.Class == ClassType.MartialArtist))
+
             //buff team
             {
                 team.ForEach(sess =>
@@ -892,6 +893,7 @@ namespace OpenNos.GameObject.Event.ARENA
                 team.Count(ch => ch.Session?.Character.Class == ClassType.Magician) == 3 ||
                 team.Count(ch => ch.Session?.Character.Class == ClassType.Swordsman) == 3 ||
                 team.Count(ch => ch.Session?.Character.Class == ClassType.MartialArtist) == 3)
+
             //debuff team
             {
                 team.ForEach(sess =>

@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using OpenNos.Core;
-using OpenNos.Data;
+﻿using OpenNos.Core;
 using OpenNos.Domain;
 using OpenNos.GameObject;
 using OpenNos.GameObject.Helpers;
 using OpenNos.GameObject.Networking;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NosTale.Extension.Extension.Packet
 {
     public static class ShopExt
     {
         #region Methods
-
 
         public static bool BuyValidate(this ClientSession Session, ClientSession clientSession,
             KeyValuePair<long, MapShop> shop, short slot, short amount)
@@ -103,7 +101,7 @@ namespace NosTale.Extension.Extension.Packet
             }
 
             return true;
-        }      
+        }
 
         private static void LoadShopItem(this ClientSession Session, long owner, KeyValuePair<long, MapShop> shop)
         {
@@ -123,7 +121,7 @@ namespace NosTale.Extension.Extension.Packet
                         else
                         {
                             packetToSend +=
-                                    $" {(byte) item.ItemInstance.Item.Type}.{item.ShopSlot}.{item.ItemInstance.ItemVNum}.{item.SellAmount}.{item.Price}.-1";
+                                    $" {(byte)item.ItemInstance.Item.Type}.{item.ShopSlot}.{item.ItemInstance.ItemVNum}.{item.SellAmount}.{item.Price}.-1";
                         }
                     }
                     else
@@ -133,7 +131,7 @@ namespace NosTale.Extension.Extension.Packet
                 }
             }
 
-            #warning Check this
+#warning Check this
             packetToSend +=
                 " -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1";
 

@@ -8,16 +8,15 @@ namespace OpenNos.DAL.EF
 
         public long CharacterId { get; set; }
 
+        public bool IsPartnerSkill { get; set; }
+
+        public bool IsTattoo { get; set; }
+
         public virtual Skill Skill { get; set; }
 
         public short SkillVNum { get; set; }
 
-        public bool IsTattoo { get; set; }
-
         public byte TattooLevel { get; set; }
-
-        public bool IsPartnerSkill { get; set; }
-
 
         #endregion
     }

@@ -1,32 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using OpenNos.Core;
-using OpenNos.GameObject;
+﻿using OpenNos.Core;
 using OpenNos.GameObject._Event;
 using OpenNos.GameObject._NpcDialog;
 using OpenNos.GameObject._NpcDialog.Event;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Plugins.BasicImplementations.NpcDialog
 {
     public class NpcDialogHandlerContainer : INpcDialogHandlerContainer
     {
+        #region Members
+
         private readonly Dictionary<long, INpcDialogAsyncHandler> _handlers;
+
+        #endregion
+
+        #region Instantiation
 
         public NpcDialogHandlerContainer()
         {
             _handlers = new Dictionary<long, INpcDialogAsyncHandler>();
         }
 
-        public async Task RegisterAsync(INpcDialogAsyncHandler handler)
-        {
-            _handlers.Add(handler.HandledId, handler);
-            Logger.Log.Debug($"[NPC_DIALOG][REGISTER_HANDLER] DIALOG_ID : {handler.HandledId} REGISTERED !");
-        }
+        #endregion
 
-        public async Task UnregisterAsync(INpcDialogAsyncHandler handler)
-        {
-            _handlers.Remove(handler.HandledId);
-        }
+        #region Methods
 
         public void Execute(EventEntity player, NpcDialogEvent e)
         {
@@ -43,5 +41,18 @@ namespace Plugins.BasicImplementations.NpcDialog
 
             await handler.Execute(player.Character.Session, e);
         }
+
+        public async Task RegisterAsync(INpcDialogAsyncHandler handler)
+        {
+            _handlers.Add(handler.HandledId, handler);
+            Logger.Log.Debug($"[NPC_DIALOG][REGISTER_HANDLER] DIALOG_ID : {handler.HandledId} REGISTERED !");
+        }
+
+        public async Task UnregisterAsync(INpcDialogAsyncHandler handler)
+        {
+            _handlers.Remove(handler.HandledId);
+        }
+
+        #endregion
     }
 }

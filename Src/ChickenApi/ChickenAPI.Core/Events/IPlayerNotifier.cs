@@ -5,6 +5,8 @@ namespace ChickenAPI.Core.Events
 {
     public interface IPlayerNotifier
     {
+        #region Methods
+
         /// <summary>
         /// Notify and format the expected string
         /// </summary>
@@ -19,5 +21,7 @@ namespace ChickenAPI.Core.Events
         /// <param name="objs"></param>
         /// <returns></returns>
         Task NotifyAllAsync(NotifiableEventType notifiable, params object[] objs);
+
+        #endregion
     }
 }

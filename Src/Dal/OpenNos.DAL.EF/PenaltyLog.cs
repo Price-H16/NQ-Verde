@@ -1,6 +1,6 @@
-﻿using System;
+﻿using OpenNos.Domain;
+using System;
 using System.ComponentModel.DataAnnotations;
-using OpenNos.Domain;
 
 namespace OpenNos.DAL.EF
 {

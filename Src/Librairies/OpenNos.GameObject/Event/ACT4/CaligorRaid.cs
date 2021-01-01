@@ -12,30 +12,20 @@
  * GNU General Public License for more details.
  */
 
+using OpenNos.Core;
+using OpenNos.Domain;
+using OpenNos.GameObject.Helpers;
+using OpenNos.GameObject.Networking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using OpenNos.Core;
-using OpenNos.Domain;
-using OpenNos.GameObject.Helpers;
-using OpenNos.GameObject.Networking;
 
 namespace OpenNos.GameObject.Event
 {
     public static class CaligorRaid
     {
-        #region Methods
-
-        public static void Run()
-        {
-            var raidThread = new CaligorRaidThread();
-            Observable.Timer(TimeSpan.FromMinutes(0)).Subscribe(X => raidThread.Run());
-        }
-
-        #endregion
-
         #region Properties
 
         public static int AngelDamage { get; set; }
@@ -53,11 +43,25 @@ namespace OpenNos.GameObject.Event
         public static MapInstance UnknownLandMapInstance { get; set; }
 
         #endregion
+
+        #region Methods
+
+        public static void Run()
+        {
+            var raidThread = new CaligorRaidThread();
+            Observable.Timer(TimeSpan.FromMinutes(0)).Subscribe(X => raidThread.Run());
+        }
+
+        #endregion
     }
 
     public class CaligorRaidThread
     {
+        #region Properties
+
         public object Session { get; private set; }
+
+        #endregion
 
         #region Methods
 
@@ -166,13 +170,10 @@ namespace OpenNos.GameObject.Event
             //        SourceX = 89,
             //        SourceY = 10,
 
-            //        DestinationMapId = 251,
-            //        DestinationX = 145,
-            //        DestinationY = 196
-
+            // DestinationMapId = 251, DestinationX = 145, DestinationY = 196
 
             //    }, 3600, true);
-            //}        
+            //}
 
             ServerManager.Shout(Language.Instance.GetMessageFromKey("CALIGOR_OPEN"), true);
 
@@ -194,7 +195,6 @@ namespace OpenNos.GameObject.Event
         {
             ServerManager.Shout(Language.Instance.GetMessageFromKey("CALIGOR_END"), true);
 
-
             foreach (var p in CaligorRaid.UnknownLandMapInstance.Portals.Where(s => s.DestinationMapInstanceId == CaligorRaid.CaligorMapInstance.MapInstanceId).ToList())
             {
                 p.IsDisabled = true;
@@ -212,8 +212,7 @@ namespace OpenNos.GameObject.Event
             CaligorRaid.IsRunning = false;
             CaligorRaid.AngelDamage = 0;
             CaligorRaid.DemonDamage = 0;
-            ServerManager.Instance.StartedEvents.Remove(EventType.CALIGOR);          
-
+            ServerManager.Instance.StartedEvents.Remove(EventType.CALIGOR);
         }
 
         private void LockRaid()
@@ -223,7 +222,7 @@ namespace OpenNos.GameObject.Event
                 p.IsDisabled = true;
                 CaligorRaid.UnknownLandMapInstance.Broadcast(p.GenerateGp());
                 p.IsDisabled = false;
-                p.Type = (byte) PortalType.Closed;
+                p.Type = (byte)PortalType.Closed;
                 CaligorRaid.UnknownLandMapInstance.Broadcast(p.GenerateGp());
             }
 

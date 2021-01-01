@@ -1,13 +1,12 @@
-﻿using System;
+﻿using OpenNos.Domain;
+using OpenNos.GameObject;
+using OpenNos.GameObject.Battle;
+using OpenNos.GameObject.Helpers;
+using OpenNos.GameObject.Networking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using OpenNos.Domain;
-using OpenNos.GameObject;
-using OpenNos.GameObject.Battle;
-using OpenNos.GameObject.Extension;
-using OpenNos.GameObject.Helpers;
-using OpenNos.GameObject.Networking;
 
 namespace NosTale.Extension.Extension.Packet
 {
@@ -71,7 +70,7 @@ namespace NosTale.Extension.Extension.Packet
             if ((skill.TargetType != 1 || !battleEntityDefender.Equals(battleEntityAttacker)) &&
                 !battleEntityAttacker.CanAttackEntity(battleEntityDefender, skill: skill)
                 || battleEntityAttacker.HasBuff(BCardType.CardType.SpecialAttack,
-                    (byte) AdditionalTypes.SpecialAttack.NoAttack))
+                    (byte)AdditionalTypes.SpecialAttack.NoAttack))
             {
                 return;
             }
@@ -162,7 +161,7 @@ namespace NosTale.Extension.Extension.Packet
                     if (battleEntityDefender.Character is Character target)
                     {
                         var convertDamageToHpChance = target.GetBuff(BCardType.CardType.DarkCloneSummon,
-                            (byte) AdditionalTypes.DarkCloneSummon.ConvertDamageToHPChance);
+                            (byte)AdditionalTypes.DarkCloneSummon.ConvertDamageToHPChance);
 
                         if (ServerManager.RandomNumber() < convertDamageToHpChance[0])
                         {
@@ -170,7 +169,7 @@ namespace NosTale.Extension.Extension.Packet
 
                             if (target.Hp + amount > target.HPLoad())
                             {
-                                amount = (int) target.HPLoad() - target.Hp;
+                                amount = (int)target.HPLoad() - target.Hp;
                             }
 
                             target.Hp += amount;
@@ -189,11 +188,11 @@ namespace NosTale.Extension.Extension.Packet
                     if (damage > 0)
                     {
                         var inflictDamageToMp = battleEntityDefender.GetBuff(BCardType.CardType.LightAndShadow,
-                            (byte) AdditionalTypes.LightAndShadow.InflictDamageToMP);
+                            (byte)AdditionalTypes.LightAndShadow.InflictDamageToMP);
 
                         if (inflictDamageToMp[0] != 0)
                         {
-                            var amount = Math.Min((int) (damage / 100D * inflictDamageToMp[0]),
+                            var amount = Math.Min((int)(damage / 100D * inflictDamageToMp[0]),
                                 battleEntityDefender.Mp);
                             battleEntityDefender.DecreaseMp(amount);
 
@@ -375,12 +374,12 @@ namespace NosTale.Extension.Extension.Packet
                                     battleEntityAttacker.PositionX, battleEntityAttacker.PositionY, skill.TargetRange);
                             foreach (var sb in skill.BCards)
                             {
-                                if (sb.Type != (short) BCardType.CardType.Buff)
+                                if (sb.Type != (short)BCardType.CardType.Buff)
                                 {
                                     continue;
                                 }
 
-                                var bf = new Buff((short) sb.SecondData, battleEntityAttacker.Level);
+                                var bf = new Buff((short)sb.SecondData, battleEntityAttacker.Level);
                                 if (bf.Card.BuffType != BuffType.Good)
                                 {
                                     continue;
@@ -393,21 +392,21 @@ namespace NosTale.Extension.Extension.Packet
                             if (entityInRange != null)
                             {
                                 foreach (var target in entityInRange)
-                                foreach (var s in skill.BCards)
-                                {
-                                    if (s.Type != (short) BCardType.CardType.Buff)
+                                    foreach (var s in skill.BCards)
                                     {
-                                        s.ApplyBCards(target.BattleEntity, battleEntityAttacker);
-                                        continue;
-                                    }
-
-                                    switch (battleEntityAttacker.Mate.Owner.MapInstance.MapInstanceType)
-                                    {
-                                        default:
+                                        if (s.Type != (short)BCardType.CardType.Buff)
+                                        {
                                             s.ApplyBCards(target.BattleEntity, battleEntityAttacker);
-                                            break;
+                                            continue;
+                                        }
+
+                                        switch (battleEntityAttacker.Mate.Owner.MapInstance.MapInstanceType)
+                                        {
+                                            default:
+                                                s.ApplyBCards(target.BattleEntity, battleEntityAttacker);
+                                                break;
+                                        }
                                     }
-                                }
                             }
 
                             break;
@@ -416,9 +415,9 @@ namespace NosTale.Extension.Extension.Packet
                         case 0:
                             foreach (var bc in skill.BCards)
                             {
-                                var bf = new Buff((short) bc.SecondData, battleEntityAttacker.Level);
+                                var bf = new Buff((short)bc.SecondData, battleEntityAttacker.Level);
 
-                                if (bc.Type == (short) BCardType.CardType.Buff && bf.Card?.BuffType == BuffType.Good)
+                                if (bc.Type == (short)BCardType.CardType.Buff && bf.Card?.BuffType == BuffType.Good)
                                 {
                                     bc.ApplyBCards(battleEntityAttacker, battleEntityAttacker);
                                     bc.ApplyBCards(battleEntityAttacker.Mate.Owner.BattleEntity, battleEntityAttacker);
@@ -494,20 +493,20 @@ namespace NosTale.Extension.Extension.Packet
                     switch (battleEntityDefender.EntityType)
                     {
                         case EntityType.Player:
-                        {
-                            var target = battleEntityDefender.Character;
-
-                            if (target != null)
                             {
-                                if (target.IsVehicled)
-                                {
-                                    target.RemoveVehicle();
-                                }
+                                var target = battleEntityDefender.Character;
 
-                                Observable.Timer(TimeSpan.FromMilliseconds(1000))
-                                          .Subscribe(o => ServerManager.Instance.AskPvpRevive(target.CharacterId));
+                                if (target != null)
+                                {
+                                    if (target.IsVehicled)
+                                    {
+                                        target.RemoveVehicle();
+                                    }
+
+                                    Observable.Timer(TimeSpan.FromMilliseconds(1000))
+                                              .Subscribe(o => ServerManager.Instance.AskPvpRevive(target.CharacterId));
+                                }
                             }
-                        }
                             break;
 
                         case EntityType.Mate:
@@ -518,10 +517,10 @@ namespace NosTale.Extension.Extension.Packet
                             break;
 
                         case EntityType.Monster:
-                        {
-                            battleEntityDefender.MapMonster?.SetDeathStatement();
-                            attackerOwner.GenerateKillBonus(battleEntityDefender.MapMonster, battleEntityAttacker);
-                        }
+                            {
+                                battleEntityDefender.MapMonster?.SetDeathStatement();
+                                attackerOwner.GenerateKillBonus(battleEntityDefender.MapMonster, battleEntityAttacker);
+                            }
                             break;
                     }
                 }

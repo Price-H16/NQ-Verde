@@ -6,9 +6,15 @@ namespace Plugins.BasicImplementations.Event
 {
     public class GenericEventPluginCore : ICorePlugin
     {
+        #region Properties
+
         public PluginEnableTime EnableTime => PluginEnableTime.PreContainerBuild;
 
         public string Name => nameof(GenericEventPluginCore);
+
+        #endregion
+
+        #region Methods
 
         public void OnDisable()
         {
@@ -23,5 +29,7 @@ namespace Plugins.BasicImplementations.Event
             builder.RegisterAssemblyTypes(typeof(GenericEventPlugin).Assembly)
                 .AsClosedTypesOf(typeof(GenericEventHandlerBase<>)).PropertiesAutowired();
         }
+
+        #endregion
     }
 }

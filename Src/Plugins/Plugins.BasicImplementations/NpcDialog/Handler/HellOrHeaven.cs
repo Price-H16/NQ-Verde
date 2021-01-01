@@ -8,7 +8,15 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
 {
     public class HellOrHeaven : INpcDialogAsyncHandler
     {
-        public long HandledId => 708; // "Accept"
+        #region Properties
+
+        public long HandledId => 708;
+
+        #endregion
+
+        // "Accept"
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -26,11 +34,21 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 
     public class HellOrHeaven2 : INpcDialogAsyncHandler
     {
-        public long HandledId => 709; // "Refuse"
+        #region Properties
+
+        public long HandledId => 709;
+
+        #endregion
+
+        // "Refuse"
+
+        #region Methods
 
         public async Task Execute(ClientSession Session, NpcDialogEvent packet)
         {
@@ -48,5 +66,7 @@ namespace Plugins.BasicImplementations.NpcDialog.Handler
                 }
             }
         }
+
+        #endregion
     }
 }

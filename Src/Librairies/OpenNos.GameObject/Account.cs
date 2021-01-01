@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using OpenNos.Data;
-using OpenNos.Domain;
+﻿using OpenNos.Data;
 using OpenNos.GameObject.Networking;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenNos.GameObject
 {
-    // Little test
     public class Account : AccountDTO
     {
         #region Instantiation
@@ -22,11 +20,13 @@ namespace OpenNos.GameObject
             RegistrationIP = input.RegistrationIP;
             VerificationToken = input.VerificationToken;
             BankMoney = input.BankMoney;
+            LastDelete = input.LastDelete;
         }
 
         #endregion
 
         #region Properties
+
         public List<PenaltyLogDTO> PenaltyLogs
         {
             get
