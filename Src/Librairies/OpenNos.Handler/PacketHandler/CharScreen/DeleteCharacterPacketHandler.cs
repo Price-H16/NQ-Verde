@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NosTale.Packets.Packets.ClientPackets;
 using OpenNos.Core;
@@ -43,8 +44,7 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 return;
             }
 
-            Logger.LogUserEvent("DELETECHARACTER", Session.GenerateIdentity(),
-                $"[DeleteCharacter]Name: {characterDeletePacket.Slot}");
+            Logger.LogUserEvent("DELETECHARACTER", Session.GenerateIdentity(), $"[DeleteCharacter]Name: {characterDeletePacket.Slot}");
             var account = DAOFactory.AccountDAO.LoadById(Session.Account.AccountId);
             if (account == null)
             {
@@ -67,8 +67,8 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 {
                     DeleteRelation(character.CharacterId, relationshipList, relation.RelatedCharacterId, relation.RelationType);
                 }
-                
-                //DAOFactory.GeneralLogDAO.SetCharIdNull(Convert.ToInt64(character.CharacterId));
+
+                DAOFactory.GeneralLogDAO.SetCharIdNull(Convert.ToInt64(character.CharacterId));
                 DAOFactory.CharacterDAO.DeleteByPrimaryKey(account.AccountId, characterDeletePacket.Slot);
                 new EntryPointPacketHandler(Session).LoadCharacters(new OpenNosEntryPointPacket
                 {
