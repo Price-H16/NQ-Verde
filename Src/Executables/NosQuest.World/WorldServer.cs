@@ -15,5 +15,6 @@ namespace NosQuest.World
 {
     public class WorldServer : TcpServer
     {
+
     }
 }
