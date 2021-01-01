@@ -38,6 +38,12 @@ namespace OpenNos.Handler.BasicPacket.CharScreen
                 characterCreatePacket.HairStyle, characterCreatePacket.Name,
                 characterCreatePacket.Slot, false);
 
+            if (characterCreatePacket.Name == null)
+            {
+                Logger.Log.Debug($"PriceCatcher: user {Session.Account.Name} tried an Crash: CreateCharacter");
+                return;
+            }
+
             new EntryPointPacketHandler(Session).LoadCharacters(new OpenNosEntryPointPacket
                 {PacketData = characterCreatePacket.OriginalContent});
         }
